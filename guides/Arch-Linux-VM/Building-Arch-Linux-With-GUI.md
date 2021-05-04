@@ -19,6 +19,7 @@
     * [Visual Studio Code](https://code.visualstudio.com/docs/setup/linux#_aur-package-for-arch-linux) 
     * sudo
     * neofetch
+    * xf86-video-fbdev
     * Display Manager: 
         * lightdm:
             * 
@@ -32,7 +33,7 @@ Terminal:
     xterm
 Panel:
     polybar
-
+File manager:
 
 Stacking:
     List:
@@ -326,3 +327,5 @@ pacman -S --noconfirm neofetch
 ```
 
 ![neofetch](./images/neofetch.png "Neofetch") 
+
+3. Install the 

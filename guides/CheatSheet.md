@@ -856,19 +856,17 @@ if (Get-WUIsPendingReboot) {Restart-Computer -Force}
 # Download updates only:
 Install-WUUpdates -DownloadOnly -Updates (Start-WUScan -SearchCriteria "IsInstalled=0 AND IsHidden=0 AND IsAssigned=1")
 ```
-
 ```bat
 REM WinNT 6.3 and below
 REM This entirley depends on the AU settings configured on the host machine at HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate or HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate
 REM Immediately detected Windows update settings:
 wuauclt /DetectNow /ReportNow
 REM Install the 
-
 ```
 
 ## <ins>Roles:</ins>
 
-ADDS:
+### ADDS:
 
 ```powershell
 # Get number of group members in AD group:
@@ -887,105 +885,138 @@ Get-ADUser <> -Properties Memberof | ForEach-Object -Process {$_.MemberOf}
 (Get-Acl -Path 'AD:,<DN>').Access | Select-Object -Property AccessControlType,IdentityReference,ActiveDirectoryRights | Format-Table -AutoSize
 ``` 
 
-DNS:
+### DNS:
 
-```console
-## Create a new DNS delegation:
->dnscmd /recordadd <zone> <sub_domain_name> NS [<authoriative_server_FQDN>]
-
-## Remove DNS delegation:
->dnscmd /nodedelete <zone> <sub_domain_name>
-
-## Add authoriative server into DNS delegation:
->dnscmd /recordadd <domainname> <sub_domain_name> NS <authoriative_server_FQDN>
-
-## Remove server zone, primary, seconday, forwarder, or stub:
->dnscmd <DNS_server> /zonedelete <zonename>
-
-## Delete authoriative server from DNS delegation:
->dnscmd /recorddelete <domainname> <sub_domain_name> NS <authoriative_server_FQDN>
-
-## Enumerate domains:
->dnscmd /enumzones
-
-## Enumerate records within domain apex:
->dnscmd /enumrecords <zonename> .
-
-## Enumerate records in delegated DNS domain:
->dnscmd /enumrecords <zonename> <childdomain> /type NS
-
-## Change DNS scavenging periods:
->dnscmd <DNS_server> /config /ScavengingInterval <value#>
-
-## Disable root hints:
-PS C:\>Set-DnsServerForwarder -UseRootHints $False
-## or
->dnscmd <DNS_server> /config isslave 1
-
-## Change DNS server forwarders with a timeout of # seconds:
->dnscmd <dns_server> /resetforwarders <ip.addr> <ip.addr> /timeout <seconds#> /noslave
-
-## Add DS-intergrated PTR zone:
->dnscmd /ZoneAdd 105.30.172.in-addr.arpa /DsPrimary
-
-## Add file-backed primary zone:
->dnscmd /ZoneAdd <zonename> /Primary /file <domainname.dns> 
-
-## Add PTR record of 172.30.44.22:
->dnscmd /recordadd 44.30.172.in-addr.arpa 22 PTR <qualified_name>
-
-## Disable XFR:
-PS C:\>Set-DnsServerPrimaryZone -Name <zonename> -SecureSecondaries NoTransfer
-## or 
->dnscmd /zoneresetsecondaries <zonename> /noxfr
-
-## Move legacy Windows 2000 DS-intergated zones to at least server 2003:
->dnscmd /zoneresettype <zonename> /overwrite_ds /directorypartition <DomainDNS.NamingContext>
-
-## Add an A record:
->dnscmd /RecordAdd <zonename> <QNAME> <QTYPE> <Rdata>
-
-## Delete an A record:
->dnscmd /RecordDelete <zonename> <QNAME> <QTYPE>
+```bat
+REM Create a new DNS delegation:
+dnscmd /recordadd <zone> <sub_domain_name> NS [<authoriative_server_FQDN>]
+```
+```bat
+REM Remove DNS delegation:
+dnscmd /nodedelete <zone> <sub_domain_name>
+```
+```bat
+REM Add authoriative server into DNS delegation:
+dnscmd /recordadd <domainname> <sub_domain_name> NS <authoriative_server_FQDN>
+```
+```bat
+REM Remove server zone, primary, seconday, forwarder, or stub:
+dnscmd <DNS_server> /zonedelete <zonename>
+```
+```bat
+REM Delete authoriative server from DNS delegation:
+dnscmd /recorddelete <domainname> <sub_domain_name> NS <authoriative_server_FQDN>
+```
+```bat
+REM Enumerate domains:
+dnscmd /enumzones
+```
+```bat
+REM Enumerate records within domain apex:
+dnscmd /enumrecords <zonename> .
+```
+```bat
+REM Enumerate records in delegated DNS domain:
+dnscmd /enumrecords <zonename> <childdomain> /type NS
+```
+```bat
+REM Change DNS scavenging periods:
+dnscmd <DNS_server> /config /ScavengingInterval <value#>
+```
+```powershell
+# Disable root hints:
+Set-DnsServerForwarder -UseRootHints $False
+```
+```bat
+REM or
+dnscmd <DNS_server> /config isslave 1
+```
+```bat
+REM Change DNS server forwarders with a timeout of # seconds:
+dnscmd <dns_server> /resetforwarders <ip.addr> <ip.addr> /timeout <seconds#> /noslave
+```
+```bat
+REM Add DS-intergrated PTR zone:
+dnscmd /ZoneAdd 105.30.172.in-addr.arpa /DsPrimary
+```
+```bat
+REM Add file-backed primary zone:
+dnscmd /ZoneAdd <zonename> /Primary /file <domainname.dns> 
+```
+```bat
+REM Add PTR record of 172.30.44.22:
+dnscmd /recordadd 44.30.172.in-addr.arpa 22 PTR <qualified_name>
+```
+```powershell
+# Disable XFR:
+Set-DnsServerPrimaryZone -Name <zonename> -SecureSecondaries NoTransfer
+```
+```bat
+REM or 
+dnscmd /zoneresetsecondaries <zonename> /noxfr
+```
+```bat
+REM Move legacy Windows 2000 DS-intergated zones to at least server 2003:
+dnscmd /zoneresettype <zonename> /overwrite_ds /directorypartition <DomainDNS.NamingContext>
+```
+```bat
+REM Add an A record:
+dnscmd /RecordAdd <zonename> <QNAME> <QTYPE> <Rdata>
+```
+```bat
+REM Delete an A record:
+dnscmd /RecordDelete <zonename> <QNAME> <QTYPE>
 ```
 
-Storage Replica:
+### Storage Replica:
 
-```console
-## Enable Storage Replica (Syncronous Topology: Server to Server):
-
-## Install Storage-Replica features:
-PS C:\>install-windowsfeature Storage-Replica -IncludeAllSubFeature -IncludeManagementTools -restart
-
-## Clear any existing reps:
-PS C:\>Get-srpartnership | remove-srpartnership;get-srgroup | % { remove-srgroup -name $_.name }
-
-## Create new SR partnership:
-PS C:\>new-srpartnership -sourcecompuitername {nb/ip.addr} -sourcergname {NB name} -sourcevolumename {mount point} -sourcelogvolumename {mount point} -destinationcomputername {nb/ip.addr} -destinationrgname {NB name} -destinationvoollume {mount point (shold be same as source} -destinationlogvolumename {mount point} -logsizeinbytes 1gb -ReplicationMode <mode>
-
-## Storage Replication Stats
-PS C:\>new-srpartnership -sourcecomputername LAB-2016TP-01 -sourcergname LAB-2016TP-01 -sourcevolumename R: -sourcelogvolumename L: -destinationcomputername LAB-2016TP-02 -destinationrgname LAB-2016TP-02 -DestinationVolumeName R: -destinationlogvolumename L: -logsizeinbytes 1gb -ReplicationMode Synchronous
+```powershell
+# Enable Storage Replica (Syncronous Topology: Server to Server):
+# Install Storage-Replica features:
+Install-WindowsFeature Storage-Replica -IncludeAllSubFeature -IncludeManagementTools -Restart
+# Clear any existing reps:
+Get-srpartnership | Remove-SRPartnership;Get-SRGroup | % { Remove-SRGroup -Name $_.name }
+# Create new SR partnership:
+New-SRPartnership -SourceComputerName {nb/ip.addr} -SourceRGName {NB name} -SourceVolumeName {mount point} -SourceLogVolumeName {mount point} -DestinationComputerName {nb/ip.addr} -DestinationRGName {NB name} -DestinationVolumeName {mount point (shold be same as source} -destinationlogvolumename {mount point} -LogSizeInBytes 1gb -ReplicationMode <mode>
 ```
 
-Hyper-V / SCVMM
+### Virtualisation and Hypervisors:
 
-```console
-## VMnetwork Adapter VM Queing Weight:
-PS C:>Set-VMNetworkAdapter -ManagementOS -Name <switch_name> -VMQWeight 0 (default was 100)
+#### Hyper-V:
+
+```powershell
+# VMnetwork Adapter VM Queing Weight (default was 100):
+Set-VMNetworkAdapter -ManagementOS -Name <switch_name> -VMQWeight 0 
+```
+```powershell
+# Create a new Hyper-V VM:
+New-VM -Name <hostname> -MemoryStartupBytes <bytes> -Generation <1|2> -NewVHDPath 'path\to\.vhdx' -NewVHDSizeBytes <bytes> -SwitchName <switchname> -Path <path\to\vmfiles>
+
+# I then create the DVD device and attach the .ISO to the VM:
+-VMName 'LAB-UXC0002' -ControllerLocation 1 -ControllerNumber 0 -Path 'X:\UNIX\Linux\Arch Linux\System Builds\archlinux-2021.05.01-x86_64.iso'
+
+# I disable dynamic memory, secure boot then reconfigure the boot options::
+Set-VM -Name 'LAB-UXC0001' -StaticMemory
+$VMDVDDrive = Get-VMDvdDrive -VMName 'LAB-UXC0001'
+Set-VMFirmware -VMName 'LAB-UXC0001' -EnableSecureBoot Off -FirstBootDevice $VMDVDDrive
 ```
 
-KVM-quemu / libvirt:
+#### KVM-quemu / libvirt:
 
-```console
-## Install KVM using RHEL yum groups:
-#yum group install 'Virtualization Host' 'Virtualization Client'
+```bash
+# Install KVM using RHEL yum groups:
+yum group install 'Virtualization Host' 'Virtualization Client'
+```
+```bash
+# Confirm module loaded:
+cat /proc/cpuinfo | grep -E 'vmx|svm'
+# or
+lsmod | grep kvm
+```
 
-## Confirm module loaded:
-$cat /proc/cpuinfo | grep -E 'vmx|svm'
-## or
-$lsmod | grep kvm
+#### virsh:
 
-## virsh:
+```bash
 ## Create new domain using virt-install:
 #virt-install --name=tester1.example.com --ram=1024 --vcpus=2 --disk=/var/lib/libvirt/images/test1.example.com.img,size=16 --graphics=spice --location=ftp://192.168.1 22.1/pub/inst --os-type=Linux --os-variant=rhel7
 

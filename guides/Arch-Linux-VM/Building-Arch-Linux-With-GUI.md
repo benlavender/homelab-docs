@@ -28,7 +28,7 @@ Using the above VM hardware settings, create this VM:
 New-VM -Name 'LAB-UXC0001' -MemoryStartupBytes '1073741824' -Generation 2 -NewVHDPath 'X:\Virtualisation\Hyper-V\Clients\LAB-UXC0001\Virtual Hard Disks\New Virtual Hard Disk.vhdx' -NewVHDSizeBytes '6442450944' -SwitchName 'LAB-EXTSWT-01' -Path 'X:\Virtualisation\Hyper-V\Clients\LAB-UXC0001'
 
 # I then create the DVD device and attach the .ISO to the VM:
--VMName 'LAB-UXC0002' -ControllerLocation 1 -ControllerNumber 0 -Path 'X:\UNIX\Linux\Arch Linux\System Builds\archlinux-2021.05.01-x86_64.iso'
+Add-VMDvdDrive -VMName 'LAB-UXC0002' -ControllerLocation 1 -ControllerNumber 0 -Path 'X:\UNIX\Linux\Arch Linux\System Builds\archlinux-2021.05.01-x86_64.iso'
 
 # I disable dynamic memory, secure boot then reconfigure the boot options::
 Set-VM -Name 'LAB-UXC0001' -StaticMemory

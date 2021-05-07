@@ -1,6 +1,6 @@
-# Building Arch Linux with GUI:
+# Building Arch Linux with on Hyper-V:
 
-![Arch Logo](./images/arch-logo.png "Btw I use Arch...")
+![Arch Logo](./images/arch-logo.png "Btw I use Arch...") &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![Hyer-V Logo](./images/hyper-v-logo.png)
 
 [Official guide](https://wiki.archlinux.org/title/Installation_guide) without modifications for my own requirements.
 
@@ -10,37 +10,33 @@
 * RAM: 1GiB
 * Storage: x1 VHDX @ 6GiB
 * Network: Hyper-V Network Adapter using DHCP
+* Hyper-V Switch: External
+* DVD Drive for ISO
 * Bootloader: GRUB
 * Extra packages in build:
     * grub
     * efimgr
     * networkmanager
     * vi
-    * [Visual Studio Code](https://code.visualstudio.com/docs/setup/linux#_aur-package-for-arch-linux) 
-    * sudo
-    * neofetch
-    * xf86-video-fbdev
-    * Display Manager: 
-        * lightdm:
-            * 
+    * hyperv
 
+## VM Build:
 
+Using the above VM hardware settings, create this VM:
 
-Launcher:
-    awesome
-    bspwm
-Terminal:
-    xterm
-Panel:
-    polybar
-File manager:
+```powershell
+New-VM -Name 'LAB-UXC0001' -MemoryStartupBytes '1073741824' -Generation 2 -NewVHDPath 'X:\Virtualisation\Hyper-V\Clients\LAB-UXC0001\Virtual Hard Disks\New Virtual Hard Disk.vhdx' -NewVHDSizeBytes '6442450944' -SwitchName 'LAB-EXTSWT-01' -Path 'X:\Virtualisation\Hyper-V\Clients\LAB-UXC0001'
 
-Stacking:
-    List:
-        Master
-        hstack
+# I then create the DVD device and attach the .ISO to the VM:
+-VMName 'LAB-UXC0002' -ControllerLocation 1 -ControllerNumber 0 -Path 'X:\UNIX\Linux\Arch Linux\System Builds\archlinux-2021.05.01-x86_64.iso'
 
-## OS Build
+# I disable dynamic memory, secure boot then reconfigure the boot options::
+Set-VM -Name 'LAB-UXC0001' -StaticMemory
+$VMDVDDrive = Get-VMDvdDrive -VMName 'LAB-UXC0001'
+Set-VMFirmware -VMName 'LAB-UXC0001' -EnableSecureBoot Off -FirstBootDevice $VMDVDDrive
+```
+
+## OS Build:
 
 Verify the PGP signatures as per [the official instructions](https://wiki.archlinux.org/title/Installation_guide#Verify_signature)
 
@@ -284,6 +280,9 @@ grub-mkconfig -o /boot/grub/grub.cfg
 25. Install Network Manager so that the interface configurations will be brought up once booted into the new system:
 
 ```bash
+# First database sync:
+pacman -Sy
+
 # Install networkmanager
 pacman -S --noconfirm NetworkManager
 # Enable daemon at start:
@@ -308,24 +307,8 @@ GRUB should be the next presented prompt, followed by the console:
 
 ![Next console](./images/new-shell.png "First login prompt")
 
-
-## Packages and other configurations:
-
-1. Install the OpenSSH Server and configure the OpenSSH server:
+27. After first boot, install the integration tools package:
 
 ```bash
-# Install openssh
-pacman -S openssh --noconfirm 
-# Enable at boot
-systemctl enable sshd
+pacman -S --noconfirm hyperv 
 ```
-
-2. Install numerous packages for later use:
-
-```bash
-pacman -S --noconfirm neofetch 
-```
-
-![neofetch](./images/neofetch.png "Neofetch") 
-
-3. Install the 

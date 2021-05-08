@@ -2,11 +2,6 @@
 
 Repository store for all my homelab build docs and configs. 😎
 
-## Guides:
-
-* [CheatSheet](guides/CheatSheet.md)
-* [Arch Linux Hyper-V build](guides/Arch-Linux-VM/Building-Arch-Linux-on-Hyper-V.md)
-
 ## Labs I'm working on: 💪
 
 | Name | Done? |
@@ -21,3 +16,17 @@ Repository store for all my homelab build docs and configs. 😎
 | [Arch Linux ARM](https://archlinuxarm.org/) |⏰
 | [Azure landing zones](https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/landing-zone/) | ⏰
 | [Docker](https://docs.docker.com/) | ⏰
+
+## Guides:
+
+### Linux/BSD 🐧:
+
+* [Arch Linux Hyper-V build](guides/Arch-Linux-VM/Building-Arch-Linux-on-Hyper-V.md)
+
+### General:
+
+* [CheatSheet](guides/CheatSheet.md)
+
+### Public Cloud ☁️:
+
+* [AzureAD Join Windows Server 2019](guides/AzureAD-Join-Windows-Server-2019.md)

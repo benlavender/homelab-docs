@@ -1389,50 +1389,65 @@ curl -L --HEAD <URI>
 # or
 PS C:\>(Invoke-WebRequest -Uri <URI>).Headers
 ```
-## Curl don't recurse redirects:
-$curl <URI>
-## or
-PS C:\>Invoke-WebRequest -Uri -MaximumRedirection <#>
-
-## curl step through redirects:
-$curl -L --max-redirs <#> <URI>
-
-https://vsapp.vehiclesmart.com/rest/vehicleData?reg=YH65PJY&appid=vs5Dszb7SzN15JlKv71QxGv-aq1VcK6G20-S9v4hbdsb5
+```bash
+# Curl don't recurse redirects:
+curl <URI>
+```
+```powershell
+# or
+Invoke-WebRequest -Uri -MaximumRedirection <#>
+```
+```bash
+# curl step through redirects:
+curl -L --max-redirs <#> <URI>
+```
+```powershell
+# Query the VRM lookup API for DVLA and DVSA vehicle data (change the REG...):
+Invoke-RestMethod -Uri 'https://vsapp.vehiclesmart.com/rest/vehicleData?reg=<registration>&appid=vs5Dszb7SzN15JlKv71QxGv-aq1VcK6G20-S9v4hbdsb5' -Method GET | ConvertTo-Json
 ```
 
-Certificates and CryptoAPI:
+### Certificates and CryptoAPI:
 
-```console
-## Convert from PKCS#12 to Base64 .PEM:
->openssl pkcs12 -in deb.pfx -out deb.pem -nodes
-
-## List X509 cert details:
->openssl x509 -in <.PEM> -text
- 
-## Split pkcs12 for Base64:
->openssl pkcs12 -in <deb2.pfx> -out <deb2.crt.pem> -clcerts -nokeys
->openssl pkcs12 -in <deb2.pfx> -out <deb2.key.pem> -nocerts -nodes
- 
-## OpenSSL connect to host and display certificate info:
->openssl s_client -connect host:443
- 
-## Displays only info on valid dates:
->openssl s_client -connect host:443 | openssl x509 -noout -dates
-
-## Discover CA/SubCA details of ADCS:
->certutil -config - -ping
- 
-## List certificate templates available on ADCS:
->certutil -CAtemplates -config CA.FQDN\CA_name
-
-## Open certificates using certutil:
->certutil -dump <certificate>
-
-## Open PKCS12 certificate using openssl:
-$openssl pkcs12 -in <certificate>
-
-## Request X509 certificate from an ADCS template using a .INF file:
-## .INI file example:
+```bash
+# Convert from PKCS#12 to Base64 .PEM:
+openssl pkcs12 -in deb.pfx -out deb.pem -nodes
+```
+```bash
+# List X509 cert details:
+openssl x509 -in <.PEM> -text
+```
+```bash
+# Split pkcs12 for Base64:
+openssl pkcs12 -in <deb2.pfx> -out <deb2.crt.pem> -clcerts -nokeys
+openssl pkcs12 -in <deb2.pfx> -out <deb2.key.pem> -nocerts -nodes
+```
+```bash 
+# OpenSSL connect to host and display certificate info:
+openssl s_client -connect host:443
+```
+```bash 
+# Displays only info on valid dates:
+openssl s_client -connect host:443 | openssl x509 -noout -dates
+```
+```bat
+REM Discover CA/SubCA details of ADCS:
+certutil -config - -ping
+```
+```bat
+REM List certificate templates available on ADCS:
+certutil -CAtemplates -config CA.FQDN\CA_name
+```
+```bat
+# Open certificates using certutil:
+certutil -dump <certificate>
+```
+```bash
+# Open PKCS12 certificate using openssl:
+openssl pkcs12 -in <certificate>
+```
+```bat
+REM Request X509 certificate from an ADCS template using a .INF file:
+REM .INI file example:
 [NewRequest]
 Subject = "CN=,DC=,DC=,DC=company,DC=co,DC=uk"
 MachineKeySet = True
@@ -1440,36 +1455,40 @@ KeyLength = 2048
 KeySpec = 1
 Exportable = True
 
-## Create the CSR:
->certreq -new <PolicyFileIn.inf> <RequestFileOut.req>
+REM Create the CSR:
+certreq -new <PolicyFileIn.inf> <RequestFileOut.req>
 
-## Submit the CSR to the ADCS instance:
->certreq -submit -config <"CA"> -attrib "CertificateTemplate:<Template-Name>" <RequestFileOut.req> <output.cer>
+REM Submit the CSR to the ADCS instance:
+certreq -submit -config <"CA"> -attrib "CertificateTemplate:<Template-Name>" <RequestFileOut.req> <output.cer>
 
-## If the certificate requires approval, approve the request in ADCS:
+REM If the certificate requires approval, approve the request in ADCS:
 ```
 
-SMTP:
+### SMTP:
 
 ```console
-## SMTP send (Telnet) telnet to SMTP server on either 25 or 587:
+# SMTP send (Telnet) telnet to SMTP server on either 25 or 587:
 >telnet
 Telnet>ehlo
 Telnet>mail from:<smtp_addr>
 Telnet>rcpt to:<Recipient_smtp>
 Telnet>Subject: (exit with .)
 Telnet>body (exit with .)
+```
+```powershell
+# or
+Send-MailMessage -From <smtp> -To <smtp> -Subject <subject_string> -SmtpServer <smtp_mta>
+```
+```bash
+# Mutt connect to to POP and IMAP mailboxes and send mail.
+mutt -f pop://mail@host.com
+```
+```bash
+# Send mail to SMTP address:
+mail -s 'Subject' ~/file
+```
 
-## or
-PS C:\>Send-MailMessage -From <smtp> -To <smtp> -Subject <subject_string> -SmtpServer <smtp_mta>
-
-## Mutt connect to to POP and IMAP mailboxes and send mail.
-$mutt -f pop://mail@host.com
-
-## Send mail to SMTP address:
-$mail -s 'Subject' ~/file
-
-#### Packet capturing:
+### Packet capturing:
 
 ```bat
 REM ETW netsh tracing:
@@ -1528,16 +1547,114 @@ tcpdump -n src host <ip.addr>
 
 ## Public Cloud:
 
-Microsoft Azure:
+### Microsoft Azure:
 
-```console
-## List available VM extensions in the Azure CLI (latest only):
+```bash
+# List available VM extensions in the Azure CLI:
 az vm extension image list --latest
-
-## 
-
-## Log analytics
-
 ```
-
-
+```powershell
+# Reset AzureAD user password:
+Set-AzureADUserPassword -ObjectId 0fd2daaf-64af-47a7-91c3-d38840eee2c5 -Password (Read-Host -AsSecureString)
+```
+```bash
+# or
+# Use --force-change-password-next-login to expire new password
+az ad user update --id <objectID> --password <password_string>
+```
+```bash
+# Listing role assignments
+# Per scope:
+az role assignment list --assignee <objectid> --scope <resourceID>
+# Current subscription:
+az role assignment list --all --assignee <objectid>
+# Without assignee:
+az role assignment list --all
+```
+```powershell
+# or
+# Current subscription:
+Get-AzRoleAssignment
+# Per scope:
+Get-AzRoleAssignment -ObjectId <objectID> -Scope <resourceID>
+# List all assignments for a specific user:
+Get-AzRoleAssignment -SignInName <UPN>
+```
+```powershell
+# List AzureAD roles:
+Get-AzureADDirectoryRole
+```
+```powershell
+# List deny assignments at a specific resource:
+Get-AzDenyAssignment -Scope <ResourceID>
+```
+```powershell
+# List deny assignments at the current subscription:
+Get-AzDenyAssignment
+```
+```powershell
+# Grant Reader at subscription scope:
+New-AzRoleAssignment -ObjectId <objectId> -RoleDefinitionName 'Reader' -Scope <subscriptionID>
+```
+```powershell
+# Grant owner to a resource:
+New-AzRoleAssignment -ObjectId <objectId> -RoleDefinitionName 'Owner' -Scope <ResourceID>
+```
+```bash
+# or
+az role assignment create --assignee <assignee> --role --scope 
+```
+```powershell
+# Remove the reader role assignment assigned to user with ID 0fd2daaf-64af-47a7-91c3-d38840eee2c5 from a subscription known as /subscriptions/07b6991f-c067-4870-b1d3-de8663bf38d:
+New-AzRoleAssignment -Scope /subscriptions/07b6991f-c067-4870-b1d3-de8663bf38d6 -ObjectId 0fd2daaf-64af-47a7-91c3-d38840eee2c5 -RoleDefinitionName Reader
+```
+```bash
+# Remove the reader role assignment assigned to user with ID 0fd2daaf-64af-47a7-91c3-d38840eee2c5 from a subscription known as /subscriptions/07b6991f-c067-4870-b1d3-de8663bf38d:
+az role assignment delete --scope /subscriptions/07b6991f-c067-4870-b1d3-de8663bf38d6 --role Reader --assignee 0fd2daaf-64af-47a7-91c3-d38840eee2c5
+```
+```powershell
+# Gets all custom role definitions in the directory:
+Get-AzRoleDefinition -Custom
+```
+```powershell
+# Gets a custom role with the specified ID:
+Get-AzRoleDefinition -Id <ID>
+```
+```powershell
+# Gets a custom role by display name:
+Get-AzRoleDefinition -Name <'Display Name'>
+```
+```bash
+# Gets all custom role definitions in the directory:
+az role definition list --custom
+```
+```bash
+# Gets a custom role by display name:
+az role definition list  --name "Billing Reader Plus"
+```
+```powershell
+# Create custom role definition:
+# Needs the Az.Resources module
+Import-Module -Name Az.Resources
+# Define the first role:
+$role = New-Object -TypeName Microsoft.Azure.Commands.Resources.Models.Authorization.PSRoleDefinition
+$role.Name = 'Virtual Machine Command Injector'
+$role.IsCustom = $True
+$role.Description = 'Permits commands to be sent to the VM using the Run command operation and viewing of VM resources'
+$role.AssignableScopes = '/subscriptions/07b6991f-c067-4870-b1d3-de8663bf38d6/resourceGroups/rg-test-lab-001'
+$role.Actions = 'Microsoft.Compute/virtualMachines/runCommand/action'
+# Create the first role definition:
+New-AzRoleDefinition -Role $role
+# Create the second role:
+Clear-Variable -Name role
+# Define the second role:
+$role = New-Object -TypeName Microsoft.Azure.Commands.Resources.Models.Authorization.PSRoleDefinition
+$role.Name = 'Virtual Machine Command Reader'
+$role.IsCustom = $True
+$role.Description = 'Permits reading of Run Commands on virtual machines'
+$role.AssignableScopes = '/subscriptions/07b6991f-c067-4870-b1d3-de8663bf38d6'
+$role.Actions = 'Microsoft.Compute/virtualMachines/read'
+$role.Actions += 'Microsoft.Compute/locations/runCommands/read'
+# Create the second role:
+New-AzRoleDefinition -Role $role
+```

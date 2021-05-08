@@ -2,7 +2,7 @@
 
 Repository store for all my homelab build docs and configs. 😎
 
-## Labs I'm working on: 💪
+## 💪 Labs I'm working on: 
 
 | Name | Done? |
 | --- | --- |
@@ -19,7 +19,7 @@ Repository store for all my homelab build docs and configs. 😎
 
 ## Guides:
 
-### Linux/BSD 🐧:
+### 🐧 Linux/BSD:
 
 * [Arch Linux Hyper-V build](guides/Arch-Linux-VM/Building-Arch-Linux-on-Hyper-V.md)
 
@@ -27,6 +27,6 @@ Repository store for all my homelab build docs and configs. 😎
 
 * [CheatSheet](guides/CheatSheet.md)
 
-### Public Cloud ☁️:
+### ☁️ Public Cloud:
 
 * [AzureAD Join Windows Server 2019](guides/AzureAD-Join-Windows-Server-2019.md)

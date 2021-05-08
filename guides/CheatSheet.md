@@ -991,14 +991,19 @@ Set-VMNetworkAdapter -ManagementOS -Name <switch_name> -VMQWeight 0
 ```powershell
 # Create a new Hyper-V VM:
 New-VM -Name <hostname> -MemoryStartupBytes <bytes> -Generation <1|2> -NewVHDPath 'path\to\.vhdx' -NewVHDSizeBytes <bytes> -SwitchName <switchname> -Path <path\to\vmfiles>
-
-# I then create the DVD device and attach the .ISO to the VM:
--VMName 'LAB-UXC0002' -ControllerLocation 1 -ControllerNumber 0 -Path 'X:\UNIX\Linux\Arch Linux\System Builds\archlinux-2021.05.01-x86_64.iso'
-
-# I disable dynamic memory, secure boot then reconfigure the boot options::
-Set-VM -Name 'LAB-UXC0001' -StaticMemory
-$VMDVDDrive = Get-VMDvdDrive -VMName 'LAB-UXC0001'
-Set-VMFirmware -VMName 'LAB-UXC0001' -EnableSecureBoot Off -FirstBootDevice $VMDVDDrive
+```
+```powershell
+# Create a DVD device and attach the .ISO to the VM:
+Add-VMDvdDrive -VMName <VMname> -ControllerLocation <#> -ControllerNumber <#> -Path <path\to\.iso>
+```
+```powershell
+# Disable dynamic memory:
+Set-VM -Name <VMname> -StaticMemory
+```
+```powershell
+# Mount an ISO and configure it for boot:
+$VMDVDDrive = Get-VMDvdDrive -VMName <vmname>
+Set-VMFirmware -VMName <vmname> -EnableSecureBoot Off -FirstBootDevice $VMDVDDrive
 ```
 
 #### KVM-quemu / libvirt:
@@ -1017,302 +1022,373 @@ lsmod | grep kvm
 #### virsh:
 
 ```bash
-## Create new domain using virt-install:
-#virt-install --name=tester1.example.com --ram=1024 --vcpus=2 --disk=/var/lib/libvirt/images/test1.example.com.img,size=16 --graphics=spice --location=ftp://192.168.1 22.1/pub/inst --os-type=Linux --os-variant=rhel7
-
-## Using an ISO for O/S deployment:
-#virt-install --name=tester1.example.com --ram=1024 --vcpus=2 --disk=/var/lib/libvirt/images/test1.example.com.img,size=10 --location=/var/lib/libvirt/images/rhel-server-7.6-x86_64-dvd.iso --graphics=spice --os-type=Linux --os-variant=rhel7 
-
-## Don't wait for O/S installation:
-#virt-install --name=tester1.example.com --ram=1024 --vcpus=2 --disk=/var/lib/libvirt/images/test1.example.com.img,size=10 --location=/var/lib/libvirt/images/rhel-server-7.6-x86_64-dvd.iso --graphics=spice --os-type=Linux --os-variant=rhel7 --noautoconsole --initrd-inject can be used with URL of .KS file.
-
-## Shutdown a domain gracefully:
-#virsh shutdown <domain_name>
-
-## Terminate domain session:
-#virsh destroy 'domain_name' --graceful
-## Non-gracefull:
-#virsh destroy 'domain_name'
-
-## Remove domain but leave storage:
-#virsh undefine tester1.example.com
-
-##Remove domain and associated storage
-#virsh undefine tester1.example.com --remove-all-storage
-
-## Using extra arguments:
-## Specifying the kirkstart URI:
-#virt-install --name=tester1.example.com --ram=1024 --vcpus=2 --disk=/var/lib/libvirt/images/test1.example.com.img,size=10 --location=/var/lib/libvirt/images/rhel-server-7.6-x86_64-dvd.iso --graphics=spice --os-type=Linux --os-variant=rhel7 --extra-args='ks=http://myserver/my.ks'
-
-##Enable / disable domain autostart at host boot:
-#virsh autostart <domain_name>
-#virsh autostart <domain_name> --disable
+# Create new domain using virt-install:
+virt-install --name=tester1.example.com --ram=1024 --vcpus=2 --disk=/var/lib/libvirt/images/test1.example.com.img,size=16 --graphics=spice --location=ftp://192.168.1 22.1/pub/inst --os-type=Linux --os-variant=rhel7
+```
+```bash
+# Using an ISO for O/S deployment:
+virt-install --name=tester1.example.com --ram=1024 --vcpus=2 --disk=/var/lib/libvirt/images/test1.example.com.img,size=10 --location=/var/lib/libvirt/images/rhel-server-7.6-x86_64-dvd.iso --graphics=spice --os-type=Linux --os-variant=rhel7 
+```
+```bash
+# Don't wait for O/S installation:
+virt-install --name=tester1.example.com --ram=1024 --vcpus=2 --disk=/var/lib/libvirt/images/test1.example.com.img,size=10 --location=/var/lib/libvirt/images/rhel-server-7.6-x86_64-dvd.iso --graphics=spice --os-type=Linux --os-variant=rhel7 --noautoconsole --initrd-inject can be used with URL of .KS file.
+```
+```bash
+# Shutdown a domain gracefully:
+virsh shutdown <domain_name>
+```
+```bash
+# Terminate domain session:
+virsh destroy 'domain_name' --graceful
+# Non-gracefull:
+virsh destroy 'domain_name'
+```
+```bash
+# Remove domain but leave storage:
+virsh undefine tester1.example.com
+```
+```bash
+# Remove domain and associated storage
+virsh undefine tester1.example.com --remove-all-storage
+```
+```bash
+# Using extra arguments:
+# Specifying the kirkstart URI:
+virt-install --name=tester1.example.com --ram=1024 --vcpus=2 --disk=/var/lib/libvirt/images/test1.example.com.img,size=10 --location=/var/lib/libvirt/images/rhel-server-7.6-x86_64-dvd.iso --graphics=spice --os-type=Linux --os-variant=rhel7 --extra-args='ks=http://myserver/my.ks'
+```
+```bash
+# Enable / disable domain autostart at host boot:
+virsh autostart <domain_name>
+virsh autostart <domain_name> --disable
 ```
 
+#### DFS-N/R:
 
-DFS-N/R:
-
-```console
-## DFS-R backlog:
->dfsrdiag backlog /rgname:"rep group name" /rfname:"volume/directory folder" /smem:hostname /rmem:hostname
+```powershell
+# DFS-R backlog:
+dfsrdiag backlog /rgname:"rep group name" /rfname:"volume/directory folder" /smem:hostname /rmem:hostname
 ```
 
-Windows Nano server:
+#### Windows Nano server:
 
-```console
-## Provisioning Nanos Servers. 
-## Interface number, setupUI, driver paths are examples only and may not be required for Hyper-v etc:
-PS C:\>New-NanoServerImage -MediaPath <'path or label'> -Edition <'Standard|Datacenter'> -DeploymentType <Guest|host> -TargetPath <'path_to_.vhdx'> -MaxSize <uint64> -EnableRemoteManagementPort -InterfaceNameOrIndex '1' -Ipv4Address <'IP.addr'> -Ipv4Dns <'IP_addr'> -Ipv4SubnetMask <'SNM'> -Ipv4Gateway <'IP.addr'> -SetupUI ('NanoServer.DNS') -DriverPath ('C:\temp\Drivers\pvscsi\Win8\pvscsi.inf', 'C:\temp\Drivers\pvscsi\Vista\pvscsi.inf', 'C:\temp\Drivers\vmxnet3\NDIS6\vmxnet3.inf') -ComputerName <'hostname'> -SetupCompleteCommand ('tzutil.exe /s "GMT Standard Time"') -LogPath '\\\\\\NanoServerImageBuilder\Logs\2017-05-08 16-20'
+```powershell
+# Provisioning Nanos Servers. 
+# Interface number, setupUI, driver paths are examples only and may not be required for Hyper-v etc:
+New-NanoServerImage -MediaPath <'path or label'> -Edition <'Standard|Datacenter'> -DeploymentType <Guest|host> -TargetPath <'path_to_.vhdx'> -MaxSize <uint64> -EnableRemoteManagementPort -InterfaceNameOrIndex '1' -Ipv4Address <'IP.addr'> -Ipv4Dns <'IP_addr'> -Ipv4SubnetMask <'SNM'> -Ipv4Gateway <'IP.addr'> -SetupUI ('NanoServer.DNS') -DriverPath ('C:\temp\Drivers\pvscsi\Win8\pvscsi.inf', 'C:\temp\Drivers\pvscsi\Vista\pvscsi.inf', 'C:\temp\Drivers\vmxnet3\NDIS6\vmxnet3.inf') -ComputerName <'hostname'> -SetupCompleteCommand ('tzutil.exe /s "GMT Standard Time"') -LogPath '\\\\\\NanoServerImageBuilder\Logs\2017-05-08 16-20'
+```
+```powershell
+# Installing roles on nano:
+Install-PackageProvider -Name <nanoserverpackage>
+```
+```powershell
+# Find nano server package 
+Find-NanoServerPackage
+```
+```powershell
+# Install nano server package
+Install-NanoServerPackage <pacakge_name> -Culture en-us
+```
 
-## Installing roles on nano:
-PS C:\>Install-PackageProvider -Name <nanoserverpackage>
+## Debugging:
+
+### Windbg / kd:
  
-## Find nano server package 
-PS C:>\Find-NanoServerPackage
+###### Display function table (use knL to see return address):
 
-##Install nano server package
-PS C:\>Install-nanoserverpackage <pacakge_name> -culture en-us
-```
-
-Debugging:
-
-```console
-## Windows debugger commands:
-## Dump files:
- 
-## Display function table (use knL to see return address):
 .fnent {address}
  
-## List nearest symbols (use .fnent to get chained being address):
+###### List nearest symbols (use .fnent to get chained being address):
+
 ln nt+{beging address}
- 
-##List processes in .dmp
-!dml_proc
- 
-## List module info:
+  
+###### List module info:
+
 lmvm {module_name}
- 
-## Live Debugging:
-## List all process on system
-.tlist
 
-## List user-mode process info on attached or .dmp:
-!peb
- 
-## Analyze X86 process on X64 system:
-.load wow64exts
-.effmach x86
- 
-## Keep debuggee running after CLR exceptions found:
-sxe -c "!pe;!clrstack;gc" clr
+###### Update symbol path:
 
-## Update symbol path:
 .sympath SRV*<lcd>*http://msdl.microsoft.com/download/symbols
 .reload
 
-## Verbose symbol info:
+###### Verbose symbol info:
+
 !sym noisy
  
-## Get info on loaded .dmp file:
+### Live Debugging:
+
+###### List all process on system
+
+.tlist
+
+###### ist user-mode process info on attached or .dmp:
+
+!peb
+ 
+###### Analyze X86 process on X64 system:
+
+.load wow64exts
+.effmach x86
+
+### DotNET:
+
+###### Keep debuggee running after CLR exceptions found:
+
+sxe -c "!pe;!clrstack;gc" clr
+
+### Dump files (no kd):
+
+###### List processes in .dmp
+
+!dml_proc
+ 
+###### Get info on loaded .dmp file:
+
 !DumpInfo or !Di
  
-## List all logon sessions:
+###### List all logon sessions:
+
 !logonsession 0 or !kdexts.logonsession 0
  
-## Show specific logon session:
+###### Show specific logon session:
+
 !logonsession <LUID>
  
-## View various system info:
+###### View various system info:
+
 !sysinfo
  
-## Kernel info:
+###### Kernel info:
+
 vertarget
 
-## Display data strucutres. Use -r to recurse substructures 
+###### Display data strucutres. Use -r to recurse substructures 
+
 dt <structure*>
-```
 
 ## Applications:
 
-Exchange On-Premise:
+### Exchange On-Premise:
 
-```console
-## Create multiple distributions lists from .csv. Can actually be used for anything else:
-## Create CSV file with attributes on one line:
-## Name SamAccountName
-## name1 sam1
-## name2 sam2
-PS C:>\Import-CSV -Path <\path.csv> | ForEach-Object -Process {New-DistributionGroup -Name $_.Name -SamAccountName $_.SamAccountName 
+```powershell
+# Create multiple distributions lists from .csv. Can actually be used for anything else:
+# Create CSV file with attributes on one line:
+# Name SamAccountName
+# name1 sam1
+# name2 sam2
+Import-CSV -Path <\path.csv> | ForEach-Object -Process {New-DistributionGroup -Name $_.Name -SamAccountName $_.SamAccountName 
 -Type $_.Type -Alias $_.Alias -DisplayName $_.DisplayName -OrganizationalUnit $_.OrganizationalUnit -ManagedBy $_.ManagedBy}
-
-## List Public Folders:
-PS C:\>Get-PublicFolder -Identity "\:ASDA Local" -Recurse | Select-Object -Property Identity | Select-String "string"
-
+```
+```powershell
+# List Public Folders:
+Get-PublicFolder -Identity '<\:Path>' -Recurse | Select-Object -Property Identity | Select-String "string"
+```
+```powershell
 ## Search Public Folders
-PS C:\>Get-PublicFolder -Identity "\:ASDA Local" -Recurse | Select-Object -Property Identity | Select-String "string
-
-## List Public Folder access:
-PS C:>\Get-PublicFolderClientPermission -Identity <path> -Server <servername>
-
-## [EventIDs:](https://docs.microsoft.com/en-us/exchange/mail-flow/transport-logs/message-tracking?view=exchserver-2019#event-types-in-the-message-tracking-log)
-## Get Message Tracking Log deliver to mailbox:
-PS C:>Get-MessageTrackingLog -Sender <smtp> -EventID 'DELIVER' -Start "xx/xx/xxxx xx:xx:xx"
-## Get Message Tracking Log received by smtp connector:
-PS C:>Get-MessageTrackingLog -Sender <smtp> -EventID 'RECEIVE' -Start "xx/xx/xxxx xx:xx:xx"
-
-## Get all remoteipranges of an exchange server specific receive connector:
-PS C:\>Get-ReceiveConnector <r/c name> | Select-Object -Expand remoteipranges | Select-Object -Property lowerbound,upperbound
-
-## View ActiveSync devices info:
-PS C:\>$UserList = Get-CASMailbox -Filter {hasactivesyncdevicepartnership -eq $true -and -not displayname -like "CAS_{*"} | Get-Mailbox;$UserList | foreach { Get-ActiveSyncDeviceStatistics -Mailbox $_} | Out-GridView
+PS C:\>Get-PublicFolder -Identity '<\:Path>' -Recurse | Select-Object -Property Identity | Select-String "string
+```
+```powershell
+# List Public Folder access:
+Get-PublicFolderClientPermission -Identity <path> -Server <servername>
 ```
 
-VMware:
+Event IDs and further info are at:
 
-```console
-## PowerCLI Connect to datacenter:
-PS C:\>Connect-VIServer -Server <hostname,...> -Credential <PSCredential>
+https://docs.microsoft.com/en-us/exchange/mail-flow/transport-logs/message-tracking?view=exchserver-2019#event-types-in-the-message-tracking-log
 
-## PowerCLI get all VM snapshots on the DC:
-PS C:\>Get-VM | Get-Snapshot | Select-Object -Property Name,VM | Format-List
+```powershell
+# Get Message Tracking Log deliver to mailbox:
+Get-MessageTrackingLog -Sender <smtp> -EventID 'DELIVER' -Start "xx/xx/xxxx xx:xx:xx"
+```
+```powershell
+# Get Message Tracking Log received by smtp connector:
+Get-MessageTrackingLog -Sender <smtp> -EventID 'RECEIVE' -Start "xx/xx/xxxx xx:xx:xx"
+```
+```powershell
+# Get all remoteipranges of an exchange server specific receive connector:
+Get-ReceiveConnector <r/c name> | Select-Object -Expand remoteipranges | Select-Object -Property lowerbound,upperbound
+```
+```powershell
+##View ActiveSync devices info:
+$UserList = Get-CASMailbox -Filter {hasactivesyncdevicepartnership -eq $true -and -not displayname -like "CAS_{*"} | Get-Mailbox;$UserList | foreach { Get-ActiveSyncDeviceStatistics -Mailbox $_} | Out-GridView
+```
 
-## PowerCLI get all VM snapshots on the DC:
+### VMware and PowerCLI:
+
+```powershell
+# PowerCLI Connect to datacenter:
+Connect-VIServer -Server <hostname,...> -Credential <PSCredential>
+```
+```powershell
+# PowerCLI get all VM snapshots on the DC:
+Get-VM | Get-Snapshot | Select-Object -Property Name,VM | Format-List
+```
+```powershell
+# PowerCLI get all VM snapshots on the DC:
 Get-VM -VM <vmname>| Get-Snapshot | Select-Object -Property Name,VM | Format-List
-
-##Install VMware tools on Linux from media:
-#yum -y install perl
-#mkdir /mnt/cdrom
-#mount /dev/cdrom /mnt/cdrom
-#cp /mnt/cdrom/VMwareTools-*.tar.gz /tmp
-#umount /mnt/cdrom
-#tar -zxf /tmp/VMwareTools-*.tar.gz -C /tmp
-#cd /
-#./tmp/vmware-tools-distrib/vmware-install.pl --default
-#rm -f /tmp/VMwareTools-*.tar.gz
-#rm -rf /tmp/vmware-tools-distrib
+```
+```bash
+#Install VMware tools on Linux from media:
+yum -y install perl
+mkdir /mnt/cdrom
+mount /dev/cdrom /mnt/cdrom
+cp /mnt/cdrom/VMwareTools-*.tar.gz /tmp
+umount /mnt/cdrom
+tar -zxf /tmp/VMwareTools-*.tar.gz -C /tmp
+cd /
+./tmp/vmware-tools-distrib/vmware-install.pl --default
+rm -f /tmp/VMwareTools-*.tar.gz
+rm -rf /tmp/vmware-tools-distrib
 ```
 
-Elasticsearch commands using curl:
+### Elasticsearch commands using curl:
  
-```console
-## Get running elasticsearch config settings (this will also give node name):
-$curl -s "localhost:9200/_nodes/_local/settings?pretty=true"
- 
-## List all indexes and info:
-$curl 'localhost:9200/_cat/indices?v'
- 
-## Elasticsearch Cluster status:
-$curl -XGET 'http://localhost:9200/_cluster/health?pretty=true'
- 
-## View shard/index status:
-$curl -XGET http://localhost:9200/_cat/shards
- 
-## Get all un-allocated primary shards:
-$curl -XGET http://localhost:9200/_cat/shards | grep -i "p UNASSIGNED"
-
-## Get cluster name:
-$curl -XGET 'http://localhost:9200/_nodes' | grep -i "cluster_name"
- 
-## Remove an index:
-$curl -XDELETE 'http://localhost:9200/<index_name>/'
- 
-##List templates:
-$curl -XGET localhost:9200/_template/
-
-##Delete template:
-$curl -XDELETE localhost:9200/_template/<template_name>
- 
-## Count documents in indice, remove <induce_name> for all documents:
-$curl localhost :9200/_cat/count/<indice_name>
+```bash
+# Get running elasticsearch config settings (this will also give node name):
+curl -s "localhost:9200/_nodes/_local/settings?pretty=true"
+```
+```bash 
+# List all indexes and info:
+curl 'localhost:9200/_cat/indices?v'
+```
+```bash 
+# Elasticsearch Cluster status:
+curl -XGET 'http://localhost:9200/_cluster/health?pretty=true'
+```
+```bash 
+# View shard/index status:
+curl -XGET http://localhost:9200/_cat/shards
+```
+```bash 
+# Get all un-allocated primary shards:
+curl -XGET http://localhost:9200/_cat/shards | grep -i "p UNASSIGNED"
+```
+```bash
+# Get cluster name:
+curl -XGET 'http://localhost:9200/_nodes' | grep -i "cluster_name"
+```
+```bash
+# Remove an index:
+curl -XDELETE 'http://localhost:9200/<index_name>/'
+```
+```bash 
+#List templates:
+curl -XGET localhost:9200/_template/
+```
+```bash
+# Delete template:
+curl -XDELETE localhost:9200/_template/<template_name>
+```
+```bash 
+# Count documents in indice, remove <induce_name> for all documents:
+curl localhost :9200/_cat/count/<indice_name>
 ```
 
-MySQL:
+### MySQL:
 
-```console
-## Enter CLI:
+```bash
+# Enter CLI:
 mysql -u {account} -p
- 
-## List DBs:
-mysql>show databases;
- 
-## List users:
-mysql>SELECT User FROM mysql.user;
- 
-## Get update timestamps on table:
-mysql>show table status from {db_name} like '{table_name}';
- 
-## Show grants per use:
-mysql>show grants for {account}@localhost;
- 
-## Give grants:
-mysql>grant all privileges on {db}.* to {user}@localhost identified by 'pass';
- 
-## View logs:
-## You can view logs at /var/log/mysql/error.log and /var/log/mysql/mysql.log
-$tail -f /var/log/mysql/mysql.log
- 
-## Turn on logging by editting /etc/mysql/my.cnf
-#general_log_file        = /var/log/mysql/mysql.log
-#general_log             = 1
- 
-## Remove user:
-mysql>DROP USER 'username'@'localhost';
- 
-## Set root password (unset):
-mysql>UPDATE mysql.user SET password = PASSWORD('goes_here') WHERE user = "root"; flush privileges;
+```
+```bash 
+# List DBs:
+show databases;
+``` 
+```bash
+# List users:
+SELECT User FROM mysql.user;
+```
+```bash
+# Get update timestamps on table:
+show table status from {db_name} like '{table_name}';
+```
+```bash
+# Show grants per use:
+show grants for {account}@localhost;
+```
+```bash 
+# Give grants:
+grant all privileges on {db}.* to {user}@localhost identified by 'pass';
+``` 
+```bash
+# You can view logs at /var/log/mysql/error.log and /var/log/mysql/mysql.log
+tail -f /var/log/mysql/mysql.log
+```
+```bash
+# Turn on logging by editting /etc/mysql/my.cnf
+general_log_file        = /var/log/mysql/mysql.log
+general_log             = 1
+```
+```bash 
+# Remove user:
+DROP USER 'username'@'localhost';
+```
+```bash 
+# Set root password (unset):
+UPDATE mysql.user SET password = PASSWORD('goes_here') WHERE user = "root"; flush privileges;
 ``` 
 
-PostgreSQL:
+### PostgreSQL:
 
-```console
-##Postgres dump DB to .sql:
+```bash
+# Postgres dump DB to .sql:
 pg_dump -U <username> <DB_name> > dir\db.sql
 ```
 
-MS-SQL:
+### MS-SQL:
 
-```console
-##Query all connections to SQL server and extra information from sp_who
+```bat
+REM Query all connections to SQL server and extra information from sp_who
 select * from sys.dm_exec_connections
 exec sp_who
 ```
-SFTP:
-
-```console 
-## Make a new user part of the sftpusers group and place in the chroot jail:
-$usermod -g sftpusers -d /incoming -s /sbin/nologin {jail}
+```bat
+REM View AG listen IP
+select * from sys.availability_group_listener_ip_addresses
 ```
 
-System Center Configuration Manager:
+### SFTP:
 
-```console
-## Get CCM device:
-PS C:\>Get-CMDevice -Name <deviceID>
+```bash 
+# Make a new user part of the sftpusers group and place in the chroot jail:
+usermod -g sftpusers -d /incoming -s /sbin/nologin {jail}
 ```
 
-PsExec:
+### System Center Configuration Manager:
 
-```console
-## Execute Powershell command via psexec:
->psexec \\<target> cmd /c "echo . | powershell <command>"
-````
+```powershell
+# Get CCM device:
+Get-CMDevice -Name <deviceID>
+```
 
-Web Traffic:
+### PsExec:
 
-```console
-## curl allow insecure server connections when using SSL
-$curl -k <URI>
+```bat
+REM Execute Powershell command via psexec:
+psexec \\<target> cmd /c "echo . | powershell <command>"
+```
 
-## Curl output file to location:
-$curl -L -o <destination.filetype> URI
-## or
-PS C:\>Invoke-WebRequest -Uri 
+### HTTP Manipulation:
 
-## Curl Display only headers from HTTP response:
-$curl -L --HEAD <URI>
-## or
-PS C:\>(Invoke-WebRequest -Uri ipecho.net/plain).Headers
-
+```bash
+# curl allow insecure server connections when using SSL
+curl -k <URI>
+```
+```bash
+# Curl output file to location:
+curl -L -o <destination.filetype> URI
+```
+```powershelll
+# or
+Invoke-WebRequest -Uri -OutFile 
+```
+```bash
+# Curl Display only headers from HTTP response:
+curl -L --HEAD <URI>
+```
+```powershell
+# or
+PS C:\>(Invoke-WebRequest -Uri <URI>).Headers
+```
 ## Curl don't recurse redirects:
 $curl <URI>
 ## or

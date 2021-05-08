@@ -271,16 +271,6 @@ Enable-WindowsOptionalFeature -Online -FeatureName <feature_name>
 Enable-WindowsCapability -Online -FeatureName <feature_name>
 ```
 ```bash
-# RPM local installs:
-rpm -ivh file.rpm
-# or
-yum localinstall package.rpm
-```
-```bash
-# APT local installs:
-dpkg -i package.deb
-```
-```bash
 # /sbin/sysctl updates kernel settings in /proc/sys directory 
 # Edit /etc/sysctl.conf and run sysctl -p to persist settings
 sysctl -p
@@ -315,6 +305,49 @@ loadectl status
 ```bash
 # Load keys for the current console only:
 loadkeys <keymap>
+```
+
+### Package Management:
+
+```bash
+# RPM local installs:
+rpm -ivh file.rpm
+# or
+yum localinstall package.rpm
+```
+```bash
+# APT local installs:
+dpkg -i package.deb
+```
+```bash
+# Pacman refresh and update packages
+pacman -Syu --noconfirm
+```
+```bash
+# Install package
+pacman -S <packagename>
+```
+```bash
+# Remove an installed package, use -Rs to remove depends:
+pacman -R <packagename> 
+```
+```bash
+# Query packages:
+pacman -Ss <packagename>
+```
+```bash
+# Query installed packages:
+pacman -Q <packagename>
+```
+```bash
+# Query installed package with info:
+pacman -Qi <packagename>
+```
+```bash
+# Query orphaned packages that no longer are depends:
+pacman -Qd
+# To remove them:
+pacman -Rns $(pacman -Qtdq)
 ```
 
 ### WinEvents:

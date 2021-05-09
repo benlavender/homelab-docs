@@ -6,9 +6,9 @@ Repository store for all my homelab build docs and configs. 😎
 
 | Name | Done? |
 | --- | --- |
-| [Arch Linux Hyper-V build](guides/Arch-Linux-VM/Building-Arch-Linux-on-Hyper-V.md) | ✔️
+| [Arch Linux Hyper-V build](guides/Arch-Linux-VM/Building-Arch-Linux-on-Hyper-V.md) | ✅
 | Arch Linux with GUI | ⏰
-| [CheatSheet](guides/CheatSheet.md) | ✔️
+| [CheatSheet](guides/CheatSheet.md) | ✅
 | [Snort](https://www.snort.org/)| ⏰
 | [NetBox](https://netbox.readthedocs.io/en/stable/) | ⏰
 | [squid-cache](http://www.squid-cache.org/) | ⏰

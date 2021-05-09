@@ -1,7 +1,7 @@
 # AzureAD Join Windows Server 2019
 
 1.  Create new Az VM with a system assigned managed identity with image of either 2019 LTSC or Windows 10 1809.
-
+###### AzureCLI
 ```bash
 az vm create --resource-group <rg> --name <vmname> --image Win2019Datacenter --assign-identity --admin-username <user> --admin-password <password>
 ```
@@ -13,19 +13,20 @@ az vm extension set --publisher Microsoft.Azure.ActiveDirectory --name AADLoginF
 ```
 
 3. Assign either the Virtual Machine Administrator Login or the Virtual Machine User Login role assignment:
-
+###### Azure PowerShell
 ```powershell
 New-AzRoleAssignment -Scope <resourceID> -ObjectId <objectref> -RoleDefinitionName 'Virtual Machine Administrator Login'
 # or
 New-AzRoleAssignment -Scope <resourceID> -ObjectId <objectref> -RoleDefinitionName 'Virtual Machine User Login' 
 ```
+###### AzureCLI
 ```bash
 # or
 az role assignment create --role "Virtual Machine Administrator Login" --assignee-object-id --scope <resourceID>
 ```
 
 4. Add user into either BUILTIN\Administrators or Remote Desktop Users:s
-
+###### Azure PowerShell
 ```powershell
 Add-LocalGroupMember -Group Administrators -Member <member>
 # or

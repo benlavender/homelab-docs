@@ -995,10 +995,16 @@ dnscmd /zoneresettype <zonename> /overwrite_ds /directorypartition <DomainDNS.Na
 ```bat
 REM Add an A record:
 dnscmd /RecordAdd <zonename> <QNAME> <QTYPE> <Rdata>
+REM Add an A record as test:
+dnscmd /RecordAdd <zonename> test A <Rdata>
 ```
 ```bat
 REM Delete an A record:
 dnscmd /RecordDelete <zonename> <QNAME> <QTYPE>
+```
+```bat
+REM Add a CNAME record as test to test.com:
+dnscmd /RecordAdd <zonename> test CNAME test.com
 ```
 
 ### Storage Replica:

@@ -336,6 +336,14 @@ pacman -R <packagename>
 pacman -Ss <packagename>
 ```
 ```bash
+# View package group members:
+pacman -Sg <package>
+```
+```bash
+# Query package information:
+pacman -Si <package>
+```
+```bash
 # Query installed packages:
 pacman -Q <packagename>
 ```

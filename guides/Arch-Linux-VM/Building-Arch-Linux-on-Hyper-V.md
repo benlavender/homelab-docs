@@ -28,7 +28,7 @@ Using the above VM hardware settings, create this VM:
 New-VM -Name 'LAB-UXC0001' -MemoryStartupBytes '1073741824' -Generation 2 -NewVHDPath 'X:\Virtualisation\Hyper-V\Clients\LAB-UXC0001\Virtual Hard Disks\New Virtual Hard Disk.vhdx' -NewVHDSizeBytes '6442450944' -SwitchName 'LAB-EXTSWT-01' -Path 'X:\Virtualisation\Hyper-V\Clients\LAB-UXC0001'
 
 # I then create the DVD device and attach the .ISO to the VM:
-Add-VMDvdDrive -VMName 'LAB-UXC0002' -ControllerLocation 1 -ControllerNumber 0 -Path 'X:\UNIX\Linux\Arch Linux\System Builds\archlinux-2021.05.01-x86_64.iso'
+Add-VMDvdDrive -VMName 'LAB-UXC0001' -ControllerLocation 1 -ControllerNumber 0 -Path 'X:\UNIX\Linux\Arch Linux\System Builds\archlinux-2021.05.01-x86_64.iso'
 
 # I disable dynamic memory, secure boot then reconfigure the boot options::
 Set-VM -Name 'LAB-UXC0001' -StaticMemory
@@ -223,7 +223,7 @@ vi /etc/fstab
 # Uncomment the locate from /etc/locale.gen:
 en_GB.UTF-8 UTF-8
 # Generate the locale:
-local-gen
+locale-gen
 ```
 
 19. Create the /etc/locale.conf locale config file and set the variable:
@@ -231,13 +231,13 @@ local-gen
 ```bash
 vi /etc/locale.conf
 # Add in:
-LANG=en_GB.UTF-8 UTF-8
+LANG=en_GB.UTF-8
 ```
 
 20. Update the virtual console config file with the keymaps:
 
 ```bash
-vi vconsole.conf
+vi /etc/vconsole.conf
 # Add in:
 KEYMAP=uk
 ```
@@ -284,7 +284,7 @@ grub-mkconfig -o /boot/grub/grub.cfg
 pacman -Sy
 
 # Install networkmanager
-pacman -S --noconfirm NetworkManager
+pacman -S --noconfirm networkmanager
 # Enable daemon at start:
 systemctl enable NetworkManager
 ```
@@ -292,6 +292,7 @@ systemctl enable NetworkManager
 25. Unmount the current partitions:
 
 ```bash
+exit
 umount -R /mnt
 ```
 

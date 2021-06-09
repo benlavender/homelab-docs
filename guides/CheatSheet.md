@@ -306,6 +306,14 @@ loadectl status
 # Load keys for the current console only:
 loadkeys <keymap>
 ```
+```bash
+# Retreive BIOS information from SMBIOS
+dmidecode --type bios
+```
+```bash
+# Retreive system information, such as serial number 
+dmidecode --type system
+```
 
 ### Package Management:
 
@@ -480,6 +488,10 @@ rmdir -p test1/test/2/test3
 ```bash
 # Removes the following directories and automatically removes the folder structure:
 rmdir --ignore-fail-on-non-empty test1/test/2/test3 
+```
+```bash
+# Removes all files and directories in current directory except non-empty ones:
+rm -R -- */
 ```
 ```bash
 # Adds user permissions to execute:
@@ -826,6 +838,29 @@ nmcli con up <con-name>
 ```bash
 # Bring up a NetworkManager connection:
 nmcli con up <con-name>
+```
+```bash
+# Show installed WLAN NICs using iw:
+iw dev
+# or
+iw dev <devname> info
+```
+```bash
+# Show WLAN NIC info and associated essids:
+iwconfig <dev>
+```
+```bash
+# Scan for available APs with verbosity:
+iwlist <dev> scanning
+```
+```bash
+# Scan for available APs using nmcli
+nmcli dev wifi list
+```
+```bash
+# Scan for available APs using wpa_cli, gives more info than nmcli:
+wpa_cli scan -i <int>
+wpa_cli scan_results -i <int>
 ```
 
 ### Storage:

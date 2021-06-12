@@ -314,6 +314,36 @@ dmidecode --type bios
 # Retreive system information, such as serial number 
 dmidecode --type system
 ```
+```bash
+# Get locale information:
+localectl status
+```
+```bash
+# Change system locale:
+# Generate the locales if needed
+# Uncomment the line from /etc/locale.gen, i.e en_GB.UTF-8 UTF-8
+locale-gen
+localectl set-locale LANG=en_GB.UTF-8
+```
+
+### Service control:
+
+```bash
+# Show all systemd unit files:
+systemctl list-unit-files
+```
+```bash
+# Show systemd service unit:
+systemctl show <service.service>
+```
+```bash
+# Show the contents of the service unit file:
+systemctl cat <service.service>
+```
+```bash
+# List systemd service dependencies:
+systemctl list-dependencies <service.service>
+```
 
 ### Package Management:
 
@@ -364,6 +394,10 @@ pacman -Qi <packagename>
 pacman -Qd
 # To remove them:
 pacman -Rns $(pacman -Qtdq)
+```
+```bash
+# Pacman info and operation verbosity, add --debug to any operation:
+pacman --verbose
 ```
 
 ### WinEvents:

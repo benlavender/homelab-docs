@@ -7,7 +7,7 @@
 
 ## Filesystems and Partitioning:
 
-This device used a 32GB SDCARD.
+This device used a 32GB SDCARD, named **/dev/sdb**.
 
 | Disk | Size |
 | --- | --- |
@@ -110,6 +110,8 @@ hostnamectl set-hostname <hostname>
 
 #### *(Optional)* Install and configure NetworkManager initially for wired connections:
 
+NetworkManager is not installed at default, my preference is to use systemd.networkd...
+
 1. Install NetworkManager:
 ```bash
 # First re-sync:
@@ -133,16 +135,19 @@ nmcli connection modify "Wired connection 1" ipv4.method manual ipv4.addresses <
 
 #### Connect to a local WLAN network:
 
-1. Configure **systemd-networkd.service** to manage the wireless interface, if not already configured:
+Configure **systemd-networkd.service** to manage the wireless interface and **wpa_supplicant** to manage the authentication, if using WEP/WPA(2).
+
+To configure authentication and connection at start, then steps 3-7 and 10 are irrelevant as these manually authenticate to a BSSID. Steps 1-2 and from 11 are only needed for connection at boot time.
+
+1. Verify if managed:
 ```bash
-# Verify if managed:
 networkctl list <int>
 ```
 
-If not, create a new file at `/etc/systemd/network` like `/etc/systemd/network/wlan0.network` and restart **systemd-networkd.service**:
+If not, create a new file at **/etc/systemd/network** like **/etc/systemd/network/<int>.network** and restart **systemd-networkd.service**:
 ```text
 [Match]
-Name=wlan0
+Name=<int>
 
 [Network]
 DHCP=yes
@@ -153,6 +158,8 @@ systemctl restart systemd-networkd.service
 
 2. Install wpa_supplicant:
 ```bash
+# First re-sync:
+pacman -Syy
 pacman -S wpa_supplicant --noconfirm
 ```
 3. Create and update the **/etc/wpa_supplicant/wpa_supplicant.conf** file:
@@ -163,7 +170,7 @@ update_config=1
 4. Start wpa_supplicant in the background using the new .conf file:
 ```bash
 # Use iwconfig to view installed WLAN interfaces.
-wpa_supplicant -B -i <int> -c /etc/wpa_supplicant/wpa_supplicant.conf 
+wpa_supplicant -B -i <int> -c /etc/wpa_supplicant/wpa_supplicant.conf
 ```
 5. Scan for BSSIDs:
 ```bash
@@ -190,14 +197,83 @@ wpa_cli set_network <#> passphrase -i <int>
 ```bash
 wpa_cli enable_network <id> -i <int>
 ```
+11. Create the **/etc/wpa_supplicant/wpa_supplicant-<int>.conf** file from the stdout of step 8.
+```text
+ctrl_interface=/run/wpa_supplicant
+update_config=1
 
-## Alternate package configuration:
-
+network={
+    ssid="SSID"
+    psk=passphrase
+}
+```
+12. Edit the name of the systemd service unit from **wpa_supplicant@.service** to **wpa_supplicant@<int>.service**.
 ```bash
-# Install the below packages:
-pacman -S sudo man strace traceroute mtr nmap dmidecode --noconfirm
+mv /usr/lib/systemd/system/wpa_supplicant@.service /usr/lib/systemd/system/wpa_supplicant@<int>.service
+systemctl daemon-reload
+```
+13. Enable at system start and start the service:
+```bash
+systemctl enable --now wpa_supplicant@<int>.service
 ```
 
+## Further OS configurations:
+
+### Configure the date and time:
+
+1. Set the timezone, use timedatectl list-timezones for zone info:
+```bash
+timedatectl set-timezone <tz>
+```
+
+### Configure locales and language:
+
+1. Uncomment the locate from **/etc/locale.gen**, mine is:
+```text
+en_GB.UTF-8 UTF-8
+```
+2. Generate the locale:
+```bash
+locale-gen
+```
+3. Create the /etc/locale.conf locale config file and set the variable:
+```bash
+localectl set-locale LANG=en_GB.UTF-8
+```
+4. Create a persistent locale for ttys:
+```bash
+localectl set-keymap --no-convert uk
+```
+
+### User configurations:
+
+1. Create a new user for general user:
+```bash
+useradd <user> --groups <group> --create-home --shell /bin/bash --password <passwordstring>
+```
+2. Disable any accounts where necessary:
+```bash
+# Disable account:
+usermod <user> --lock
+# or
+## Delete any account:
+userdel --force --remove <user>
+```
+
+### Arch User Repository (AUR):
+
+1. Install the base-devel group:
+```bash
+sudo pacman -S base-devel git --noconfirm
+```
+2. Install and configure the YAY interface:
+```bash
+git clone https://aur.archlinux.org/yay.git
+# Change to the directory:
+cd yay
+# Create the package:
+makepkg -si --noconfirm
+```
 
 ### Reflector:
 
@@ -242,23 +318,20 @@ sudo systemctl enable reflector.service
 sudo systemctl start reflector.service
 ```
 
-### Arch User Repository (AUR):
+### Alternate package configuration:
 
-1. Install the base-devel group:
+1. Install packages that are useful for system administration:
 ```bash
-sudo pacman -S base-devel --noconfirm --needed
+# Install the below packages:
+pacman -S sudo man strace traceroute mtr nmap dmidecode tzdata smartmontools bind whois htop --noconfirm
 ```
-2. Install and configure the YAY interface:
+2. Configure sudoers:
 ```bash
-git clone https://aur.archlinux.org/yay.git
-# Change to the directory:
-cd yay
-# Create the package:
-makepkg -si --noconfirm
+visudo
+# Add in any configs
 ```
 
 ### Configure LightDM:
-
 Using the Litarvan theme at https://github.com/Litarvan/lightdm-webkit-theme-litarvan
 
 1. Install lightdm and the theme:
@@ -279,3 +352,7 @@ sudo systemctl start lightdm
 sudo systemctl enable lightdm 
 ```
 
+## Install and configure any remaining apps and productivity tools:
+
+
+neofetch gimp firefox visualstudio code

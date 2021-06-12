@@ -13,14 +13,14 @@ Repository store for all my homelab build docs and configs. 😎
 | [NetBox](https://netbox.readthedocs.io/en/stable/) | ⏰
 | [squid-cache](http://www.squid-cache.org/) | ⏰
 | [HAProxy](http://www.haproxy.org/) | ⏰
-| [Arch Linux ARM](https://archlinuxarm.org/) |⏰
+| [Arch Linux ARM](https://archlinuxarm.org/) | ✍️
 | [Azure landing zones](https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/landing-zone/) | ⏰
 | [Docker](https://docs.docker.com/) | ⏰
 | [VyOS](https://docs.vyos.io/en/latest/) | ⏰
 
 ## Configs:
 
-### 🐧 Personal Arch Linux ARM
+* [Personal Arch Linux ARM](configs/pi/Arch-Pi.md)
 
 ## Guides:
 

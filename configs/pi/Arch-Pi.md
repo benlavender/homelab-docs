@@ -332,6 +332,7 @@ visudo
 ```
 
 ### Configure LightDM:
+
 Using the Litarvan theme at https://github.com/Litarvan/lightdm-webkit-theme-litarvan
 
 1. Install lightdm and the theme:

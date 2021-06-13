@@ -27,6 +27,7 @@ Repository store for all my homelab build docs and configs. 😎
 ### 🐧 Linux/BSD:
 
 * [Arch Linux Hyper-V build](guides/Arch-Linux-VM/Building-Arch-Linux-on-Hyper-V.md)
+* [Arch Linux Reflector service](guides/Arch-Linux-Reflector-Service.md)
 
 ### General:
 

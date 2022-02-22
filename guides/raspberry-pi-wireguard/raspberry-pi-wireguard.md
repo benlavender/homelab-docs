@@ -31,8 +31,3 @@ ip link add dev wg0 type wireguard
 
 ip address add dev wg0 192.168.0.3/24
 
-
-umask 077; wg genkey | tee privatekey | wg pubkey > publickey
-
-
-

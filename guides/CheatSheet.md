@@ -1545,6 +1545,10 @@ openssl s_client -connect host:443
 # Displays only info on valid dates:
 openssl s_client -connect host:443 | openssl x509 -noout -dates
 ```
+```bash
+# Connect to StartTLS smtp port (can change protocol):
+openssl s_client -connect host:25 -starttls smtp
+```
 ```bat
 REM Discover CA/SubCA details of ADCS:
 certutil -config - -ping
@@ -1578,6 +1582,84 @@ REM Submit the CSR to the ADCS instance:
 certreq -submit -config <"CA"> -attrib "CertificateTemplate:<Template-Name>" <RequestFileOut.req> <output.cer>
 
 REM If the certificate requires approval, approve the request in ADCS:
+```
+```bash
+# Generate a new private key (RSA 1024):
+openssl genpkey -algorithm rsa -out private.key
+# Generate a new private key (RSA 4096):
+openssl genpkey -algorithm rsa -out private.key -pkeyopt rsa_keygen_bits:4096
+# Generate an encrypted private key with a Tripe-DES passphrase:
+openssl genpkey -algorithm rsa -out private.key -pkeyopt rsa_keygen_bits:2048 -des3 
+```
+```bash
+# Generate a private / public key pair using an existing key:
+openssl pkey -in private.key -out public.key -pubout
+```
+```bash
+# Read a private key file (enter passphrase if required):
+openssl rsa -in private.key -noout -text
+# or:
+openssl pkey -in privkey.key -text
+# Read a public key:
+openssl pkey -in pubkey.key -pubin -text
+```
+```bash
+# Create a CSR based on an existing key:
+# Follow the interactive guide, use "." to leave certain fields blank
+openssl req -key private.key -new -out website.csr
+# Create a CSR with a new private key:
+# Follow the interactive guide, use "." to leave certain fields blank
+openssl req -newkey rsa:2048 -keyout private.key -nodes -out website.csr
+```
+```bash
+# Create a self-signed certificate with an existing private key:
+# Follow the interactive guide, use "." to leave certain fields blank
+openssl req -x509 -new -key private.key -days 365 -out website.pem
+# Create a self-signed certificate with a new psrivate key:
+# Follow the interactive guide, use "." to leave certain fields blank
+openssl req -x509 -new -newkey rsa:2048 -nodes -keyout private.key -days 365 -out website.pem
+# Omit the "-nodes" switch to prompt for passphrase.
+openssl req -x509 -new -newkey rsa:2048 -keyout private.key -days 365 -out website.pem
+```
+```bash
+# Generte file hashes using dgst:
+# SHA256
+openssl dgst -sha256 inputfile
+# MD5
+openssl dgst -md5 inputfile
+```
+```bash
+# Verify private and public key relationship:
+# Using an existing private and public key pair, generate a signature using the private key and verify using a file:
+openssl dgst -sha1 -sign private.key -out signiture.sig <file>
+# Verify against public key:
+openssl dgst -sha1 -verify public.key -signature signiture.sig <file>
+```
+```bash
+# Sign and encrypt a file for sharing between user A => user B:
+# Create a private/public key pair for user A:
+openssl genpkey -algorithm rsa -pkeyopt rsa_keygen_bits:2048 -out private-a.key
+openssl pkey -in private-a.key -pubout -out public-a.key
+# Create a private/public key pair for user B:
+openssl genpkey -algorithm rsa -pkeyopt rsa_keygen_bits:2048 -out private-b.key
+openssl pkey -in private-b.key -pubout -out public-b.key
+# Share the public keys of each user with each other.
+# Create a file with some text like "Example text" with user A.
+# Encrypt the hash value using the senders private key.
+# Generate a hash value of this file:
+openssl dgst -sha1 message.txt 
+# Encrypt hash value using user A's private key and output the digital signature:
+openssl dgst -sha1 -sign private-a.key -out signiture.bin message.txt
+# Signature to be sent to user B for verification and decryption with user A's public key.
+# Encrypt file with public key of user B:
+openssl pkeyutl -encrypt -in message.txt -pubin -inkey public-b.key -out ciphertext.bin
+# Cipher text and signiture to be sent to user B.
+# As user B:
+# Decrypt ciphertext.bin:
+openssl pkeyutl -decrypt -in ciphertext.bin -inkey private-b.key -out received-message.txt
+# Verify received-message is the same as message.txt, either by hash or content.
+# Verify signiture:
+openssl dgst -sha1 -verify public-a.key -signature signiture.bin received-message.txt
 ```
 
 ### SMTP:

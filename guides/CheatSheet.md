@@ -1522,74 +1522,64 @@ curl -L --max-redirs <#> <URI>
 Invoke-RestMethod -Uri 'https://vsapp.vehiclesmart.com/rest/vehicleData?reg=<registration>&appid=vs5Dszb7SzN15JlKv71QxGv-aq1VcK6G20-S9v4hbdsb5' -Method GET | ConvertTo-Json
 ```
 
-### Certificates and CryptoAPI:
+### Certificates, OpenSSL and CryptoAPI:
 
 ```bash
-# Convert from PKCS#12 to Base64 .PEM:
-openssl pkcs12 -in deb.pfx -out deb.pem -nodes
+# Conversations with OpenSSL
+# Create PKCS12 archive from a private key and signed PEM certificate:
+openssl pkcs12 -in certificate.pem -inkey private.key -export -out certificate.pfx
+# Convert from PKCS#12 to PEM format and export private key to a combined PEM file:
+openssl pkcs12 -in certificate.pfx -out certificate.pem -nodes
+# Convert from PKCS#12 to PEM format and export unencrypted private key only:
+openssl pkcs12 -in certificate.pfx -nocerts -out private.key -nodes
+# Convert from PKCS#12 to PEM format but do no export the private key:
+openssl pkcs12 -in certificate.pfx -nokeys -out certificate.pem 
+# Convert a signed PEM (Base64) certificate to DER (binary) format:
+openssl x509 -in certificate.pem -out certificate.der -outform DER
+# Convert a signed DER (binary) certificate to PEM (Base64) format:
+openssl x509 -inform DER -in certificate.der -out certificate.pem
+# Create PKCS7 P7B archive archive from a PKCS12 archive, via PEM conversation without importing a CRL file:
+openssl pkcs12 -in certificate.pfx -out certificate.pem -nodes
+openssl crl2pkcs7 -certfile certificate.pem -out certificate.p7b -nocrl
 ```
 ```bash
-# List X509 cert details:
-openssl x509 -in <.PEM> -text
-```
-```bash
-# Split pkcs12 for Base64:
-openssl pkcs12 -in <deb2.pfx> -out <deb2.crt.pem> -clcerts -nokeys
-openssl pkcs12 -in <deb2.pfx> -out <deb2.key.pem> -nocerts -nodes
-```
-```bash 
-# OpenSSL connect to host and display certificate info:
-openssl s_client -connect host:443
-```
-```bash 
-# Displays only info on valid dates:
-openssl s_client -connect host:443 | openssl x509 -noout -dates
-```
-```bash
-# Connect to StartTLS smtp port (can change protocol):
-openssl s_client -connect host:25 -starttls smtp
-```
-```bat
-REM Discover CA/SubCA details of ADCS:
-certutil -config - -ping
-```
-```bat
-REM List certificate templates available on ADCS:
-certutil -CAtemplates -config CA.FQDN\CA_name
-```
-```bat
-# Open certificates using certutil:
-certutil -dump <certificate>
-```
-```bash
-# Open PKCS12 certificate using openssl:
-openssl pkcs12 -in <certificate>
-```
-```bat
-REM Request X509 certificate from an ADCS template using a .INF file:
-REM .INI file example:
-[NewRequest]
-Subject = "CN=,DC=,DC=,DC=company,DC=co,DC=uk"
-MachineKeySet = True
-KeyLength = 2048
-KeySpec = 1
-Exportable = True
-
-REM Create the CSR:
-certreq -new <PolicyFileIn.inf> <RequestFileOut.req>
-
-REM Submit the CSR to the ADCS instance:
-certreq -submit -config <"CA"> -attrib "CertificateTemplate:<Template-Name>" <RequestFileOut.req> <output.cer>
-
-REM If the certificate requires approval, approve the request in ADCS:
+# Reading certificates with OpenSSL
+# PKCS12
+# Read the contents, including the chain and keys from a PKCS12 PFX file:
+openssl pkcs12 -in certificate.pfx
+# Without the private key:
+openssl pkcs12 -in certificate.pfx -nokeys
+# Without the private key, CA certs and only the client certs:
+openssl pkcs12 -in certificate.pfx -nokeys -clcerts
+# Without the private key and only the CA certs:
+openssl pkcs12 -in certificate.pfx -nokeys -cacerts
+# PKCS7
+# Read the contents of a P7B file without the cert data:
+openssl pkcs7 -in certificate.p7b -print -noout
+# X509
+# Read the contents of an X509 signed certificate without the cert data:
+openssl x509 -in certificate.pem -noout -text
+# Display only the fingerprint digest in SHA256 (default is SHA1):
+openssl x509 -in certificate.pem -fingerprint -sha256 -noout
+# PKCS10 (CSR)
+# Read the contents of a CSR file without the cert data:
+openssl req -in request.csr -text -noout
+# View just the subject of the request:
+openssl req -in request.csr -noout -subject
 ```
 ```bash
 # Generate a new private key (RSA 1024):
 openssl genpkey -algorithm rsa -out private.key
 # Generate a new private key (RSA 4096):
 openssl genpkey -algorithm rsa -out private.key -pkeyopt rsa_keygen_bits:4096
-# Generate an encrypted private key with a Tripe-DES passphrase:
-openssl genpkey -algorithm rsa -out private.key -pkeyopt rsa_keygen_bits:2048 -des3 
+# Generate an encrypted private key with a Triple-DES passphrase:
+openssl genpkey -algorithm rsa -out private.key -pkeyopt rsa_keygen_bits:2048 -des3
+# Generate an encrypted private key with a AES256 passphrase (generally preferred):
+openssl genpkey -algorithm rsa -out private.key -pkeyopt rsa_keygen_bits:2048 -aes256
+```
+```bash
+# Decrypt a private Key:
+openssl pkey -in private.key -out private2.key
 ```
 ```bash
 # Generate a private / public key pair using an existing key:
@@ -1608,18 +1598,26 @@ openssl pkey -in pubkey.key -pubin -text
 # Follow the interactive guide, use "." to leave certain fields blank
 openssl req -key private.key -new -out website.csr
 # Create a CSR with a new private key:
-# Follow the interactive guide, use "." to leave certain fields blank
+# Follow the interactive guide, use "." to leave certain fields blank:
 openssl req -newkey rsa:2048 -keyout private.key -nodes -out website.csr
 ```
 ```bash
 # Create a self-signed certificate with an existing private key:
 # Follow the interactive guide, use "." to leave certain fields blank
 openssl req -x509 -new -key private.key -days 365 -out website.pem
-# Create a self-signed certificate with a new psrivate key:
+# Create a self-signed certificate with a new private key:
 # Follow the interactive guide, use "." to leave certain fields blank
 openssl req -x509 -new -newkey rsa:2048 -nodes -keyout private.key -days 365 -out website.pem
 # Omit the "-nodes" switch to prompt for passphrase.
 openssl req -x509 -new -newkey rsa:2048 -keyout private.key -days 365 -out website.pem
+```
+```bash
+# Generate a self signed certificate based on an existing CSR and private key:
+openssl x509 -signkey private.key -in request.csr -req -days 365 -out website.cer
+```
+```bash
+# Read and verify an existing CSR:
+openssl req -in request.csr -text -noout -verify
 ```
 ```bash
 # Generte file hashes using dgst:
@@ -1634,6 +1632,15 @@ openssl dgst -md5 inputfile
 openssl dgst -sha1 -sign private.key -out signiture.sig <file>
 # Verify against public key:
 openssl dgst -sha1 -verify public.key -signature signiture.sig <file>
+```
+```bash
+# Verify a certificate is associated with a known private key
+# Confirm the modulus of both the private key and the signed certificate are the same:
+openssl rsa -modulus -noout -in private.key
+openssl x509 -modulus -noout -in website.cer
+# Each modulus string can be verified with dgst for simplicity if required:
+openssl rsa -modulus -noout -in private.key | openssl dgst -sha256
+openssl x509 -modulus -noout -in website.cer | openssl dgst -sha256
 ```
 ```bash
 # Sign and encrypt a file for sharing between user A => user B:
@@ -1660,6 +1667,48 @@ openssl pkeyutl -decrypt -in ciphertext.bin -inkey private-b.key -out received-m
 # Verify received-message is the same as message.txt, either by hash or content.
 # Verify signiture:
 openssl dgst -sha1 -verify public-a.key -signature signiture.bin received-message.txt
+```
+```bash 
+# OpenSSL connect to host and display certificate info:
+openssl s_client -connect host:443
+```
+```bash 
+# Displays only info on valid dates:
+openssl s_client -connect host:443 | openssl x509 -noout -dates
+```
+```bash
+# Connect to StartTLS smtp port (can change protocol):
+openssl s_client -connect host:25 -starttls smtp
+```
+```bat
+REM Discover CA/SubCA details of ADCS:
+certutil -config - -ping
+```
+```bat
+REM List certificate templates available on ADCS:
+certutil -CAtemplates -config CA.FQDN\CA_name
+```
+```bat
+# Open certificates using certutil:
+certutil -dump <certificate>
+```
+```bat
+REM Request X509 certificate from an ADCS template using a .INF file:
+REM .INI file example:
+[NewRequest]
+Subject = "CN=,DC=,DC=,DC=company,DC=co,DC=uk"
+MachineKeySet = True
+KeyLength = 2048
+KeySpec = 1
+Exportable = True
+
+REM Create the CSR:
+certreq -new <PolicyFileIn.inf> <RequestFileOut.req>
+
+REM Submit the CSR to the ADCS instance:
+certreq -submit -config <"CA"> -attrib "CertificateTemplate:<Template-Name>" <RequestFileOut.req> <output.cer>
+
+REM If the certificate requires approval, approve the request in ADCS:
 ```
 
 ### SMTP:

@@ -1493,6 +1493,10 @@ curl -k <URI>
 # Curl output file to location:
 curl -L -o <destination.filetype> URI
 ```
+```bash
+# Curl static DNS mapping, can be used with A and CNAME RRs (Useful for TLS SNI):
+curl --resolve <DNS:port:IP.addr/DNS_record> <URL>
+```
 ```powershelll
 # or
 Invoke-WebRequest -Uri -OutFile 
@@ -1668,15 +1672,18 @@ openssl pkeyutl -decrypt -in ciphertext.bin -inkey private-b.key -out received-m
 # Verify signiture:
 openssl dgst -sha1 -verify public-a.key -signature signiture.bin received-message.txt
 ```
-```bash 
-# OpenSSL connect to host and display certificate info:
-openssl s_client -connect host:443
-```
-```bash 
-# Displays only info on valid dates:
-openssl s_client -connect host:443 | openssl x509 -noout -dates
+```bash
+# Load a SSL/TLS server for debugging:
+openssl s_server -port 443 -cert certificate.pem -key private.key -status -www
 ```
 ```bash
+# OpenSSL s_client for client to server connections
+# OpenSSL connect to host and display connection and certificate info:
+openssl s_client -connect host:443
+# Displays only info on valid dates:
+openssl s_client -connect host:443 | openssl x509 -noout -dates
+# Show all certs sent by the server, including any CA certs:
+openssl s_client -connect host:443 -showcerts 
 # Connect to StartTLS smtp port (can change protocol):
 openssl s_client -connect host:25 -starttls smtp
 ```

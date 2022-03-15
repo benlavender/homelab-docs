@@ -451,6 +451,12 @@ find . -type f -exec grep -l "string" {} +
 # or
 grep -R "string" /
 ``` 
+```bash
+# Find only directories in working directory (-maxdepth to stop recursion):
+find . -maxdepth 1 -not -type f
+# Finds only files:
+find . -maxdepth 1 -not -type d
+```
 ```powershell
 # Get top x10 largest files:
 Get-ChildItem <dir> -Recurse -File | Sort-Object -Property Length -Descending | Select-Object -First 10 -Property Length,VersionInfo
@@ -1524,6 +1530,21 @@ curl -L --max-redirs <#> <URI>
 ```powershell
 # Query the VRM lookup API for DVLA and DVSA vehicle data (change the REG...):
 Invoke-RestMethod -Uri 'https://vsapp.vehiclesmart.com/rest/vehicleData?reg=<registration>&appid=vs5Dszb7SzN15JlKv71QxGv-aq1VcK6G20-S9v4hbdsb5' -Method GET | ConvertTo-Json
+```
+
+### DNS Manipulation:
+
+```bash
+# Query the root hints:
+dig . NS
+```
+```bash
+# Attempt an XFR pull:
+dig AXFR <zonename> <NS>
+```
+```bash
+# Perform an iterative query and report back the results. Use @nameserver to verify the hinters using a specific server:
+dig +trace <QNAME>
 ```
 
 ### Certificates, OpenSSL and CryptoAPI:

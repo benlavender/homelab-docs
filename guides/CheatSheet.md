@@ -1703,6 +1703,32 @@ openssl s_client -connect host:443 -state
 # Connect to StartTLS smtp port (can change protocol):
 openssl s_client -connect host:25 -starttls smtp
 ```
+```bat 
+REM Conversations with certutil:
+REM Convert DER format to Base64:
+certutil -encode certificate.der certificate.pem
+REM Convert Base64 PEM format to DER:
+certutil -decode certificate.pem certificate.der
+```
+```bat
+REM PKCS12
+REM Create PKCS12 archive from a pair of PEM certificates. Ensure both certificates have the same file name where the certificate is .cer and the private key is .key if exist:
+CertUtil -MergePFX certificate.cer certificate.pfx
+```
+```bat
+REM Reading certificates with certutil
+REM PKCS12
+REM Read PFX PKCS12 arhvive and private key:
+certutil -dumpPFX -privatekey -p <password> certificate.pfx
+REM Read PEM formats:
+certutil -dump certificate.key
+REM or:
+certutil -dump certificate.cer
+REM or:
+certutil -dump certificate.cer
+REM DER binary format:
+certutil -dump certificate.der
+```
 ```bat
 REM Discover CA/SubCA details of ADCS:
 certutil -config - -ping
@@ -1710,10 +1736,6 @@ certutil -config - -ping
 ```bat
 REM List certificate templates available on ADCS:
 certutil -CAtemplates -config CA.FQDN\CA_name
-```
-```bat
-# Open certificates using certutil:
-certutil -dump <certificate>
 ```
 ```bat
 REM Request X509 certificate from an ADCS template using a .INF file:

@@ -1534,6 +1534,8 @@ Invoke-RestMethod -Uri 'https://vsapp.vehiclesmart.com/rest/vehicleData?reg=<reg
 openssl pkcs12 -in certificate.pem -inkey private.key -export -out certificate.pfx
 # Convert from PKCS#12 to PEM format and export private key to a combined PEM file:
 openssl pkcs12 -in certificate.pfx -out certificate.pem -nodes
+# Omit the -nodes to export an encrypted private key
+openssl pkcs12 -in certificate.pfx -out certificate.pem
 # Convert from PKCS#12 to PEM format and export unencrypted private key only:
 openssl pkcs12 -in certificate.pfx -nocerts -out private.key -nodes
 # Convert from PKCS#12 to PEM format but do no export the private key:
@@ -1557,6 +1559,12 @@ openssl pkcs12 -in certificate.pfx -nokeys
 openssl pkcs12 -in certificate.pfx -nokeys -clcerts
 # Without the private key and only the CA certs:
 openssl pkcs12 -in certificate.pfx -nokeys -cacerts
+# View only certificate information:
+openssl pkcs12 -in certificate.pfx -info -nokeys -noout
+# View only the encrypted private key:
+openssl pkcs12 -in certificate.pfx -nocerts
+# View only the private key:
+openssl pkcs12 -in certificate.pfx -nocerts -nodes
 # PKCS7
 # Read the contents of a P7B file without the cert data:
 openssl pkcs7 -in certificate.p7b -print -noout
@@ -1674,7 +1682,9 @@ openssl dgst -sha1 -verify public-a.key -signature signiture.bin received-messag
 ```
 ```bash
 # Load a SSL/TLS server for debugging:
-openssl s_server -port 443 -cert certificate.pem -key private.key -status -www
+openssl s_server -port 443 -cert certificate.pem -key private.key -status 
+# Support HTTP by adding -www to return a / on HTTP GET:
+openssl s_server -port 443 -cert certificate.pem -key private.key -www
 ```
 ```bash
 # OpenSSL s_client for client to server connections
@@ -1684,6 +1694,12 @@ openssl s_client -connect host:443
 openssl s_client -connect host:443 | openssl x509 -noout -dates
 # Show all certs sent by the server, including any CA certs:
 openssl s_client -connect host:443 -showcerts 
+# Show brief TLS connection settings with certificate validation only:
+openssl s_client -connect host:443 -brief
+# Configure alternative server name for SNI:
+openssl s_client -connect host:443 -servername fqdn
+# Show TLS/SSL states during connect:
+openssl s_client -connect host:443 -state
 # Connect to StartTLS smtp port (can change protocol):
 openssl s_client -connect host:25 -starttls smtp
 ```

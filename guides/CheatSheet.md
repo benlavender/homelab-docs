@@ -1776,6 +1776,10 @@ certreq -submit -config <"CA"> -attrib "CertificateTemplate:<Template-Name>" <Re
 
 REM If the certificate requires approval, approve the request in ADCS:
 ```
+```bash
+# Create your own pet Certificate Authority with OpenSSL:
+# 
+```
 
 ### SMTP:
 

@@ -1663,7 +1663,7 @@ openssl dgst -md5 inputfile
 # Verify private and public key relationship:
 # Using an existing private and public key pair, generate a signature using the private key and verify using a file:
 openssl dgst -sha1 -sign private.key -out signiture.sig <file>
-# Verify against public key:
+# Verify against public key:1
 openssl dgst -sha1 -verify public.key -signature signiture.sig <file>
 ```
 ```bash
@@ -1775,6 +1775,63 @@ REM Submit the CSR to the ADCS instance:
 certreq -submit -config <"CA"> -attrib "CertificateTemplate:<Template-Name>" <RequestFileOut.req> <output.cer>
 
 REM If the certificate requires approval, approve the request in ADCS:
+```
+
+#### Let's Encrypt:
+
+##### Certbot:
+
+```bash
+# List working certificates:
+certbot certificates
+```
+```bash
+# Generate a new certificate on a server with no current web server software. This uses certbots own web server:
+certbot certonly --standalone --preferred-challenges http -d <domain> -m <notice_smtp>
+```
+```bash
+# Generate a new certificate from an alternative machine and perform validation setup manually:
+certbot certonly --manual -d <domain> -m <notice_smtp>
+# Or using an alternative challenge type like DNS-01:
+certbot certonly --manual -d <domain> -m <notice_smtp> --preferred-challenges dns
+```
+```bash
+# Generate a new certificate from an existing CSR:
+certbot certonly --manual --csr <path/to/csr> -m <notice_smtp>
+# Generate a new certificate from an existing CSR using DNS-01 challenge:
+certbot certonly --manual --preferred-challenges dns --csr <path/to/csr> -m <notice_smtp>
+```
+```bash
+# Renew all certificates known by certbot:
+certbot renew
+# Renew a particular certificate:
+certbot renew --cert-name <Certificate Name> 
+```
+```bash
+# Renew and modify existing certificate with --manual and the dns-01 challenge:
+certbot certonly --manual --cert-name <> --preferred-challenges dns
+# Renew and modify existing certificate with the same or different domains:
+certbot certonly --force-renewal -d <existing.com,example.com,newdomain.com> --cert-name <Certificate Name> 
+# Renew a particular certificate:
+certbot certonly --force-renewal --cert-name <Certificate Name> 
+# Renew a particular certificate on an alternate machine
+certbot certonly --manual --force-renewal --cert-name <Certificate Name> 
+# Renew a particular certificate on an alternate machine with the same or different domains:
+certbot certonly --manual --force-renewal -d <existing.com,example.com,newdomain.com> --cert-name <Certificate Name>
+# Duplicate an existing certificate which creates a separate certificate file:
+certbot certonly --duplicate --cert-name <Certificate Name> 
+# Duplicate an existing certificate which creates a separate certificate using an alternate challenge type on an alternate machine: 
+certbot certonly --manual --duplicate --cert-name <Certificate Name> --preferred-challenges dns
+```
+```bash
+# Update an existing certificate but with the same plus new domains (does not create the certs alongside the existing one as with --force-renewal) on an alternate machine:
+certbot certonly --manual --expand -d <existing.com,example.com,newdomain.com> --cert-name <Certificate Name>
+# Update an existing certificate but with the same plus new domains (does not create the certs alongside the existing one as with --force-renewal):
+certbot certonly --expand -d <existing.com,example.com,newdomain.com> --cert-name <Certificate Name>
+```
+```bash
+# Revoke a certificate managed by certbot:
+certbot revoke --cert-name <Certificate Name>
 ```
 
 ### SMTP:

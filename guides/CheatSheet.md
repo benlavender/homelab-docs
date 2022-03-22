@@ -1631,8 +1631,19 @@ openssl pkey -in pubkey.key -pubin -text
 # Follow the interactive guide, use "." to leave certain fields blank
 openssl req -key private.key -new -out website.csr
 # Create a CSR with a new private key:
-# Follow the interactive guide, use "." to leave certain fields blank:
+# Follow the interactive guide, use "." to leave certain fields blank
 openssl req -newkey rsa:2048 -keyout private.key -nodes -out website.csr
+# Generate a new CSR with optional extensions like X509v3 Subject Alternative Name (requires 1.1.1 min):
+# Follow the interactive guide, use "." to leave certain fields blank
+openssl req -newkey rsa:2048 -keyout private.key -nodes -addext "subjectAltName = DNS:fqdn" -out website.csr 
+# Generate a new CSR based on a new private key, without using the wizard:
+openssl req -newkey rsa:2048 -keyout private.key -nodes -subj "/C=AU/ST=Some-State/O=Internet Widgits Pty Ltd/CN=fqdn" -out website.csr
+# With subject and SAN extensions:
+openssl req -newkey rsa:2048 -keyout private.key -nodes -subj "/C=AU/ST=Some-State/O=Internet Widgits Pty Ltd/CN=fqdn" -addext "subjectAltName = DNS:fqdn" -out website.csr
+# or:
+openssl req -newkey rsa:2048 -keyout private.key -nodes -subj "/CN=fqdn" -out website.csr
+# or 
+openssl req -newkey rsa:2048 -keyout private.key -nodes -subj "/CN=fqdn" -addext "subjectAltName = DNS:fqdn" -out website.csr
 ```
 ```bash
 # Create a self-signed certificate with an existing private key:
@@ -1643,6 +1654,7 @@ openssl req -x509 -new -key private.key -days 365 -out website.pem
 openssl req -x509 -new -newkey rsa:2048 -nodes -keyout private.key -days 365 -out website.pem
 # Omit the "-nodes" switch to prompt for passphrase.
 openssl req -x509 -new -newkey rsa:2048 -keyout private.key -days 365 -out website.pem
+
 ```
 ```bash
 # Generate a self signed certificate based on an existing CSR and private key:

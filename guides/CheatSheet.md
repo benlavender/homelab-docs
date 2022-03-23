@@ -1482,13 +1482,19 @@ usermod -g sftpusers -d /incoming -s /sbin/nologin {jail}
 Get-CMDevice -Name <deviceID>
 ```
 
-### PsExec:
+### Sysinternals:
 
 ```bat
+REM psexec
 REM Execute Powershell command via psexec:
 psexec \\<target> cmd /c "echo . | powershell <command>"
 ```
-
+```bat
+REM sigcheck
+```
+```bat
+REM listdlls
+```
 ### HTTP Manipulation:
 
 ```bash

@@ -1931,6 +1931,17 @@ tcpdump -i ANY port 514
 tcpdump -n src host <ip.addr>
 ```
 
+### Git SCM:
+
+```bash
+# View all keys and values assigned in config file:
+git config --list
+# View a particulular key and value:
+git config --get name.setting
+# If key is multi-valued, use --get-all:
+git config --get-all name.setting
+```
+
 ## Public Cloud:
 
 ### Microsoft Azure:

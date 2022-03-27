@@ -952,6 +952,75 @@ mount /dev/sda2 /mnt
 # Mount the efi partition to /mnt/boot:
 mount /dev/sda1 /mnt/boot
 ```
+```bash
+# List all block devices:
+lsblk -a
+```
+```bash
+# List FS info on all block devices:
+lsblk -f
+# or
+df -T
+```
+```bash
+# List filesystems with human readable figures:
+df -h
+```
+```bash
+# Scan for potential LVM psychical volume disks:
+lvmdiskscan
+```
+```bash
+# List information on LVM physical volumes:
+pvdisplay
+# Display specific PV name:
+pvdisplay </dev/device>
+```
+```bash
+# List information on LVM volume groups:
+vgs -a
+# or:
+vgdisplay
+# Display information on specific volume group:
+vgdisplay <VG Name>
+```
+```bash
+# Display information on LVM logical volumes:
+lvdisplay -v
+# Display information on specific logical volumes:
+vdisplay -v <LV path>
+```
+```bash
+# Add additional LVM physical volume from a new disk and add to volume group
+# Confirm disk has no partitions:
+lsblk -f </dev/disk>
+# Add new PV to volume group, which creates PV automatically:
+vgextend <VG name> </dev/disk>
+# Or create new PV from the new disk manually:
+pvcreate </dev/disk>
+```
+```bash
+# Increase logical volume and extend FS on sole disk
+# Add additional primary partition on disk:
+fdisk </dev/disk>
+# Create new partition:
+n
+# Create primary partition:
+p
+# Enter partition number, enter for default and select default for both start and end sectors
+# Write changes to disk:
+w
+# Create new physical volume from new partition:
+pvcreate </dev/newpart>
+# Extend volume group:
+vgextend <VG Name> </dev/new_pv>
+# Confirm vg is now extended with "Free  PE / Size":
+vgdisplay <VG Name>
+# Extend logical volume and FS:
+lvextend -r -l +100%FREE <LV Path>
+# Optionally you can increase the FS (XFS in this case) without using the -r switch in the previous command:
+xfs_growfs <FS>
+```
 
 ### O/S Updates:
 
@@ -1126,6 +1195,14 @@ Set-VM -Name <VMname> -StaticMemory
 # Mount an ISO and configure it for boot:
 $VMDVDDrive = Get-VMDvdDrive -VMName <vmname>
 Set-VMFirmware -VMName <vmname> -EnableSecureBoot Off -FirstBootDevice $VMDVDDrive
+```
+```powershell
+# Get VHD information:
+Get-VHD -Path <path\to\vhd>
+```
+```powershell
+# Resize VHD
+Resize-VHD -Path <path\to\vhd> -SizeBytes <bytes>
 ```
 
 #### KVM-quemu / libvirt:

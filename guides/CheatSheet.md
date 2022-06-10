@@ -2138,3 +2138,27 @@ $role.Actions += 'Microsoft.Compute/locations/runCommands/read'
 # Create the second role:
 New-AzRoleDefinition -Role $role
 ```
+```bash
+# Create a new resource group:
+az group create --location <Region> --name <ResourceGroupName>
+```
+```bash
+# Create a new NSG and permit TCP 22 (SSH):
+az network nsg create --name <Name> --resource-group <ResourceGroupName> --location <Region>
+az network nsg rule create --resource-group <ResourceGroupName> --nsg-name <NSGName> --Name <Rule_Name> --priority <int> --description <"Desc"> --destination-address-prefixes <cidr> --destination-port-ranges <int> --direction <inbound|outbound> --protocol <proto> --source-address-prefixes <cidr> --access <allow|deny>
+```
+```bash
+# Create a new static public IP address and configure PTR:
+az network public-ip create --name PIP-PRD-UKWEST-001 --resource-group RG-SMTP-PRD-001 --allocation-method static --location ukwest --sku basic --tags Workload=SMTP --tier Regional --version IPv4
+```
+```bash
+az network vnet create --name VNET-SMTP-PRD-UKWEST-001 --resource-group RG-SMTP-PRD-001 --address-prefix 192.168.0.0/16 --subnet-name SNET-SMTP-PRD-001 --subnet-prefix 192.168.0.0/24 --location ukwest --tags Workload=SMTP --network-security-group NSG-SMTP-PRD-UKWEST-001
+```
+```bash
+# Create a new NIC and associate with an existing public IP address:
+az network nic create --name NIC-PRD-UKWEST-001 --resource-group RG-SMTP-PRD-001 --vnet-name VNET-SMTP-PRD-UKWEST-001 --subnet SNET-SMTP-PRD-001 --location ukwest
+```
+```bash
+# Create a Linux VM from the marketplace using an existing NIC, Public IP, VNET and subnet:
+az vm create --name VM-SMTP-PRD-UKWEST-001 --resource-group RG-SMTP-PRD-001 --image debian --generate-ssh-keys --size Standard_B1ls --os-disk-name osdisk-prd-VM-PRD-SMTP-UKWEST-001-ukwest-001 --location ukwest --enable-agent true --computer-name VM-PRD-SMTP-UKWEST-001 --nics nic-prd-ukwest-001 --tags Workload=SMTP
+```

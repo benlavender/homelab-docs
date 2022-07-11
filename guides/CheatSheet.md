@@ -2029,6 +2029,8 @@ git config --get-all name.setting
 
 ### Microsoft Azure:
 
+#### Azure Active Directory:
+
 ```bash
 # List available VM extensions in the Azure CLI:
 az vm extension image list --latest
@@ -2042,6 +2044,9 @@ Set-AzureADUserPassword -ObjectId 0fd2daaf-64af-47a7-91c3-d38840eee2c5 -Password
 # Use --force-change-password-next-login to expire new password
 az ad user update --id <objectID> --password <password_string>
 ```
+
+#### Azure Resource Manager:
+
 ```bash
 # Listing role assignments
 # Per scope:
@@ -2142,6 +2147,9 @@ New-AzRoleDefinition -Role $role
 # Create a new resource group:
 az group create --location <Region> --name <ResourceGroupName>
 ```
+
+#### Virtual Network:
+
 ```bash
 # Create a new NSG and permit TCP 22 (SSH):
 az network nsg create --name <Name> --resource-group <ResourceGroupName> --location <Region>
@@ -2161,4 +2169,8 @@ az network nic create --name NIC-PRD-UKWEST-001 --resource-group RG-SMTP-PRD-001
 ```bash
 # Create a Linux VM from the marketplace using an existing NIC, Public IP, VNET and subnet:
 az vm create --name VM-SMTP-PRD-UKWEST-001 --resource-group RG-SMTP-PRD-001 --image debian --generate-ssh-keys --size Standard_B1ls --os-disk-name osdisk-prd-VM-PRD-SMTP-UKWEST-001-ukwest-001 --location ukwest --enable-agent true --computer-name VM-PRD-SMTP-UKWEST-001 --nics nic-prd-ukwest-001 --tags Workload=SMTP
+```
+```powershell
+# Validate effective routes for an existing NIC:
+Get-AzEffectiveRouteTable -NetworkInterfaceName <NIC> -ResourceGroupName <ResourceGroupName>
 ```

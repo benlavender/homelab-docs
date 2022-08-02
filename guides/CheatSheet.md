@@ -366,10 +366,6 @@ pacman -Syu --noconfirm
 pacman -S <packagename>
 ```
 ```bash
-# Remove an installed package, use -Rs to remove depends:
-pacman -R <packagename> 
-```
-```bash
 # Query packages:
 pacman -Ss <packagename>
 ```
@@ -382,6 +378,21 @@ pacman -Sg <package>
 pacman -Si <package>
 ```
 ```bash
+# Remove any non-installed cached packages from /var/cache/pacman/pkg:
+# Use -Scc to clear all regardless
+pacman -Sc
+# or (use the -u switch to target only uninstalled packages):
+paccache -rk0
+```
+```bash
+# Remove all cached packages older than -3x versions earlier (use the -u switch to target only uninstalled packages):
+paccache -r
+```
+```bash
+# Remove -1x versions earlier (use the -u switch to target only uninstalled packages):
+paccache -rk1
+```
+```bash
 # Query installed packages:
 pacman -Q <packagename>
 ```
@@ -390,14 +401,60 @@ pacman -Q <packagename>
 pacman -Qi <packagename>
 ```
 ```bash
+# Query list of files installed within a package:
+pacman -Ql <packagename>
+```
+```bash
+# List all files that are part of a remote package (add -y to update the databases):
+pacman -Fl <packagename>
+```
+```bash
+# List which remote package this file belongs to (add -y to update the databases):
+pacman -F <filename or /path/to/file>
+````
+```bash
 # Query orphaned packages that no longer are depends:
-pacman -Qd
+pacman -Qtd
 # To remove them:
 pacman -Rns $(pacman -Qtdq)
 ```
 ```bash
+# Remove an installed package, use -Rs to remove depends:
+pacman -R <packagename> 
+```
+```bash
 # Pacman info and operation verbosity, add --debug to any operation:
 pacman --verbose
+```
+```bat
+REM List Windows Package Manager info:
+winget --info
+```
+```bat
+REM List packages managed by WPM:
+winget list
+```
+```bat
+REM List all packages available to install with WPM:
+winget search
+REM append package name for search:
+winget search <package>
+```
+```bat
+REM Search for a package in a specific source, such as winget:
+winget search --source <winget> <packagename>
+```
+```bat
+REM show package info (Use --id for specific package):
+winget show <package>
+```
+```bat
+REM List all configured package sources:
+winget source list
+```
+```bat
+REM Update all configured sources:
+winget source update
 ```
 
 ### WinEvents:

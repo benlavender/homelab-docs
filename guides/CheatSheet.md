@@ -366,6 +366,10 @@ pacman -Syu --noconfirm
 pacman -S <packagename>
 ```
 ```bash
+# Print the download targets only insteading of downloading and installing:
+pacman -S --print <package>
+```
+```bash
 # Query packages:
 pacman -Ss <packagename>
 ```
@@ -1623,13 +1627,8 @@ REM psexec
 REM Execute Powershell command via psexec:
 psexec \\<target> cmd /c "echo . | powershell <command>"
 ```
-```bat
-REM sigcheck
-```
-```bat
-REM listdlls
-```
-### HTTP Manipulation:
+
+### HTTP Commands:
 
 ```bash
 # curl allow insecure server connections when using SSL
@@ -1672,7 +1671,7 @@ curl -L --max-redirs <#> <URI>
 Invoke-RestMethod -Uri 'https://vsapp.vehiclesmart.com/rest/vehicleData?reg=<registration>&appid=vs5Dszb7SzN15JlKv71QxGv-aq1VcK6G20-S9v4hbdsb5' -Method GET | ConvertTo-Json
 ```
 
-### DNS Manipulation:
+### DNS Commands:
 
 ```bash
 # Query the root hints:

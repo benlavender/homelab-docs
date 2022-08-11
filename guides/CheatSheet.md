@@ -2230,3 +2230,19 @@ az vm create --name VM-SMTP-PRD-UKWEST-001 --resource-group RG-SMTP-PRD-001 --im
 # Validate effective routes for an existing NIC:
 Get-AzEffectiveRouteTable -NetworkInterfaceName <NIC> -ResourceGroupName <ResourceGroupName>
 ```
+
+### Azure Storage:
+
+```bash
+# Create a disk for the purpose of uploading from an alternate source.
+# This disk is a standard disk and not an OS disk.
+# Create the disk:
+az disk create --name <DiskName> --resource-group <ResourceGroupName> --upload-type Upload --location <Region> --sku <SKU> --upload-size-bytes <FileSize>
+# Permit access to upload to this disk:
+az disk grant-access --name <DiskName> --resource-group <ResourceGroupName> --access-level Write --duration-in-seconds <Int>
+# Upload the VHD to the accessSas URI Azcopy is easies:
+azcopy copy <path/to/vhd> <"accessSas"> --blob-type PageBlob
+# Finish by revoking the access to the disk:
+az disk revoke-access --name <DiskName> --resource-group <ResourceGroupName>
+```
+

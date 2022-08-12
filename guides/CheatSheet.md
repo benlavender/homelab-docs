@@ -2070,6 +2070,90 @@ tcpdump -i ANY port 514
 tcpdump -n src host <ip.addr>
 ```
 
+### Network Analysis:
+
+```bash
+# Perform host discovery only of a host or range of hosts:
+# ICMP echo request, TCP SYN to port 443, TCP ACK to port 80, and an ICMP timestamp request by default.
+# Only ARP is done with on-link networks.
+nmap -sn <host/CIDR>
+```
+```bash
+# Disable all host discovery (useful if you already know the host is up):
+nmap -Pn <Host> 
+```
+```bash
+# Discover and scan a net range but exclude a unicast address or addresses:
+nmap <CIDR> --excude <IP.addr IP.addr>
+```
+```bash
+# Discover and scan a host for a specific TCP port:
+nmap -sS -p <Int> <Host>
+# Combine with UDP ports:
+nmap -sS -sU -p <Int> <Host>
+```
+```bash
+# Discover and scan open TCP ports to determine service/version info:
+nmap -sS -sV <Host>
+# Combine with UDP ports:
+# UDP scanning becomes more accurate with the service/version flag
+nmap -sS -sU -sV <Host>
+```
+```bash
+# Discover, scan and additionally display decision reasoning on results (useful for UDP scanning):
+nmap --reason <host>
+```
+```bash
+# Discover, scan and display only the open ports discovered 
+nmap --open <host>
+```
+```bash
+# Additionally fingerprint the OS and provide verbose info:
+nmap -o <host> -v
+```
+```bash
+# Show supported IP protocols of a host: 
+nmap -sO <host>
+```
+```bash
+# View certificate details of a TLS/SSL connection:
+nmap -sS -Pn --script=ssl-cert -p <TLS/SSL_Port> <Host>
+```
+```bash
+# View extended commands available on an SMTP server:
+nmap -sS -Pn --script=smtp-commands -p <SMTP_Port> <Host>
+# This can be used to verify if STARTTLS is available:
+nmap -Pn -sS -p 25 --script=smtp-commands <Host>
+```
+```bash
+# View available ciphers for negotiation of a remote host and offers scoring:
+nmap --script=ssl-enum-ciphers -Pn -sS -p <Int> <Host>
+```
+```bash
+# View available scripts
+nmap --script-help=*
+```
+```bash
+# Search for a specific script, i.e certificates:
+nmap --script-help=*cert*
+```
+```bash
+# Update the script database and show verbosity:
+nmap --script-updatedb -v
+```
+```bash
+# Scan with output verbosity
+nmap <Host> -v
+# Increase this verbosity with -vv
+nmap <Host> -vv
+```
+```bash
+# Scan with debug mode:
+nmap <Host> -d
+# Scan with extra debugging verbosity:
+nmap <Host> -dd
+```
+
 ### Git SCM:
 
 ```bash
@@ -2245,4 +2329,3 @@ azcopy copy <path/to/vhd> <"accessSas"> --blob-type PageBlob
 # Finish by revoking the access to the disk:
 az disk revoke-access --name <DiskName> --resource-group <ResourceGroupName>
 ```
-

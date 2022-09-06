@@ -12,7 +12,7 @@ Repository store for all my homelab build docs and configs. 😎
 | [Snort](https://www.snort.org/)| ⏰
 | [NetBox](https://netbox.readthedocs.io/en/stable/) | ⏰
 | [squid-cache](http://www.squid-cache.org/) | ⏰
-| [HAProxy](http://www.haproxy.org/) | ✍️
+| [HAProxy](http://www.haproxy.org/) | ✅
 | [Arch Linux ARM](https://archlinuxarm.org/) | ✍️
 | [Azure landing zones](https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/landing-zone/) | ⏰
 | [Docker](https://docs.docker.com/) | ⏰
@@ -28,6 +28,7 @@ Repository store for all my homelab build docs and configs. 😎
 
 * [Arch Linux Hyper-V build](guides/Arch-Linux-VM/Building-Arch-Linux-on-Hyper-V.md)
 * [Arch Linux Reflector service](guides/Arch-Linux-Reflector-Service.md)
+* [Simple HAProxy build on Debian Linux](guides/haproxy-deb.md)
 
 ### General:
 

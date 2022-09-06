@@ -12,7 +12,7 @@ Repository store for all my homelab build docs and configs. 😎
 | [Snort](https://www.snort.org/)| ⏰
 | [NetBox](https://netbox.readthedocs.io/en/stable/) | ⏰
 | [squid-cache](http://www.squid-cache.org/) | ⏰
-| [HAProxy](http://www.haproxy.org/) | ⏰
+| [HAProxy](http://www.haproxy.org/) | ✍️
 | [Arch Linux ARM](https://archlinuxarm.org/) | ✍️
 | [Azure landing zones](https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/landing-zone/) | ⏰
 | [Docker](https://docs.docker.com/) | ⏰

@@ -1,8 +1,8 @@
 # HAProxy build on Debian stable
 
-This is a quick start guide to building a HAProxy load balancer for a stateless HTTP server backend for an example.
+This is a quick start guide to building a HAProxy load balancer for a stateless HTTP server backend.
 
-My O/S *(not for sizing)*:
+Two servers needed for HTTP and one needed for HAProxy:
 
 - **Operating System:** Debian GNU/Linux 11 (bullseye)
 - **Disk:** /dev/sda: 5 GiB
@@ -97,13 +97,14 @@ backend web_servers
 	option httpchk OPTIONS /
 	cookie SERVER insert indirect nocache
 	default-server check maxconn 32
-	server LAB-UXSW001 192.168.0.20:80 cookie LAB-UXSW001
-	server LAB-UXSW00 192.168.0.21:80 cookie LAB-UXSW002
+	server LAB-UXSW001 92.168.0.186:80 cookie LAB-UXSW001
+	server LAB-UXSW002 192.168.0.27:80 cookie LAB-UXSW002
 ```
 
-6. HAProxy should now be listening on the correct TCP port:
+6. Reload HAProxy and it should now be listening on the correct TCP port:
 
 ```bash
+$ sudo systemctl reload haproxy.service
 $ sudo ss -antpl | grep -i :80
 ```
 
@@ -113,4 +114,38 @@ $ sudo ss -antpl | grep -i :80
 $ sudo apt install lighttpd -y
 ```
 
+8. Create a basic HTML page for each web server by creating a new file named `/var/www/html/index.html`:
 
+```html
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>LAB-UXSW001</h1>
+
+</body>
+</html>
+```
+```html
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>LAB-UXSW002</h1>
+
+</body>
+</html>
+```
+
+9. Confirm on each HTTP server that the site is now being served on port 80:
+
+```bash
+curl localhost
+```
+
+10. You should now be able send GET requests to the HAProxy service. View the `SERVER` cookie in the response headers and view the round-robin mechanism in action:
+
+```bash
+# In the absence of DNS I can map a host entry to an IP and port then send the request to that:
+curl --resolve lab.airnet.org.uk:80:192.168.0.24 http://lab.airnet.org.uk --HEAD
+```

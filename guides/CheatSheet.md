@@ -713,11 +713,46 @@ find / -type d -name "*dir*" -print
 # Get directory size:
 du -h -c dir
 ```
+
+### Archiving and Compression:
+
 ```bash
-# Extract archives:
-tar -zxvf data.tar.gz
-# or
-tar -zxv data.tar
+# Opening archives with tar
+# Omit the -v to remove verbosity
+# Open a tarball with tar:
+tar -tvf <tarball.tar>
+# Emmit the -v to list extended file info like permissions etc:
+tar -tzvf <tarball.tar>
+```
+```bash
+# Archiving with tar
+# Omit the -v to remove verbosity
+# Create a tarball using tar:
+tar -cvf <archive.tar> <file1> <file2> <file3>
+# Create a tarball using tar and maintain directory structure:
+tar -cvf <archive.tar> <directory>
+# Create a tarball with wildcard expression like archiving all .JSON files in the current directory:
+tar -cvf archive.tar *.json
+# Create a compressed tarball using tar and gzip:
+tar -czvf <archive.tar.gz> <file1> <file2> <file3>
+# Again but maintaining directory structure:
+tar -czvf <archive.tar> <directory>
+# Create a tarball but no not recurse child objects: 
+tar --no-recursion -cvf <archive.tar> <directory>
+```
+```bash
+# Extracting archives with tar
+# Omit the -v to remove verbosity
+# Extract a tarball with tar to current directory:
+tar -xvf <archive.tar>
+# Extract a tarball with tar to different existing directory:
+tar -xvf <archive.tar> --directory <directory>
+# Extract a compressed tarball to the current directory:
+tar -zxvf <archive.tar.gz>
+# Uncompress and extract to a directory named the same as the archive base level:
+tar --one-top-level -zxvf <archive.tar.gz>
+# Uncompress and extract to a directory named as specified:
+tar --one-top-level=<directory> -zxvf <archive.tar.gz>
 ```
 
 ### Process and Memory Management:

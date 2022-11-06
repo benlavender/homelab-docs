@@ -1686,7 +1686,7 @@ dig AXFR <zonename> <NS>
 dig +trace <QNAME>
 ```
 
-### Certificates, OpenSSL and CryptoAPI:
+### Certificates, OpenSSL/GPG and CryptoAPI:
 
 ```bash
 # Conversations with OpenSSL
@@ -1827,7 +1827,7 @@ openssl rsa -modulus -noout -in private.key | openssl dgst -sha256
 openssl x509 -modulus -noout -in website.cer | openssl dgst -sha256
 ```
 ```bash
-# Sign and encrypt a file for sharing between user A => user B:
+# Sign and encrypt a file for sharing between user A => user B using OpenSSL:
 # Create a private/public key pair for user A:
 openssl genpkey -algorithm rsa -pkeyopt rsa_keygen_bits:2048 -out private-a.key
 openssl pkey -in private-a.key -pubout -out public-a.key
@@ -1853,6 +1853,20 @@ openssl pkeyutl -decrypt -in ciphertext.bin -inkey private-b.key -out received-m
 openssl dgst -sha1 -verify public-a.key -signature signiture.bin received-message.txt
 ```
 ```bash
+# Password encrypt a file for sharing between user A => user B with GPG using symmetrical encryption only. 
+# Enter passphrase when prompted:
+gpg --symmetric --output <file.gpg> <file_to_encrypt> 
+# User B can now decrypt the file using the passphrase
+# Enter passphrase when prompted:
+gpg --output <output_file> --decrypt <file_to_decrpy.gpg>
+# Password encrypt a file for sharing between user A => user B with GPG using symmetrical encryption only but using AES256.
+# Enter passphrase when prompted:
+gpg --symmetric --cipher-algo AES256 --output <file.gpg> <file_to_encrypt>
+# User B can now decrypt the file using the passphrase
+# Enter passphrase when prompted:
+gpg --output <output_file> --decrypt <file_to_decrpy.gpg>
+```
+```bash
 # Load a SSL/TLS server for debugging:
 openssl s_server -port 443 -cert certificate.pem -key private.key -status 
 # Support HTTP by adding -www to return a / on HTTP GET:
@@ -1863,7 +1877,7 @@ openssl s_server -port 443 -cert certificate.pem -key private.key -www
 # OpenSSL connect to host and display connection and certificate info:
 openssl s_client -connect host:443
 # Displays only info on valid dates:
-openssl s_client -connect host:443 | openssl x509 -noout -dates
+openssl s_client -connect host:443 | openssl x509  -noout -dates
 # Show all certs sent by the server, including any CA certs:
 openssl s_client -connect host:443 -showcerts 
 # Show brief TLS connection settings with certificate validation only:

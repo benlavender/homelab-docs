@@ -797,7 +797,6 @@ mkswap /swapfile
 # Enable swap
 swapon /swapfile
 # Update /etc/fstab:
-
 ```
 
 ### Networking:

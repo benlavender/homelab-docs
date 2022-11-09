@@ -740,11 +740,29 @@ tar -czvf <archive.tar> <directory>
 # Create a tarball but no not recurse child objects: 
 tar --no-recursion -cvf <archive.tar> <directory>
 ```
+```powershell
+# Create a compressed archive with piped input files:
+Get-ChildItem -Path <'filename'> | Compress-Archive -DestinationPath <'archive.zip'>
+# Create a compressed archive using a whole directory:
+Compress-Archive -Path <'directory'> -DestinationPath <'archive.zip'>
+# Create a compressed archive using only the child items in the directory:
+Compress-Archive -Path <'directory\*'> -DestinationPath <'archive.zip'>
+# Add a file to an existing compressed archive:
+Compress-Archive -Path <'file'> -DestinationPath <'archive.zip'> -Update
+```
+```powershell
+# Extract an archive to a new directory in the current working directory named as the archive base level:
+Expand-Archive -Path <archive.zip>
+# Extract an archive to a directory named specifically:
+Expand-Archive -Path <archive.zip> -DestinationPath <directory>
+```
 ```bash
 # Extracting archives with tar
 # Omit the -v to remove verbosity
 # Extract a tarball with tar to current directory:
 tar -xvf <archive.tar>
+# Extract a single file from a tarball:
+tar -xvf <archive.tar> <file_in_archive.file>
 # Extract a tarball with tar to different existing directory:
 tar -xvf <archive.tar> --directory <directory>
 # Extract a compressed tarball to the current directory:

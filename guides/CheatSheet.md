@@ -1943,27 +1943,47 @@ openssl s_client -connect host:25 -starttls smtp
 ```
 ```powershell
 # Reading certificate stores with PowerShell
-# This leverages the Windows Certificate Store functions using PowerShell
-# List certificate stores:
-Get-ChildItem cert:
+# This leverages the Windows Certificate Store functions using the PowerShell Certificate provider
+# List certificate locations:
+Get-ChildItem -Path 'Cert:'
+# List certificate stores and locations:
+Get-ChildItem -Path 'Cert:' -Recurse | Where-Object -Property PSIsContainer -EQ $true
 # List all store names in the LocalMachine store:
-Get-ChildItem Cert:\LocalMachine\
+Get-ChildItem -Path 'Cert:\LocalMachine\'
 # List all certificates in all stores:
-Get-ChildItem cert: -Recurse
+Get-ChildItem -Path 'Cert:' -Recurse | Where-Object -Property PSIsContainer -EQ $false
 # List all CA root certificates in the LocalMachine store:
-Get-ChildItem Cert:\LocalMachine\Root
+Get-ChildItem -Path 'Cert:\LocalMachine\Root'
 # List basic X509 attributes of a specific certificate with subject:
-Get-ChildItem Cert: -Recurse | Where-Object -Property Subject -EQ <'id-at-commonName'>
+Get-ChildItem -Path 'Cert:' -Recurse | Where-Object -Property Subject -EQ <'id-at-commonName'>
 # List basic X509 attributes of a specific certificate with SHA1 fingerprint:
-Get-ChildItem Cert: -Recurse | Where-Object -Property Thumbprint -EQ <'string'>
+Get-ChildItem -Path 'Cert:' -Recurse | Where-Object -Property Thumbprint -EQ <'string'>
 # or for known path:
-Get-ChildItem Cert:</path/thumbprint>
+Get-ChildItem -Path 'Cert:</path/thumbprint>'
 # List basic X509 attributes of a specific certificate with a SAN DNS attribute:
-Get-Childitem Cert: -Recurse -DnsName <'FQDN'>
+Get-Childitem -Path 'Cert:' -Recurse -DnsName <'FQDN'>
 # Get all available X509 attributes and PS object types of a specific certificate with subject:
-Get-ChildItem Cert: -Recurse | Where-Object -Property Subject -EQ <'id-at-commonName'> | Format-List *
+Get-ChildItem -Path 'Cert:' -Recurse | Where-Object -Property Subject -EQ <'id-at-commonName'> | Format-List *
 # Get all certificates expiring in x number of days (includes expired):
-Get-ChildItem Cert: -Recurse -ExpiringInDays <'days'>
+Get-ChildItem -Path 'Cert:' -Recurse -ExpiringInDays <'days'>
+# Or:
+Get-ChildItem -Path 'Cert:' -Recurse | Where-Object {$_.PSIsContainer -EQ $false -and $_.NotAfter -le (Get-Date).AddDays(<'days'>)}
+# Get all certificates expiring in x number of days:
+Get-ChildItem -Path 'Cert:' -Recurse | Where-Object {$_.PSIsContainer -EQ $false -and $_.NotAfter -ge (Get-Date) -and $_.NotAfter -le (Get-Date).AddDays(<'days'>)}
+# Get all certificates expiring in the next month:
+Get-ChildItem -Path 'Cert:' -Recurse | Where-Object {$_.PSIsContainer -EQ $false -and $_.NotAfter -ge (Get-Date) -and $_.NotAfter -le (Get-Date).AddMonths('1')}
+# Get all expired certificates:
+Get-ChildItem -Path 'Cert': -Recurse | Where-Object {$_.PSIsContainer -EQ $false -and $_.NotAfter -le (Get-Date)}
+# Get all expired certificates from the system personal store:
+Get-ChildItem -Path 'Cert:\LocalMachine\My\' -Recurse | Where-Object {$_.PSIsContainer -EQ $false -and $_.NotAfter -le (Get-Date)}
+# Get all non-expired certificates:
+Get-ChildItem -Path 'Cert:' -Recurse | Where-Object {$_.PSIsContainer -EQ $false -and $_.NotAfter -ge (Get-Date)}
+```
+```powershell
+# Managing certificate stores with PowerShell
+# This leverages the Windows Certificate Store functions using the PowerShell Certificate provider
+# Move a certificate from one store to another (only local store):
+Move-Item -Path 'Cert:</path/thumbprint>' -Destination 'Cert:\<store\path>'
 ```
 ```bat 
 REM Conversations with certutil:

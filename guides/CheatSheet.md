@@ -1959,7 +1959,7 @@ Get-ChildItem -Path 'Cert:' -Recurse | Where-Object -Property Subject -EQ <'id-a
 # List basic X509 attributes of a specific certificate with SHA1 fingerprint:
 Get-ChildItem -Path 'Cert:' -Recurse | Where-Object -Property Thumbprint -EQ <'string'>
 # or for known path:
-Get-ChildItem -Path 'Cert:</path/thumbprint>'
+Get-ChildItem -Path 'Cert:<\path\thumbprint>'
 # List basic X509 attributes of a specific certificate with a SAN DNS attribute:
 Get-Childitem -Path 'Cert:' -Recurse -DnsName <'FQDN'>
 # Get all available X509 attributes and PS object types of a specific certificate with subject:
@@ -1973,7 +1973,7 @@ Get-ChildItem -Path 'Cert:' -Recurse | Where-Object {$_.PSIsContainer -EQ $false
 # Get all certificates expiring in the next month:
 Get-ChildItem -Path 'Cert:' -Recurse | Where-Object {$_.PSIsContainer -EQ $false -and $_.NotAfter -ge (Get-Date) -and $_.NotAfter -le (Get-Date).AddMonths('1')}
 # Get all expired certificates:
-Get-ChildItem -Path 'Cert': -Recurse | Where-Object {$_.PSIsContainer -EQ $false -and $_.NotAfter -le (Get-Date)}
+Get-ChildItem -Path 'Cert:' -Recurse | Where-Object {$_.PSIsContainer -EQ $false -and $_.NotAfter -le (Get-Date)}
 # Get all expired certificates from the system personal store:
 Get-ChildItem -Path 'Cert:\LocalMachine\My\' -Recurse | Where-Object {$_.PSIsContainer -EQ $false -and $_.NotAfter -le (Get-Date)}
 # Get all non-expired certificates:
@@ -1982,8 +1982,14 @@ Get-ChildItem -Path 'Cert:' -Recurse | Where-Object {$_.PSIsContainer -EQ $false
 ```powershell
 # Managing certificate stores with PowerShell
 # This leverages the Windows Certificate Store functions using the PowerShell Certificate provider
+# Create a new certificate store in the local computer store:
+New-Item -Path 'Cert:\LocalMachine\<storename>\'
+# Remove a certificate:
+Remove-Item -Path 'Cert:<\path\thumbprint>'
+# Remove all expired certificates from a specific store:
+Get-ChildItem -Path 'Cert:\<path>' -Recurse | Where-Object {$_.PSIsContainer -EQ $false -and $_.NotAfter -le (Get-Date)} | Remove-Item -DeleteKey
 # Move a certificate from one store to another (only local store):
-Move-Item -Path 'Cert:</path/thumbprint>' -Destination 'Cert:\<store\path>'
+Move-Item -Path 'Cert:<\path\thumbprint>' -Destination 'Cert:\<store\path>'
 ```
 ```bat 
 REM Conversations with certutil:

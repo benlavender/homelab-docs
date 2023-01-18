@@ -358,6 +358,10 @@ yum localinstall package.rpm
 dpkg -i package.deb
 ```
 ```bash
+# Show reverse dependency information for a package:
+apt-cache rdepends <package>
+```
+```bash
 # Pacman refresh and update packages
 pacman -Syu --noconfirm
 ```

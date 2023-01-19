@@ -2048,6 +2048,22 @@ certreq -submit -config <"CA"> -attrib "CertificateTemplate:<Template-Name>" <Re
 REM If the certificate requires approval, approve the request in ADCS:
 ```
 
+#### Key-based Authentication:
+
+```bash
+# Create and configure a new public key pair for authentication using OpenSSH on a new system.
+# This requires the openssh package and it's dependencies.
+# Create the ssh dot file and configure the permissions:
+mkdir ~/.ssh
+chmod 700 ~/.ssh
+# Create a new RSA key pair
+# Follow the prompts select the default options:
+ssh-keygen -t rsa
+# Transfer the public key to the target OpenSSH server.
+# Follow the prompts select yes when prompted for connection and enter the target account password:
+ssh-copy-id <username>@<host>
+```
+
 #### Let's Encrypt:
 
 ##### Certbot:

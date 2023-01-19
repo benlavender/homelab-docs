@@ -2063,6 +2063,14 @@ ssh-keygen -t rsa
 # Follow the prompts select yes when prompted for connection and enter the target account password:
 ssh-copy-id <username>@<host>
 ```
+```bash
+# Create an OpenSSH RSA key pair with comments (default will be $USER@$NAME):
+ssh-keygen -t rsa -C <'Comments'>
+# Create an OpenSSH RSA key pair with a large key length than default (3072):
+ssh-keygen -t rsa -b 4072
+# Create an OpenSSH Ed25519 key pair:
+ssh-keygen -t ed25519
+```
 
 #### Let's Encrypt:
 

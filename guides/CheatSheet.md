@@ -2115,6 +2115,25 @@ vi ~/.ssh/authorized_keys
 # Set the appropriate permissions:
 chmod 600 ~/.ssh/authorized_keys
 ```
+```bash
+# Authenticating with ssh-agent.
+# This requires the openssh package and it's dependencies.
+# ssh-agent doesn't usually run without configuration so it needs to be called initially:
+ssh-agent
+# Use eval to create a command using the process arguments:
+eval $(ssh-agent)
+# Add an private key to the ssh-agent cache (enter passphrase if prompted):
+ssh-add </path/.ssh/privatekey_file>
+```
+```bash
+# Managing keys used by ssh-agent
+# View all the keys stored in the ssh-agent cache:
+ssh-add -l
+# Remove a key from the cache:
+ssh-add -d </path/.ssh/privatekey_file>
+# Or use -D to remove all:
+ssh-add -D
+```
 
 #### Let's Encrypt:
 

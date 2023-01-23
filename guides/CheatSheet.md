@@ -2051,8 +2051,42 @@ REM If the certificate requires approval, approve the request in ADCS:
 #### Key-based Authentication:
 
 ```bash
-# Create and configure a new public key pair for authentication using OpenSSH on a new system.
+# Creating and managing OpenSSH keys with ssh-keygen.
 # This requires the openssh package and it's dependencies.
+# Create an OpenSSH RSA key pair with comments (default will be $USER@$NAME):
+ssh-keygen -t rsa -C <'Comments'>
+# Create an OpenSSH RSA key pair with a large key length than default (3072)
+# Follow the prompts select the default options:
+ssh-keygen -t rsa -b 4072
+# Create an OpenSSH Ed25519 key pair
+# Follow the prompts select the default options:
+ssh-keygen -t ed25519
+# Create an OpenSSH RSA key pair and specify a file location.
+# Follow the prompts select the default options:
+ssh-keygen -t rsa -f </path/.ssh/filename>
+# Create an OpenSSH RSA key pair and specify a file location and passphrase switch.
+# Follow the prompts select the default options:
+ssh-keygen -t rsa -f </path/.ssh/filename> -P <"passphrase">
+# Change the passphrase for an existing private key
+# Follow the prompts to change the key:
+ssh-keygen -p -f </path/.ssh/privatekey_file> 
+# Or (no prompt):
+ssh-keygen -p -f </path/.ssh/privatekey_file> -P <"OldPassphrase"> -N <"NewPassphrase">
+# Print corresponding public key by providing the relevant OpenSSH private key:
+ssh-keygen -y -f </path/.ssh/privatekey_file>
+# Print corresponding public key by providing the relevant OpenSSH private key with passphrase switch:
+ssh-keygen -y -f </path/.ssh/privatekey_file> -P <"passphrase">
+```
+```bash
+# Copying OpenSSH keys to remote systems.
+# This requires the openssh package and it's dependencies.
+# Transfer the public key to the target OpenSSH server using a specific public key file:
+ssh-copy-id -i </path/to/public_key_file.pub> <username>@<host>
+# Transfer the public key to the target OpenSSH server running on an alternate port:
+ssh-copy-id -p 25 <username>@<host>
+```
+```bash
+# Create and configure a new public key pair for authentication using OpenSSH on a new system.
 # Create the ssh dot file and configure the permissions:
 mkdir ~/.ssh
 chmod 700 ~/.ssh
@@ -2062,14 +2096,24 @@ ssh-keygen -t rsa
 # Transfer the public key to the target OpenSSH server.
 # Follow the prompts select yes when prompted for connection and enter the target account password:
 ssh-copy-id <username>@<host>
+# Or if username is the same on the client as the remote server:
+ssh-copy-id <host>
 ```
 ```bash
-# Create an OpenSSH RSA key pair with comments (default will be $USER@$NAME):
-ssh-keygen -t rsa -C <'Comments'>
-# Create an OpenSSH RSA key pair with a large key length than default (3072):
-ssh-keygen -t rsa -b 4072
-# Create an OpenSSH Ed25519 key pair:
-ssh-keygen -t ed25519
+# Configure OpenSSH keys on a new target system without ssh-copy-id (presumes client already configured).
+# Create a new OpenSSH key pair.
+# Follow the prompts select the default options:
+ssh-keygen -t rsa
+# Configure the .ssh dot file location on the sshd server:
+mkdir ~/.ssh
+chmod 700 ~/.ssh
+# Using ssh-keygen copy the public key file contents and create the ~/.ssh/authorized_keys file.
+# On the client print the OpenSSH public key:
+ssh-keygen -y -f </path/.ssh/privatekey_file>
+# On the sshd server create the ~/.ssh/authorized_keys file and paste the public key contents:
+vi ~/.ssh/authorized_keys
+# Set the appropriate permissions:
+chmod 600 ~/.ssh/authorized_keys
 ```
 
 #### Let's Encrypt:

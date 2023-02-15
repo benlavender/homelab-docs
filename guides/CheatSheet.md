@@ -2513,16 +2513,12 @@ az network vnet create --name VNET-SMTP-PRD-UKWEST-001 --resource-group RG-SMTP-
 # Create a new NIC and associate with an existing public IP address:
 az network nic create --name NIC-PRD-UKWEST-001 --resource-group RG-SMTP-PRD-001 --vnet-name VNET-SMTP-PRD-UKWEST-001 --subnet SNET-SMTP-PRD-001 --location ukwest
 ```
-```bash
-# Create a Linux VM from the marketplace using an existing NIC, Public IP, VNET and subnet:
-az vm create --name VM-SMTP-PRD-UKWEST-001 --resource-group RG-SMTP-PRD-001 --image debian --generate-ssh-keys --size Standard_B1ls --os-disk-name osdisk-prd-VM-PRD-SMTP-UKWEST-001-ukwest-001 --location ukwest --enable-agent true --computer-name VM-PRD-SMTP-UKWEST-001 --nics nic-prd-ukwest-001 --tags Workload=SMTP
-```
 ```powershell
 # Validate effective routes for an existing NIC:
 Get-AzEffectiveRouteTable -NetworkInterfaceName <NIC> -ResourceGroupName <ResourceGroupName>
 ```
 
-### Azure Storage:
+#### Storage:
 
 ```bash
 # Create a disk for the purpose of uploading from an alternate source.
@@ -2535,4 +2531,34 @@ az disk grant-access --name <DiskName> --resource-group <ResourceGroupName> --ac
 azcopy copy <path/to/vhd> <"accessSas"> --blob-type PageBlob
 # Finish by revoking the access to the disk:
 az disk revoke-access --name <DiskName> --resource-group <ResourceGroupName>
+```
+
+#### Virtual Machines:
+
+```bash
+# Create a Linux VM from the marketplace using an existing NIC, Public IP, and subnet:
+az vm create --name <vmName> --resource-group <resourceGroupName> --image <UrnAlias> --generate-ssh-keys --size <vmSize> --os-disk-name <name> --location <location> --enable-agent true --computer-name <computerName> --nics nic-prd-ukwest-001 --tags Workload=SMTP
+```
+
+##### Images, sizes and SKUs:
+
+- **Publisher**: The organization that created the image. Examples: Canonical, MicrosoftWindowsServer
+- **Offer**: The name of a group of related images created by a publisher. Examples: UbuntuServer, WindowsServer
+- **SKU**: An instance of an offer, such as a major release of a distribution. Examples: 18.04-LTS, 2019-Datacenter
+- **Version**: The version number of an image SKU.
+
+```bash
+# Images, sizes and SKUs.
+# List all images in the Marketplace from the online list:
+az vm image list --all
+# List all images in the Marketplace from a specific region from the online list:
+az vm image list --location <region> --all
+# List all images from a specific publisher:
+az vm image list --publisher <Publisher>
+# List all images from Debian in a specific region:
+az vm image list --publisher Debian --location <region>
+# List all images provided from a specific offer, such as CentOS or RHEL:
+az vm image list --offer <offer>
+# List all images provided from a specific offer, such as CentOS or RHEL from a specific region
+az vm image list --offer <offer> --location <region>
 ```

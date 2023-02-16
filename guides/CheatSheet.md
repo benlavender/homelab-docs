@@ -2595,3 +2595,6 @@ az vm image list --publisher <Publisher>
 # List all images from Debian in a specific region:
 az vm image list --publisher Debian --location <region>
 ```
+```bash
+# 
+```

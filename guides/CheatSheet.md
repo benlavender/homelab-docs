@@ -2537,10 +2537,22 @@ az disk revoke-access --name <DiskName> --resource-group <ResourceGroupName>
 
 ```bash
 # Create a Linux VM from the marketplace using an existing NIC, Public IP, and subnet:
-az vm create --name <vmName> --resource-group <resourceGroupName> --image <UrnAlias> --generate-ssh-keys --size <vmSize> --os-disk-name <name> --location <location> --enable-agent true --computer-name <computerName> --nics nic-prd-ukwest-001 --tags Workload=SMTP
+az vm create --name <vmName> --resource-group <resourceGroupName> --image <UrnAlias> --generate-ssh-keys --size <vmSize> --os-disk-name <name> --location <location> --enable-agent true --computer-name <computerName> --nics nic-prd-ukwest-001 --tags <name=value> 
+```
+```bash
+# Create a Linux VM from the marketplace using an existing NIC, subnet, with agent installed, an MSI and using Premium LRS for the managed OS disk. If this VM is deleted it will delete the NIC, OS disk but detach and leave any data disks:
+az vm create --name <vmName> --resource-group <resourceGroupName> --image <UrnAlias> --generate-ssh-keys --size <vmSize> --os-disk-name <name> --location <location> --enable-agent true --computer-name <computerName> --nics nic-prd-ukwest-001 --tags <name=value> --assign-identity --nic-delete-option Delete --os-disk-delete-option Delete --storage-sku Premium_LRS --data-disk-delete-option Detach
+```
+```bash
+# Deploy a Debian Linux VM using the latest Azure image on 
+az vm create --name <vmName> --resource-group <resourceGroupName> --image Debian --generate-ssh-keys --size <vmSize> --os-disk-name <name> --location <location> --enable-agent true --computer-name <computerName> --nics nic-prd-ukwest-001 --tags <name=value> 
+```
+```bash
+# Create a new auto shutdown configuration:
+az vm auto-shutdown --resource-group <resourceGroupName> --name <vmName> --time <UTC> --email <"SMTP">
 ```
 
-##### Images, sizes and SKUs:
+##### VM Images, sizes and SKUs:
 
 - **Publisher**: The organization that created the image. Examples: Canonical, MicrosoftWindowsServer
 - **Offer**: The name of a group of related images created by a publisher. Examples: UbuntuServer, WindowsServer
@@ -2548,7 +2560,32 @@ az vm create --name <vmName> --resource-group <resourceGroupName> --image <UrnAl
 - **Version**: The version number of an image SKU.
 
 ```bash
-# Images, sizes and SKUs.
+# List all publishers available at a specific location:
+az vm image list-publishers --location <region>
+# List all publishers available at a specific location that contains case-sensitive specific string in the name:
+az vm image list-publishers -l <location> --query "[?contains(name, <'string'>)]"
+# List all offers at a specific location from the a publisher:
+az vm image list-offers --publisher <name> --location <region>
+# List all offers at a specific location from the RedHat publisher:
+az vm image list-offers --publisher RedHat --location <region>
+# List all SKUs available under a specific offer at a specific location:
+az vm image list-skus --location <region> --publisher <Name> --offer <Name>
+# List all SKUs available under a specific offer, ie RHEL at a specific location:
+az vm image list-skus --location <region> --publisher RedHat --offer RHEL
+# Get an image from the Marketplace on based on it's URN at a specific location:
+az vm image show --urn <publisher:offer:sku:version> --location <region>
+# Get an image from the Marketplace on based on it's URN at a specific location that is the latest:
+az vm image show --urn <publisher:offer:sku:latest> --location <region>
+# List images provided from a specific offer, such as CentOS or RHEL (usually latest) from specific location:
+az vm image list --offer <offer> --location <region>
+# List all images provided from a specific offer, such as CentOS or RHEL:
+az vm image list --offer <offer> --all
+# List all images provided from a specific offer, such as CentOS or RHEL from a specific location:
+az vm image list --offer <offer> --all --location <region>
+# List all images provided from a specific offer, such as CentOS or RHEL from a specific region
+az vm image list --offer <offer> --location <region>
+# List all images based on a specific SKU from the online list at a specific locations
+az vm image list --location <location> --sku <name> --all
 # List all images in the Marketplace from the online list:
 az vm image list --all
 # List all images in the Marketplace from a specific region from the online list:
@@ -2557,8 +2594,4 @@ az vm image list --location <region> --all
 az vm image list --publisher <Publisher>
 # List all images from Debian in a specific region:
 az vm image list --publisher Debian --location <region>
-# List all images provided from a specific offer, such as CentOS or RHEL:
-az vm image list --offer <offer>
-# List all images provided from a specific offer, such as CentOS or RHEL from a specific region
-az vm image list --offer <offer> --location <region>
 ```

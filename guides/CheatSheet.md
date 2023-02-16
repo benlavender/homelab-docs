@@ -2544,8 +2544,8 @@ az vm create --name <vmName> --resource-group <resourceGroupName> --image <UrnAl
 az vm create --name <vmName> --resource-group <resourceGroupName> --image <UrnAlias> --generate-ssh-keys --size <vmSize> --os-disk-name <name> --location <location> --enable-agent true --computer-name <computerName> --nics nic-prd-ukwest-001 --tags <name=value> --assign-identity --nic-delete-option Delete --os-disk-delete-option Delete --storage-sku Premium_LRS --data-disk-delete-option Detach
 ```
 ```bash
-# Deploy a Debian Linux VM using the latest Azure image on 
-az vm create --name <vmName> --resource-group <resourceGroupName> --image Debian --generate-ssh-keys --size <vmSize> --os-disk-name <name> --location <location> --enable-agent true --computer-name <computerName> --nics nic-prd-ukwest-001 --tags <name=value> 
+# Deploy a Debian 11 Linux VM using the latest Azure image on 
+az vm create --name <vmName> --resource-group <resourceGroupName> --image Debian --generate-ssh-keys --location <location> --enable-agent true --computer-name <computerName> 
 ```
 ```bash
 # Create a new auto shutdown configuration:
@@ -2572,6 +2572,8 @@ az vm image list-offers --publisher RedHat --location <region>
 az vm image list-skus --location <region> --publisher <Name> --offer <Name>
 # List all SKUs available under a specific offer, ie RHEL at a specific location:
 az vm image list-skus --location <region> --publisher RedHat --offer RHEL
+# List all images based on a specific SKU from the online list at a specific locations
+az vm image list --location <location> --sku <name> --all
 # Get an image from the Marketplace on based on it's URN at a specific location:
 az vm image show --urn <publisher:offer:sku:version> --location <region>
 # Get an image from the Marketplace on based on it's URN at a specific location that is the latest:
@@ -2584,8 +2586,6 @@ az vm image list --offer <offer> --all
 az vm image list --offer <offer> --all --location <region>
 # List all images provided from a specific offer, such as CentOS or RHEL from a specific region
 az vm image list --offer <offer> --location <region>
-# List all images based on a specific SKU from the online list at a specific locations
-az vm image list --location <location> --sku <name> --all
 # List all images in the Marketplace from the online list:
 az vm image list --all
 # List all images in the Marketplace from a specific region from the online list:

@@ -2513,16 +2513,12 @@ az network vnet create --name VNET-SMTP-PRD-UKWEST-001 --resource-group RG-SMTP-
 # Create a new NIC and associate with an existing public IP address:
 az network nic create --name NIC-PRD-UKWEST-001 --resource-group RG-SMTP-PRD-001 --vnet-name VNET-SMTP-PRD-UKWEST-001 --subnet SNET-SMTP-PRD-001 --location ukwest
 ```
-```bash
-# Create a Linux VM from the marketplace using an existing NIC, Public IP, VNET and subnet:
-az vm create --name VM-SMTP-PRD-UKWEST-001 --resource-group RG-SMTP-PRD-001 --image debian --generate-ssh-keys --size Standard_B1ls --os-disk-name osdisk-prd-VM-PRD-SMTP-UKWEST-001-ukwest-001 --location ukwest --enable-agent true --computer-name VM-PRD-SMTP-UKWEST-001 --nics nic-prd-ukwest-001 --tags Workload=SMTP
-```
 ```powershell
 # Validate effective routes for an existing NIC:
 Get-AzEffectiveRouteTable -NetworkInterfaceName <NIC> -ResourceGroupName <ResourceGroupName>
 ```
 
-### Azure Storage:
+#### Storage:
 
 ```bash
 # Create a disk for the purpose of uploading from an alternate source.
@@ -2535,4 +2531,79 @@ az disk grant-access --name <DiskName> --resource-group <ResourceGroupName> --ac
 azcopy copy <path/to/vhd> <"accessSas"> --blob-type PageBlob
 # Finish by revoking the access to the disk:
 az disk revoke-access --name <DiskName> --resource-group <ResourceGroupName>
+```
+
+#### Virtual Machines:
+
+```bash
+# Create a Linux VM from the marketplace using an existing NIC, Public IP, and subnet:
+az vm create --name <vmName> --resource-group <resourceGroupName> --image <UrnAlias> --generate-ssh-keys --size <vmSize> --os-disk-name <name> --location <location> --enable-agent true --computer-name <computerName> --nics nic-prd-ukwest-001 --tags <name=value> 
+```
+```bash
+# Create a Linux VM from the marketplace using an existing NIC, subnet, with agent installed, an MSI and using Premium LRS for the managed OS disk. If this VM is deleted it will delete the NIC, OS disk but detach and leave any data disks:
+az vm create --name <vmName> --resource-group <resourceGroupName> --image <UrnAlias> --generate-ssh-keys --size <vmSize> --os-disk-name <name> --location <location> --enable-agent true --computer-name <computerName> --nics nic-prd-ukwest-001 --tags <name=value> --assign-identity --nic-delete-option Delete --os-disk-delete-option Delete --storage-sku Premium_LRS --data-disk-delete-option Detach
+```
+```bash
+# Deploy a Debian 11 Linux VM using the latest gen2 image with key-based authentication, agent enabled, hostname pre-configured, with a specific sized OS disk of 31GB and to an existing VNET subnet:
+az vm create --name <vmname> --resource-group <resourceGroupName> --image Debian:debian-11-daily:11-gen2:latest --generate-ssh-keys --location <region> --enable-agent true --computer-name <hostname> --subnet <subnetID> --os-disk-size-gb 31
+# Deploy the same VM but with two extra data disks of 1GB each and with a specific cheap VM size:
+az vm create --name <vmname> --resource-group <resourceGroupName> --image Debian:debian-11-daily:11-gen2:latest --generate-ssh-keys --location <region> --enable-agent true --computer-name <hostname> --subnet <subnetID> --os-disk-size-gb 31 --data-disk-sizes-gb 1 1 --size Standard_B1ls
+# Deploy the same VM but the OS and data disks and the NICs will be deleted with the VM:
+az vm create --name <vmname> --resource-group <resourceGroupName> --image Debian:debian-11-daily:11-gen2:latest --generate-ssh-keys --location <region> --enable-agent true --computer-name <hostname> --subnet <subnetID> --os-disk-size-gb 31 --data-disk-sizes-gb 1 1 --size Standard_B1ls --os-disk-delete-option Delete --data-disk-delete-option Delete --nic-delete-option Delete
+# Deploy a Debian Linux VM with a custom username and key-based authentication to a specific location:
+az vm create --name <vmname> --resource-group <resourceGroupName> --image Debian:debian-11-daily:11-gen2:latest --generate-ssh-keys location uksouth --admin-username <username> --size Standard_B1ls 
+# Deploy a Debian Linux VM and associate with an existing NIC with no public IP address:
+az vm create --name <vmname> --resource-group <resourceGroupName> --image Debian:debian-11-daily:11-gen2:latest --location uksouth --public-ip-address "" --nic <NICname>
+```
+```bash
+# Create a new auto shutdown configuration:
+az vm auto-shutdown --resource-group <resourceGroupName> --name <vmName> --time <UTC> --email <"SMTP">
+```
+
+##### VM Images, sizes and SKUs:
+
+- **Publisher**: The organization that created the image. Examples: Canonical, MicrosoftWindowsServer
+- **Offer**: The name of a group of related images created by a publisher. Examples: UbuntuServer, WindowsServer
+- **SKU**: An instance of an offer, such as a major release of a distribution. Examples: 18.04-LTS, 2019-Datacenter
+- **Version**: The version number of an image SKU.
+
+```bash
+# List all publishers available at a specific location:
+az vm image list-publishers --location <region>
+# List all publishers available at a specific location that contains case-sensitive specific string in the name:
+az vm image list-publishers -l <location> --query "[?contains(name, <'string'>)]"
+# List all offers at a specific location from the a publisher:
+az vm image list-offers --publisher <name> --location <region>
+# List all offers at a specific location from the RedHat publisher:
+az vm image list-offers --publisher RedHat --location <region>
+# List all SKUs available under a specific offer at a specific location:
+az vm image list-skus --location <region> --publisher <Name> --offer <Name>
+# List all SKUs available under a specific offer, ie RHEL at a specific location:
+az vm image list-skus --location <region> --publisher RedHat --offer RHEL
+# List all images based on a specific SKU from the online list at a specific locations
+az vm image list --location <location> --sku <name> --all
+# Get an image from the Marketplace on based on it's URN at a specific location:
+az vm image show --urn <publisher:offer:sku:version> --location <region>
+# Get an image from the Marketplace on based on it's URN at a specific location that is the latest:
+az vm image show --urn <publisher:offer:sku:latest> --location <region>
+# List images provided from a specific offer, such as CentOS or RHEL (usually latest) from specific location:
+az vm image list --offer <offer> --location <region>
+# List all images provided from a specific offer, such as CentOS or RHEL:
+az vm image list --offer <offer> --all
+# List all images provided from a specific offer, such as CentOS or RHEL from a specific location:
+az vm image list --offer <offer> --all --location <region>
+# List all images provided from a specific offer, such as CentOS or RHEL from a specific region
+az vm image list --offer <offer> --location <region>
+# List all images in the Marketplace from the online list:
+az vm image list --all
+# List all images in the Marketplace from a specific region from the online list:
+az vm image list --location <region> --all
+# List all images from a specific publisher:
+az vm image list --publisher <Publisher>
+# List all images from Debian in a specific region:
+az vm image list --publisher Debian --location <region>
+```
+```bash
+# List all VM sizes in a specific region:
+az vm list-sizes --location <region>
 ```

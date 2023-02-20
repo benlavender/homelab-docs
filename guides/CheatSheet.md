@@ -2596,5 +2596,6 @@ az vm image list --publisher <Publisher>
 az vm image list --publisher Debian --location <region>
 ```
 ```bash
-# 
+# List all VM sizes in a specific region:
+az vm list-sizes --location <region>
 ```

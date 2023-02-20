@@ -2544,8 +2544,16 @@ az vm create --name <vmName> --resource-group <resourceGroupName> --image <UrnAl
 az vm create --name <vmName> --resource-group <resourceGroupName> --image <UrnAlias> --generate-ssh-keys --size <vmSize> --os-disk-name <name> --location <location> --enable-agent true --computer-name <computerName> --nics nic-prd-ukwest-001 --tags <name=value> --assign-identity --nic-delete-option Delete --os-disk-delete-option Delete --storage-sku Premium_LRS --data-disk-delete-option Detach
 ```
 ```bash
-# Deploy a Debian 11 Linux VM using the latest Azure image on 
-az vm create --name <vmName> --resource-group <resourceGroupName> --image Debian --generate-ssh-keys --location <location> --enable-agent true --computer-name <computerName> 
+# Deploy a Debian 11 Linux VM using the latest gen2 image with key-based authentication, agent enabled, hostname pre-configured, with a specific sized OS disk of 31GB and to an existing VNET subnet:
+az vm create --name <vmname> --resource-group <resourceGroupName> --image Debian:debian-11-daily:11-gen2:latest --generate-ssh-keys --location <region> --enable-agent true --computer-name <hostname> --subnet <subnetID> --os-disk-size-gb 31
+# Deploy the same VM but with two extra data disks of 1GB each and with a specific cheap VM size:
+az vm create --name <vmname> --resource-group <resourceGroupName> --image Debian:debian-11-daily:11-gen2:latest --generate-ssh-keys --location <region> --enable-agent true --computer-name <hostname> --subnet <subnetID> --os-disk-size-gb 31 --data-disk-sizes-gb 1 1 --size Standard_B1ls
+# Deploy the same VM but the OS and data disks and the NICs will be deleted with the VM:
+az vm create --name <vmname> --resource-group <resourceGroupName> --image Debian:debian-11-daily:11-gen2:latest --generate-ssh-keys --location <region> --enable-agent true --computer-name <hostname> --subnet <subnetID> --os-disk-size-gb 31 --data-disk-sizes-gb 1 1 --size Standard_B1ls --os-disk-delete-option Delete --data-disk-delete-option Delete --nic-delete-option Delete
+# Deploy a Debian Linux VM with a custom username and key-based authentication to a specific location:
+az vm create --name <vmname> --resource-group <resourceGroupName> --image Debian:debian-11-daily:11-gen2:latest --generate-ssh-keys location uksouth --admin-username <username> --size Standard_B1ls 
+# Deploy a Debian Linux VM and associate with an existing NIC with no public IP address:
+az vm create --name <vmname> --resource-group <resourceGroupName> --image Debian:debian-11-daily:11-gen2:latest --location uksouth --public-ip-address "" --nic <NICname>
 ```
 ```bash
 # Create a new auto shutdown configuration:

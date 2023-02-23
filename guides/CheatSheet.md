@@ -2607,3 +2607,16 @@ az vm image list --publisher Debian --location <region>
 # List all VM sizes in a specific region:
 az vm list-sizes --location <region>
 ```
+
+#### Azure Key Vault:
+
+```bash
+# Create a new AKV:
+az keyvault create --name <name> --resource-group <resourcegroupname>  --location <region>
+# Create a new AKV with purge protection enabled: 
+az keyvault create --name <name> --resource-group <resourcegroupname>  --location <region> --enable-purge-protection true
+# Create a new AKV with AzureAD authorization and with 10 days data retention for deleted entries::  
+az keyvault create --name <name> --resource-group <resourcegroupname>  --location <region> --enable-rbac-authorization true
+az keyvault create --name <name> --resource-group <resourcegroupname>  --location <region> --enable-rbac-authorization true
+az keyvault create --name <name> --resource-group <resourcegroupname>  --location <region> --enable-rbac-authorization true --retention-days 10
+```

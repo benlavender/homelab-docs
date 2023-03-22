@@ -2524,10 +2524,6 @@ az network nsg rule create --name AllowAzureStorage --nsg-name <NSGName> --resou
 az network nsg rule update --name <RuleName> --nsg-name <NSGName> --resource-group <ResourceGroupName> --priority <int>
 # Add an additional unicast IP address into the destination:
 az network nsg rule update --name <RuleName> --nsg-name <NSGName> --resource-group <ResourceGroupName> --destination-address-prefixes <CIDR CIDR> # Ensure existing entries are included!
-# 
-az network nsg rule show --name AllowTcpPort22 --nsg-name nsg-test-lab-uksouth-001 --resource-group RG-NET-LAB-UKSOUTH-001 --add property.listProperty destinationAddressPrefixes='172.18.48.6/32'
-
-
 ```
 ```bash
 # Create a new static public IP address and configure PTR:

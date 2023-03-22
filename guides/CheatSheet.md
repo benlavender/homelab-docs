@@ -2498,9 +2498,32 @@ az group create --location <Region> --name <ResourceGroupName>
 #### Virtual Network:
 
 ```bash
-# Create a new NSG and permit TCP 22 (SSH):
-az network nsg create --name <Name> --resource-group <ResourceGroupName> --location <Region>
-az network nsg rule create --resource-group <ResourceGroupName> --nsg-name <NSGName> --Name <Rule_Name> --priority <int> --description <"Desc"> --destination-address-prefixes <cidr> --destination-port-ranges <int> --direction <inbound|outbound> --protocol <proto> --source-address-prefixes <cidr> --access <allow|deny>
+# Create a new network security group with default rules:
+az network nsg create --name <name> --resource-group <ResourceGroupName> --location <Region>
+# # Create a new network security group with default rules with tags:
+az network nsg create --name <name> --resource-group <ResourceGroupName> --location <Region> --tags --tags <name=value>
+# Show all rules in an NSG:
+az network nsg rule list --nsg-name <NSGName> --resource-group <ResourceGroupName> --include-default
+# List a specific rule by it's name:
+az network nsg rule show --name <RuleName> --nsg-name <NSGName> --resource-group <ResourceGroupName>
+# Create a new NSG rule:
+az network nsg rule create --nsg-name <NSGName> --resource-group <ResourceGroupName> --Name <Rule_Name> --priority <int> --description <"Desc"> --destination-address-prefixes <cidr> --destination-port-ranges <int> --direction <inbound|outbound> --protocol <proto> --source-address-prefixes <cidr> --access <allow|deny>
+# Create an inbound NSG rule that permits destination port TCP 22 to a unicast IP address with priority 100 from the internet: 
+az network nsg rule create --name AllowTcpPort22 --nsg-name <NSGName> --resource-group <ResourceGroupName> --priority 100 --access allow --description "Permit TCP port 22" --protocol TCP --destination-port-ranges 22 --destination-address-prefixes <CIDR> --direction inbound
+# Create an inbound NSG rule that permits destination port TCP 22 to a unicast IP address with priority 100 from a unicast source IP address: 
+az network nsg rule create --name AllowTcpPort22 --nsg-name <NSGName> --resource-group <ResourceGroupName> --priority 100 --access allow --description "Permit TCP port 22" --protocol TCP --source-address-prefixes <CIDR> --destination-port-ranges 22 --destination-address-prefixes <CIDR> --direction inbound
+# Create an outbound NSG rule that blocks all traffic to the internet:
+az network nsg rule create --name DenyAllInternet --nsg-name <NSGName> --resource-group <ResourceGroupName> --priority <int> --access Deny --description "Drop all internet" --protocol * --source-address-prefixes * --destination-address-prefixes Internet --direction outbound --destination-port-ranges *
+# Create an outbound NSG rule that blocks all traffic:
+az network nsg rule create --name DenyAll --nsg-name <NSGName> --resource-group <ResourceGroupName> --priority <int> --access Deny --description "Drop all" --protocol * --source-address-prefixes * --destination-address-prefixes * --direction outbound --destination-port-ranges *
+# Create an inbound NSG rule that permits traffic to the Azure Storage service tag from all hosts in the VNET:
+az network nsg rule create --name AllowAzureStorage --nsg-name <NSGName> --resource-group <ResourceGroupName> --priority <int> --access allow --description "Permit VNET to Azure Storage" --source-address-prefixes * --protocol Tcp --source-address-prefixes VirtualNetwork --destination-address-prefixes Storage --direction outbound --destination-port-ranges *
+```
+```bash
+# Change the priority of an existing NSG rule:
+az network nsg rule update --name <RuleName> --nsg-name <NSGName> --resource-group <ResourceGroupName> --priority <int>
+# Add an additional unicast IP address into the destination:
+az network nsg rule update --name <RuleName> --nsg-name <NSGName> --resource-group <ResourceGroupName> --destination-address-prefixes <CIDR CIDR> # Ensure existing entries are included!
 ```
 ```bash
 # Create a new static public IP address and configure PTR:

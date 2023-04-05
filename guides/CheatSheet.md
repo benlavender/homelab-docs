@@ -2536,6 +2536,16 @@ az network vnet create --name VNET-SMTP-PRD-UKWEST-001 --resource-group RG-SMTP-
 # Create a new NIC and associate with an existing public IP address:
 az network nic create --name NIC-PRD-UKWEST-001 --resource-group RG-SMTP-PRD-001 --vnet-name VNET-SMTP-PRD-UKWEST-001 --subnet SNET-SMTP-PRD-001 --location ukwest
 ```
+```bash
+# Peer two vnets, allow vnet traffic as well as forwarded vnet traffic:
+az network vnet peering create --name <peering_name> --resource-group <ResourceGroupName> --vnet-name <name> --remote-vnet 'id' --allow-vnet-access --allow-forwarded-traffic
+az network vnet peering create --name <peering_name> --resource-group <ResourceGroupName> --vnet-name <name> --remote-vnet 'id' --allow-vnet-access --allow-forwarded-traffic
+```
+```bash
+# Remove a vnet peering between two vnets:
+az network vnet peering delete --name <peering_name> --resource-group <ResourceGroupName> --vnet-name <source_vnet_name>
+az network vnet peering delete --name <peering_name> --resource-group <ResourceGroupName> --vnet-name <source_vnet_name>
+```
 ```powershell
 # Validate effective routes for an existing NIC:
 Get-AzEffectiveRouteTable -NetworkInterfaceName <NIC> -ResourceGroupName <ResourceGroupName>

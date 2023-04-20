@@ -2279,6 +2279,8 @@ tcpdump -n src host <ip.addr>
 
 ### Network Analysis:
 
+#### Nmap:
+
 ```bash
 # Perform host discovery only of a host or range of hosts:
 # ICMP echo request, TCP SYN to port 443, TCP ACK to port 80, and an ICMP timestamp request by default.
@@ -2359,6 +2361,34 @@ nmap <Host> -vv
 nmap <Host> -d
 # Scan with extra debugging verbosity:
 nmap <Host> -dd
+```
+
+#### Shodan:
+
+```bash
+# Searching Shodan.
+# Search for hosts related to Apache:
+shodan search Apache
+# Search for hosts related to both Apache and Windows:
+shodan search Apache Windows
+# Search for hosts related to Apache2.2:
+shodan search Apache2.2
+# Search for hosts related to Apache but only output the IP address and hostname:
+shodan search Apache2.2 --fields ip_str,hostnames
+# Search for hosts related to Apache but only output the IP address, hostname and OS:
+shodan search Apache2.2 --fields ip_str,hostnames,os
+# Search for hosts that have a particular string in the hostname:
+shodan search hostname:<FQDN/string>
+# Search for hosts that relate to a service name of Apache:
+shodan search product:Apache
+# Search for hosts that relate to a service name of MySQL:
+shodan search product:MySQL
+# Search for hosts that relate to a service name of cPanel:
+shodan search product:cPanel
+# Download results to a compressed JSON file:
+shodan download <filename.json.gz> <query>
+# Use shodan parse to show the results:
+shodan parse <filename.json.gz>
 ```
 
 ### Git SCM:

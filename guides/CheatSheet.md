@@ -2568,6 +2568,23 @@ az network vnet peering delete --name <peering_name> --resource-group <ResourceG
 Get-AzEffectiveRouteTable -NetworkInterfaceName <NIC> -ResourceGroupName <ResourceGroupName>
 ```
 
+#### Azure DNS:
+
+```bash
+# Create a new private DNS zone:
+az network private-dns zone create --name <fqdn> --resource-group <ResourceGroupName>
+# Link an existing private DNS zone to a VNET:
+az network private-dns link vnet create --name <link_name> --zone-name <fqdn> --resource-group <ResourceGroupName> --virtual-network <vnetID> --registration-enabled false
+# Show all associated VNET links:
+az network private-dns link vnet list --zone-name <fqdn> --resource-group <ResourceGroupName>
+# Remove an existing VNET link:
+az network private-dns link vnet delete --name <link_name> --zone-name <fqdn> --resource-group <ResourceGroupName>
+# Remove private DNS zone (ensure all links are removed):
+az network private-dns zone delete --name <fqdn> --resource-group <ResourceGroupName>
+```
+```bash
+# 
+```
 #### Storage:
 
 ```bash

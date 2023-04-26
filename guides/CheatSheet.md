@@ -2568,6 +2568,51 @@ az network vnet peering delete --name <peering_name> --resource-group <ResourceG
 Get-AzEffectiveRouteTable -NetworkInterfaceName <NIC> -ResourceGroupName <ResourceGroupName>
 ```
 
+#### Azure DNS:
+
+```bash
+# Create a new private DNS zone:
+az network private-dns zone create --name <fqdn> --resource-group <ResourceGroupName>
+# Link an existing private DNS zone to a VNET:
+az network private-dns link vnet create --name <link_name> --zone-name <fqdn> --resource-group <ResourceGroupName> --virtual-network <vnetID> --registration-enabled false
+# Show all associated VNET links:
+az network private-dns link vnet list --zone-name <fqdn> --resource-group <ResourceGroupName>
+# Remove an existing VNET link:
+az network private-dns link vnet delete --name <link_name> --zone-name <fqdn> --resource-group <ResourceGroupName>
+# Remove private DNS zone (ensure all links are removed):
+az network private-dns zone delete --name <fqdn> --resource-group <ResourceGroupName>
+```
+```bash
+# View all record sets within a private DNS zone:
+az network private-dns record-set list --zone-name <fqdn> --resource-group <ResourceGroupName>
+# List all A record sets within a private DNS zone:
+az network private-dns record-set a list --zone-name <fqdn> --resource-group <ResourceGroupName>
+# List all CNAME record sets within a private DNS zone:
+az network private-dns record-set cname list --zone-name <fqdn> --resource-group <ResourceGroupName>
+# Show a CNAME record set within a private DNS zone:
+az network private-dns record-set cname show --name <recordset> --zone-name <fqdn> --resource-group <ResourceGroupName>
+# List all MX record sets within a private DNS zone:
+az network private-dns record-set mx list --zone-name <fqdn> --resource-group <ResourceGroupName>
+# List all TXT record sets within a private DNS zone:
+az network private-dns record-set txt list --zone-name <fqdn> --resource-group <ResourceGroupName>
+# Show a TXT record set within a private DNS zone:
+az network private-dns record-set txt show --name <recordset> --zone-name <fqdn> --resource-group <ResourceGroupName>
+# Create a new TXT record set within a private DNS zone:
+az network private-dns record-set txt add-record --record-set-name <recordset> --value <string> --zone-name <fqdn> --resource-group <ResourceGroupName>
+# Create a new TXT record set within a private DNS zone at the zone apex:
+az network private-dns record-set txt add-record --record-set-name @ --value <string> --zone-name <fqdn> --resource-group <ResourceGroupName>
+# Create a new MX record set within a private DNS zone at the zone apex:
+az network private-dns record-set mx add-record --record-set-name @ --zone-name <fqdn> --resource-group <ResourceGroupName> --exchange <fqdn> --preference <int>
+# Create a new A record set within a private DNS zone: 
+az network private-dns record-set a add-record --record-set-name <recordset> --ipv4-address <IPV4> --zone-name <fqdn> --resource-group <ResourceGroupName>
+# Remove an A record set from a private DNS zone:
+az network private-dns record-set a delete --name <recordset> --zone-name <fqdn> --resource-group <ResourceGroupName>
+# Remove a CNAME record set from a private DNS zone:
+az network private-dns record-set cname delete --name <recordset> --zone-name <fqdn> --resource-group <ResourceGroupName>
+# Remove a TXT record set from a private DNS zone at the apex:
+az network private-dns record-set txt delete --name @ --zone-name <fqdn> --resource-group <ResourceGroupName>
+```
+
 #### Storage:
 
 ```bash

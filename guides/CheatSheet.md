@@ -2392,6 +2392,23 @@ Set-AzureADUserPassword -ObjectId 0fd2daaf-64af-47a7-91c3-d38840eee2c5 -Password
 az ad user update --id <objectID> --password <password_string>
 ```
 
+#### Azure DevOps Services:
+
+```bash
+# Create a new Azure AD service connection based on certificate authentication and then associate with a new Azure DevOps service connection in an existing project.
+# Create a self-signed certificate with a new private key:
+# Follow the interactive guide, use "." to leave certain fields blank.
+openssl req -x509 -new -newkey rsa:2048 -nodes -keyout private.key -days 365 -out certificate.pem
+# Create PKCS12 archive from a private key and signed PEM certificate:
+openssl pkcs12 -in certificate.pem -inkey private.key -export -out certificate.pfx
+# Convert from PKCS#12 to PEM format and export private key to a combined PEM file:
+openssl pkcs12 -in certificate.pfx -out certificate.pem -nodes
+# Create a new AzureAD service principal based on RBAC. Omit both --role and --scope if no assignments are required:
+az ad sp create-for-rbac --name <'Name'> --role <definition> --scope <resourceID> --cert <'@certificate.pem'>
+# Create a new service connection in an existing Azure DevOps project:
+az devops service-endpoint azurerm create --azure-rm-service-principal-id <AppId> --azure-rm-subscription-id <subscriptionId> --azure-rm-subscription-name <subscriptionName> --azure-rm-tenant-id <tenantId> --name <Service Connection Name> --azure-rm-service-principal-certificate-path certificate.pem --project <projectName> --organization <URI>
+```
+
 #### Azure Resource Manager:
 
 ```bash

@@ -2378,10 +2378,6 @@ git config --get-all name.setting
 
 #### Azure Active Directory:
 
-```bash
-# List available VM extensions in the Azure CLI:
-az vm extension image list --latest
-```
 ```powershell
 # Reset AzureAD user password:
 Set-AzureADUserPassword -ObjectId 0fd2daaf-64af-47a7-91c3-d38840eee2c5 -Password (Read-Host -AsSecureString)
@@ -2694,6 +2690,10 @@ az vm create --name <vmname> --resource-group <resourceGroupName> --image Debian
 ```bash
 # Create a new auto shutdown configuration:
 az vm auto-shutdown --resource-group <resourceGroupName> --name <vmName> --time <UTC> --email <"SMTP">
+```
+```bash
+# List available VM extensions in the Azure CLI:
+az vm extension image list --latest
 ```
 
 ##### VM Images, sizes and SKUs:

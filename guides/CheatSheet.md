@@ -2378,10 +2378,6 @@ git config --get-all name.setting
 
 #### Azure Active Directory:
 
-```bash
-# List available VM extensions in the Azure CLI:
-az vm extension image list --latest
-```
 ```powershell
 # Reset AzureAD user password:
 Set-AzureADUserPassword -ObjectId 0fd2daaf-64af-47a7-91c3-d38840eee2c5 -Password (Read-Host -AsSecureString)
@@ -2571,6 +2567,47 @@ Get-AzEffectiveRouteTable -NetworkInterfaceName <NIC> -ResourceGroupName <Resour
 #### Azure DNS:
 
 ```bash
+# Create a new Azure DNS zone:
+az network dns zone create --name <fqdn> --resource-group <ResourceGroupName>
+# Create a new Azure DNS zone that is a delegation of an existing zone in Azure:
+az network dns zone create --name <fqdn> --parent-name <fqdn | id> --resource-group <ResourceGroupName>
+# Remove an Azure DNS zone:
+az network dns zone delete --name <fqdn> --resource-group <ResourceGroupName>
+```
+```bash
+# View an Azure DNS zone:
+az network dns zone show --name <fqdn> --resource-group <ResourceGroupName>
+# List all records sets in an Azure DNS zone:
+az network dns record-set list --zone-name <fqdn> --resource-group <ResourceGroupName>
+# List all A record sets within an Azure DNS zone:
+az network dns record-set a list --zone-name <fqdn> --resource-group <ResourceGroupName>
+# List all CNAME record sets within an Azure DNS zone:
+az network dns record-set cname list --zone-name <fqdn> --resource-group <ResourceGroupName>
+# Show a CNAME record set within an Azure DNS zone:
+az network dns record-set cname show --name <recordset> --zone-name <fqdn> --resource-group <ResourceGroupName>
+# List all MX record sets within an Azure DNS zone:
+az network dns record-set mx list --zone-name <fqdn> --resource-group <ResourceGroupName>
+# List all TXT record sets within an Azure DNS zone:
+az network dns record-set txt txt --zone-name <fqdn> --resource-group <ResourceGroupName>
+# Show a TXT record set within an Azure DNS zone:
+az network dns record-set txt show --name <recordset> --zone-name <fqdn> --resource-group <ResourceGroupName>
+# Create a new TXT record set within an Azure DNS zone:
+az network dns record-set txt add-record --record-set-name <recordset> --value <string> --zone-name <fqdn> --resource-group <ResourceGroupName>
+# Create a new TXT record set within an Azure DNS zone at the zone apex:
+az network dns record-set txt add-record --record-set-name @ --value <string> --zone-name <fqdn> --resource-group <ResourceGroupName>
+# Create a new MX record set within an Azure DNS zone at the zone apex:
+az network dns record-set mx add-record --record-set-name @ --zone-name <fqdn> --resource-group <ResourceGroupName> --exchange <fqdn> --preference <int>
+# Create a new A record set within an Azure DNS zone: 
+az network dns record-set a add-record --record-set-name <recordset> --ipv4-address <IPV4> --zone-name <fqdn> --resource-group <ResourceGroupName>
+# Remove an A record set from an Azure DNS zone:
+az network dns record-set a delete --name <recordset> --zone-name <fqdn> --resource-group <ResourceGroupName>
+# Remove a CNAME record set from an Azure DNS zone:
+az network dns record-set cname delete --name <recordset> --zone-name <fqdn> --resource-group <ResourceGroupName>
+# Remove a TXT record set from an Azure DNS zone at the apex:
+az network dns record-set txt delete --name @ --zone-name <fqdn> --resource-group <ResourceGroupName>
+```
+
+```bash
 # Create a new private DNS zone:
 az network private-dns zone create --name <fqdn> --resource-group <ResourceGroupName>
 # Link an existing private DNS zone to a VNET:
@@ -2583,7 +2620,7 @@ az network private-dns link vnet delete --name <link_name> --zone-name <fqdn> --
 az network private-dns zone delete --name <fqdn> --resource-group <ResourceGroupName>
 ```
 ```bash
-# View all record sets within a private DNS zone:
+# List all record sets within a private DNS zone:
 az network private-dns record-set list --zone-name <fqdn> --resource-group <ResourceGroupName>
 # List all A record sets within a private DNS zone:
 az network private-dns record-set a list --zone-name <fqdn> --resource-group <ResourceGroupName>
@@ -2653,6 +2690,10 @@ az vm create --name <vmname> --resource-group <resourceGroupName> --image Debian
 ```bash
 # Create a new auto shutdown configuration:
 az vm auto-shutdown --resource-group <resourceGroupName> --name <vmName> --time <UTC> --email <"SMTP">
+```
+```bash
+# List available VM extensions in the Azure CLI:
+az vm extension image list --latest
 ```
 
 ##### VM Images, sizes and SKUs:

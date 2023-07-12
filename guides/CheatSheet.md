@@ -2619,6 +2619,14 @@ az network private-endpoint create --connection-name <name> --name <endpointName
 # Create a new private endpoint and associate it with an existing key vault:
 az network private-endpoint create --connection-name <name> --name <endpointName> --private-connection-resource-id <resourceId> --resource-group <ResourceGroupName> --subnet <subnetId> --nic-name <name> --group-id vault
 ```
+```bash
+# List all DNS zone groups associated with a private endpoint:
+az network private-endpoint dns-zone-group list --endpoint-name <endpointName> --resource-group <ResourceGroupName>
+```
+```bash
+# Create a new DNS zone group and associate with an existing private endpoint and Azure private DNS zone:
+az network private-endpoint dns-zone-group create --endpoint-name <endpointName>  --name <name> --zone-name <resourceId> --private-dns-zone <partition> --resource-group <ResourceGroupName>
+```
 
 #### Azure DNS:
 

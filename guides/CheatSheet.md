@@ -2607,8 +2607,17 @@ az network private-endpoint show --name <name> --resource-group <ResourceGroupNa
 az network private-endpoint show  --ids <id>
 ```
 ```bash
-# List all private link groups for an existing resource that is supports private link. (This is needed for any --group-id parameters):
+# Private link groups (this is needed for any --group-id parameters).
+# List all private link groups for an existing resource that supports private link:
 az network private-link-resource list --name <resource_name> --resource-group <ResourceGroupName> --type <provider/namespace>
+# List all private link groups for an existing resource that supports private link by resourceID:
+az network private-link-resource list --id <resourceId>
+```
+```bash
+# Create a new private endpoint and associate it with an existing storage account blob endpoint:
+az network private-endpoint create --connection-name <name> --name <endpointName> --private-connection-resource-id <resourceId> --resource-group <ResourceGroupName> --subnet <subnetId> --nic-name <name> --group-id blob
+# Create a new private endpoint and associate it with an existing key vault:
+az network private-endpoint create --connection-name <name> --name <endpointName> --private-connection-resource-id <resourceId> --resource-group <ResourceGroupName> --subnet <subnetId> --nic-name <name> --group-id vault
 ```
 
 #### Azure DNS:

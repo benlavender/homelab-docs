@@ -2594,7 +2594,7 @@ az network vnet peering delete --name <peering_name> --resource-group <ResourceG
 Get-AzEffectiveRouteTable -NetworkInterfaceName <NIC> -ResourceGroupName <ResourceGroupName>
 ```
 
-##### Azure Private Link:
+#### Azure Private Link:
 
 ```bash
 # List all private endpoints in the active subscription:

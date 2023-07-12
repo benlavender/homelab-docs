@@ -2594,6 +2594,40 @@ az network vnet peering delete --name <peering_name> --resource-group <ResourceG
 Get-AzEffectiveRouteTable -NetworkInterfaceName <NIC> -ResourceGroupName <ResourceGroupName>
 ```
 
+#### Azure Private Link:
+
+```bash
+# List all private endpoints in the active subscription:
+az network private-endpoint list
+```
+```bash
+# Get a private endpoint by name:
+az network private-endpoint show --name <name> --resource-group <ResourceGroupName>
+# Get a private endpoint by id:
+az network private-endpoint show  --ids <id>
+```
+```bash
+# Private link groups (this is needed for any --group-id parameters).
+# List all private link groups for an existing resource that supports private link:
+az network private-link-resource list --name <resource_name> --resource-group <ResourceGroupName> --type <provider/namespace>
+# List all private link groups for an existing resource that supports private link by resourceID:
+az network private-link-resource list --id <resourceId>
+```
+```bash
+# Create a new private endpoint and associate it with an existing storage account blob endpoint:
+az network private-endpoint create --connection-name <name> --name <endpointName> --private-connection-resource-id <resourceId> --resource-group <ResourceGroupName> --subnet <subnetId> --nic-name <name> --group-id blob
+# Create a new private endpoint and associate it with an existing key vault:
+az network private-endpoint create --connection-name <name> --name <endpointName> --private-connection-resource-id <resourceId> --resource-group <ResourceGroupName> --subnet <subnetId> --nic-name <name> --group-id vault
+```
+```bash
+# List all DNS zone groups associated with a private endpoint:
+az network private-endpoint dns-zone-group list --endpoint-name <endpointName> --resource-group <ResourceGroupName>
+```
+```bash
+# Create a new DNS zone group and associate with an existing private endpoint and Azure private DNS zone:
+az network private-endpoint dns-zone-group create --endpoint-name <endpointName>  --name <name> --zone-name <resourceId> --private-dns-zone <partition> --resource-group <ResourceGroupName>
+```
+
 #### Azure DNS:
 
 ```bash

@@ -325,6 +325,20 @@ localectl status
 locale-gen
 localectl set-locale LANG=en_GB.UTF-8
 ```
+```bash
+# RH subscription manager.
+# Show system registration status:
+sudo subscription-manager status
+# Show system registration status and product information:
+sudo subscription-manager list
+# Register a system to RH customer portal and attach all available to the system:
+sudo subscription-manager register --username=<username> --password=<password>
+sudo subscription-manager attach --auto
+# Unregister a system from the RH customer portal:
+sudo subscription-manager unregister
+# List all available subscriptions for the system:
+sudo subscription-manager list --all --available
+```
 
 ### Service control:
 

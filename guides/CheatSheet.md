@@ -389,6 +389,10 @@ sudo subscription-manager remove --serial=<serial>
 # Or straight out remove all:
 sudo subscription-manager remove --all
 ```
+```bash
+# List all the organizations associated with an account:
+sudo subscription-manager orgs
+```
 
 ### Service control:
 

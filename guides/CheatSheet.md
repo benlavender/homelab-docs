@@ -2646,7 +2646,7 @@ az network private-endpoint dns-zone-group create --endpoint-name <endpointName>
 az network private-endpoint dns-zone-group add --endpoint-name <endpointName> --name <name> --zone-name <resourceId> --private-dns-zone <partition> --resource-group <ResourceGroupName>
 ```
 ```bash
-# Remove an aprivate endpoint DNS zone group from an Azure private DNS zone:
+# Remove an a private endpoint DNS zone group from an Azure private DNS zone:
 az network private-endpoint dns-zone-group delete --endpoint-name <endpointName> --name <name> --resource-group <ResourceGroupName>
 ```
 

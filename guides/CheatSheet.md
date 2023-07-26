@@ -393,6 +393,14 @@ sudo subscription-manager remove --all
 # List all the organizations associated with an account:
 sudo subscription-manager orgs
 ```
+```bash
+# Show all available system releases:
+sudo subscription-manager release --list
+# Set a stick release for use with packages and updates:
+sudo subscription-manager release --set=<value>
+# Removes current sticky release:
+sudo subscription-manager release --unset
+```
 
 ### Service control:
 

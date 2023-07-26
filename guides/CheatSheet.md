@@ -401,6 +401,14 @@ sudo subscription-manager release --set=<value>
 # Removes current sticky release:
 sudo subscription-manager release --unset
 ```
+```bash
+# List all available repos provided by the CDN:
+sudo subscription-manager repos --list
+# Disable a specific repo:
+sudo subscription-manager repos --disable=<Repo-ID>
+# Enable a specific repo:
+sudo subscription-manager repos --enable=<Repo-ID>
+```
 
 ### Service control:
 

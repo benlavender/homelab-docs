@@ -329,15 +329,31 @@ localectl set-locale LANG=en_GB.UTF-8
 # RH subscription manager.
 # Show system registration status:
 sudo subscription-manager status
+```
+```bash
 # Show system registration status and product information:
 sudo subscription-manager list
-# Register a system to RH customer portal and attach all available to the system:
-sudo subscription-manager register --username=<username> --password=<password>
-sudo subscription-manager attach --auto
-# Unregister a system from the RH customer portal:
-sudo subscription-manager unregister
+# List available subscriptions for the system not currently attached:
+sudo subscription-manager list --available
 # List all available subscriptions for the system:
 sudo subscription-manager list --all --available
+# List all subscriptions matching installed products:
+sudo subscription-manager list --available --match-installed
+# List all subscriptions currently attached to the system:
+sudo subscription-manager list --consumed
+# List products installed on the system, regardless if subscribed or not:
+sudo subscription-manager list --installed
+```
+```bash
+# Registering to RedHat customer portal (use --force to force re-registration).
+# Register a system using a username:
+sudo subscription-manager register --username=<username>
+# or with inline password:
+sudo subscription-manager register --username=<username> --password=<password>
+# Register a system to RH customer portal using an activation key:
+sudo subscription-manager register --activationkey=<SKU>
+# Register a system using a username and password then attach best matched subscriptions:
+sudo subscription-manager register --auto-attach
 ```
 
 ### Service control:

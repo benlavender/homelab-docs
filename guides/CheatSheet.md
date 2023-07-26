@@ -2627,6 +2627,14 @@ az network private-endpoint dns-zone-group list --endpoint-name <endpointName> -
 # Create a new DNS zone group and associate with an existing private endpoint and Azure private DNS zone:
 az network private-endpoint dns-zone-group create --endpoint-name <endpointName>  --name <name> --zone-name <resourceId> --private-dns-zone <partition> --resource-group <ResourceGroupName>
 ```
+```bash
+# Add an existing private endpoint DNS zone group into an existing Azure private DNS zone:
+az network private-endpoint dns-zone-group add --endpoint-name <endpointName> --name <name> --zone-name <resourceId> --private-dns-zone <partition> --resource-group <ResourceGroupName>
+```
+```bash
+# Remove an aprivate endpoint DNS zone group from an Azure private DNS zone:
+az network private-endpoint dns-zone-group delete --endpoint-name <endpointName> --name <name> --resource-group <ResourceGroupName>
+```
 
 #### Azure DNS:
 

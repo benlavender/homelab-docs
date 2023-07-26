@@ -325,8 +325,10 @@ localectl status
 locale-gen
 localectl set-locale LANG=en_GB.UTF-8
 ```
+
+### RH subscription manager:
+
 ```bash
-# RH subscription manager.
 # Show all subscription-manager configs:
 sudo subscription-manager config --list
 # Delete a config value:

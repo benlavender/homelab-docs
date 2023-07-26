@@ -327,6 +327,14 @@ localectl set-locale LANG=en_GB.UTF-8
 ```
 ```bash
 # RH subscription manager.
+# Show all subscription-manager configs:
+sudo subscription-manager config --list
+# Delete a config value:
+sudo subscription-manager config --remove=<section.name>
+# Adds a config value:
+sudo subscription-manager config --<section.name=value>
+```
+```bash
 # Show system registration status:
 sudo subscription-manager status
 ```
@@ -358,6 +366,8 @@ sudo subscription-manager register --auto-attach
 ```bash
 # Unregister a system from the RH customer portal:
 sudo subscription-manager unregister
+# Remove all subscriptions and un-register the system:
+sudo subscription-manager clean
 ```
 ```bash
 # Attach a subscription to the system:

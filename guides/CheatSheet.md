@@ -356,6 +356,10 @@ sudo subscription-manager register --activationkey=<SKU>
 sudo subscription-manager register --auto-attach
 ```
 ```bash
+# Unregister a system from the RH customer portal:
+sudo subscription-manager unregister
+```
+```bash
 # Attach a subscription to the system:
 sudo subscription-manager attach --pool=<id>
 # Attach best matched subscriptions automatically:
@@ -368,12 +372,12 @@ sudo subscription-manager auto-attach --enable
 sudo subscription-manager auto-attach --disable
 ```
 ```bash
-# attach all available subscriptions to the system:
-sudo subscription-manager attach --auto
-```
-```bash
-# Unregister a system from the RH customer portal:
-sudo subscription-manager unregister
+# Remove a subscription from the system by pool ID:
+sudo subscription-manager remove --pool=<id>
+# or via serial:
+sudo subscription-manager remove --serial=<serial>
+# Or straight out remove all:
+sudo subscription-manager remove --all
 ```
 
 ### Service control:

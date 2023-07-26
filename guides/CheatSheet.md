@@ -325,19 +325,91 @@ localectl status
 locale-gen
 localectl set-locale LANG=en_GB.UTF-8
 ```
+
+### RH subscription manager:
+
 ```bash
-# RH subscription manager.
+# Show all subscription-manager configs:
+sudo subscription-manager config --list
+# Delete a config value:
+sudo subscription-manager config --remove=<section.name>
+# Adds a config value:
+sudo subscription-manager config --<section.name=value>
+```
+```bash
 # Show system registration status:
 sudo subscription-manager status
+```
+```bash
 # Show system registration status and product information:
 sudo subscription-manager list
-# Register a system to RH customer portal and attach all available to the system:
-sudo subscription-manager register --username=<username> --password=<password>
-sudo subscription-manager attach --auto
-# Unregister a system from the RH customer portal:
-sudo subscription-manager unregister
+# List available subscriptions for the system not currently attached:
+sudo subscription-manager list --available
 # List all available subscriptions for the system:
 sudo subscription-manager list --all --available
+# List all subscriptions matching installed products:
+sudo subscription-manager list --available --match-installed
+# List all subscriptions currently attached to the system:
+sudo subscription-manager list --consumed
+# List products installed on the system, regardless if subscribed or not:
+sudo subscription-manager list --installed
+```
+```bash
+# Registering to RedHat customer portal (use --force to force re-registration).
+# Register a system using a username:
+sudo subscription-manager register --username=<username>
+# or with inline password:
+sudo subscription-manager register --username=<username> --password=<password>
+# Register a system to RH customer portal using an activation key:
+sudo subscription-manager register --activationkey=<SKU>
+# Register a system using a username and password then attach best matched subscriptions:
+sudo subscription-manager register --auto-attach
+```
+```bash
+# Unregister a system from the RH customer portal:
+sudo subscription-manager unregister
+# Remove all subscriptions and un-register the system:
+sudo subscription-manager clean
+```
+```bash
+# Attach a subscription to the system:
+sudo subscription-manager attach --pool=<id>
+# Attach best matched subscriptions automatically:
+sudo subscription-manager attach --auto
+# Checks auto-attach status (Runs every 4 hours):
+sudo subscription-manager auto-attach --show
+# Enable auto-attach:
+sudo subscription-manager auto-attach --enable
+# Disable auto-attach:
+sudo subscription-manager auto-attach --disable
+```
+```bash
+# Remove a subscription from the system by pool ID:
+sudo subscription-manager remove --pool=<id>
+# or via serial:
+sudo subscription-manager remove --serial=<serial>
+# Or straight out remove all:
+sudo subscription-manager remove --all
+```
+```bash
+# List all the organizations associated with an account:
+sudo subscription-manager orgs
+```
+```bash
+# Show all available system releases:
+sudo subscription-manager release --list
+# Set a stick release for use with packages and updates:
+sudo subscription-manager release --set=<value>
+# Removes current sticky release:
+sudo subscription-manager release --unset
+```
+```bash
+# List all available repos provided by the CDN:
+sudo subscription-manager repos --list
+# Disable a specific repo:
+sudo subscription-manager repos --disable=<Repo-ID>
+# Enable a specific repo:
+sudo subscription-manager repos --enable=<Repo-ID>
 ```
 
 ### Service control:
@@ -2646,7 +2718,7 @@ az network private-endpoint dns-zone-group create --endpoint-name <endpointName>
 az network private-endpoint dns-zone-group add --endpoint-name <endpointName> --name <name> --zone-name <resourceId> --private-dns-zone <partition> --resource-group <ResourceGroupName>
 ```
 ```bash
-# Remove an aprivate endpoint DNS zone group from an Azure private DNS zone:
+# Remove an a private endpoint DNS zone group from an Azure private DNS zone:
 az network private-endpoint dns-zone-group delete --endpoint-name <endpointName> --name <name> --resource-group <ResourceGroupName>
 ```
 

@@ -355,6 +355,26 @@ sudo subscription-manager register --activationkey=<SKU>
 # Register a system using a username and password then attach best matched subscriptions:
 sudo subscription-manager register --auto-attach
 ```
+```bash
+# Attach a subscription to the system:
+sudo subscription-manager attach --pool=<id>
+# Attach best matched subscriptions automatically:
+sudo subscription-manager attach --auto
+# Checks auto-attach status (Runs every 4 hours):
+sudo subscription-manager auto-attach --show
+# Enable auto-attach:
+sudo subscription-manager auto-attach --enable
+# Disable auto-attach:
+sudo subscription-manager auto-attach --disable
+```
+```bash
+# attach all available subscriptions to the system:
+sudo subscription-manager attach --auto
+```
+```bash
+# Unregister a system from the RH customer portal:
+sudo subscription-manager unregister
+```
 
 ### Service control:
 

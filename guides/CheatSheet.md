@@ -2624,6 +2624,24 @@ New-AzRoleDefinition -Role $role
 az group create --location <Region> --name <ResourceGroupName>
 ```
 
+#### Azure Policy:
+
+```bash
+# List all policy definitions:
+az policy definition list
+# List all policy definitions installed at a specific scope:
+az policy definition list --management-group '<name>'
+# Get a policy definition by name:
+az policy definition show --name <'name-UID'>
+# Get a policy definition by name and scope (if applicable):
+az policy definition show --name <'name-UID'> --management-group '<name>'
+```
+
+```powershell
+# Create a custom policy definition from a .json file:
+
+```
+
 #### Virtual Network:
 
 ```bash

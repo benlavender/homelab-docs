@@ -1882,6 +1882,15 @@ openssl req -in request.csr -text -noout
 openssl req -in request.csr -noout -subject
 ```
 ```bash
+# Working with public and private keys in OpenSSL.
+# Read a private key file (enter passphrase if required):
+openssl rsa -in private.key -noout -text
+# or:
+openssl pkey -in privkey.key -text
+# Read a public key:
+openssl pkey -in pubkey.key -pubin -text
+```
+```bash
 # Generate a new private key (RSA 1024):
 openssl genpkey -algorithm rsa -out private.key
 # Generate a new private key (RSA 4096):
@@ -1892,20 +1901,22 @@ openssl genpkey -algorithm rsa -out private.key -pkeyopt rsa_keygen_bits:2048 -d
 openssl genpkey -algorithm rsa -out private.key -pkeyopt rsa_keygen_bits:2048 -aes256
 ```
 ```bash
-# Decrypt a private Key:
-openssl pkey -in private.key -out private2.key
-```
-```bash
 # Generate a private / public key pair using an existing key:
 openssl pkey -in private.key -out public.key -pubout
 ```
 ```bash
-# Read a private key file (enter passphrase if required):
-openssl rsa -in private.key -noout -text
-# or:
-openssl pkey -in privkey.key -text
-# Read a public key:
-openssl pkey -in pubkey.key -pubin -text
+# Encrypt an existing private key using the 3DES cipher:
+openssl pkey -in private.key -des3 -out private2.key
+# Or with the AES128 chiper:
+openssl pkey -in private.key -aes128 -out private2.key
+# Or with the AES256 chiper:
+openssl pkey -in private.key -aes256 -out private2.key
+# Or with the AES256-CBC cipher:
+openssl pkey -in private.key -out private2.key -aes-256-cbc
+```
+```bash
+# Decrypt a private Key:
+openssl pkey -in private.key -out private2.key
 ```
 ```bash
 # Create a CSR based on an existing key:

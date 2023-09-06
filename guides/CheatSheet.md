@@ -1831,7 +1831,7 @@ dig +trace <QNAME>
 ### Certificates, OpenSSL/GPG and CryptoAPI:
 
 ```bash
-# Conversations with OpenSSL
+# Creating and converting with OpenSSL
 # Create PKCS12 archive from a private key and signed PEM certificate:
 openssl pkcs12 -in certificate.pem -inkey private.key -export -out certificate.pfx
 # Convert from PKCS#12 to PEM format and export private key to a combined PEM file:
@@ -1882,6 +1882,15 @@ openssl req -in request.csr -text -noout
 openssl req -in request.csr -noout -subject
 ```
 ```bash
+# Working with public and private keys in OpenSSL.
+# Read a private key file (enter passphrase if required):
+openssl rsa -in private.key -noout -text
+# or:
+openssl pkey -in privkey.key -text
+# Read a public key:
+openssl pkey -in pubkey.key -pubin -text
+```
+```bash
 # Generate a new private key (RSA 1024):
 openssl genpkey -algorithm rsa -out private.key
 # Generate a new private key (RSA 4096):
@@ -1892,31 +1901,40 @@ openssl genpkey -algorithm rsa -out private.key -pkeyopt rsa_keygen_bits:2048 -d
 openssl genpkey -algorithm rsa -out private.key -pkeyopt rsa_keygen_bits:2048 -aes256
 ```
 ```bash
-# Decrypt a private Key:
-openssl pkey -in private.key -out private2.key
-```
-```bash
 # Generate a private / public key pair using an existing key:
 openssl pkey -in private.key -out public.key -pubout
 ```
 ```bash
-# Read a private key file (enter passphrase if required):
-openssl rsa -in private.key -noout -text
-# or:
-openssl pkey -in privkey.key -text
-# Read a public key:
-openssl pkey -in pubkey.key -pubin -text
+# Encrypt an existing private key using the 3DES cipher:
+openssl pkey -in private.key -des3 -out private2.key
+# Or with the AES128 chiper:
+openssl pkey -in private.key -aes128 -out private2.key
+# Or with the AES256 chiper:
+openssl pkey -in private.key -aes256 -out private2.key
+# Or with the AES256-CBC cipher:
+openssl pkey -in private.key -out private2.key -aes-256-cbc
 ```
 ```bash
+# Decrypt a private Key:
+openssl pkey -in private.key -out private2.key
+```
+```bash
+# Working with Certificate Signing Requests (PKCS10) in OpenSSL.
 # Create a CSR based on an existing key:
 # Follow the interactive guide, use "." to leave certain fields blank
 openssl req -key private.key -new -out website.csr
 # Create a CSR with a new private key:
 # Follow the interactive guide, use "." to leave certain fields blank
 openssl req -newkey rsa:2048 -keyout private.key -nodes -out website.csr
-# Generate a new CSR with optional extensions like X509v3 Subject Alternative Name (requires 1.1.1 min):
+# Generate a new CSR with with a new private key and optional extensions like X509v3 Subject Alternative Name (requires 1.1.1 min):
 # Follow the interactive guide, use "." to leave certain fields blank
-openssl req -newkey rsa:2048 -keyout private.key -nodes -addext "subjectAltName = DNS:fqdn" -out website.csr 
+openssl req -newkey rsa:2048 -keyout private.key -nodes -addext "subjectAltName = DNS:fqdn" -out website.csr
+# Generate a new CSR with a new private key and optional extensions like X509v3 Basic Constraints. Set the CA boolean to TRUE or FALSE:
+# Follow the interactive guide, use "." to leave certain fields blank
+openssl req -newkey rsa:2048 -keyout private.key -nodes -addext "basicConstraints = CA:FALSE" -out website.csr
+# Generate a new CSR with a new private key and optional extensions like X509v3 Extended Key Usage:
+# Follow the interactive guide, use "." to leave certain fields blank
+openssl req -newkey rsa:2048 -keyout private.key -nodes -addext "extendedKeyUsage = serverAuth" -out website.csr
 # Generate a new CSR based on a new private key, without using the wizard:
 openssl req -newkey rsa:2048 -keyout private.key -nodes -subj "/C=AU/ST=Some-State/O=Internet Widgits Pty Ltd/CN=fqdn" -out website.csr
 # With subject and SAN extensions:
@@ -1925,8 +1943,17 @@ openssl req -newkey rsa:2048 -keyout private.key -nodes -subj "/C=AU/ST=Some-Sta
 openssl req -newkey rsa:2048 -keyout private.key -nodes -subj "/CN=fqdn" -out website.csr
 # or 
 openssl req -newkey rsa:2048 -keyout private.key -nodes -subj "/CN=fqdn" -addext "subjectAltName = DNS:fqdn" -out website.csr
+# With basic constraints. Set the CA boolean to TRUE or FALSE:
+openssl req -newkey rsa:2048 -keyout private.key -nodes -subj "/CN=fqdn" -addext "basicConstraints = CA:FALSE" -out website.csr
+# With extended key usage:
+openssl req -newkey rsa:2048 -keyout private.key -nodes -subj "/CN=fqdn" -addext "extendedKeyUsage = serverAuth" -out website.csr
 ```
 ```bash
+# Read and verify an existing CSR:
+openssl req -in request.csr -text -noout -verify
+```
+```bash
+# Creating self-signed certificates in OpenSSL.
 # Create a self-signed certificate with an existing private key:
 # Follow the interactive guide, use "." to leave certain fields blank
 openssl req -x509 -new -key private.key -days 365 -out website.pem
@@ -1935,15 +1962,14 @@ openssl req -x509 -new -key private.key -days 365 -out website.pem
 openssl req -x509 -new -newkey rsa:2048 -nodes -keyout private.key -days 365 -out website.pem
 # Omit the "-nodes" switch to prompt for passphrase.
 openssl req -x509 -new -newkey rsa:2048 -keyout private.key -days 365 -out website.pem
-
+# Generate a new CSR based on a new private key, without using the wizard:
+openssl req -x509 -new -newkey rsa:2048 -nodes -keyout private.key -subj "/CN=fqdn" -days 365 -out website.pem
+# With subject, SAN extensions, basic constraints and extended key usage:
+openssl req -x509 -new -newkey rsa:2048 -nodes -keyout private.key -subj "/CN=fqdn" -addext "subjectAltName = DNS:fqdn" -addext "basicConstraints = CA:FALSE" -addext "extendedKeyUsage = serverAuth" -days 365 -out website.pem
 ```
 ```bash
 # Generate a self signed certificate based on an existing CSR and private key:
 openssl x509 -signkey private.key -in request.csr -req -days 365 -out website.cer
-```
-```bash
-# Read and verify an existing CSR:
-openssl req -in request.csr -text -noout -verify
 ```
 ```bash
 # Generte file hashes using dgst:

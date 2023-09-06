@@ -1919,6 +1919,7 @@ openssl pkey -in private.key -out private2.key -aes-256-cbc
 openssl pkey -in private.key -out private2.key
 ```
 ```bash
+# Working with Certificate Signing Requests (PKCS10) in OpenSSL.
 # Create a CSR based on an existing key:
 # Follow the interactive guide, use "." to leave certain fields blank
 openssl req -key private.key -new -out website.csr
@@ -1948,6 +1949,11 @@ openssl req -newkey rsa:2048 -keyout private.key -nodes -subj "/CN=fqdn" -addext
 openssl req -newkey rsa:2048 -keyout private.key -nodes -subj "/CN=fqdn" -addext "extendedKeyUsage = serverAuth" -out website.csr
 ```
 ```bash
+# Read and verify an existing CSR:
+openssl req -in request.csr -text -noout -verify
+```
+```bash
+# Creating self-signed certificates in OpenSSL.
 # Create a self-signed certificate with an existing private key:
 # Follow the interactive guide, use "." to leave certain fields blank
 openssl req -x509 -new -key private.key -days 365 -out website.pem
@@ -1964,10 +1970,6 @@ openssl req -x509 -new -newkey rsa:2048 -nodes -keyout private.key -subj "/CN=fq
 ```bash
 # Generate a self signed certificate based on an existing CSR and private key:
 openssl x509 -signkey private.key -in request.csr -req -days 365 -out website.cer
-```
-```bash
-# Read and verify an existing CSR:
-openssl req -in request.csr -text -noout -verify
 ```
 ```bash
 # Generte file hashes using dgst:

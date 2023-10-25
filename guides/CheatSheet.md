@@ -2578,6 +2578,8 @@ terraform apply -auto-approve
 terraform plan -destroy
 # Destroy nfrastructure based on the repository changes (if any):
 terraform destroy
+# With auto approve:
+terraform destroy -auto-approve
 ```
 
 ## Public Cloud:

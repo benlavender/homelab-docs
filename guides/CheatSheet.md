@@ -2549,6 +2549,37 @@ docker search <string> --filter is-official=true
 
 ### Terraform:
 
+```bash
+# Initialize a repository with terraform configuration files:
+terraform init
+```
+```bash
+# Validate a repository of terraform files for syntax validity:
+terraform validate
+```
+```bash
+# Show the current plan of changes based on the state file (if any):
+terraform plan
+```
+```bash
+# Show terraform infrastructure as per the desired state in the local terraform.tfstate file:
+terraform show
+# Show terraform infrastructure as per the desired state in a specific terraform.tfstate file:
+terraform show <filepath>
+```
+```bash
+# Apply changes to infrastructure based on the repository changes (if any):
+terraform apply
+# With auto approve:
+terraform apply -auto-approve
+```
+```bash
+# Show terraform destroy changes:
+terraform plan -destroy
+# Destroy nfrastructure based on the repository changes (if any):
+terraform destroy
+```
+
 ## Public Cloud:
 
 ### Microsoft Azure:

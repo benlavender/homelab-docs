@@ -2514,6 +2514,37 @@ git config --get name.setting
 git config --get-all name.setting
 ```
 
+## Containerization:
+
+### Docker:
+
+```bash
+# Working with Docker registries.
+# Login to a container registry, default being Docker Hub.
+# Using default credsStore:
+docker login
+# Login using a specific username:
+docker login --username <username>
+# Also specify the password inline:
+docker login --username <username> --password <password>
+# Read a password from stdin:
+echo ~/my_password.txt | docker login --username <username | smtp> --password-stdin
+# Login to a local registry:
+docker login --username <username> <hostname:port>
+```
+```bash
+# Search Docker Hub for images:
+docker search <string>
+# Do not shorten the DESCRIPTION field:
+docker search <string> --no-trunc
+# Limit the results:
+docker search <string> --limit <#>
+# Search Docker Hub for images and filter by minimum stars:
+docker search <string> --filter stars=<#>
+# Search Docker Hub for images and filter for only official images:
+docker search <string> --filter is-official=true
+```
+
 ## Public Cloud:
 
 ### Microsoft Azure:

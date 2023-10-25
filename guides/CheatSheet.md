@@ -2545,6 +2545,10 @@ docker search <string> --filter stars=<#>
 docker search <string> --filter is-official=true
 ```
 
+## Desired State Configuration:
+
+### Terraform:
+
 ## Public Cloud:
 
 ### Microsoft Azure:

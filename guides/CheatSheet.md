@@ -2572,6 +2572,8 @@ terraform show <filepath>
 terraform apply
 # With auto approve:
 terraform apply -auto-approve
+# Apply changes to infrastructure based on the repository changes (if any) and override a variable:
+terraform apply -var <"variable=value">
 ```
 ```bash
 # Show terraform destroy changes:
@@ -2580,6 +2582,10 @@ terraform plan -destroy
 terraform destroy
 # With auto approve:
 terraform destroy -auto-approve
+```
+```bash
+# View any output variables after apply:
+terraform output
 ```
 
 ## Public Cloud:

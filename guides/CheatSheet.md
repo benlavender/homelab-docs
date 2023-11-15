@@ -2505,13 +2505,53 @@ shodan parse <filename.json.gz>
 
 ### Git SCM:
 
+#### Git config paths:
+
+`[path]/etc/gitconfig`: Applies to all users of the local system (applies to --system)
+
+`~/.gitconfig` or `~/.config/git/config`: Applies to the current user only (applies to --global)
+
+`.git/config`: Applies to the current repository only (applies to --local)
+
 ```bash
-# View all keys and values assigned in config file:
+# Configuring git.
+# View all settings and their respective file locations:
+git config --list --show-origin
+# Get all settings that apply to the user:
+git config --list --global
+# Get all settings that apply to all users of the system:
+git config --list --system
+# View all keys and values assigned in all config files:
 git config --list
 # View a particulular key and value:
-git config --get name.setting
+git config --get <setting>
+# Show the location of the setting Git used:
+git config --show-origin --get <setting> 
 # If key is multi-valued, use --get-all:
-git config --get-all name.setting
+git config --get-all <setting>
+# Update a particular key value pair for the current user:
+git config --global <setting> <value>
+```
+```bash
+# Get help from Git:
+git <verb> -h
+# Get help from Git via the web:
+git help <verb>
+# Get help from the man pages (UNIX-like):
+man git-<verb>
+```
+```bash
+# Working with repositories and files in Git.
+# Create a new local repository:
+git init
+# Clone a remote repository:
+git clone <PATH>
+# Clone a remote repository to a specified location:
+git clone <PATH> <filepath>
+# Clone a remote repository with more verbosity:
+git clone <PATH> --verbose
+# Clone a remote repository with only .Git file:
+git clone <PATH> --bare
 ```
 
 ## Containerization:

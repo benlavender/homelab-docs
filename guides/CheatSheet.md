@@ -2584,6 +2584,20 @@ docker search <string> --filter stars=<#>
 # Search Docker Hub for images and filter for only official images:
 docker search <string> --filter is-official=true
 ```
+```bash
+# Download Docker images.
+## All image locations are from Docker Hub.
+# Download a Docker image by name (defaults to latest):
+docker pull <name>
+# Download a Docker image by name and tag:
+docker pull <name:tag>
+# Download a Docker image by the SHA2 digest:
+docker pull <name@sha256:digest>
+# Download a Docker image from an alternative registry:
+docker pull <FQDN:port/name>
+# Pull all Docker images:
+docker pull <name> --all-tags
+```
 
 ## Desired State Configuration:
 

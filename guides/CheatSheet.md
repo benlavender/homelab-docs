@@ -2598,6 +2598,26 @@ docker pull <FQDN:port/name>
 # Pull all Docker images:
 docker pull <name> --all-tags
 ```
+```bash
+# Managing docker images and containers.
+# List all local Docker images:
+docker image ls
+# Remove a docker image:
+docker image rm <name>
+# Remove dangling Docker images:
+docker image prune
+# Remove all unused and dangling Docker images:
+docker image prune --all
+# Export a docker image to a tarball:
+docker image save <name> --output <tarball.tar>
+```
+
+```bash
+# Running Docker images.
+# If an image is not present locally it will download before running.
+# Run a Docker image named 
+
+```
 
 ## Desired State Configuration:
 

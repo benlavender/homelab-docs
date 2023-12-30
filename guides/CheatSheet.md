@@ -2610,6 +2610,10 @@ docker image prune
 docker image prune --all
 # Export a docker image to a tarball:
 docker image save <name> --output <tarball.tar>
+# View detailed information on a Docker image:
+docker image inspect <name>
+# View in JSON format:
+docker image inspect <name> --format json
 ```
 
 ```bash

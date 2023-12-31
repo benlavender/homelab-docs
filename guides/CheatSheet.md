@@ -2556,7 +2556,7 @@ git clone <PATH> --bare
 
 ## Containerization:
 
-### Docker:
+### 🐳 Docker: 
 
 ```bash
 # Working with Docker registries.
@@ -2614,6 +2614,9 @@ docker image save <name> --output <tarball.tar>
 docker image inspect <name>
 # View in JSON format:
 docker image inspect <name> --format json
+# List all dangling images:
+docker image ls --filter=unused=true
+
 ```
 ```bash
 # Managing Docker containers.
@@ -2627,12 +2630,14 @@ docker ps --latest
 docker ps --size <name>
 # Show all containers and their file sizes:
 docker ps --all --size
+# Remove a container:
+docker rm <name>
 ```
-
 ```bash
-# Running Docker images.
+# Running Docker containers.
 # If an image is not present locally it will download before running.
-# Run a Docker image named 
+# Run a Docker container:
+
 
 ```
 

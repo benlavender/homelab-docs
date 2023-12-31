@@ -2599,7 +2599,7 @@ docker pull <FQDN:port/name>
 docker pull <name> --all-tags
 ```
 ```bash
-# Managing docker images and containers.
+# Managing Docker images.
 # List all local Docker images:
 docker image ls
 # Remove a docker image:
@@ -2614,6 +2614,19 @@ docker image save <name> --output <tarball.tar>
 docker image inspect <name>
 # View in JSON format:
 docker image inspect <name> --format json
+```
+```bash
+# Managing Docker containers.
+# Show all running containers:
+docker ps
+# Show all containers:
+docker ps --all
+# Show last created container:
+docker ps --latest
+# Show container file size:
+docker ps --size <name>
+# Show all containers and their file sizes:
+docker ps --all --size
 ```
 
 ```bash

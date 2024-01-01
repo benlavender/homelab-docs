@@ -2615,8 +2615,7 @@ docker image inspect <name>
 # View in JSON format:
 docker image inspect <name> --format json
 # List all dangling images:
-docker image ls --filter=unused=true
-
+docker image ls --filter=unused=trueA
 ```
 ```bash
 # Managing Docker containers.
@@ -2632,13 +2631,36 @@ docker ps --size <name>
 docker ps --all --size
 # Remove a container:
 docker rm <name>
+# Stop a container:
+docker stop <containerID | name>
 ```
 ```bash
 # Running Docker containers.
 # If an image is not present locally it will download before running.
-# Run a Docker container:
-
-
+# Run a Docker container based on an image:
+docker run <image>
+# Run a Docker container based on an image with it's own name:
+docker run --name <name> <image> 
+# Run a Docker container based on an image with an allocated pseudo-TTY in interactive mode (will stop once TTY is exited):
+docker run --interactive --tty <image>
+# or:
+docker run -it <image>
+# Run a container based on an image in the background:
+docker run --detach <image>
+# or:
+docker run -d <image>
+# Run a container based on an image but remove once exited:
+docker run --interactive --tty --rm <image>
+# Run a container in the background if the ENTRYPOINT process exists:
+docker run --detach --tty --interactive <image>
+# Attach to a running container:
+docker attach <ID>
+# Start an existing container in detached mode:
+docker start <ID | name>
+# Start an existing container in interactive mode (will stop once TTY is exited): 
+docker start --interactive <containerID | name>
+# or:
+docker start -i <containerID | name>
 ```
 
 ## Desired State Configuration:

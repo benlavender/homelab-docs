@@ -3060,6 +3060,13 @@ az vm image list --publisher Debian --location <region>
 az vm list-sizes --location <region>
 ```
 
+```powershell
+# Get all images in a specific region:
+$Skus = Get-AzVMImagePublisher -Location <'region'> | Get-AzVMImageOffer | Get-AzVMImageSku
+foreach ($sku in $skus) {
+    $skus | Get-AzVMImage | Get-AzVMImage | Where-Object -Property PurchasePlan -NE $null | Select-Object -Property PublisherName,Offer,Skus,Name}
+```
+
 #### Azure Key Vault:
 
 ```bash

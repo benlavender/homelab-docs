@@ -2556,7 +2556,7 @@ git clone <PATH> --bare
 
 ## Containerization:
 
-### Docker:
+### 🐳 Docker: 
 
 ```bash
 # Working with Docker registries.
@@ -2583,6 +2583,84 @@ docker search <string> --limit <#>
 docker search <string> --filter stars=<#>
 # Search Docker Hub for images and filter for only official images:
 docker search <string> --filter is-official=true
+```
+```bash
+# Download Docker images.
+## All image locations are from Docker Hub.
+# Download a Docker image by name (defaults to latest):
+docker pull <name>
+# Download a Docker image by name and tag:
+docker pull <name:tag>
+# Download a Docker image by the SHA2 digest:
+docker pull <name@sha256:digest>
+# Download a Docker image from an alternative registry:
+docker pull <FQDN:port/name>
+# Pull all Docker images:
+docker pull <name> --all-tags
+```
+```bash
+# Managing Docker images.
+# List all local Docker images:
+docker image ls
+# Remove a docker image:
+docker image rm <name>
+# Remove dangling Docker images:
+docker image prune
+# Remove all unused and dangling Docker images:
+docker image prune --all
+# Export a docker image to a tarball:
+docker image save <name> --output <tarball.tar>
+# View detailed information on a Docker image:
+docker image inspect <name>
+# View in JSON format:
+docker image inspect <name> --format json
+# List all dangling images:
+docker image ls --filter=unused=trueA
+```
+```bash
+# Managing Docker containers.
+# Show all running containers:
+docker ps
+# Show all containers:
+docker ps --all
+# Show last created container:
+docker ps --latest
+# Show container file size:
+docker ps --size <name>
+# Show all containers and their file sizes:
+docker ps --all --size
+# Remove a container:
+docker rm <name>
+# Stop a container:
+docker stop <containerID | name>
+```
+```bash
+# Running Docker containers.
+# If an image is not present locally it will download before running.
+# Run a Docker container based on an image:
+docker run <image>
+# Run a Docker container based on an image with it's own name:
+docker run --name <name> <image> 
+# Run a Docker container based on an image with an allocated pseudo-TTY in interactive mode (will stop once TTY is exited):
+docker run --interactive --tty <image>
+# or:
+docker run -it <image>
+# Run a container based on an image in the background:
+docker run --detach <image>
+# or:
+docker run -d <image>
+# Run a container based on an image but remove once exited:
+docker run --interactive --tty --rm <image>
+# Run a container in the background if the ENTRYPOINT process exists:
+docker run --detach --tty --interactive <image>
+# Attach to a running container:
+docker attach <ID>
+# Start an existing container in detached mode:
+docker start <ID | name>
+# Start an existing container in interactive mode (will stop once TTY is exited): 
+docker start --interactive <containerID | name>
+# or:
+docker start -i <containerID | name>
 ```
 
 ## Desired State Configuration:

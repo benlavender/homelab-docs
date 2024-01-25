@@ -2566,7 +2566,6 @@ git add <*name*>
 git commit
 # Commit changes in the staging area with an inline commit message:
 git commit -m <"commit_log">
-
 ```
 ```bash
 # Working with diffs in Git.

@@ -2552,12 +2552,35 @@ git clone <PATH> <filepath>
 git clone <PATH> --verbose
 # Clone a remote repository with only .Git file:
 git clone <PATH> --bare
+# View current working tree status:
+git status
+# View current working tree status in-brief:
+git status --short
 # Stage or track a file or directory:
 git add <name>
 # Stage or track multiple files:
 git add <name> <name> <name>
 # Stage or track multiple files with an expression:
 git add <*name*>
+# Commit changes in the staging area with the default editor:
+git commit
+# Commit changes in the staging area with an inline commit message:
+git commit -m <"commit_log">
+
+```
+```bash
+# Working with diffs in Git.
+# View diff between staging area (index) and working tree:
+git diff
+# View changes that are staged for the next commit:
+git diff --staged
+# Viewing diffs in an alternate tool.
+# View diff in current set difftool:
+git difftool -y
+# View available tools to use:
+git difftool --tool-help
+# View diff in a specific difftool:
+git difftool --tool=<toolname>
 ```
 
 ## Containerization:

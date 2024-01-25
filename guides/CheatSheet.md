@@ -2555,11 +2555,11 @@ git clone <PATH> --bare
 ```
 ```bash
 # Working with files and directories in Git.
-# Stage a file or directory:
+# Stage or track a file or directory:
 git add <name>
-# Stage multiple files:
+# Stage or track multiple files:
 git add <name> <name> <name>
-# Stage multiple files with an expression:
+# Stage or track multiple files with an expression:
 git add <*name*>
 ```
 

@@ -2552,9 +2552,6 @@ git clone <PATH> <filepath>
 git clone <PATH> --verbose
 # Clone a remote repository with only .Git file:
 git clone <PATH> --bare
-```
-```bash
-# Working with files and directories in Git.
 # Stage or track a file or directory:
 git add <name>
 # Stage or track multiple files:

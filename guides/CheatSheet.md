@@ -2553,6 +2553,15 @@ git clone <PATH> --verbose
 # Clone a remote repository with only .Git file:
 git clone <PATH> --bare
 ```
+```bash
+# Working with files and directories in Git.
+# Stage a file or directory:
+git add <name>
+# Stage multiple files:
+git add <name> <name> <name>
+# Stage multiple files with an expression:
+git add <*name*>
+```
 
 ## Containerization:
 

@@ -2743,14 +2743,28 @@ All commands use the [Microsoft Graph PowerShell SDK (Microsoft.Graph)](https://
 **Note**: There are two types of login, **Delegated** or **App-only**. Delegated permits the SDK to interact with the Graph API on your behalf. Where app-only requests an existing registered application to interact with the Graph API. **Delegated** is the default authentication used here, where a default app named Microsoft Graph Command Line Tools will be created automatically.
 
 ```powershell
+# Finding commands.
 # Find a command by name:
 Find-MgGraphCommand -Command <Name>
 # Find a command by expression:
 Find-MgGraphCommand -Command <*name*>
+# Find a command by the API URI:
+Find-MgGraphCommand -Uri <'.*users.*'>
 # Show requires permissions for a specific command:
 Find-MgGraphCommand -Command <command> | Select-Object -ExpandProperty Permissions
-# Find a command only from the -ApiVersionAPI and not the beta:
+# Find a command only from the v1 and not the beta API:
 Find-MgGraphCommand -Command <Name> -ApiVersion 'v1.0'
+```
+```powershell
+# Finding permissions.
+# Find all delegated and application permissions:
+Find-MgGraphPermission -All
+# Find all delegated permissions:
+Find-MgGraphPermission -All -PermissionType Delegated
+# Find permissions related to a specific domain, such as either device, user, or application:
+Find-MgGraphPermission <'domain'>
+# Find the identifier for a specific permission, such as User.ReadWrite.All:
+Find-MgGraphPermission <permission>
 ```
 ```powershell
 # Sign in interactively:

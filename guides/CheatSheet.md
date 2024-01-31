@@ -2883,11 +2883,6 @@ az policy definition show --name <'name-UID'>
 az policy definition show --name <'name-UID'> --management-group '<name>'
 ```
 
-```powershell
-# Create a custom policy definition from a .json file:
-
-```
-
 #### Virtual Network:
 
 ```bash

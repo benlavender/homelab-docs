@@ -2786,6 +2786,15 @@ Disconnect-MgGraph
 # Invoke API calls directly:
 Invoke-MgGraphRequest -Method <method> <URI>
 ```
+#### Microsoft Entra ID:
+
+```powershell
+# Requires: User.Read.All
+# Get all users:
+Get-MgUser
+# Get a user by Id:
+Get-MgUser -UserId '<Id | UPN>'
+```
 
 ### Microsoft Azure:
 

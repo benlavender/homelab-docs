@@ -2768,6 +2768,10 @@ Get-MgContext | Select-Object -ExpandProperty Scopes
 # Disconnect from the Graph API:
 Disconnect-MgGraph
 ```
+```powershell
+# Invoke API calls directly:
+Invoke-MgGraphRequest -Method <method> <URI>
+```
 
 ### Microsoft Azure:
 

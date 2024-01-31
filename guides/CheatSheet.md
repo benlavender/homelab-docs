@@ -2736,6 +2736,39 @@ terraform output
 
 ## Public Cloud:
 
+### Microsoft 365:
+
+All commands use the [Microsoft Graph PowerShell SDK (Microsoft.Graph)](https://learn.microsoft.com/en-us/powershell/microsoftgraph/get-started?view=graph-powershell-1.0)
+
+**Note**: There are two types of login, **Delegated** or **App-only**. Delegated permits the SDK to interact with the Graph API on your behalf. Where app-only requests an existing registered application to interact with the Graph API. **Delegated** is the default authentication used here, where a default app named Microsoft Graph Command Line Tools will be created automatically.
+
+```powershell
+# Find a command by name:
+Find-MgGraphCommand -Command <Name>
+# Find a command by expression:
+Find-MgGraphCommand -Command <*name*>
+# Show requires permissions for a specific command:
+Find-MgGraphCommand -Command <command> | Select-Object -ExpandProperty Permissions
+# Find a command only from the -ApiVersionAPI and not the beta:
+Find-MgGraphCommand -Command <Name> -ApiVersion 'v1.0'
+```
+```powershell
+# Sign in interactively:
+Connect-MgGraph
+# Sign in interactively and define a set of permission scopes:
+Connect-MgGraph -Scopes <'scope', 'scope'>
+# Sign in with a specific application:
+Connect-MgGraph -ClientId <app_ID> -TenantId <tenantID>
+# Sign in with a device code:
+Connect-MgGraph -UseDeviceAuthentication
+# View context information about the current user:
+Get-MgContext
+# View current permissions from the current context:
+Get-MgContext | Select-Object -ExpandProperty Scopes
+# Disconnect from the Graph API:
+Disconnect-MgGraph
+```
+
 ### Microsoft Azure:
 
 #### Azure Active Directory:

@@ -2541,7 +2541,7 @@ git help <verb>
 man git-<verb>
 ```
 ```bash
-# Working with repositories and files in Git.
+# Working with repositories in Git.
 # Create a new local repository:
 git init
 # Clone a remote repository:
@@ -2552,6 +2552,9 @@ git clone <PATH> <filepath>
 git clone <PATH> --verbose
 # Clone a remote repository with only .Git file:
 git clone <PATH> --bare
+```
+```bash
+# Working with files and stages in GIT.
 # View current working tree status:
 git status
 # View current working tree status in-brief:

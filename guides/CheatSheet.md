@@ -2584,6 +2584,30 @@ git commit -v
 git commit -a
 # or with inline commit message:
 git commit -am <"commit_log">
+# View commit history:
+git log
+# View latest number of logs:
+git log -<#>
+# View all commits:
+git log --all
+# View all commits over the last number of weeks:
+git log --since=<#>.weeks
+# View all commits by author:
+git log --author <SMTP | 'name'>
+# Search commit messages for a single (use -i for case insensitive):
+git log --grep <'string'>
+# Search commit messages for an expression (use -i for case insensitive):
+git log --grep -E <expression>
+# View commit logs that involved a specific string:
+git log -S 
+# View the patch (diffs) with each commit log:
+git log --patch
+# View a basic stat of what how many files were interacted with:
+git log --stat
+# View commits on oneline with basic info:
+git log --pretty=oneline
+# View a graph showing the commit and branch merges:
+git log --graph
 ```
 ```bash
 # Working with diffs in Git.

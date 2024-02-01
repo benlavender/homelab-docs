@@ -2571,6 +2571,9 @@ git rm <name>
 git rm --cached <name> 
 # Rename a file:
 git mv <file> <newname>
+```
+```bash
+# Working with commits in Git.
 # Commit changes in the staging area with the default editor:
 git commit
 # Commit changes in the staging area with an inline commit message:

@@ -2554,7 +2554,7 @@ git clone <PATH> --verbose
 git clone <PATH> --bare
 ```
 ```bash
-# Working with files and stages in GIT.
+# Working with files and stages in Git.
 # View current working tree status:
 git status
 # View current working tree status in-brief:
@@ -2565,10 +2565,22 @@ git add <name>
 git add <name> <name> <name>
 # Stage or track multiple files with an expression:
 git add <*name*>
+# Remove a tracked file:
+git rm <name>
+# Remove a file from the staging area:
+git rm --cached <name> 
+# Rename a file:
+git mv <file> <newname>
 # Commit changes in the staging area with the default editor:
 git commit
 # Commit changes in the staging area with an inline commit message:
 git commit -m <"commit_log">
+# View diff associated with this commit along with commit message editor:
+git commit -v
+# Commit all tracked files regardless if they're in the staging area or not:
+git commit -a
+# or with inline commit message:
+git commit -am <"commit_log">
 ```
 ```bash
 # Working with diffs in Git.

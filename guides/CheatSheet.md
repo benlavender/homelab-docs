@@ -2541,7 +2541,7 @@ git help <verb>
 man git-<verb>
 ```
 ```bash
-# Working with repositories and files in Git.
+# Working with repositories in Git.
 # Create a new local repository:
 git init
 # Clone a remote repository:
@@ -2552,6 +2552,9 @@ git clone <PATH> <filepath>
 git clone <PATH> --verbose
 # Clone a remote repository with only .Git file:
 git clone <PATH> --bare
+```
+```bash
+# Working with files and stages in Git.
 # View current working tree status:
 git status
 # View current working tree status in-brief:
@@ -2562,10 +2565,49 @@ git add <name>
 git add <name> <name> <name>
 # Stage or track multiple files with an expression:
 git add <*name*>
+# Remove a tracked file:
+git rm <name>
+# Remove a file from the staging area:
+git rm --cached <name> 
+# Rename a file:
+git mv <file> <newname>
+```
+```bash
+# Working with commits in Git.
 # Commit changes in the staging area with the default editor:
 git commit
 # Commit changes in the staging area with an inline commit message:
 git commit -m <"commit_log">
+# View diff associated with this commit along with commit message editor:
+git commit -v
+# Commit all tracked files regardless if they're in the staging area or not:
+git commit -a
+# or with inline commit message:
+git commit -am <"commit_log">
+# View commit history:
+git log
+# View latest number of logs:
+git log -<#>
+# View all commits:
+git log --all
+# View all commits over the last number of weeks:
+git log --since=<#>.weeks
+# View all commits by author:
+git log --author <SMTP | 'name'>
+# Search commit messages for a single (use -i for case insensitive):
+git log --grep <'string'>
+# Search commit messages for an expression (use -i for case insensitive):
+git log --grep -E <expression>
+# View commit logs that involved a specific string:
+git log -S 
+# View the patch (diffs) with each commit log:
+git log --patch
+# View a basic stat of what how many files were interacted with:
+git log --stat
+# View commits on oneline with basic info:
+git log --pretty=oneline
+# View a graph showing the commit and branch merges:
+git log --graph
 ```
 ```bash
 # Working with diffs in Git.

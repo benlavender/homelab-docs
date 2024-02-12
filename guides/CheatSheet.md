@@ -2644,6 +2644,8 @@ docker image inspect <name>
 docker image inspect <name> --format json
 # List all dangling images:
 docker image ls --filter=unused=trueA
+# Show detailed information on an existing container:
+docker inspect <name>
 ```
 ```bash
 # Managing Docker containers.
@@ -2681,6 +2683,14 @@ docker run -d <image>
 docker run --interactive --tty --rm <image>
 # Run a container in the background if the ENTRYPOINT process exists:
 docker run --detach --tty --interactive <image>
+# Run a container based on an image with a TCP port mapping to the host:
+docker run --publish <host_port:container_port> <image>
+# or:
+docker run -p <host_port:container_port> <image>
+# Run a container based on an image with a UDP port mapping:
+docker run --publish <host_port/<UDP>:container_port/<UDP>> <image>
+# Run a container based on an image with a TCP port mapping to a specific local IP on the host:
+docker run -p <inet_addr:host_port:container:port> <image>
 # Attach to a running container:
 docker attach <ID>
 # Start an existing container in detached mode:
@@ -2689,6 +2699,17 @@ docker start <ID | name>
 docker start --interactive <containerID | name>
 # or:
 docker start -i <containerID | name>
+```
+```bash
+# Docker networking.
+# Show all networks:
+docker network ls
+# Display detailed information on a Docker network:
+docker network inspect <networkID>
+# Connect a container to a network:
+docker network connect <networkID> <containerID>
+# Connect a container to a network and specificy its IPv4 address:
+docker network connect --ip <ip.addr> <networkID> <containerID>
 ```
 
 ## Desired State Configuration:

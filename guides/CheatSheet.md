@@ -2594,11 +2594,11 @@ git log --all
 git log --since=<#>.weeks
 # View all commits by author:
 git log --author <SMTP | 'name'>
-# Search commit messages for a single (use -i for case insensitive):
+# Search commit messages for a single (use -i for case insensitive or use --no-merges to ignore merge commits):
 git log --grep <'string'>
-# Search commit messages for an expression (use -i for case insensitive):
+# Search commit messages for an expression (use -i for case insensitive or use --no-merges to ignore merge commits):
 git log --grep -E <expression>
-# View commit logs when the number of occurrences of the specific string changes, I.e if a new function was added or removed (this is not a string search):
+# View commit logs when the number of occurrences of the specific string changes, I.e if a new function was added or removed (use --all to search logs across all branches or use --no-merges to ignore merge commits):
 git log -S <string>
 # View the patch (diffs) with each commit log:
 git log --patch

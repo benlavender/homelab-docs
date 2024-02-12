@@ -2598,8 +2598,8 @@ git log --author <SMTP | 'name'>
 git log --grep <'string'>
 # Search commit messages for an expression (use -i for case insensitive):
 git log --grep -E <expression>
-# View commit logs that involved a specific string:
-git log -S 
+# View commit logs when the number of occurrences of the specific string changes, I.e if a new function was added or removed (this is not a string search):
+git log -S <string>
 # View the patch (diffs) with each commit log:
 git log --patch
 # View a basic stat of what how many files were interacted with:

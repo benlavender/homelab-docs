@@ -2505,6 +2505,8 @@ shodan parse <filename.json.gz>
 
 ### Git SCM:
 
+> **Note**: All commands as of version 2.43.x
+
 #### Git config paths:
 
 `[path]/etc/gitconfig`: Applies to all users of the local system (applies to --system)
@@ -2565,6 +2567,12 @@ git add <name>
 git add <name> <name> <name>
 # Stage or track multiple files with an expression:
 git add <*name*>
+# Unstage a file from the staging area and put it back in the working tree:
+git restore --staged <file>
+# Remove tracked changes from the working tree:
+git restore <file>
+# Remove all tracked changes from the working tree:
+git restore .
 # Remove a tracked file:
 git rm <name>
 # Remove a file from the staging area:

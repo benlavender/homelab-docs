@@ -2584,6 +2584,8 @@ git commit -v
 git commit -a
 # or with inline commit message:
 git commit -am <"commit_log">
+# Amend the last commit with changes in the staging area (use -m for inline commit message). This will replace the last commit:
+git commit --amend
 # View commit history:
 git log
 # View latest number of logs:

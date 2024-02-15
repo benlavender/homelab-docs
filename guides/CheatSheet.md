@@ -2533,6 +2533,8 @@ git config --show-origin --get <setting>
 git config --get-all <setting>
 # Update a particular key value pair for the current user:
 git config --global <setting> <value>
+# Create a custom git alias:
+git config --global alias.<name> <'git command to be ran'>
 ```
 ```bash
 # Get help from Git:
@@ -2554,6 +2556,22 @@ git clone <PATH> <filepath>
 git clone <PATH> --verbose
 # Clone a remote repository with only .Git file:
 git clone <PATH> --bare
+# Show all remotes and their URI:
+git remote -v
+# Add a remote with a custom name:
+git remote add <name> <URI>
+# Show verbose information on a remote:
+git remote show <name>
+# Change the custom name of a remote:
+git remote rename <name> <new_name>
+# Remove a remote:
+git remote remove <name>
+# Fetch all updates from the origin:
+get fetch
+# Fetch updates from a specific remote:
+git fetch <name>
+# Push all commits to origin from the main branch:
+git push origin <master | main>
 ```
 ```bash
 # Working with files and stages in Git.

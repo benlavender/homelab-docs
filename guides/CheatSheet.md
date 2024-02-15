@@ -2533,6 +2533,8 @@ git config --show-origin --get <setting>
 git config --get-all <setting>
 # Update a particular key value pair for the current user:
 git config --global <setting> <value>
+# Create a custom git alias:
+git config --global alias.<name> <'git command to be ran'>
 ```
 ```bash
 # Get help from Git:

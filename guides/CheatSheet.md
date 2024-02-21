@@ -24,6 +24,21 @@
 
 9 Kernel routines [Non standard]
 
+```bash
+# Open a man page by name:
+man <name>
+# Open a man page by the section:
+man <#> <name>
+# Search for a man page by its description:
+man -k <string>
+# or:
+apropos <string>
+# Update the man database:
+sudo mandb
+# Show search paths for man pages:
+manpath
+```
+
 ### PowerShell Management:
 
 ```powershell

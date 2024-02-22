@@ -2679,6 +2679,13 @@ git log --pretty=oneline
 git log --graph
 ```
 ```bash
+# Working with tags in Git.
+# List all tags:
+git tag -l
+# List specific tag names:
+git tag -l <string>
+```
+```bash
 # Working with diffs in Git.
 # View diff between staging area (index) and working tree:
 git diff

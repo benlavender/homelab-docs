@@ -2681,7 +2681,9 @@ git log --graph
 ```bash
 # Working with tags in Git.
 # List all tags:
-git tag
+git tag -l
+# List specific tag names:
+git tag -l <string>
 ```
 ```bash
 # Working with diffs in Git.

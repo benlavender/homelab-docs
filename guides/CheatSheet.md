@@ -2690,6 +2690,12 @@ git show <tag>
 git tag -a <tag>
 # Create a lightweight tag:
 git tag <tag>
+# Tag a commit directly:
+git tag -a <tag> <md5>
+# Push tag to remote:
+git push <remote> <tag>
+# Push all tags to remote:
+git push <remote> --tags
 ```
 ```bash
 # Working with diffs in Git.

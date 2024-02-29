@@ -2684,6 +2684,18 @@ git log --graph
 git tag -l
 # List specific tag names:
 git tag -l <string>
+# Show a tag:
+git show <tag>
+# Create an annotated tag (use -m for inline message):
+git tag -a <tag>
+# Create a lightweight tag:
+git tag <tag>
+# Tag a commit directly:
+git tag -a <tag> <md5>
+# Push tag to remote:
+git push <remote> <tag>
+# Push all tags to remote:
+git push <remote> --tags
 ```
 ```bash
 # Working with diffs in Git.

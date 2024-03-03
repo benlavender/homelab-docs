@@ -1729,6 +1729,8 @@ curl localhost :9200/_cat/count/<indice_name>
 ykman list
 # Show full information of connected YubiKey devices:
 ykman show
+# Show full information of specific connected YubiKey device:
+ykman --device <sku> info
 ```
 
 ### MySQL:

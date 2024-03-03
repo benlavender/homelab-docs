@@ -1722,6 +1722,15 @@ curl -XDELETE localhost:9200/_template/<template_name>
 curl localhost :9200/_cat/count/<indice_name>
 ```
 
+### Yubikey Manager:
+
+```bash
+# List connected YubiKey devices:
+ykman list
+# Show full information of connected YubiKey devices:
+ykman show
+```
+
 ### MySQL:
 
 ```bash

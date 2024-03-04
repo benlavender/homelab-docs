@@ -1722,6 +1722,37 @@ curl -XDELETE localhost:9200/_template/<template_name>
 curl localhost :9200/_cat/count/<indice_name>
 ```
 
+### Yubikey Manager:
+
+```bash
+# List connected YubiKey devices:
+ykman list
+# Show full information of connected YubiKey devices:
+ykman show
+# Show full information of specific connected YubiKey device:
+ykman --device <sku> info
+# List applications enabled by interface:
+ykman config <interface> --list
+# Enable all applications of an interface:
+ykman config <interface> --enable-all
+# Disable an application of an interface:
+ykan config <interface> --disable <application> 
+# Create an application lock code to protect the configs (use --generate to generate a code):
+ykman config set-lock-code
+# Clear an existing lock code:
+ykman config set-lock-code --clear
+```
+```bash
+# Manage FIDO2 application.
+# Set or change a FIDO2 pin:
+ykman fido access change-pin
+# Verify PIN is correct of a YubiKey:
+ykman fido access verify-pin
+# Rest a FIDO2 pin (clears all FIDO2 entries).
+# Follow scripted advice:
+ykman fido reset
+```
+
 ### MySQL:
 
 ```bash

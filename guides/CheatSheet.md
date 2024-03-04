@@ -1751,6 +1751,10 @@ ykman fido access verify-pin
 # Rest a FIDO2 pin (clears all FIDO2 entries).
 # Follow scripted advice:
 ykman fido reset
+# List FIDO2 credentials:
+ykman fido credentials list
+# Delete a FIDO2 credential:
+ykman fido credentials delete <Credential ID>
 ```
 
 ### MySQL:

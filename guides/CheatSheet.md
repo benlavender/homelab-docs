@@ -1731,6 +1731,22 @@ ykman list
 ykman show
 # Show full information of specific connected YubiKey device:
 ykman --device <sku> info
+# List applications enabled by interface:
+ykman config <interface> --list
+# Enable all applications of an interface:
+ykman config <interface> --enable-all
+# Disable an application of an interface:
+ykan config <interface> --disable <application> 
+```
+```bash
+# Manage FIDO2 application.
+# Set or change a FIDO2 pin:
+ykman fido access change-pin
+# Verify PIN is correct of a YubiKey:
+ykman fido access verify-pin
+# Rest a FIDO2 pin (clears all FIDO2 entries).
+# Follow scripted advice:
+ykman fido reset
 ```
 
 ### MySQL:

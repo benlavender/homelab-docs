@@ -1737,6 +1737,10 @@ ykman config <interface> --list
 ykman config <interface> --enable-all
 # Disable an application of an interface:
 ykan config <interface> --disable <application> 
+# Create an application lock code to protect the configs (use --generate to generate a code):
+ykman config set-lock-code
+# Clear an existing lock code:
+ykman config set-lock-code --clear
 ```
 ```bash
 # Manage FIDO2 application.

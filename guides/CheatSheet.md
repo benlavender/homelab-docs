@@ -2731,6 +2731,12 @@ git tag -a <tag> <md5>
 git push <remote> <tag>
 # Push all tags to remote:
 git push <remote> --tags
+# Delete a tag in the local repository:
+git tag -d <tag>
+# Delete a tag in the remote repository:
+git push <remote> --delete <tag>
+# Checkout and view files that relate to a specific tag:
+git checkout <tag>
 ```
 ```bash
 # Working with diffs in Git.

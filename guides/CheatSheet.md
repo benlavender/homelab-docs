@@ -2712,6 +2712,10 @@ git log --stat
 git log --pretty=oneline
 # View a graph showing the commit and branch merges:
 git log --graph
+# View branches pointing to commit:
+git log --oneline --decorate
+# View full ref name of branches pointing to commit:
+git log --oneline --decorate=full
 ```
 ```bash
 # Working with branches in Git.

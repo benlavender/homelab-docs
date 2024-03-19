@@ -2714,6 +2714,13 @@ git log --pretty=oneline
 git log --graph
 ```
 ```bash
+# Working with branches in Git.
+# Create a new branch:
+git branch <name>
+# Create a new branch and switch to it:
+git checkout -b <name>
+```
+```bash
 # Working with tags in Git.
 # List all tags:
 git tag -l

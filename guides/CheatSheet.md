@@ -2723,6 +2723,15 @@ git log --oneline --decorate=full
 git branch <name>
 # Create a new branch and switch to it:
 git checkout -b <name>
+# Delete a branch:
+git branch -d <name>
+# Delete a branch forcefully:
+git branch -D <name>
+```
+```bash
+# Merging with Git.
+# Merge changes into the current branch (HEAD):
+git merge <branch>
 ```
 ```bash
 # Working with tags in Git.

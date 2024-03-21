@@ -2732,6 +2732,10 @@ git branch -D <name>
 # Merging with Git.
 # Merge changes into the current branch (HEAD):
 git merge <branch>
+# Perform a dry-run merge where a merge is completed but not committed (does not apply to fast-forward merges):
+git merge --no-commit <branch>
+# Perform a dry-run merge where a merge is completed but not committed (forces no fast-forward merges):
+git merge --no-ff --no-commit <branch>
 ```
 ```bash
 # Working with tags in Git.

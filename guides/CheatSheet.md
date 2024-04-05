@@ -2690,6 +2690,8 @@ git log
 git log -<#>
 # View all commits:
 git log --all
+# View commit logs that relate only to merge commits:
+git log --merges
 # View all commits over the last number of weeks:
 git log --since=<#>.weeks
 # View all commits by author:
@@ -2736,6 +2738,15 @@ git merge <branch>
 git merge --no-commit <branch>
 # Perform a dry-run merge where a merge is completed but not committed (forces no fast-forward merges):
 git merge --no-ff --no-commit <branch>
+# Cancel a merge in progress:
+git merge --abort
+# Viewing merges in an alternate tool.
+# View merges in current set mergetool:
+git mergetool -y 
+# View available tools to use:
+git mergetool --tool-help
+# View merge in a specific mergetool:
+git mergetool --tool=<toolname>
 ```
 ```bash
 # Working with tags in Git.

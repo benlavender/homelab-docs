@@ -2690,6 +2690,8 @@ git log
 git log -<#>
 # View all commits:
 git log --all
+# View commit logs that relate only to merge commits:
+git log --merges
 # View all commits over the last number of weeks:
 git log --since=<#>.weeks
 # View all commits by author:

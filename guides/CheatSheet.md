@@ -629,13 +629,37 @@ Get-EventLog -ComputerName <host> <logname> | select timegenerated,message | Sel
 
 ### Files and Directories:
 
-#### Find command:
-
-`‘.'` is assumed as starting point if not specified.
-
-`pwd` can be used for current directory.
-
 ```bash
+# Searching with find command.
+# ‘.' is assumed as starting point if not specified or `pwd` can be used for current directory.
+# Find a file with a specific name:
+find <dir> -type f -name <'filename'>
+# Find a file as an expression:
+find <dir> -type f -name <'*name*'>
+# Find a files with a specific extension:
+find <dir> -type f -name <'*.ext'>
+# Find a directory with a specific name:
+find <dir> -type d -name <'filename'>
+# Find a file as an expression:
+find <dir> -type d -name <'*name*'>
+# Find files modified in the last +24 hours:
+find <dir> -type f -mtime 0
+# Find files modified between +24 and +48 hours: 
+find <dir> -type f -mtime 1
+# Find files modified in beyond the last +24 hours:
+find <dir> -type f -mtime +0
+# Find files that have changed in last x amount of time, where {#} = minutes since last change:
+find <dir> -type f -cmin -<#>
+```
+
+
+
+
+
+
+
+
+
 # Find files that have changed in last x amount of time, where {#} = minutes since last change:
 find <dir> -cmin -{#}
 # Find only directories in working directory (-maxdepth to stop recursion):
@@ -648,7 +672,7 @@ find <dir> -type f -print0 | xargs -0 du | sort -n | tail -10 | cut -f2 | xargs 
 # Only difference is -type {d:f}.
 find <dir> -type d -print0 | xargs -0 du | sort -n | tail -10 | cut -f2 | xargs -I{} du -sh {}
 # or
-du -a <dir> | sort -n -r | head -n 10 
+du -a <dir> | sort -n -r | head -n 10
 # Find files/dir with absolute paths:
 find <dir> -name "file"
 # or

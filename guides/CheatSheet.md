@@ -643,11 +643,13 @@ find <dir> -type d -name <'filename'>
 # Find a file as an expression:
 find <dir> -type d -name <'*name*'>
 # Find files modified in the last +24 hours:
-find <dir> -type f -mtime 0
-# Find files modified between +24 and +48 hours: 
-find <dir> -type f -mtime 1
-# Find files modified in beyond the last +24 hours:
-find <dir> -type f -mtime +0
+find <dir> -type f -mtime -1
+# Find files modified in the last +48 hours:
+find <dir> -type f -mtime -2
+# Find files modified after +48 hours:
+find <dir> -type f -mtime +1
+
+
 # Find files that have changed in last x amount of time, where {#} = minutes since last change:
 find <dir> -type f -cmin -<#>
 ```

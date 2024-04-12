@@ -629,6 +629,31 @@ Get-EventLog -ComputerName <host> <logname> | select timegenerated,message | Sel
 
 ### Files and Directories:
 
+#### Find command:
+
+`‘.'` is assumed as starting point if not specified.
+
+`pwd` can be used for current directory.
+
+```bash
+# Find files that have changed in last x amount of time, where {#} = minutes since last change:
+find <dir> -cmin -{#}
+# Find only directories in working directory (-maxdepth to stop recursion):
+find <dir> -maxdepth 1 -not -type f
+# Finds only files:
+find <dir> -maxdepth 1 -not -type d
+# To find the largest 10 directories:
+find <dir> -type f -print0 | xargs -0 du | sort -n | tail -10 | cut -f2 | xargs -I{} du -sh {}
+# or
+# Only difference is -type {d:f}.
+find <dir> -type d -print0 | xargs -0 du | sort -n | tail -10 | cut -f2 | xargs -I{} du -sh {}
+# or
+du -a <dir> | sort -n -r | head -n 10 
+# Find files/dir with absolute paths:
+find <dir> -name "file"
+# or
+find <dir> -type d -name "*dir*" -print
+```
 ```powershell
 # Get files and directories of a specific size:
 Get-ChildItem <dir> -Recurse | Where-Object -Property Length -gt 100MB | Select-Object -Property Name,length,VersionInfo
@@ -639,12 +664,6 @@ find . -type f -exec grep -l "string" {} +
 # or
 grep -R "string" /
 ``` 
-```bash
-# Find only directories in working directory (-maxdepth to stop recursion):
-find . -maxdepth 1 -not -type f
-# Finds only files:
-find . -maxdepth 1 -not -type d
-```
 ```powershell
 # Get top x10 largest files:
 Get-ChildItem <dir> -Recurse -File | Sort-Object -Property Length -Descending | Select-Object -First 10 -Property Length,VersionInfo
@@ -656,10 +675,6 @@ Get-ItemProperty -Path 'file/dir' | Format-List -Property *
 ```powershell
 # List files created and modified today, in descending order by lastwritetime and include the name, lwt and size:
 Get-ChildItem -Path <dir> -Recurse | Where-Object {$_.LastWriteTime.date -eq (Get-Date).Date} | Sort-Object LastWriteTime -Descending | Select-Object -Property Name,LastWriteTime,Length | Format-Table -AutoSize
-```
-```bash
-# Find files that have changed in last x amount of time, where {#} = minutes since last change:
-find . -cmin -{#}
 ```
 ```bat
 REM Robocopy mirror sync:
@@ -820,21 +835,6 @@ setfacl -b file
 ```bash
 # Actually modifies the primary permissions, potentially dangerous as it does not change ACL...
 setfacl -m o:rwx file 
-```
-```bash
-# To find the largest 10 directories:
-find . -type f -print0 | xargs -0 du | sort -n | tail -10 | cut -f2 | xargs -I{} du -sh {}
-# or
-# Only difference is -type {d:f}.
-find . -type d -print0 | xargs -0 du | sort -n | tail -10 | cut -f2 | xargs -I{} du -sh {}
-# or
-du -a /var | sort -n -r | head -n 10 
-```
-```bash
-# Find files/dir with absolute paths:
-find `pwd` -name "file"
-# or
-find / -type d -name "*dir*" -print
 ```
 ```bash
 # Get directory size:

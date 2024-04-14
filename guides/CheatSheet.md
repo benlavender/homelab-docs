@@ -630,7 +630,7 @@ Get-EventLog -ComputerName <host> <logname> | select timegenerated,message | Sel
 ### Files and Directories:
 
 ```bash
-# Searching with find command.
+# Basic searching with find command.
 # ‘.' is assumed as starting point if not specified or `pwd` can be used for current directory.
 # Find a file with a specific name:
 find <dir> -type f -name <'filename'>
@@ -642,13 +642,43 @@ find <dir> -type f -name <'*.ext'>
 find <dir> -type d -name <'filename'>
 # Find a file as an expression:
 find <dir> -type d -name <'*name*'>
+```
+```bash
+# Cronological file searching with find command.
+# 'n' = Exact.
+# '+n' = After.
+# '-n' = Before.
 # Find files modified in the last +24 hours:
 find <dir> -type f -mtime -1
 # Find files modified in the last +48 hours:
 find <dir> -type f -mtime -2
 # Find files modified after +48 hours:
 find <dir> -type f -mtime +1
-
+# Find files changed in the last +24 hours:
+find <dir> -type f -ctime -1
+# Find files changed in the last +48 hours:
+find <dir> -type f -ctime -2
+# Find files changed after +48 hours:
+find <dir> -type f -ctime +1
+# Find files accessed in the last +24 hours:
+find <dir> -type f -atime -1
+# Find files accessed in the last +48 hours:
+find <dir> -type f -atime -2
+# Find files accessed after +48 hours:
+find <dir> -type f -atime +1
+# Find files modified in the last n minutes:
+find <dir> -type f -mmin -<n>
+# Find files modified after n minutes:
+find <dir> -type f -mmin +<n>
+# Find files changed in the last n minutes:
+find <dir> -type f -cmin -<n>
+# Find files changed after n minutes:
+find <dir> -type f -cmin +<n>
+# Find files accessed in the last n minutes:
+find <dir> -type f -amin -<n>
+# Find files accessed after n minutes:
+find <dir> -type f -amin +<n>
+```
 
 # Find files that have changed in last x amount of time, where {#} = minutes since last change:
 find <dir> -type f -cmin -<#>

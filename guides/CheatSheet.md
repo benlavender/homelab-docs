@@ -642,6 +642,14 @@ find <dir> -type f -name <'*.ext'>
 find <dir> -type d -name <'filename'>
 # Find a file as an expression:
 find <dir> -type d -name <'*name*'>
+# Print the full path of a file:
+find <dir> -type f -name <'filename'> -print
+# Print the full path of a directory:
+find <dir> -type d -name <'filename'> -print
+# Only search the current directory:
+find <dir> -type f -name <'filename'> -maxdepth 1
+# or:
+find <dir> -type d -name <'filename'> -maxdepth 1
 ```
 ```bash
 # Cronological file searching with find command.
@@ -679,25 +687,7 @@ find <dir> -type f -amin -<n>
 # Find files accessed after n minutes:
 find <dir> -type f -amin +<n>
 ```
-
-# Find files that have changed in last x amount of time, where {#} = minutes since last change:
-find <dir> -type f -cmin -<#>
-```
-
-
-
-
-
-
-
-
-
-# Find files that have changed in last x amount of time, where {#} = minutes since last change:
-find <dir> -cmin -{#}
-# Find only directories in working directory (-maxdepth to stop recursion):
-find <dir> -maxdepth 1 -not -type f
-# Finds only files:
-find <dir> -maxdepth 1 -not -type d
+```bash
 # To find the largest 10 directories:
 find <dir> -type f -print0 | xargs -0 du | sort -n | tail -10 | cut -f2 | xargs -I{} du -sh {}
 # or
@@ -705,10 +695,6 @@ find <dir> -type f -print0 | xargs -0 du | sort -n | tail -10 | cut -f2 | xargs 
 find <dir> -type d -print0 | xargs -0 du | sort -n | tail -10 | cut -f2 | xargs -I{} du -sh {}
 # or
 du -a <dir> | sort -n -r | head -n 10
-# Find files/dir with absolute paths:
-find <dir> -name "file"
-# or
-find <dir> -type d -name "*dir*" -print
 ```
 ```powershell
 # Get files and directories of a specific size:

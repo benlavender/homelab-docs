@@ -629,6 +629,73 @@ Get-EventLog -ComputerName <host> <logname> | select timegenerated,message | Sel
 
 ### Files and Directories:
 
+```bash
+# Basic searching with find command.
+# ‘.' is assumed as starting point if not specified or `pwd` can be used for current directory.
+# Find a file with a specific name:
+find <dir> -type f -name <'filename'>
+# Find a file as an expression:
+find <dir> -type f -name <'*name*'>
+# Find a files with a specific extension:
+find <dir> -type f -name <'*.ext'>
+# Find a directory with a specific name:
+find <dir> -type d -name <'filename'>
+# Find a file as an expression:
+find <dir> -type d -name <'*name*'>
+# Print the full path of a file:
+find <dir> -type f -name <'filename'> -print
+# Print the full path of a directory:
+find <dir> -type d -name <'filename'> -print
+# Only search the current directory:
+find <dir> -type f -name <'filename'> -maxdepth 1
+# or:
+find <dir> -type d -name <'filename'> -maxdepth 1
+```
+```bash
+# Cronological file searching with find command.
+# 'n' = Exact.
+# '+n' = After.
+# '-n' = Before.
+# Find files modified in the last +24 hours:
+find <dir> -type f -mtime -1
+# Find files modified in the last +48 hours:
+find <dir> -type f -mtime -2
+# Find files modified after +48 hours:
+find <dir> -type f -mtime +1
+# Find files changed in the last +24 hours:
+find <dir> -type f -ctime -1
+# Find files changed in the last +48 hours:
+find <dir> -type f -ctime -2
+# Find files changed after +48 hours:
+find <dir> -type f -ctime +1
+# Find files accessed in the last +24 hours:
+find <dir> -type f -atime -1
+# Find files accessed in the last +48 hours:
+find <dir> -type f -atime -2
+# Find files accessed after +48 hours:
+find <dir> -type f -atime +1
+# Find files modified in the last n minutes:
+find <dir> -type f -mmin -<n>
+# Find files modified after n minutes:
+find <dir> -type f -mmin +<n>
+# Find files changed in the last n minutes:
+find <dir> -type f -cmin -<n>
+# Find files changed after n minutes:
+find <dir> -type f -cmin +<n>
+# Find files accessed in the last n minutes:
+find <dir> -type f -amin -<n>
+# Find files accessed after n minutes:
+find <dir> -type f -amin +<n>
+```
+```bash
+# To find the largest 10 directories:
+find <dir> -type f -print0 | xargs -0 du | sort -n | tail -10 | cut -f2 | xargs -I{} du -sh {}
+# or
+# Only difference is -type {d:f}.
+find <dir> -type d -print0 | xargs -0 du | sort -n | tail -10 | cut -f2 | xargs -I{} du -sh {}
+# or
+du -a <dir> | sort -n -r | head -n 10
+```
 ```powershell
 # Get files and directories of a specific size:
 Get-ChildItem <dir> -Recurse | Where-Object -Property Length -gt 100MB | Select-Object -Property Name,length,VersionInfo
@@ -639,12 +706,6 @@ find . -type f -exec grep -l "string" {} +
 # or
 grep -R "string" /
 ``` 
-```bash
-# Find only directories in working directory (-maxdepth to stop recursion):
-find . -maxdepth 1 -not -type f
-# Finds only files:
-find . -maxdepth 1 -not -type d
-```
 ```powershell
 # Get top x10 largest files:
 Get-ChildItem <dir> -Recurse -File | Sort-Object -Property Length -Descending | Select-Object -First 10 -Property Length,VersionInfo
@@ -656,10 +717,6 @@ Get-ItemProperty -Path 'file/dir' | Format-List -Property *
 ```powershell
 # List files created and modified today, in descending order by lastwritetime and include the name, lwt and size:
 Get-ChildItem -Path <dir> -Recurse | Where-Object {$_.LastWriteTime.date -eq (Get-Date).Date} | Sort-Object LastWriteTime -Descending | Select-Object -Property Name,LastWriteTime,Length | Format-Table -AutoSize
-```
-```bash
-# Find files that have changed in last x amount of time, where {#} = minutes since last change:
-find . -cmin -{#}
 ```
 ```bat
 REM Robocopy mirror sync:
@@ -820,21 +877,6 @@ setfacl -b file
 ```bash
 # Actually modifies the primary permissions, potentially dangerous as it does not change ACL...
 setfacl -m o:rwx file 
-```
-```bash
-# To find the largest 10 directories:
-find . -type f -print0 | xargs -0 du | sort -n | tail -10 | cut -f2 | xargs -I{} du -sh {}
-# or
-# Only difference is -type {d:f}.
-find . -type d -print0 | xargs -0 du | sort -n | tail -10 | cut -f2 | xargs -I{} du -sh {}
-# or
-du -a /var | sort -n -r | head -n 10 
-```
-```bash
-# Find files/dir with absolute paths:
-find `pwd` -name "file"
-# or
-find / -type d -name "*dir*" -print
 ```
 ```bash
 # Get directory size:

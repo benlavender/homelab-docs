@@ -686,6 +686,15 @@ find <dir> -type f -cmin +<n>
 find <dir> -type f -amin -<n>
 # Find files accessed after n minutes:
 find <dir> -type f -amin +<n>
+```bash
+# Find files and directories with a specific permission set:
+find <dir> -perm <octal>
+# or:
+find <dir> -perm <rwx>
+```
+```bash
+# Executing with find command.
+
 ```
 ```bash
 # To find the largest 10 directories:

@@ -687,14 +687,34 @@ find <dir> -type f -amin -<n>
 # Find files accessed after n minutes:
 find <dir> -type f -amin +<n>
 ```bash
-# Find files and directories with a specific permission set:
+# Find files and directories with based on permissions.
+# Default should be octal notation but non-POSIX symbollics can be used, i.e u=<rwx>,g=<rwx>,o=<rwx>.
+# Find files and directories with an exact permission set:
 find <dir> -perm <octal>
-# or:
-find <dir> -perm <rwx>
-```
-```bash
-# Executing with find command.
-
+# Find files and directories with 0777:
+find <dir> -perm 0777
+# Find files and directories where only the owner has read permissions:
+find <dir> -perm 0400
+# Find files and directories with a minimum permission set:
+find <dir> -perm -<octal>
+# Find files and directories where others have write permissions, regardless of user and owner:
+find <dir> -perm -0006
+# Find files and directories where others have read write and execute permissions:
+find <dir> -perm -0007
+# Find files and directories where others have read permissions regardless of user and owner:
+find <dir> -perm -0004
+# Find files and directories where others have execute permissions regardless of user and owner:
+find <dir> -perm -0001
+# Find files and directories where owner and group have read and write permissions:
+find <dir> -perm -0660
+# Find files and directories which contains a permission set, either user, group or other:
+find <dir> -perm /<octal>
+# Find files and directories where someone has read and write permissions:
+find <dir> -perm /0666
+# Find files and directories where either the owner or group has write permissions:
+find <dir> -perm /0440
+# Find files and directories where anyone other than the owner and group has write permissions:
+find <dir> -perm /0044
 ```
 ```bash
 # To find the largest 10 directories:

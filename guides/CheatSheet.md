@@ -688,6 +688,7 @@ find <dir> -type f -cmin +<n>
 find <dir> -type f -amin -<n>
 # Find files accessed after n minutes:
 find <dir> -type f -amin +<n>
+```
 ```bash
 # Find files and directories with based on permissions.
 # Default should be octal notation but non-POSIX symbollics can be used, i.e u=<rwx>,g=<rwx>,o=<rwx>.

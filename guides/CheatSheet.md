@@ -720,6 +720,15 @@ find <dir> -perm /0440
 find <dir> -perm /0044
 ```
 ```bash
+# Execution with find command.
+# With "-exec <command> {} \;" the command is executed for each file found, in order and per line.
+# With "-exec <command> {} +" the command is executed for all files found in one go. 
+# Find all files that begin with the name picture and delete them:
+find <dir> -type f -name 'picture*' -exec rm {} \;
+# Find all files in the current directory and delete them:
+find <dir> -type f -exec rm -f {} \;
+```
+```bash
 # To find the largest 10 directories:
 find <dir> -type f -print0 | xargs -0 du | sort -n | tail -10 | cut -f2 | xargs -I{} du -sh {}
 # or

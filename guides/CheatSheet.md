@@ -650,6 +650,8 @@ find <dir> -type d -name <'filename'> -print
 find <dir> -type f -name <'filename'> -maxdepth 1
 # or:
 find <dir> -type d -name <'filename'> -maxdepth 1
+# Don't recurse into mounted directorties for files and directories:
+find <dir> -mount -name <'filename'>
 ```
 ```bash
 # Cronological file searching with find command.

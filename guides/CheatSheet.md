@@ -2842,6 +2842,8 @@ git branch -d <name>
 git branch -D <name>
 # Delete a remote branch:
 git push <remote> --delete <branch>
+# Delete a remote tracking branch:
+git branch -dr <remote/branch>
 ```
 ```bash
 # Merging with Git.

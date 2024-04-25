@@ -2817,7 +2817,11 @@ git branch -a
 git branch -v
 # List both remote-tracking and local branches with their last commit message:
 git branch -av
-# Create a new branch:
+# List branches that havn't yet been merged with HEAD:
+git branch --no-merged
+# List branches that have been merged with HEAD:
+git branch --merged
+# Create a new branch: 
 git branch <name>
 # Create a new branch and switch to it:
 git checkout -b <name>

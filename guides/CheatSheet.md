@@ -2809,6 +2809,14 @@ git log --oneline --decorate=full
 ```
 ```bash
 # Working with branches in Git.
+# List all local branches:
+git branch
+# List both remote-tracking and local branches:
+git branch -a
+# List last commit message on branch:
+git branch -v
+# List both remote-tracking and local branches with their last commit message:
+git branch -av
 # Create a new branch:
 git branch <name>
 # Create a new branch and switch to it:

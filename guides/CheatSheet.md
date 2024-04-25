@@ -2809,14 +2809,39 @@ git log --oneline --decorate=full
 ```
 ```bash
 # Working with branches in Git.
-# Create a new branch:
+# List all local branches:
+git branch
+# List both remote-tracking and local branches:
+git branch -a
+# List last commit message on local branch:
+git branch -v
+# List both remote-tracking and local branches with their last commit message:
+git branch -av
+# List branches that havn't yet been merged with HEAD:
+git branch --no-merged
+# List branches that have been merged with HEAD:
+git branch --merged
+# List branches that have been merged with a specific branch:
+git branch --merged <branch>
+# List branches that havn't yet been merged with a specific branch:
+git branch --no-merged <branch>
+# Create a new local branch: 
 git branch <name>
-# Create a new branch and switch to it:
+# Create a new local branch and switch to it:
 git checkout -b <name>
-# Delete a branch:
+# Rename a local branch (use -m for short):
+git branch --move <oldname> <newname>
+# Rename a local branch (use -m for short) and push to remote:
+git branch --move <oldname> <newname>
+git push --set-upstream <remote> <branch>
+# Push a local branch to a remote and set the remote as upstream:
+git push --set-upstream <remote> <branch>
+# Delete a local branch:
 git branch -d <name>
-# Delete a branch forcefully:
+# Delete a local branch forcefully:
 git branch -D <name>
+# Delete a remote branch:
+git push <remote> --delete <branch>
 ```
 ```bash
 # Merging with Git.

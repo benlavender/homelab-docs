@@ -724,13 +724,13 @@ find <dir> -perm /0044
 # With "-exec <command> {} \;" the command is executed for each file found, in order and per line.
 # With "-exec <command> {} +" the command is executed for all files found in one go. 
 # Without the -mount switch, find will traverse mounted directories; caution when using -exec!
-# Find all files that begin with the name picture and delete them:
+# Find all files that begin with the name picture and delete them (use -mount to avoid traversing mounted directories):
 find <dir> -type f -name 'picture*' -exec rm {} \;
 # Find all .txt files in the current directory and delete them:
 find -type f -name '*.txt' -exec rm {} \;
 # Find all files in the current directory and delete them:
 find -type f -exec rm -f {} \;
-# Find all files where other users have execute permissions and remove that permission:
+# Find all files where other users have execute permissions and remove that permission (use -mount to avoid traversing mounted directories):
 find <dir> -type f -perm -0001 -exec chmod o-x {} \;
 ```
 ```bash

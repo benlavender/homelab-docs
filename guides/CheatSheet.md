@@ -3383,6 +3383,19 @@ az network private-endpoint dns-zone-group add --endpoint-name <endpointName> --
 az network private-endpoint dns-zone-group delete --endpoint-name <endpointName> --name <name> --resource-group <ResourceGroupName>
 ```
 
+#### Azure Load Balancer:
+
+> **Note**: All load balancers are standard SKU.
+
+```bash
+# Create an external zone-redudant load balancer with an existing public IP address and custom frontend and backend pool names:
+az network lb create --name <name> --resource-group <ResourceGroupName> --location <region> --sku standard --frontend-ip-name <name> --public-ip-address <resource_name>
+# Create an internal non-zonal load balancer with a dynamic private IP address from an existing VNET subnet and custom frontend and backend pool names:
+az network lb create --name <name> --resource-group <ResourceGroupName>  --location <region> --sku standard --frontend-ip-name <name> --backend-pool-name <name> --subnet <Subnet_id>
+# Create an internal non-zonal load balancer with a static private IP address from an existing VNET subnet and custom frontend and backend pool names:
+az network lb create --name <name> --resource-group <ResourceGroupName> --location <region> --sku standard --frontend-ip-name <name> --backend-pool-name <name> --private-ip-address <ip.addr> --subnet Subnet_id>
+```
+
 #### Azure DNS:
 
 ```bash

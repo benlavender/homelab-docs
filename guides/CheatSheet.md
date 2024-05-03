@@ -3388,12 +3388,19 @@ az network private-endpoint dns-zone-group delete --endpoint-name <endpointName>
 > **Note**: All load balancers are standard SKU.
 
 ```bash
-# Create an external zone-redudant load balancer with an existing public IP address and custom frontend and backend pool names:
-az network lb create --name <name> --resource-group <ResourceGroupName> --location <region> --sku standard --frontend-ip-name <name> --public-ip-address <resource_name>
-# Create an internal non-zonal load balancer with a dynamic private IP address from an existing VNET subnet and custom frontend and backend pool names:
-az network lb create --name <name> --resource-group <ResourceGroupName>  --location <region> --sku standard --frontend-ip-name <name> --backend-pool-name <name> --subnet <Subnet_id>
-# Create an internal non-zonal load balancer with a static private IP address from an existing VNET subnet and custom frontend and backend pool names:
-az network lb create --name <name> --resource-group <ResourceGroupName> --location <region> --sku standard --frontend-ip-name <name> --backend-pool-name <name> --private-ip-address <ip.addr> --subnet Subnet_id>
+# Create an external zone-redudant load balancer with an existing public IP address and custom frontend and backend pool names (ensure --zone includes all zones in the region):
+az network public-ip create --name <name> --resource-group <ResourceGroupName> --location <region> --sku standard --zone <# # #>
+az network lb create --name <name> --resource-group <ResourceGroupName> --location <region> --sku standard --frontend-ip-name <name> --backend-pool-name <name> --public-ip-address <resource_name>
+```
+```bash
+# Create an external zonal load balancer with an existing public IP address and custom frontend and backend pool names:
+az network public-ip create --name <name> --resource-group <ResourceGroupName> --location <region> --sku standard --zone <#>
+az network lb create --name <name> --resource-group <ResourceGroupName> --location <region> --sku standard --frontend-ip-name <name> --backend-pool-name <name> --public-ip-address <resource_name>
+```
+```bash
+# Create an external non-zonal load balancer with an existing public IP address and custom frontend and backend pool names:
+az network public-ip create --name <name> --resource-group <ResourceGroupName> --location <region> --sku standard
+az network lb create --name <name> --resource-group <ResourceGroupName> --location <region> --sku standard --frontend-ip-name <name> --backend-pool-name <name> --public-ip-address <resource_name>
 ```
 
 #### Azure DNS:

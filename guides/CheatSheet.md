@@ -3408,6 +3408,12 @@ az network lb create --name <name> --resource-group <ResourceGroupName> --sku st
 # Create an internal zonal load balancer with a dynamic private IP address from an existing VNET and custom frontend and backend pool names:
 az network lb create --name <name> --resource-group <ResourceGroupName> --sku standard --frontend-ip-name <name> --backend-pool-name <name> --subnet <subnet_id> --frontend-ip-zone <#>
 ```
+```bash
+# Delete a load balancer:
+az network lb delete --name <name> --resource-group <ResourceGroupName>
+# Delete a load balancer by ID:
+az network lb delete --ids <resource_id>
+```
 
 #### Azure DNS:
 

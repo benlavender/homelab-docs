@@ -3414,6 +3414,10 @@ az network lb delete --name <name> --resource-group <ResourceGroupName>
 # Delete a load balancer by ID:
 az network lb delete --ids <resource_id>
 ```
+```bash
+# Create a new front end pool on an existing external load balancer with an existing public IP address:
+az network lb frontend-ip create --name <name> --lb-name <name> --resource-group <ResourceGroupName> --public-ip-address <resource_name>
+```
 
 #### Azure DNS:
 

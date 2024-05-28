@@ -3015,7 +3015,7 @@ docker run --network <network> <image>
 # Run a container based on an image and associate with a current containers network stack:
 docker run --network container:<name|id> <image>
 # Run a container based on an image with a TCP port mapping to a specific local IP on the host:
-docker run -p <inet_addr:host_port:container:port> <image>
+docker run --publish <inet_addr:host_port:container:port> <image>
 # Attach to a running container:
 docker attach <ID>
 # Start an existing container in detached mode:

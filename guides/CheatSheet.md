@@ -3021,6 +3021,21 @@ docker start --interactive <containerID | name>
 # or:
 docker start -i <containerID | name>
 ```
+
+#### Docker network driver types:
+
+`bridge:` The default network driver.
+
+`host:` Remove network isolation between the container and the Docker host.
+
+`none:` Completely isolate a container from the host and other containers.
+
+`overlay:` Overlay networks connect multiple Docker daemons together
+
+`ipvlan:` IPvlan networks provide full control over both IPv4 and IPv6 addressing.
+
+`macvlan:` Assign a MAC address to a container.
+
 ```bash
 # Docker networking.
 # Show all networks:
@@ -3031,6 +3046,12 @@ docker network inspect <networkID>
 docker network connect <networkID> <containerID>
 # Connect a container to a network and specificy its IPv4 address:
 docker network connect --ip <ip.addr> <networkID> <containerID>
+# Create a new docker network with the default bridge driver:
+docker network create <name>
+# Create a new docker network with a specific driver:
+docker network create --driver <driver> <name>
+# Remove a docker network:
+docker network rm <networkID>
 ```
 
 ## Desired State Configuration:

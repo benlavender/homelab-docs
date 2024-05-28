@@ -3003,7 +3003,7 @@ docker run -d <image>
 # Run a container based on an image but remove once exited:
 docker run --interactive --tty --rm <image>
 # Run a container in the background if the ENTRYPOINT process exists:
-docker run --detach --tty --interactive <image>
+docker run --detach --interactive <image>
 # Run a container based on an image with a TCP port mapping to the host:
 docker run --publish <host_port:container_port> <image>
 # or:
@@ -3012,6 +3012,8 @@ docker run -p <host_port:container_port> <image>
 docker run --publish <host_port/<UDP>:container_port/<UDP>> <image>
 # Run a container based on an image with a specific network:
 docker run --network <network> <image>
+# Run a container based on an image and associate with a current containers network stack:
+docker run --network container:<name|id> <image>
 # Run a container based on an image with a TCP port mapping to a specific local IP on the host:
 docker run -p <inet_addr:host_port:container:port> <image>
 # Attach to a running container:

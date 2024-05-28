@@ -3010,6 +3010,8 @@ docker run --publish <host_port:container_port> <image>
 docker run -p <host_port:container_port> <image>
 # Run a container based on an image with a UDP port mapping:
 docker run --publish <host_port/<UDP>:container_port/<UDP>> <image>
+# Run a container based on an image with a specific network:
+docker run --network <network> <image>
 # Run a container based on an image with a TCP port mapping to a specific local IP on the host:
 docker run -p <inet_addr:host_port:container:port> <image>
 # Attach to a running container:

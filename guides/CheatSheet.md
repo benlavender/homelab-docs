@@ -3014,8 +3014,16 @@ docker run --publish <host_port/<UDP>:container_port/<UDP>> <image>
 docker run --network <network> <image>
 # Run a container based on an image and associate with a current containers network stack:
 docker run --network container:<name|id> <image>
+# Run a container based on an image with a TCP port mapping (defaults to all interfaces):
+docker run --publish <host_port:container_port> <image>
+# Run a container based on an image with a UDP port mapping:
+docker run --publish <host_port:container_port/udp> <image>
 # Run a container based on an image with a TCP port mapping to a specific local IP on the host:
-docker run --publish <inet_addr:host_port:container:port> <image>
+docker run --publish <inet_addr:host_port:container_port> <image>
+# Run a container based on an image with a UDP port mapping to a specific local IP on the host:
+docker run --publish <inet_addr:host_port:container_port/udp> <image>
+# Show all published ports of a running container:
+docker port <containerID | name>
 # Attach to a running container:
 docker attach <ID>
 # Start an existing container in detached mode:

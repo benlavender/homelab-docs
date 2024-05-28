@@ -3000,18 +3000,30 @@ docker run -it <image>
 docker run --detach <image>
 # or:
 docker run -d <image>
+# Run a container in the background if the ENTRYPOINT process exists:
+docker run --detach --interactive --tty <image>
 # Run a container based on an image but remove once exited:
 docker run --interactive --tty --rm <image>
-# Run a container in the background if the ENTRYPOINT process exists:
-docker run --detach --tty --interactive <image>
 # Run a container based on an image with a TCP port mapping to the host:
 docker run --publish <host_port:container_port> <image>
 # or:
 docker run -p <host_port:container_port> <image>
 # Run a container based on an image with a UDP port mapping:
 docker run --publish <host_port/<UDP>:container_port/<UDP>> <image>
+# Run a container based on an image with a specific network:
+docker run --network <network> <image>
+# Run a container based on an image and associate with a current containers network stack:
+docker run --network container:<name|id> <image>
+# Run a container based on an image with a TCP port mapping (defaults to all interfaces):
+docker run --publish <host_port:container_port> <image>
+# Run a container based on an image with a UDP port mapping:
+docker run --publish <host_port:container_port/udp> <image>
 # Run a container based on an image with a TCP port mapping to a specific local IP on the host:
-docker run -p <inet_addr:host_port:container:port> <image>
+docker run --publish <inet_addr:host_port:container_port> <image>
+# Run a container based on an image with a UDP port mapping to a specific local IP on the host:
+docker run --publish <inet_addr:host_port:container_port/udp> <image>
+# Show all published ports of a running container:
+docker port <containerID | name>
 # Attach to a running container:
 docker attach <ID>
 # Start an existing container in detached mode:
@@ -3021,6 +3033,21 @@ docker start --interactive <containerID | name>
 # or:
 docker start -i <containerID | name>
 ```
+
+#### Docker network driver types:
+
+`bridge:` The default network driver.
+
+`host:` Remove network isolation between the container and the Docker host.
+
+`none:` Completely isolate a container from the host and other containers.
+
+`overlay:` Overlay networks connect multiple Docker daemons together
+
+`ipvlan:` IPvlan networks provide full control over both IPv4 and IPv6 addressing.
+
+`macvlan:` Assign a MAC address to a container.
+
 ```bash
 # Docker networking.
 # Show all networks:
@@ -3031,6 +3058,12 @@ docker network inspect <networkID>
 docker network connect <networkID> <containerID>
 # Connect a container to a network and specificy its IPv4 address:
 docker network connect --ip <ip.addr> <networkID> <containerID>
+# Create a new docker network with the default bridge driver:
+docker network create <name>
+# Create a new docker network with a specific driver:
+docker network create --driver <driver> <name>
+# Remove a docker network:
+docker network rm <networkID>
 ```
 
 ## Desired State Configuration:

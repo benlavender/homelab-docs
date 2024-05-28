@@ -3001,7 +3001,7 @@ docker run --detach <image>
 # or:
 docker run -d <image>
 # Run a container in the background if the ENTRYPOINT process exists:
-docker run --detach --interactive <image>
+docker run --detach --interactive --tty <image>
 # Run a container based on an image but remove once exited:
 docker run --interactive --tty --rm <image>
 # Run a container based on an image with a TCP port mapping to the host:

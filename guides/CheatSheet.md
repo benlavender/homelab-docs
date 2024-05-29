@@ -3028,6 +3028,10 @@ docker run --publish 127.0.0.1:host_port:container_port <image>
 docker run --ip <ip.addr> --network <name> <image>
 # Run a container based on an image with a specific hostname:
 docker run --hostname <hostname> <image>
+# Run a container based on an image with a specific DNS resolver:
+docker run --dns <ip.addr> <image>
+# Run a container based on an image with a specific DNS search list:
+docker run --dns-search <domain> <image>
 # Show all published ports of a running container:
 docker port <containerID | name>
 # Attach to a running container:

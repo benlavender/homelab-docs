@@ -3022,6 +3022,16 @@ docker run --publish <host_port:container_port/udp> <image>
 docker run --publish <inet_addr:host_port:container_port> <image>
 # Run a container based on an image with a UDP port mapping to a specific local IP on the host:
 docker run --publish <inet_addr:host_port:container_port/udp> <image>
+# Run a container based on an image with a TCP port mapping to localhost only:
+docker run --publish 127.0.0.1:host_port:container_port <image>
+# Run a container based on an image with a static IP address:
+docker run --ip <ip.addr> --network <name> <image>
+# Run a container based on an image with a specific hostname:
+docker run --hostname <hostname> <image>
+# Run a container based on an image with a specific DNS resolver:
+docker run --dns <ip.addr> <image>
+# Run a container based on an image with a specific DNS search list:
+docker run --dns-search <domain> <image>
 # Show all published ports of a running container:
 docker port <containerID | name>
 # Attach to a running container:
@@ -3062,6 +3072,8 @@ docker network connect --ip <ip.addr> <networkID> <containerID>
 docker network create <name>
 # Create a new docker network with a specific driver:
 docker network create --driver <driver> <name>
+# Create a network with a specific subnet:
+docker network create --subnet <cidr> <name>
 # Remove a docker network:
 docker network rm <networkID>
 ```

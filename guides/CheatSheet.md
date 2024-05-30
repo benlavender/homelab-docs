@@ -3014,6 +3014,8 @@ docker run --publish <host_port/<UDP>:container_port/<UDP>> <image>
 docker run --network <network> <image>
 # Run a container based on an image and associate with a current containers network stack:
 docker run --network container:<name|id> <image>
+# Run a container based on a image using the same IP stack as the host. Port mappings are then direct on the host and --publish/-p is ignored.:
+docker run --network host <image>
 # Run a container based on an image with an external TCP port mapping (defaults to all interfaces):
 docker run --publish <host_port:container_port> <image>
 # Run a container based on an image with an external UDP port mapping:
@@ -3068,12 +3070,16 @@ docker network inspect <networkID>
 docker network connect <networkID> <containerID>
 # Connect a container to a network and specificy its IPv4 address:
 docker network connect --ip <ip.addr> <networkID> <containerID>
+# Disconnect a container from a network:
+docker network disconnect <networkID> <containerID>
 # Create a new docker network with the default bridge driver:
 docker network create <name>
 # Create a new docker network with a specific driver:
 docker network create --driver <driver> <name>
 # Create a network with a specific subnet:
 docker network create --subnet <cidr> <name>
+# Create an l2 IPvlan network:
+docker network create --driver ipvlan --subnet <cidr> --gateway <ip.addr> --opt parent=<int> <name>
 # Remove a docker network:
 docker network rm <networkID>
 ```

@@ -3014,15 +3014,15 @@ docker run --publish <host_port/<UDP>:container_port/<UDP>> <image>
 docker run --network <network> <image>
 # Run a container based on an image and associate with a current containers network stack:
 docker run --network container:<name|id> <image>
-# Run a container based on an image with a TCP port mapping (defaults to all interfaces):
+# Run a container based on an image with an external TCP port mapping (defaults to all interfaces):
 docker run --publish <host_port:container_port> <image>
-# Run a container based on an image with a UDP port mapping:
+# Run a container based on an image with an external UDP port mapping:
 docker run --publish <host_port:container_port/udp> <image>
-# Run a container based on an image with a TCP port mapping to a specific local IP on the host:
+# Run a container based on an image with an external TCP port mapping to a specific local IP on the host:
 docker run --publish <inet_addr:host_port:container_port> <image>
-# Run a container based on an image with a UDP port mapping to a specific local IP on the host:
+# Run a container based on an image with an external UDP port mapping to a specific local IP on the host:
 docker run --publish <inet_addr:host_port:container_port/udp> <image>
-# Run a container based on an image with a TCP port mapping to localhost only:
+# Run a container based on an image with an externalTCP port mapping to localhost only:
 docker run --publish 127.0.0.1:host_port:container_port <image>
 # Run a container based on an image with a static IP address:
 docker run --ip <ip.addr> --network <name> <image>

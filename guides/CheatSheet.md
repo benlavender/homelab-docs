@@ -3014,15 +3014,17 @@ docker run --publish <host_port/<UDP>:container_port/<UDP>> <image>
 docker run --network <network> <image>
 # Run a container based on an image and associate with a current containers network stack:
 docker run --network container:<name|id> <image>
-# Run a container based on an image with a TCP port mapping (defaults to all interfaces):
+# Run a container based on a image using the same IP stack as the host. Port mappings are then direct on the host and --publish/-p is ignored.:
+docker run --network host <image>
+# Run a container based on an image with an external TCP port mapping (defaults to all interfaces):
 docker run --publish <host_port:container_port> <image>
-# Run a container based on an image with a UDP port mapping:
+# Run a container based on an image with an external UDP port mapping:
 docker run --publish <host_port:container_port/udp> <image>
-# Run a container based on an image with a TCP port mapping to a specific local IP on the host:
+# Run a container based on an image with an external TCP port mapping to a specific local IP on the host:
 docker run --publish <inet_addr:host_port:container_port> <image>
-# Run a container based on an image with a UDP port mapping to a specific local IP on the host:
+# Run a container based on an image with an external UDP port mapping to a specific local IP on the host:
 docker run --publish <inet_addr:host_port:container_port/udp> <image>
-# Run a container based on an image with a TCP port mapping to localhost only:
+# Run a container based on an image with an externalTCP port mapping to localhost only:
 docker run --publish 127.0.0.1:host_port:container_port <image>
 # Run a container based on an image with a static IP address:
 docker run --ip <ip.addr> --network <name> <image>
@@ -3046,17 +3048,17 @@ docker start -i <containerID | name>
 
 #### Docker network driver types:
 
-`bridge:` The default network driver.
+`bridge:` The default network driver. If you don't specify a driver, this is the type of network you are creating. Bridge networks are commonly used when your application runs in a container that needs to communicate with other containers on the same host.
 
-`host:` Remove network isolation between the container and the Docker host.
+`host:` Remove network isolation between the container and the Docker host, and use the host's networking directly.
 
-`none:` Completely isolate a container from the host and other containers.
+`none:` Completely isolate a container from the host and other containers. none is not available for Swarm services.
 
-`overlay:` Overlay networks connect multiple Docker daemons together
+`overlay:` Overlay networks connect multiple Docker daemons together and enable Swarm services and containers to communicate across nodes. This strategy removes the need to do OS-level routing.
 
-`ipvlan:` IPvlan networks provide full control over both IPv4 and IPv6 addressing.
+`ipvlan:` IPvlan networks give users total control over both IPv4 and IPv6 addressing. The VLAN driver builds on top of that in giving operators complete control of layer 2 VLAN tagging and even IPvlan L3 routing for users interested in underlay network integration.
 
-`macvlan:` Assign a MAC address to a container.
+`macvlan:` Macvlan networks allow you to assign a MAC address to a container, making it appear as a physical device on your network. The Docker daemon routes traffic to containers by their MAC addresses. Using the macvlan driver is sometimes the best choice when dealing with legacy applications that expect to be directly connected to the physical network, rather than routed through the Docker host's network stack.
 
 ```bash
 # Docker networking.
@@ -3068,12 +3070,16 @@ docker network inspect <networkID>
 docker network connect <networkID> <containerID>
 # Connect a container to a network and specificy its IPv4 address:
 docker network connect --ip <ip.addr> <networkID> <containerID>
+# Disconnect a container from a network:
+docker network disconnect <networkID> <containerID>
 # Create a new docker network with the default bridge driver:
 docker network create <name>
 # Create a new docker network with a specific driver:
 docker network create --driver <driver> <name>
 # Create a network with a specific subnet:
 docker network create --subnet <cidr> <name>
+# Create an l2 IPvlan network:
+docker network create --driver ipvlan --subnet <cidr> --gateway <ip.addr> --opt parent=<int> <name>
 # Remove a docker network:
 docker network rm <networkID>
 ```

@@ -2716,6 +2716,8 @@ git clone <PATH> <filepath>
 git clone <PATH> --verbose
 # Clone a remote repository with only .Git file:
 git clone <PATH> --bare
+# Clone a remote repository with a custom remote name:
+git clone <PATH> --origin <name>
 # Show all remotes and their URI:
 git remote -v
 # Add a remote with a custom name:

@@ -3679,6 +3679,14 @@ az vm extension image show --name <Name> --publisher <Publisher> --version <#> -
 # Show a VM extension by ID:
 az vm extension image show --ids <ID>
 ```
+```bash
+# List all VM extensions attached to a VM:
+az vm extension list --resource-group <resourceGroupName> --vm-name <Name>
+```
+```bash
+# Show a VM extension attached to a VM:
+az vm extension show --resource-group <resourceGroupName> --vm-name <Name> --name <Name>
+```
 
 #### Azure Key Vault:
 

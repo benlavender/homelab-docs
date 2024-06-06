@@ -3659,6 +3659,17 @@ foreach ($sku in $skus) {
     $skus | Get-AzVMImage | Get-AzVMImage | Where-Object -Property PurchasePlan -NE $null | Select-Object -Property PublisherName,Offer,Skus,Name}
 ```
 
+#### VM Extensions:
+
+```bash
+# List all VM extensions available globally:
+az vm extension image list
+# List all VM extensions available in a specific region:
+az vm extension image list --location <region>
+# List all VM extensions available in a specific region but only show latest:
+az vm extension image list --location <region> --latest
+```
+
 #### Azure Key Vault:
 
 ```bash

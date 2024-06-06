@@ -3664,12 +3664,20 @@ foreach ($sku in $skus) {
 ```bash
 # List all VM extensions available globally:
 az vm extension image list
-# List all VM extensions available in a specific region:
-az vm extension image list --location <region>
-# List all VM extensions available in a specific region but only show latest:
+# List all VM extensions available in a specific region (omit --latest to show all versions):
 az vm extension image list --location <region> --latest
-# List all VM extensions by publisher:
-az vm extension image list-names --publisher <name> --location <region>
+# List all VM extensions by publisher (omit --latest to show all versions):
+az vm extension image list --publisher <name> --location <region> --latest
+# List all VM extensions available by name (omit --latest to show all versions):
+az vm extension image list --name <name> --latest
+# List all VM extensions available by name in the current region (omit --latest to show all versions):
+az vm extension image list --name <name> --location <region> --latest
+```
+```bash
+# Show a VM extension:
+az vm extension image show --name <Name> --publisher <Publisher> --version <#> --location <Region>
+# Show a VM extension by ID:
+az vm extension image show --ids <ID>
 ```
 
 #### Azure Key Vault:

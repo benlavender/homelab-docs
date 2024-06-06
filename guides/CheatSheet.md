@@ -3668,6 +3668,8 @@ az vm extension image list
 az vm extension image list --location <region>
 # List all VM extensions available in a specific region but only show latest:
 az vm extension image list --location <region> --latest
+# List all VM extensions by publisher:
+az vm extension image list-names --publisher <name> --location <region>
 ```
 
 #### Azure Key Vault:

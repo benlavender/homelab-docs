@@ -1016,6 +1016,14 @@ swapon /swapfile
 
 ### Networking:
 
+#### netfilter:
+
+> **Note:** iptables and ip6tables are both considered legacy and have been replaced by nftables.
+
+```bash
+
+```
+
 ```powershell
 # Get firewall profile associations with interfaces:
 Get-NetConnectionProfile

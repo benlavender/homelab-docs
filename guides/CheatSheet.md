@@ -3687,6 +3687,18 @@ az vm extension list --resource-group <resourceGroupName> --vm-name <Name>
 # Show a VM extension attached to a VM:
 az vm extension show --resource-group <resourceGroupName> --vm-name <Name> --name <Name>
 ```
+```bash
+# Install a VM extension to a VM:
+az vm extension set --name <Name> --publisher <Publisher> --resource-group <resourceGroupName> --vm-name <Name>
+# Install a VM extension to a VM via VM resource ID:
+az vm extension set --name <Name> --publisher <Publisher> --ids <ResourceID>
+# Force an update of a VM extension:
+az vm extension set --name <Name> --publisher <Publisher> --resource-group <resourceGroupName> --vm-name <Name> --force-update
+```
+```bash
+# Uninstall a VM extension from a VM:
+az vm extension delete --name <Name> --resource-group <resourceGroupName> --vm-name <Name>
+```
 
 #### Azure Key Vault:
 

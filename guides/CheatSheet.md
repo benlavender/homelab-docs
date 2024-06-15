@@ -1014,6 +1014,29 @@ swapon /swapfile
 # Update /etc/fstab:
 ```
 
+### Time management:
+
+#### systemd-timesyncd:
+
+```bash
+# Show time sync status:
+timedatectl status
+# Show time sync configuration:
+timedatectl show
+# Show info of systemd-timesyncd, including NTP servers and stratum etc:
+timedatectl timesync-status
+# Show configuration of systemd-timesyncd:
+timedatectl show-timesync
+# List all supported timezones:
+timedatectl list-timezones
+```
+```bash
+# Set the timezone:
+timedatectl set-timezone <ZONE>
+# Enable or disable NTP syncronisation:
+sudo timedatectl set-ntp <true|false>
+```
+
 ### Networking:
 
 ```powershell

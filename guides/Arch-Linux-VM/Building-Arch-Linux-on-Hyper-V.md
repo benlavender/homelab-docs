@@ -56,8 +56,11 @@ loadkeys uk
 
 4. I am using a UFI capable device so verify efivarfs variables are available: 
 
+> **Note**: We will need to also verify the memory size the system is booted with, i.e 64bit.
+
 ```bash
 ls -l /sys/firmware/efi/efivars
+cat /sys/firmware/efi/fw_platform_size
 ```
 
 5. I obtained IP addressing via DHCP so verify this device has connectivity to build the distribution:

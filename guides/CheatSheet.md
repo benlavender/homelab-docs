@@ -1016,7 +1016,7 @@ swapon /swapfile
 
 ### Time management:
 
-### systemd-timesyncd:
+#### systemd-timesyncd:
 
 ```bash
 # Show time sync status:

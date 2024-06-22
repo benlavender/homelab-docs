@@ -1014,6 +1014,29 @@ swapon /swapfile
 # Update /etc/fstab:
 ```
 
+### Time management:
+
+#### systemd-timesyncd:
+
+```bash
+# Show time sync status:
+timedatectl status
+# Show time sync configuration:
+timedatectl show
+# Show info of systemd-timesyncd, including NTP servers and stratum etc:
+timedatectl timesync-status
+# Show configuration of systemd-timesyncd:
+timedatectl show-timesync
+# List all supported timezones:
+timedatectl list-timezones
+```
+```bash
+# Set the timezone:
+timedatectl set-timezone <ZONE>
+# Enable or disable NTP syncronisation:
+sudo timedatectl set-ntp <true|false>
+```
+
 ### Networking:
 
 #### netfilter:
@@ -3665,6 +3688,47 @@ az vm list-sizes --location <region>
 $Skus = Get-AzVMImagePublisher -Location <'region'> | Get-AzVMImageOffer | Get-AzVMImageSku
 foreach ($sku in $skus) {
     $skus | Get-AzVMImage | Get-AzVMImage | Where-Object -Property PurchasePlan -NE $null | Select-Object -Property PublisherName,Offer,Skus,Name}
+```
+
+#### VM Extensions:
+
+```bash
+# List all VM extensions available globally:
+az vm extension image list
+# List all VM extensions available in a specific region (omit --latest to show all versions):
+az vm extension image list --location <region> --latest
+# List all VM extensions by publisher (omit --latest to show all versions):
+az vm extension image list --publisher <name> --location <region> --latest
+# List all VM extensions available by name (omit --latest to show all versions):
+az vm extension image list --name <name> --latest
+# List all VM extensions available by name in the current region (omit --latest to show all versions):
+az vm extension image list --name <name> --location <region> --latest
+```
+```bash
+# Show a VM extension:
+az vm extension image show --name <Name> --publisher <Publisher> --version <#> --location <Region>
+# Show a VM extension by ID:
+az vm extension image show --ids <ID>
+```
+```bash
+# List all VM extensions attached to a VM:
+az vm extension list --resource-group <resourceGroupName> --vm-name <Name>
+```
+```bash
+# Show a VM extension attached to a VM:
+az vm extension show --resource-group <resourceGroupName> --vm-name <Name> --name <Name>
+```
+```bash
+# Install a VM extension to a VM:
+az vm extension set --name <Name> --publisher <Publisher> --resource-group <resourceGroupName> --vm-name <Name>
+# Install a VM extension to a VM via VM resource ID:
+az vm extension set --name <Name> --publisher <Publisher> --ids <ResourceID>
+# Force an update of a VM extension:
+az vm extension set --name <Name> --publisher <Publisher> --resource-group <resourceGroupName> --vm-name <Name> --force-update
+```
+```bash
+# Uninstall a VM extension from a VM:
+az vm extension delete --name <Name> --resource-group <resourceGroupName> --vm-name <Name>
 ```
 
 #### Azure Key Vault:

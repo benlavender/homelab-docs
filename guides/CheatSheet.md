@@ -1254,6 +1254,12 @@ wpa_cli scan -i <int>
 wpa_cli scan_results -i <int>
 ```
 
+#### systemd-networkd:
+
+
+> **Note:** Ensure the systemd-networkd.service unit is loaded. See [systemd-networkd - Network manager](./Linux/guides/systemd-networkd.md) for more information.
+
+
 ### Storage:
 
 ```bat

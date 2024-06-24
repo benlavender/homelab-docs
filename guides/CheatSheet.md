@@ -1256,9 +1256,18 @@ wpa_cli scan_results -i <int>
 
 #### systemd-networkd:
 
-
 > **Note:** Ensure the systemd-networkd.service unit is loaded. See [systemd-networkd - Network manager](./Linux/guides/systemd-networkd.md) for more information.
 
+```bash
+# Show all links on system with service logs:
+networkctl status
+# Show the service status:
+systemctl status systemd-networkd
+```
+```bash
+# List all links on system:
+networkctl list
+```
 
 ### Storage:
 

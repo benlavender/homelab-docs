@@ -21,7 +21,7 @@ Files in `/etc/systemd/network` will override files in the other directories and
 `enable systemd-networkd-wait-online.service` is enabled whenever `systemd-networkd` is also enabled as per `/usr/lib/systemd/system/systemd-networkd.service`, which waits for the associated links to be configured or failed, or at least one to be online. The latter then also relys on `network-online.target` to signify that the network is online.
 
 > **Note:** 
-> - You can use [`networkctl(1)`](.././../CheatSheet.md) for adhoc management of systemd-networkd.
+> - You can use [`networkctl(1)`](.././../CheatSheet.md#systemd-networkd) for adhoc management of systemd-networkd.
 > - Ensure the systemd-networkd.service unit is loaded.
 > - Do not conflict network daemons like NetworkManager, netctl or iwd with systemd-networkd.
 > - On inital setup you may need to enable and start the `systemd-networkd` service: with `systemctl enable systemd-networkd --now`

@@ -1254,6 +1254,41 @@ wpa_cli scan -i <int>
 wpa_cli scan_results -i <int>
 ```
 
+#### systemd-networkd:
+
+> **Note:** Ensure the systemd-networkd.service unit is loaded. See [systemd-networkd - Network manager](./Linux/guides/systemd-networkd.md) for more information.
+
+```bash
+# List all links on system:
+networkctl list
+# List specific link information:
+networkctl list <link|idx>
+```
+```bash
+# Show all links on system with service logs:
+networkctl status
+# Show the service status:
+systemctl status systemd-networkd
+# Show all link status information:
+networkctl status --all
+# Show specific link information:
+networkctl status <link|idx>
+```
+```bash
+# Reload .network and .netdev files:
+networkctl reload
+```
+```bash
+# Bring a link down:
+networkctl down <link|idx>
+# Bring a link up:
+networkctl up <link|idx>
+```
+```bash
+# Renew DHCP lease on a link:
+networkctl renew <link|idx>
+```
+
 ### Storage:
 
 ```bat

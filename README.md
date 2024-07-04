@@ -31,6 +31,7 @@ Repository store for all my homelab build docs and configs. 😎
 * [Arch Linux Hyper-V build](guides/Arch-Linux-VM/Building-Arch-Linux-on-Hyper-V.md)
 * [Arch Linux Reflector service](guides/Arch-Linux-Reflector-Service.md)
 * [Simple HAProxy build on Debian Linux](guides/haproxy-deb.md)
+* [systemd-networkd - Network manager](guides/systemd-networkd.md)
 
 ### General:
 

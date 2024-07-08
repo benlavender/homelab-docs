@@ -2,7 +2,7 @@
 
 `systemd-resolved` is a caching and validating stub resolver (plus other features like, DNS-over-TLS, LLMNR and MDNS) that runs under the `systemd`(1) init system. This is offered via fully-featured API exposed via D-BUS, the glibc Name Service Switch `nss`(5) and a local DNS stub listener on both `127.0.0.53` and `127.0.0.54`.
 
-> **Note:** The stub resolver listening on `172.0.0.54` provides a forwarding service only and doesn't perform recursion.
+> **Note:** The stub resolver listening on `172.0.0.54` provides a forwarding service only and doesn't perform recursion, where via `172.0.0.53` a fully-featured resolver is available.
 
 ## Configuration:
 

@@ -2470,6 +2470,22 @@ ssh-add -D
 ##### Certbot:
 
 ```bash
+# Show ACME account:
+certbot show_account
+```
+```bash
+# Register a new ACME account (use --agree-tos to agree to the TOS):
+certbot register --email <smtp>
+# Unregister an ACME account:
+certbot unregister --account <ACCOUNT_ID> 
+```
+```bash
+# Update the e-mail address on the ACME account:
+certbot update_account 
+# or:
+certbot update_account --email <smtp>
+```
+```bash
 # List working certificates:
 certbot certificates
 ```

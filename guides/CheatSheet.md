@@ -2470,6 +2470,22 @@ ssh-add -D
 ##### Certbot:
 
 ```bash
+# Show ACME account:
+certbot show_account
+```
+```bash
+# Register a new ACME account (use --agree-tos to agree to the TOS):
+certbot register --email <smtp>
+# Unregister an ACME account:
+certbot unregister --account <ACCOUNT_ID> 
+```
+```bash
+# Update the e-mail address on the ACME account:
+certbot update_account 
+# or:
+certbot update_account --email <smtp>
+```
+```bash
 # List working certificates:
 certbot certificates
 ```
@@ -2524,6 +2540,10 @@ certbot revoke --cert-name <Certificate Name> --delete-after-revoke
 certbot revoke --cert-path <path/to/cert/cert.pem> --key-path <path/to/privkey.pem> --delete-after-revoke
 # Generally use a revocation reason:
 certbot revoke --cert-name <Certificate Name> --delete-after-revoke --reason {unspecified,keycompromise,affiliationchanged,superseded,cessationofoperation}
+```
+```bash
+# Delete a certificate managed by certbot (usually for expired certificates only):
+certbot delete --cert-name <Certificate Name>
 ```
 
 ### SMTP:

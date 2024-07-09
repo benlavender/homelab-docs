@@ -2541,6 +2541,10 @@ certbot revoke --cert-path <path/to/cert/cert.pem> --key-path <path/to/privkey.p
 # Generally use a revocation reason:
 certbot revoke --cert-name <Certificate Name> --delete-after-revoke --reason {unspecified,keycompromise,affiliationchanged,superseded,cessationofoperation}
 ```
+```bash
+# Delete a certificate managed by certbot (usually for expired certificates only):
+certbot delete --cert-name <Certificate Name>
+```
 
 ### SMTP:
 

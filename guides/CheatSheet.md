@@ -2470,6 +2470,22 @@ ssh-add -D
 ##### Certbot:
 
 ```bash
+# Show ACME account:
+certbot show_account
+```
+```bash
+# Register a new ACME account (use --agree-tos to agree to the TOS):
+certbot register --email <smtp>
+# Unregister an ACME account:
+certbot unregister --account <ACCOUNT_ID> 
+```
+```bash
+# Update the e-mail address on the ACME account:
+certbot update_account 
+# or:
+certbot update_account --email <smtp>
+```
+```bash
 # List working certificates:
 certbot certificates
 ```
@@ -2518,12 +2534,18 @@ certbot certonly --manual --expand -d <existing.com,example.com,newdomain.com> -
 certbot certonly --expand -d <existing.com,example.com,newdomain.com> --cert-name <Certificate Name>
 ```
 ```bash
-# Revoke a certificate managed by certbot and delete:
-certbot revoke --cert-name <Certificate Name> --delete-after-revoke 
+# Revoke a certificate managed by certbot by certificate name:
+certbot revoke --cert-name <Certificate Name>
 # Revoke by using the private key:
-certbot revoke --cert-path <path/to/cert/cert.pem> --key-path <path/to/privkey.pem> --delete-after-revoke
+certbot revoke --cert-path <path/to/cert/cert.pem> --key-path <path/to/privkey.pem>
 # Generally use a revocation reason:
-certbot revoke --cert-name <Certificate Name> --delete-after-revoke --reason {unspecified,keycompromise,affiliationchanged,superseded,cessationofoperation}
+certbot revoke --cert-name <Certificate Name> --reason {unspecified,keycompromise,affiliationchanged,superseded,cessationofoperation}
+# Revoke a certificate managed by certbot and delete:
+certbot revoke --cert-name <Certificate Name> --delete-after-revoke
+```
+```bash
+# Delete a certificate managed by certbot (usually for expired certificates only):
+certbot delete --cert-name <Certificate Name>
 ```
 
 ### SMTP:

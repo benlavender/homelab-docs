@@ -2534,12 +2534,14 @@ certbot certonly --manual --expand -d <existing.com,example.com,newdomain.com> -
 certbot certonly --expand -d <existing.com,example.com,newdomain.com> --cert-name <Certificate Name>
 ```
 ```bash
-# Revoke a certificate managed by certbot and delete:
-certbot revoke --cert-name <Certificate Name> --delete-after-revoke 
+# Revoke a certificate managed by certbot by certificate name:
+certbot revoke --cert-name <Certificate Name>
 # Revoke by using the private key:
-certbot revoke --cert-path <path/to/cert/cert.pem> --key-path <path/to/privkey.pem> --delete-after-revoke
+certbot revoke --cert-path <path/to/cert/cert.pem> --key-path <path/to/privkey.pem>
 # Generally use a revocation reason:
-certbot revoke --cert-name <Certificate Name> --delete-after-revoke --reason {unspecified,keycompromise,affiliationchanged,superseded,cessationofoperation}
+certbot revoke --cert-name <Certificate Name> --reason {unspecified,keycompromise,affiliationchanged,superseded,cessationofoperation}
+# Revoke a certificate managed by certbot and delete:
+certbot revoke --cert-name <Certificate Name> --delete-after-revoke
 ```
 ```bash
 # Delete a certificate managed by certbot (usually for expired certificates only):

@@ -3068,6 +3068,17 @@ docker rm <name>
 docker stop <containerID | name>
 ```
 ```bash
+# Building Docker containers.
+# Create a new image from a container's changes:
+docker commit <containerID | name> <name>
+# Create a new image from a container's changes with a message/comment:
+docker commit --message <containerID | name> <name>
+# Create a new image from a container's changes and apply Dockerfile instruction to the created image:
+docker commit --change <instruction> <containerID | name> <name>
+# Show history changes of an image:
+docker history <containerID | name>
+```
+```bash
 # Running Docker containers.
 # If an image is not present locally it will download before running.
 # Run a Docker container based on an image:

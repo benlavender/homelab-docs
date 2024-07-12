@@ -3069,6 +3069,11 @@ docker stop <containerID | name>
 ```
 ```bash
 # Building Docker containers.
+# Create a number of base starter files to assist with building a container, optionally select a project type for those starter files.
+# Follow the interactive guide:
+docker init 
+# Create a new container from a Dockerfile (path must contain a Dockerfile):
+docker build <path>
 # Create a new image from a container's changes:
 docker commit <containerID | name> <name>
 # Create a new image from a container's changes with a message/comment:

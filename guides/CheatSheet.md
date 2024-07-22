@@ -3074,6 +3074,8 @@ docker stop <containerID | name>
 docker init 
 # Create a new container from a Dockerfile (path must contain a Dockerfile):
 docker build <path>
+# Create a new container from a Dockerfile (path must contain a Dockerfile) with a tag:
+docker build --tag <name> <path>
 # Create a new image from a container's changes:
 docker commit <containerID | name> <name>
 # Create a new image from a container's changes with a message/comment:
@@ -3082,6 +3084,12 @@ docker commit --message <containerID | name> <name>
 docker commit --change <instruction> <containerID | name> <name>
 # Show history changes of an image:
 docker history <containerID | name>
+```
+```bash
+# Tag an existing Docker container:
+docker tag <containerID | name> <name:tag>
+# Or 
+docker tag <containerID | name> <tag>
 ```
 ```bash
 # Running Docker containers.

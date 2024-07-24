@@ -3016,8 +3016,8 @@ docker search <string> --filter stars=<#>
 docker search <string> --filter is-official=true
 ```
 ```bash
-# Download Docker images.
-## All image locations are from Docker Hub.
+# Download / upload Docker images.
+# All image locations are from Docker Hub by default.
 # Download a Docker image by name (defaults to latest):
 docker pull <name>
 # Download a Docker image by name and tag:
@@ -3028,6 +3028,8 @@ docker pull <name@sha256:digest>
 docker pull <FQDN:port/name>
 # Pull all Docker images:
 docker pull <name> --all-tags
+# Push a Docker image to a registry repository:
+docker push <name>
 ```
 ```bash
 # Managing Docker images.
@@ -3066,6 +3068,30 @@ docker ps --all --size
 docker rm <name>
 # Stop a container:
 docker stop <containerID | name>
+```
+```bash
+# Building Docker containers.
+# Create a number of base starter files to assist with building a container, optionally select a project type for those starter files.
+# Follow the interactive guide:
+docker init 
+# Create a new container from a Dockerfile (path must contain a Dockerfile):
+docker build <path>
+# Create a new container from a Dockerfile (path must contain a Dockerfile) with a tag:
+docker build --tag <name> <path>
+# Create a new image from a container's changes:
+docker commit <containerID | name> <name>
+# Create a new image from a container's changes with a message/comment:
+docker commit --message <containerID | name> <name>
+# Create a new image from a container's changes and apply Dockerfile instruction to the created image:
+docker commit --change <instruction> <containerID | name> <name>
+# Show history changes of an image:
+docker history <containerID | name>
+```
+```bash
+# Tag an existing Docker container:
+docker tag <containerID | name> <name:tag>
+# Or 
+docker tag <containerID | name> <tag>
 ```
 ```bash
 # Running Docker containers.

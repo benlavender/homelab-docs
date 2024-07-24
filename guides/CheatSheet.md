@@ -3016,8 +3016,8 @@ docker search <string> --filter stars=<#>
 docker search <string> --filter is-official=true
 ```
 ```bash
-# Download Docker images.
-## All image locations are from Docker Hub.
+# Download / upload Docker images.
+# All image locations are from Docker Hub by default.
 # Download a Docker image by name (defaults to latest):
 docker pull <name>
 # Download a Docker image by name and tag:
@@ -3028,6 +3028,8 @@ docker pull <name@sha256:digest>
 docker pull <FQDN:port/name>
 # Pull all Docker images:
 docker pull <name> --all-tags
+# Push a Docker image to a registry repository:
+docker push <name>
 ```
 ```bash
 # Managing Docker images.

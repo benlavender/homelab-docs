@@ -2806,6 +2806,8 @@ git remote add <name> <URI>
 git remote show <name>
 # Change the custom name of a remote:
 git remote rename <name> <new_name>
+# Prune a stale remote:
+git remote prune <name>
 # Remove a remote:
 git remote remove <name>
 # Fetch all updates from the origin:

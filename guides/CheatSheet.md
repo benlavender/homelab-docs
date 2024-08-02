@@ -2806,12 +2806,16 @@ git remote add <name> <URI>
 git remote show <name>
 # Change the custom name of a remote:
 git remote rename <name> <new_name>
+# Remove a stale remote:
+git remote prune <name>
 # Remove a remote:
 git remote remove <name>
 # Fetch all updates from the origin:
 get fetch
 # Fetch updates from a specific remote:
 git fetch <name>
+# Fetch updates from all remotes:
+git fetch --all
 # Push all commits to origin from the main branch:
 git push origin <master | main>
 ```

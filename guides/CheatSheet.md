@@ -3072,6 +3072,8 @@ docker ps --all --size
 docker rm <name>
 # Stop a container:
 docker stop <containerID | name>
+# Copy files and directories between containers:
+docker cp <src_path> <containerID | name:dst_path>
 ```
 ```bash
 # Building Docker containers.

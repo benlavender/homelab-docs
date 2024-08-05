@@ -3072,8 +3072,11 @@ docker ps --all --size
 docker rm <name>
 # Stop a container:
 docker stop <containerID | name>
-# Copy files and directories between containers:
+# Copy files and directories between containers.
+# Copy files and directories from local host to a container:
 docker cp <src_path> <containerID | name:dst_path>
+# Copy files and directories from a container to local host:
+docker cp <containerID | name:src_path> <dst_path>
 ```
 ```bash
 # Building Docker containers.

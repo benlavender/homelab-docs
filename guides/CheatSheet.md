@@ -3232,6 +3232,10 @@ terraform apply -auto-approve
 terraform apply -var <"variable=value">
 ```
 ```bash
+# Import an existing resource into the state file:
+terraform import <provider/resource> <ID>
+```
+```bash
 # Show terraform destroy changes:
 terraform plan -destroy
 # Destroy nfrastructure based on the repository changes (if any):

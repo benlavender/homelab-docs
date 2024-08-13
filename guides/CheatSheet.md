@@ -2460,6 +2460,17 @@ ssh-add -D
 gpg --list-keys
 ```
 ```bash
+# Generate a new GPG key pair.
+# Follow the interactive guide:
+gpg --generate-key
+# Generate a new GPG key pair with a specific key type and validity.
+# Follow the interactive guide:
+gpg --full-generate-key
+# Generate a new GPG key pair with only the USER-ID field.
+# Follow the interactive guide:
+gpg --quick-generate-key <USER-ID>
+```
+```bash
 # Password encrypt a file for sharing between user A => user B with GPG using symmetrical encryption only. 
 # Enter passphrase when prompted:
 gpg --symmetric --output <file.gpg> <file_to_encrypt> 

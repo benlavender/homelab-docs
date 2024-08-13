@@ -2046,7 +2046,9 @@ dig AXFR <zonename> <NS>
 dig +trace <QNAME>
 ```
 
-### Certificates, OpenSSL/GPG and CryptoAPI:
+### Certificates, Key-based Authentication, and Encryption:
+
+#### OpenSSL:
 
 ```bash
 # Creating and converting with OpenSSL
@@ -2239,20 +2241,6 @@ openssl pkeyutl -decrypt -in ciphertext.bin -inkey private-b.key -out received-m
 openssl dgst -sha1 -verify public-a.key -signature signiture.bin received-message.txt
 ```
 ```bash
-# Password encrypt a file for sharing between user A => user B with GPG using symmetrical encryption only. 
-# Enter passphrase when prompted:
-gpg --symmetric --output <file.gpg> <file_to_encrypt> 
-# User B can now decrypt the file using the passphrase
-# Enter passphrase when prompted:
-gpg --output <output_file> --decrypt <file_to_decrpy.gpg>
-# Password encrypt a file for sharing between user A => user B with GPG using symmetrical encryption only but using AES256.
-# Enter passphrase when prompted:
-gpg --symmetric --cipher-algo AES256 --output <file.gpg> <file_to_encrypt>
-# User B can now decrypt the file using the passphrase
-# Enter passphrase when prompted:
-gpg --output <output_file> --decrypt <file_to_decrpy.gpg>
-```
-```bash
 # Load a SSL/TLS server for debugging:
 openssl s_server -port 443 -cert certificate.pem -key private.key -status 
 # Support HTTP by adding -www to return a / on HTTP GET:
@@ -2378,7 +2366,7 @@ certreq -submit -config <"CA"> -attrib "CertificateTemplate:<Template-Name>" <Re
 REM If the certificate requires approval, approve the request in ADCS:
 ```
 
-#### Key-based Authentication:
+#### OpenSSH:
 
 ```bash
 # Creating and managing OpenSSH keys with ssh-keygen.
@@ -2463,6 +2451,27 @@ ssh-add -l
 ssh-add -d </path/.ssh/privatekey_file>
 # Or use -D to remove all:
 ssh-add -D
+```
+
+#### OpenPGP/GnuPG:
+
+```bash
+# List all keys in the GPG keyring:
+gpg --list-keys
+```
+```bash
+# Password encrypt a file for sharing between user A => user B with GPG using symmetrical encryption only. 
+# Enter passphrase when prompted:
+gpg --symmetric --output <file.gpg> <file_to_encrypt> 
+# User B can now decrypt the file using the passphrase
+# Enter passphrase when prompted:
+gpg --output <output_file> --decrypt <file_to_decrpy.gpg>
+# Password encrypt a file for sharing between user A => user B with GPG using symmetrical encryption only but using AES256.
+# Enter passphrase when prompted:
+gpg --symmetric --cipher-algo AES256 --output <file.gpg> <file_to_encrypt>
+# User B can now decrypt the file using the passphrase
+# Enter passphrase when prompted:
+gpg --output <output_file> --decrypt <file_to_decrpy.gpg>
 ```
 
 #### Let's Encrypt:

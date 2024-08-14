@@ -2497,7 +2497,9 @@ save
 ```bash
 # Export a public key from the GPG keyring to stdout:
 gpg --export <USER-ID | fingerprint>
-# Export a public key from the GPG keyring to a file as plain text:
+# Export a public key from the GPG keyring to stdout as Base64:
+gpg --export --armor <USER-ID | fingerprint>
+# Export a public key from the GPG keyring to a file as Base64:
 gpg --export --output <file.pub> --armour <USER-ID | fingerprint>
 ```
 ```bash

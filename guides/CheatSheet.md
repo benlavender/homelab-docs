@@ -2479,6 +2479,28 @@ gpg --full-generate-key
 gpg --quick-generate-key <USER-ID>
 ```
 ```bash
+# Edit a GPG key.
+# Follow the interactive guide and use ? or help to provide subcommands:
+gpg --edit-key <USER-ID | fingerprint>
+# Add additional USER-ID:
+adduid
+save
+# Delete a USER-ID:
+uid <#>
+deluid
+save
+# Change expiration date.
+# Follow the interactive guide:
+expire
+save
+```
+```bash
+# Export a public key from the GPG keyring to stdout:
+gpg --export <USER-ID | fingerprint>
+# Export a public key from the GPG keyring to a file as plain text:
+gpg --export --output <file.pub> --armour <USER-ID | fingerprint>
+```
+```bash
 # Remove a secret key from the GPG secret keyring:
 gpg --delete-secret-keys <USER-ID | fingerprint>
 # Remove a public key from the GPG public keyring:

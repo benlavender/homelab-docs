@@ -2455,6 +2455,8 @@ ssh-add -D
 
 #### OpenPGP/GnuPG:
 
+> **Note:** All gpg commands are based on gpg2.x.x.
+
 ```bash
 # List all public keys in the GPG keyring:
 gpg --list-keys
@@ -2531,6 +2533,17 @@ gpg --symmetric --cipher-algo AES256 --output <file.gpg> <file_to_encrypt>
 # User B can now decrypt the file using the passphrase
 # Enter passphrase when prompted:
 gpg --output <output_file> --decrypt <file_to_decrpy.gpg>
+```
+```bash
+# Working with keys servers.
+# Query a WKD server for WKS support:
+gpg-wks-client --verbose --supported <domain>
+# Check if a public key exists for an email address:
+gpg-wks-client --verbose --check <email>
+# Find USER-ID and corresponding mailboxes for an email address:
+gpg-wks-client --print-wkd-hash <email>
+# Show the URIs used to fetch the public key for an email address:
+gpg-wks-client --print-wkd-url <email>
 ```
 
 #### Let's Encrypt:

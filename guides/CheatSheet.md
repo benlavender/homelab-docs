@@ -2456,12 +2456,10 @@ ssh-add -D
 #### OpenPGP/GnuPG:
 
 ```bash
-# List all keys in the GPG keyring:
+# List all public keys in the GPG keyring:
 gpg --list-keys
-# List all keys based on a specific user ID:
+# List all public keys based on a specific user ID:
 gpg --list-keys <USER-ID>
-# List all keys from the public keyring:
-gpg --list-public-keys
 # List all keys from the secret keyring:
 gpg --list-secret-keys
 # Show the fingerprint of a key:
@@ -2479,6 +2477,32 @@ gpg --full-generate-key
 gpg --quick-generate-key <USER-ID>
 ```
 ```bash
+# Remove a secret key from the GPG secret keyring:
+gpg --delete-secret-keys <USER-ID | fingerprint>
+# Remove a public key from the GPG public keyring:
+gpg --delete-keys <USER-ID | fingerprint>
+# Remove both the secret and public key from the GPG keyrings:
+gpg --delete-secret-and-public-key <USER-ID | fingerprint>
+```
+```bash
+# Export a public key from the GPG keyring to stdout:
+gpg --export <USER-ID | fingerprint>
+# Export a public key from the GPG keyring to stdout as Base64:
+gpg --export --armor <USER-ID | fingerprint>
+# Export a public key from the GPG keyring to a file as Base64:
+gpg --export --output <file> --armour <USER-ID | fingerprint>
+# Export a secret key from the GPG keyring to stdout:
+gpg --export-secret-keys <USER-ID | fingerprint>
+```
+```bash
+# Import a key into the GPG keyring:
+gpg --import <file>
+# Perform a dry run import of a key into the GPG keyring:
+gpg --import --import-options show-only <file>
+# Import a key into the GPG keyring and update existing keys only, no new keys will be imported:
+gpg --import --import-options merge-only <file>
+```
+```bash
 # Edit a GPG key.
 # Follow the interactive guide and use ? or help to provide subcommands:
 gpg --edit-key <USER-ID | fingerprint>
@@ -2493,22 +2517,6 @@ save
 # Follow the interactive guide:
 expire
 save
-```
-```bash
-# Export a public key from the GPG keyring to stdout:
-gpg --export <USER-ID | fingerprint>
-# Export a public key from the GPG keyring to stdout as Base64:
-gpg --export --armor <USER-ID | fingerprint>
-# Export a public key from the GPG keyring to a file as Base64:
-gpg --export --output <file.pub> --armour <USER-ID | fingerprint>
-```
-```bash
-# Remove a secret key from the GPG secret keyring:
-gpg --delete-secret-keys <USER-ID | fingerprint>
-# Remove a public key from the GPG public keyring:
-gpg --delete-keys <USER-ID | fingerprint>
-# Remove both the secret and public key from the GPG keyrings:
-gpg --delete-secret-and-public-key <USER-ID | fingerprint>
 ```
 ```bash
 # Password encrypt a file for sharing between user A => user B with GPG using symmetrical encryption only. 

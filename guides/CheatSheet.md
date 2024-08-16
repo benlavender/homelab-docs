@@ -2535,7 +2535,7 @@ gpg --symmetric --cipher-algo AES256 --output <file.gpg> <file_to_encrypt>
 gpg --output <output_file> --decrypt <file_to_decrpy.gpg>
 ```
 ```bash
-# Working with keys servers.
+# Working with keys servers and WKD.
 # Query a WKD server for WKS support:
 gpg-wks-client --verbose --supported <domain>
 # Check if a public key exists for an email address:

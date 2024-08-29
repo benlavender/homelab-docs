@@ -2994,6 +2994,12 @@ git difftool --tool=<toolname>
 ### 🐳 Docker: 
 
 ```bash
+# Show Docker version information:
+docker version
+# Show Docker system information:
+docker info
+```
+```bash
 # Working with Docker registries.
 # Login to a container registry, default being Docker Hub.
 # Using default credsStore:

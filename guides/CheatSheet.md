@@ -2495,6 +2495,10 @@ gpg --export --armor <USER-ID | fingerprint>
 gpg --export --output <file> --armour <USER-ID | fingerprint>
 # Export a secret key from the GPG keyring to stdout:
 gpg --export-secret-keys <USER-ID | fingerprint>
+# Export a secret key from the GPG keyring to stdout as Base64:
+gpg --export-secret-keys --armor <USER-ID | fingerprint>
+# Export a secret key from the GPG keyring to a file as Base64:
+gpg --export-secret-keys --output <file> --armour <USER-ID | fingerprint>
 ```
 ```bash
 # Import a key into the GPG keyring:
@@ -2521,6 +2525,20 @@ expire
 save
 ```
 ```bash
+# Working with Web Key Directorys (WKD).
+# Query a WKD server for Web Key Service (WKS) support:
+gpg-wks-client --verbose --supported <domain>
+# Check if a public key exists for an email address:
+gpg-wks-client --verbose --check <email>
+# Find USER-ID and corresponding mailboxes for an email address:
+gpg-wks-client --print-wkd-hash <email>
+# Show the URIs used to fetch the public key for an email address:
+gpg-wks-client --print-wkd-url <email>
+```
+
+##### OpenPGP/GnuPG (Use cases):
+
+```bash
 # Password encrypt a file for sharing between user A => user B with GPG using symmetrical encryption only. 
 # Enter passphrase when prompted:
 gpg --symmetric --output <file.gpg> <file_to_encrypt> 
@@ -2533,17 +2551,6 @@ gpg --symmetric --cipher-algo AES256 --output <file.gpg> <file_to_encrypt>
 # User B can now decrypt the file using the passphrase
 # Enter passphrase when prompted:
 gpg --output <output_file> --decrypt <file_to_decrpy.gpg>
-```
-```bash
-# Working with key servers and WKD.
-# Query a WKD server for WKS support:
-gpg-wks-client --verbose --supported <domain>
-# Check if a public key exists for an email address:
-gpg-wks-client --verbose --check <email>
-# Find USER-ID and corresponding mailboxes for an email address:
-gpg-wks-client --print-wkd-hash <email>
-# Show the URIs used to fetch the public key for an email address:
-gpg-wks-client --print-wkd-url <email>
 ```
 
 #### Let's Encrypt:

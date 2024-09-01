@@ -1453,12 +1453,6 @@ fc-list :lang=<lang>
 fc-list :fontformat=<fontformat>
 ```
 ```bash
-# Scan a font file for information:
-fc-scan <filename>
-# Scan a directory containing font files for information:
-fc-scan <directory>
-```
-```bash
 # Use --verbose to show more information.
 # Rescan font directories:
 fc-cache
@@ -1468,6 +1462,12 @@ fc-cache --system-only
 fc-cache --force
 # Erase cache and rescan font directories:
 fc-cache --really-force
+```
+```bash
+# Scan a font file for information:
+fc-scan <filename>
+# Scan a directory containing font files for information:
+fc-scan <directory>
 ```
 
 ## <ins>Roles:</ins>

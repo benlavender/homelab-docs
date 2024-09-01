@@ -2525,6 +2525,12 @@ expire
 save
 ```
 ```bash
+# Symmetric encryption.
+# Symmetrically encrypt a file with a passphrase:
+
+```
+
+```bash
 # Working with Web Key Directorys (WKD).
 # Query a WKD server for Web Key Service (WKS) support:
 gpg-wks-client --verbose --supported <domain>

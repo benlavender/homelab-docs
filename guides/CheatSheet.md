@@ -1445,6 +1445,8 @@ REM Install the
 # Use --verbose to show more information.
 # List available fonts:
 fc-list
+# List available fonts supporting a specific style, such as Bold or Regular:
+fc-list :style=<style>
 # List available fonts supporting a specific language:
 fc-list :lang=<lang>
 # List available fonts supporting a specific fontformat:

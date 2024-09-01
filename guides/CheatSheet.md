@@ -1435,6 +1435,39 @@ wuauclt /DetectNow /ReportNow
 REM Install the 
 ```
 
+### Fonts:
+
+#### Fontconfig:
+
+> **Note**: Manual local user fonts are stored in `~/.local/share/fonts` and manaual system fonts are stored in `/usr/local/share/fonts`. Package fonts are stored in `/usr/share/fonts`.
+
+```bash
+# Use --verbose to show more information.
+# List available fonts:
+fc-list
+# List available fonts supporting a specific language:
+fc-list :lang=<lang>
+# List available fonts supporting a specific fontformat:
+fc-list :fontformat=<fontformat>
+```
+```bash
+# Scan a font file for information:
+fc-scan <filename>
+# Scan a directory containing font files for information:
+fc-scan <directory>
+```
+```bash
+# Use --verbose to show more information.
+# Rescan font directories:
+fc-cache
+# Rescan only system font directories:
+fc-cache --system-only
+# Rescan font directories and force update timestamps:
+fc-cache --force
+# Erase cache and rescan font directories:
+fc-cache --really-force
+```
+
 ## <ins>Roles:</ins>
 
 ### ADDS:

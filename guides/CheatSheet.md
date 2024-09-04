@@ -2490,7 +2490,7 @@ ssh-add -D
 
 #### OpenPGP/GnuPG:
 
-> **Note:** All gpg commands are based on gpg2.x.x.
+> **Note:** All gpg commands are based on gpg2.4.x.
 
 ```bash
 # List all public keys in the GPG keyring:
@@ -2559,10 +2559,19 @@ save
 expire
 save
 ```
+
 ```bash
 # Symmetric encryption.
-# Symmetrically encrypt a file with a passphrase:
-
+# Use --version to show supported ciphers.
+# Symmetrically encrypt a file with a passphrase using AES256.
+# Enter passphrase when prompted:
+gpg --symmetric --output <cypher_file> <file_to_encrypt>
+# Symmetrically encrypt a file with a passphrase using AES128.
+# Enter passphrase when prompted:
+gpg --symmetric --cipher-algo AES128 --output <cypher_file> <file_to_encrypt>
+# Symmetrically encrypt a file with a passphrase using CAMELLIA256.
+# Enter passphrase when prompted:
+gpg --symmetric --cipher-algo CAMELLIA256 --output <cypher_file> <file_to_encrypt>
 ```
 
 ```bash

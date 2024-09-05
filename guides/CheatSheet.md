@@ -2490,7 +2490,7 @@ ssh-add -D
 
 #### OpenPGP/GnuPG:
 
-> **Note:** All gpg commands are based on gpg2.4.x.
+> **Note:** All gpg commands are based on gpg 2.4.x.
 
 ```bash
 # List all public keys in the GPG keyring:

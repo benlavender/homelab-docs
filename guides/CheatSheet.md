@@ -2560,7 +2560,7 @@ expire
 save
 ```
 ```bash
-# Symmetric encryption.
+# Encryption.
 # Use --version to show supported ciphers.
 # Symmetrically encrypt a file with a passphrase using AES256.
 # Enter passphrase when prompted:
@@ -2574,6 +2574,20 @@ gpg --symmetric --cipher-algo AES128 --output <cypher_file> <file_to_encrypt>
 # Symmetrically encrypt a file with a passphrase using CAMELLIA256.
 # Enter passphrase when prompted:
 gpg --symmetric --cipher-algo CAMELLIA256 --output <cypher_file> <file_to_encrypt>
+```
+```bash
+# Signing.
+# Sign a file with a private key and export to a binary file.
+# Enter passphrase if prompted:
+gpg --sign <file_to_sign>
+```
+```bash
+# Decryption.
+# Use --version to show supported ciphers.
+# Decrypt a symmetrically encrypted file to stdout:
+gpg --decrypt <cypher_file>
+# Decrypt a symmetrically encrypted file to a file:
+gpg --output <filename> --decrypt <cypher_file>
 ```
 ```bash
 # Working with Web Key Directorys (WKD).

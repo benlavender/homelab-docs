@@ -2559,13 +2559,15 @@ save
 expire
 save
 ```
-
 ```bash
 # Symmetric encryption.
 # Use --version to show supported ciphers.
 # Symmetrically encrypt a file with a passphrase using AES256.
 # Enter passphrase when prompted:
 gpg --symmetric --output <cypher_file> <file_to_encrypt>
+# Symmetrically encrypt a file with a passphrase using AES256 where cipher spec is Base64):
+# Enter passphrase when prompted:
+gpg --symmetric --armor --output <cypher_file> <file_to_encrypt>
 # Symmetrically encrypt a file with a passphrase using AES128.
 # Enter passphrase when prompted:
 gpg --symmetric --cipher-algo AES128 --output <cypher_file> <file_to_encrypt>
@@ -2573,7 +2575,6 @@ gpg --symmetric --cipher-algo AES128 --output <cypher_file> <file_to_encrypt>
 # Enter passphrase when prompted:
 gpg --symmetric --cipher-algo CAMELLIA256 --output <cypher_file> <file_to_encrypt>
 ```
-
 ```bash
 # Working with Web Key Directorys (WKD).
 # Query a WKD server for Web Key Service (WKS) support:

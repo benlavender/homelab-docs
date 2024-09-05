@@ -2577,6 +2577,12 @@ gpg --symmetric --cipher-algo CAMELLIA256 --output <cypher_file> <file_to_encryp
 ```
 ```bash
 # Signing.
+# Sign an existing public key in the GPG keyring with the default private key:
+gpg --sign-key <USER-ID | fingerprint>
+# Sign an existing public key in the GPG keyring with a specific private key:
+gpg --sign-key <USER-ID | fingerprint> --default-key <USER-ID | fingerprint>
+# Locally sign an existing public key in the GPG keyring with the default private key:
+gpg --lsign-key <USER-ID | fingerprint>
 # Sign a file with a private key and export to a binary file.
 # Enter passphrase if prompted:
 gpg --sign <file_to_sign>

@@ -2505,12 +2505,19 @@ gpg --sign-key <USER-ID | fingerprint>
 gpg --sign-key <USER-ID | fingerprint> --default-key <USER-ID | fingerprint>
 # Locally sign an existing public key in the public keyring with the default private key:
 gpg --lsign-key <USER-ID | fingerprint>
-# Sign a file with a private key and export to a binary file.
+# Sign and compress a file with a private key and export to a binary signature file.
 # Enter passphrase if prompted:
-gpg --sign <file_to_sign>
-# Clearsign a file with a private key and export to a Base64 file.
+gpg --output <signed_file> --sign <file_to_sign>
+# Clearsign a file with a private key and export to file.
 # Enter passphrase if prompted:
-
+gpg --output <signed_file> --clearsign <file_to_sign>
+# Sign a file with a private key and export to a detached signature file.
+# Enter passphrase if prompted:
+gpg --output <signed_file> --detach-sign <file_to_sign>
+# Verify a signed signature file:
+gpg --verify <signed_file>
+# Verify a signed signature file and its corresponding detached signature file:
+gpg --verify <signed_file> <detached_signature_file>
 ```
 ```bash
 # Decryption.
@@ -2519,6 +2526,8 @@ gpg --sign <file_to_sign>
 gpg --decrypt <cypher_file>
 # Decrypt a symmetrically encrypted file to a file:
 gpg --output <filename> --decrypt <cypher_file>
+# Decrypt a signed signature file and output original to a file:
+gpg --output <filename> --decrypt <signed_file>
 ```
 ```bash
 # Working with Web Key Directorys (WKD).

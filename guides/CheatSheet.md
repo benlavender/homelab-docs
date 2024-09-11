@@ -2476,6 +2476,10 @@ save
 # Follow the interactive guide:
 expire
 save
+# Sign a key that has been imported.
+# Follow the interactive guide:
+sign
+save
 ```
 ```bash
 # Encryption.

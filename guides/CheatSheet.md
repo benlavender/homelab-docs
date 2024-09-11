@@ -2406,9 +2406,9 @@ REM If the certificate requires approval, approve the request in ADCS:
 > **Note:** All gpg commands are based on gpg 2.4.x.
 
 ```bash
-# List all public keys in the GPG keyring:
+# List all keys in the public keyring:
 gpg --list-keys
-# List all public keys based on a specific user ID:
+# List all keys based on a specific user ID in the public keyring:
 gpg --list-keys <USER-ID>
 # List all keys from the secret keyring:
 gpg --list-secret-keys
@@ -2416,48 +2416,53 @@ gpg --list-secret-keys
 gpg --fingerprint <USER-ID>
 ```
 ```bash
-# Generate a new GPG key pair.
+# Generate a new key pair.
 # Follow the interactive guide:
 gpg --generate-key
-# Generate a new GPG key pair with a specific key type and validity.
+# Generate a new key pair with a specific key type and validity.
 # Follow the interactive guide:
 gpg --full-generate-key
-# Generate a new GPG key pair with only the USER-ID field.
+# Generate a new key pair with only the USER-ID field.
 # Follow the interactive guide:
 gpg --quick-generate-key <USER-ID>
 ```
 ```bash
-# Remove a secret key from the GPG secret keyring:
+# Generate a revocation certificate so that it can be used to revoke a key.
+# Follow the interactive guide:
+gpg --output <file.asc> --gen-revoke <USER-ID | fingerprint> 
+```
+```bash
+# Remove a secret key from the secret keyring:
 gpg --delete-secret-keys <USER-ID | fingerprint>
-# Remove a public key from the GPG public keyring:
+# Remove a public key from the public keyring:
 gpg --delete-keys <USER-ID | fingerprint>
-# Remove both the secret and public key from the GPG keyrings:
+# Remove both the secret and public key from the keyrings:
 gpg --delete-secret-and-public-key <USER-ID | fingerprint>
 ```
 ```bash
-# Export a public key from the GPG keyring to stdout:
+# Export a public key from the public keyring to stdout:
 gpg --export <USER-ID | fingerprint>
-# Export a public key from the GPG keyring to stdout as Base64:
+# Export a public key from the public keyring to stdout as Base64:
 gpg --export --armor <USER-ID | fingerprint>
-# Export a public key from the GPG keyring to a file as Base64:
+# Export a public key from the public keyring to a file as Base64:
 gpg --export --output <file> --armour <USER-ID | fingerprint>
-# Export a secret key from the GPG keyring to stdout:
+# Export a secret key from the secret keyring to stdout:
 gpg --export-secret-keys <USER-ID | fingerprint>
-# Export a secret key from the GPG keyring to stdout as Base64:
+# Export a secret key from the secret keyring to stdout as Base64:
 gpg --export-secret-keys --armor <USER-ID | fingerprint>
-# Export a secret key from the GPG keyring to a file as Base64:
+# Export a secret key from the secret keyring to a file as Base64:
 gpg --export-secret-keys --output <file> --armour <USER-ID | fingerprint>
 ```
 ```bash
-# Import a key into the GPG keyring:
+# Import a key(s) into the keyrings:
 gpg --import <file>
-# Perform a dry run import of a key into the GPG keyring:
+# Perform a dry run import of a key(s) into the keyrings:
 gpg --import --import-options show-only <file>
-# Import a key into the GPG keyring and update existing keys only, no new keys will be imported:
+# Import a key(s) into the keyrings and update existing keys only, no new keys will be imported:
 gpg --import --import-options merge-only <file>
 ```
 ```bash
-# Edit a GPG key.
+# Edit a key.
 # Follow the interactive guide and use ? or help to provide subcommands:
 gpg --edit-key <USER-ID | fingerprint>
 # Add additional USER-ID:
@@ -2490,15 +2495,18 @@ gpg --symmetric --cipher-algo CAMELLIA256 --output <cypher_file> <file_to_encryp
 ```
 ```bash
 # Signing.
-# Sign an existing public key in the GPG keyring with the default private key:
+# Sign an existing public key in the public keyring with the default private key:
 gpg --sign-key <USER-ID | fingerprint>
-# Sign an existing public key in the GPG keyring with a specific private key:
+# Sign an existing public key in the public keyring with a specific private key:
 gpg --sign-key <USER-ID | fingerprint> --default-key <USER-ID | fingerprint>
-# Locally sign an existing public key in the GPG keyring with the default private key:
+# Locally sign an existing public key in the public keyring with the default private key:
 gpg --lsign-key <USER-ID | fingerprint>
 # Sign a file with a private key and export to a binary file.
 # Enter passphrase if prompted:
 gpg --sign <file_to_sign>
+# Clearsign a file with a private key and export to a Base64 file.
+# Enter passphrase if prompted:
+
 ```
 ```bash
 # Decryption.

@@ -2496,6 +2496,13 @@ gpg --symmetric --cipher-algo AES128 --output <cypher_file> <file_to_encrypt>
 # Symmetrically encrypt a file with a passphrase using CAMELLIA256.
 # Enter passphrase when prompted:
 gpg --symmetric --cipher-algo CAMELLIA256 --output <cypher_file> <file_to_encrypt>
+# Encrypt a message from stdin using AES256 to a file with the default secret key and associated with a specific public key(s).
+# Use Ctrl+D to end input:
+gpg --encrypt --output <cypher_file> --recipient <USER-ID | fingerprint>
+# Encrypt a file using AES256 with the default secret key and associated with a specific public key(s):
+gpg --encrypt --output <cypher_file> --recipient <USER-ID | fingerprint> <file_to_encrypt>
+# Encrypt a file using AES128 with the default secret key and associated with a specific public key(s):
+gpg --encrypt --cipher-algo AES128 --output <cypher_file> --recipient <USER-ID | fingerprint> <file_to_encrypt>
 ```
 ```bash
 # Signing.
@@ -2526,8 +2533,12 @@ gpg --verify <signed_file> <detached_signature_file>
 gpg --decrypt <cypher_file>
 # Decrypt a symmetrically encrypted file to a file:
 gpg --output <filename> --decrypt <cypher_file>
+# Decrypt a file using the public key associated with the encrypted file to stdout:
+gpg --decrypt <cypher_file>
 # Decrypt a signed signature file and output original to a file:
 gpg --output <filename> --decrypt <signed_file>
+# Decrypt a file using the public key associated with the encrypted file:
+gpg --output <filename> --decrypt <cypher_file>
 ```
 ```bash
 # Working with Web Key Directorys (WKD).

@@ -2552,23 +2552,6 @@ gpg-wks-client --print-wkd-hash <email>
 gpg-wks-client --print-wkd-url <email>
 ```
 
-##### OpenPGP/GnuPG (Use cases):
-
-```bash
-# Password encrypt a file for sharing between user A => user B with GPG using symmetrical encryption only. 
-# Enter passphrase when prompted:
-gpg --symmetric --output <file.gpg> <file_to_encrypt> 
-# User B can now decrypt the file using the passphrase
-# Enter passphrase when prompted:
-gpg --output <output_file> --decrypt <file_to_decrpy.gpg>
-# Password encrypt a file for sharing between user A => user B with GPG using symmetrical encryption only but using AES256.
-# Enter passphrase when prompted:
-gpg --symmetric --cipher-algo AES256 --output <file.gpg> <file_to_encrypt>
-# User B can now decrypt the file using the passphrase
-# Enter passphrase when prompted:
-gpg --output <output_file> --decrypt <file_to_decrpy.gpg>
-```
-
 #### OpenSSH:
 
 ```bash

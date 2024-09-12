@@ -2401,6 +2401,157 @@ certreq -submit -config <"CA"> -attrib "CertificateTemplate:<Template-Name>" <Re
 REM If the certificate requires approval, approve the request in ADCS:
 ```
 
+#### OpenPGP/GnuPG:
+
+> **Note:** All gpg commands are based on gpg 2.4.x.
+
+```bash
+# List all keys in the public keyring:
+gpg --list-keys
+# List all keys based on a specific user ID in the public keyring:
+gpg --list-keys <USER-ID>
+# List all keys from the secret keyring:
+gpg --list-secret-keys
+# Show the fingerprint of a key:
+gpg --fingerprint <USER-ID>
+```
+```bash
+# Generate a new key pair.
+# Follow the interactive guide:
+gpg --generate-key
+# Generate a new key pair with a specific key type and validity.
+# Follow the interactive guide:
+gpg --full-generate-key
+# Generate a new key pair with only the USER-ID field.
+# Follow the interactive guide:
+gpg --quick-generate-key <USER-ID>
+```
+```bash
+# Generate a revocation certificate so that it can be used to revoke a key.
+# Follow the interactive guide:
+gpg --output <file.asc> --gen-revoke <USER-ID | fingerprint> 
+```
+```bash
+# Remove a secret key from the secret keyring:
+gpg --delete-secret-keys <USER-ID | fingerprint>
+# Remove a public key from the public keyring:
+gpg --delete-keys <USER-ID | fingerprint>
+# Remove both the secret and public key from the keyrings:
+gpg --delete-secret-and-public-key <USER-ID | fingerprint>
+```
+```bash
+# Export a public key from the public keyring to stdout:
+gpg --export <USER-ID | fingerprint>
+# Export a public key from the public keyring to stdout as Base64:
+gpg --export --armor <USER-ID | fingerprint>
+# Export a public key from the public keyring to a file as Base64:
+gpg --export --output <file> --armour <USER-ID | fingerprint>
+# Export a secret key from the secret keyring to stdout:
+gpg --export-secret-keys <USER-ID | fingerprint>
+# Export a secret key from the secret keyring to stdout as Base64:
+gpg --export-secret-keys --armor <USER-ID | fingerprint>
+# Export a secret key from the secret keyring to a file as Base64:
+gpg --export-secret-keys --output <file> --armour <USER-ID | fingerprint>
+```
+```bash
+# Import a key(s) into the keyrings:
+gpg --import <file>
+# Perform a dry run import of a key(s) into the keyrings:
+gpg --import --import-options show-only <file>
+# Import a key(s) into the keyrings and update existing keys only, no new keys will be imported:
+gpg --import --import-options merge-only <file>
+```
+```bash
+# Edit a key.
+# Follow the interactive guide and use ? or help to provide subcommands:
+gpg --edit-key <USER-ID | fingerprint>
+# Add additional USER-ID:
+adduid
+save
+# Delete a USER-ID:
+uid <#>
+deluid
+save
+# Change expiration date.
+# Follow the interactive guide:
+expire
+save
+# Sign a key that has been imported.
+# Follow the interactive guide:
+sign
+save
+```
+```bash
+# Encryption.
+# Use --version to show supported ciphers.
+# Symmetrically encrypt a file with a passphrase using AES256.
+# Enter passphrase when prompted:
+gpg --symmetric --output <cypher_file> <file_to_encrypt>
+# Symmetrically encrypt a file with a passphrase using AES256 where cipher spec is Base64):
+# Enter passphrase when prompted:
+gpg --symmetric --armor --output <cypher_file> <file_to_encrypt>
+# Symmetrically encrypt a file with a passphrase using AES128.
+# Enter passphrase when prompted:
+gpg --symmetric --cipher-algo AES128 --output <cypher_file> <file_to_encrypt>
+# Symmetrically encrypt a file with a passphrase using CAMELLIA256.
+# Enter passphrase when prompted:
+gpg --symmetric --cipher-algo CAMELLIA256 --output <cypher_file> <file_to_encrypt>
+# Encrypt a message from stdin using AES256 to a file with the default secret key and associated with a specific public key(s).
+# Use Ctrl+D to end input:
+gpg --encrypt --output <cypher_file> --recipient <USER-ID | fingerprint>
+# Encrypt a file using AES256 with the default secret key and associated with a specific public key(s):
+gpg --encrypt --output <cypher_file> --recipient <USER-ID | fingerprint> <file_to_encrypt>
+# Encrypt a file using AES128 with the default secret key and associated with a specific public key(s):
+gpg --encrypt --cipher-algo AES128 --output <cypher_file> --recipient <USER-ID | fingerprint> <file_to_encrypt>
+```
+```bash
+# Signing.
+# Sign an existing public key in the public keyring with the default private key:
+gpg --sign-key <USER-ID | fingerprint>
+# Sign an existing public key in the public keyring with a specific private key:
+gpg --sign-key <USER-ID | fingerprint> --default-key <USER-ID | fingerprint>
+# Locally sign an existing public key in the public keyring with the default private key:
+gpg --lsign-key <USER-ID | fingerprint>
+# Sign and compress a file with a private key and export to a binary signature file.
+# Enter passphrase if prompted:
+gpg --output <signed_file> --sign <file_to_sign>
+# Clearsign a file with a private key and export to file.
+# Enter passphrase if prompted:
+gpg --output <signed_file> --clearsign <file_to_sign>
+# Sign a file with a private key and export to a detached signature file.
+# Enter passphrase if prompted:
+gpg --output <signed_file> --detach-sign <file_to_sign>
+# Verify a signed signature file:
+gpg --verify <signed_file>
+# Verify a signed signature file and its corresponding detached signature file:
+gpg --verify <signed_file> <detached_signature_file>
+```
+```bash
+# Decryption.
+# Use --version to show supported ciphers.
+# Decrypt a symmetrically encrypted file to stdout:
+gpg --decrypt <cypher_file>
+# Decrypt a symmetrically encrypted file to a file:
+gpg --output <filename> --decrypt <cypher_file>
+# Decrypt a file using the public key associated with the encrypted file to stdout:
+gpg --decrypt <cypher_file>
+# Decrypt a signed signature file and output original to a file:
+gpg --output <filename> --decrypt <signed_file>
+# Decrypt a file using the public key associated with the encrypted file:
+gpg --output <filename> --decrypt <cypher_file>
+```
+```bash
+# Working with Web Key Directorys (WKD).
+# Query a WKD server for Web Key Service (WKS) support:
+gpg-wks-client --verbose --supported <domain>
+# Check if a public key exists for an email address:
+gpg-wks-client --verbose --check <email>
+# Find USER-ID and corresponding mailboxes for an email address:
+gpg-wks-client --print-wkd-hash <email>
+# Show the URIs used to fetch the public key for an email address:
+gpg-wks-client --print-wkd-url <email>
+```
+
 #### OpenSSH:
 
 ```bash
@@ -2486,27 +2637,6 @@ ssh-add -l
 ssh-add -d </path/.ssh/privatekey_file>
 # Or use -D to remove all:
 ssh-add -D
-```
-
-#### OpenPGP/GnuPG:
-
-```bash
-# List all keys in the GPG keyring:
-gpg --list-keys
-```
-```bash
-# Password encrypt a file for sharing between user A => user B with GPG using symmetrical encryption only. 
-# Enter passphrase when prompted:
-gpg --symmetric --output <file.gpg> <file_to_encrypt> 
-# User B can now decrypt the file using the passphrase
-# Enter passphrase when prompted:
-gpg --output <output_file> --decrypt <file_to_decrpy.gpg>
-# Password encrypt a file for sharing between user A => user B with GPG using symmetrical encryption only but using AES256.
-# Enter passphrase when prompted:
-gpg --symmetric --cipher-algo AES256 --output <file.gpg> <file_to_encrypt>
-# User B can now decrypt the file using the passphrase
-# Enter passphrase when prompted:
-gpg --output <output_file> --decrypt <file_to_decrpy.gpg>
 ```
 
 #### Let's Encrypt:

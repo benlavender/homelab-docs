@@ -2990,8 +2990,12 @@ get fetch
 git fetch <name>
 # Fetch updates from all remotes:
 git fetch --all
-# Push all commits to origin from the main branch:
-git push origin <master | main>
+# Push all commits to a remote from the current branch:
+git push <remote> HEAD
+# Push all commits to a remote from a specific branch:
+git push <remote> <branch>
+# Push all commits to a remote from a specific local branch but with a different name:
+git push <remote> <local_branch>:<remote_branch>
 ```
 ```bash
 # Working with files and stages in Git.
@@ -3089,6 +3093,8 @@ git branch --no-merged <branch>
 git branch <name>
 # Create a new local branch and switch to it:
 git checkout -b <name>
+# Create a new local branch from a remote tracking branch and switch to it:
+git checkout -b <localbranch> <remote/branch>
 # Rename a local branch (use -m for short):
 git branch --move <oldname> <newname>
 # Rename a local branch (use -m for short) and push to remote:
@@ -3109,6 +3115,8 @@ git branch -dr <remote/branch>
 # Merging with Git.
 # Merge changes into the current branch (HEAD):
 git merge <branch>
+# Merge changes into the current branch from a remote tracking branch:
+git merge <remote/branch>
 # Perform a dry-run merge where a merge is completed but not committed (does not apply to fast-forward merges):
 git merge --no-commit <branch>
 # Perform a dry-run merge where a merge is completed but not committed (forces no fast-forward merges):

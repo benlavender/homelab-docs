@@ -3081,6 +3081,8 @@ git branch -a
 git branch -v
 # List both remote-tracking and local branches with their last commit message:
 git branch -av
+# List both remote-tracking and local branches with their last commit message as well as the upstream branch:
+git branch -avv
 # List branches that havn't yet been merged with HEAD:
 git branch --no-merged
 # List branches that have been merged with HEAD:
@@ -3093,8 +3095,12 @@ git branch --no-merged <branch>
 git branch <name>
 # Create a new local branch and switch to it:
 git checkout -b <name>
+# If remote tracking branch is available then create a local branch and switch to it:
+git checkout <branch>
 # Create a new local branch from a remote tracking branch and switch to it:
 git checkout -b <localbranch> <remote/branch>
+# Set the upstream branch for the current branch:
+git branch --set-upstream-to <remote/branch>
 # Rename a local branch (use -m for short):
 git branch --move <oldname> <newname>
 # Rename a local branch (use -m for short) and push to remote:

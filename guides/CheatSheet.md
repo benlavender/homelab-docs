@@ -3121,6 +3121,8 @@ git branch -dr <remote/branch>
 # Merging with Git.
 # Merge changes into the current branch (HEAD):
 git merge <branch>
+# Merge changes between branches:
+git merge <src_branch> <branch>
 # Merge changes into the current branch from a remote tracking branch:
 git merge <remote/branch>
 # Perform a dry-run merge where a merge is completed but not committed (does not apply to fast-forward merges):

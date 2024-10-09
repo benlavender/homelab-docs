@@ -3119,11 +3119,16 @@ git branch -dr <remote/branch>
 ```
 ```bash
 # Merging with Git.
-# Merge changes into the current branch (HEAD):
-git merge <branch>
 # Merge changes between branches:
 git merge <src_branch> <branch>
-# Merge changes into the current branch from a remote tracking branch:
+# Merge changes into the current branch (HEAD):
+git merge <branch>
+# Merge changes into the current branch (HEAD) via a single commit (no preservation of history):
+git merge --squash <branch>
+git commit
+# Merge changes into the current branch (HEAD) and force a merge commit:
+git merge --no-ff <branch>
+# Merge changes into the current branch (HEAD) from a remote tracking branch:
 git merge <remote/branch>
 # Perform a dry-run merge where a merge is completed but not committed (does not apply to fast-forward merges):
 git merge --no-commit <branch>

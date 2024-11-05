@@ -62,6 +62,7 @@ sudo mkfs.ext4 /dev/sdb2
 sudo mkdir root
 # Mount the new filesystem to root:
 sudo mount /dev/sdb2 root
+sudo rm /
 ```
 
 ## Build the OS:

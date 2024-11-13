@@ -3501,6 +3501,7 @@ Disconnect-MgGraph
 # Invoke API calls directly:
 Invoke-MgGraphRequest -Method <method> <URI>
 ```
+
 #### Microsoft Entra ID:
 
 ```powershell

@@ -2732,7 +2732,7 @@ Set-PAServer <'name'>
 # Show ACME account:
 Get-PAAccount
 ```
-```bash
+```powershell
 # Update the e-mail address on an ACME account:
 Set-PAAccount -ID <'ID'> -Contact <'smtp'>
 # or if only one account is registered:
@@ -2740,7 +2740,19 @@ Set-PAAccount -Contact <'smtp'>
 ```
 ```powershell
 # Create a new LE account:
-New-PAAccount -Contact <smtp> -AcceptTOS
+New-PAAccount -Contact <smtp>
+```
+```powershell
+# Generate a new order:
+New-PAOrder -Domain <domain> 
+```
+```powershell
+# These commands automatically manage associated orders and handle the validation process if required.
+# Generate a new certificate with a single domain:
+New-PACertificate -Domain <'domain'> -Contact <'smtp'>
+# Generate a new certificate with multiple domains.
+# The first domain in the -Domain list will be the name in the X509 subject field:
+New-PACertificate -Domain <'domain1','domain2'> -Contact <'smtp'>
 ```
 
 ### SMTP:

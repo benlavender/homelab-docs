@@ -2725,16 +2725,22 @@ certbot delete --cert-name <Certificate Name>
 ##### Posh-ACME:
 
 ```powershell
+# Set the ACME environement to either staging or production (see https://poshac.me/docs/latest/Tutorial/#picking-a-server for list of shortcuts):
+Set-PAServer <'name'>
+```
+```powershell
 # Show ACME account:
 Get-PAAccount
+```
+```bash
+# Update the e-mail address on an ACME account:
+Set-PAAccount -ID <'ID'> -Contact <'smtp'>
+# or if only one account is registered:
+Set-PAAccount -Contact <'smtp'>
 ```
 ```powershell
 # Create a new LE account:
 New-PAAccount -Contact <smtp> -AcceptTOS
-```
-```powershell
-# Set the ACME environement to either staging or production (see https://poshac.me/docs/latest/Tutorial/#picking-a-server for list of shortcuts):
-Set-PAServer <'name'>
 ```
 
 ### SMTP:

@@ -2755,9 +2755,12 @@ New-PACertificate -Domain <'domain'> -Contact <'smtp'>
 New-PACertificate -Domain <'domain1','domain2'> -Contact <'smtp'>
 ```
 ```powershell
-# Create a new order:
+# Create a new order with a single domain:
 New-PAOrder -Domain <'domain'>
-# Create a new order with a custom name:    
+# Create a new order with multiple domains.
+# The first domain in the -Domain list will be the name in the X509 subject field:
+New-PAOrder -Domain <'domain1','domain2'>
+# Create a new order with a custom name:
 New-PAOrder -Name <'name'> -Domain <'domain'>
 # Create a new order with a custom name from an existing CSR:
 New-PAOrder -Name <'name'> -CSRPath <'path\csr.csr'>

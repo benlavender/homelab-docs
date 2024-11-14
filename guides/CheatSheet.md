@@ -2754,6 +2754,18 @@ New-PACertificate -Domain <'domain'> -Contact <'smtp'>
 # The first domain in the -Domain list will be the name in the X509 subject field:
 New-PACertificate -Domain <'domain1','domain2'> -Contact <'smtp'>
 ```
+```powershell
+# Create a new order:
+New-PAOrder -Domain <'domain'>
+# Create a new order with a custom name:    
+New-PAOrder -Name <'name'> -Domain <'domain'>
+# Create a new order with a custom name from an existing CSR:
+New-PAOrder -Name <'name'> -CSRPath <'path\csr.csr'>
+# Create a new order with a custom name and a specific certificate validity:
+New-PAOrder -Name <'name'> -Domain <'domain'> -LifetimeDays <days>
+# Create a new order with a custom name where all certificates will install to local machine personal store:
+New-PAOrder -Name <'name'> -Domain <'domain'> -Install
+```
 
 ### SMTP:
 

@@ -2766,8 +2766,10 @@ New-PAOrder -Name <'name'> -Domain <'domain'>
 New-PAOrder -Name <'name'> -CSRPath <'path\csr.csr'>
 # Create a new order with a custom name and a specific certificate validity:
 New-PAOrder -Name <'name'> -Domain <'domain'> -LifetimeDays <days>
-# Create a new order with a custom name where all certificates will install to local machine personal store:
+# Create a new order with a custom name where all certificates will install to local machine personal store (requires elevation):
 New-PAOrder -Name <'name'> -Domain <'domain'> -Install
+# Create a new order with a custom name and change the archive encryption password:
+New-PAOrder -Name <'name'> -Domain <'domain'> -PfxPass <password>
 ```
 
 ### SMTP:

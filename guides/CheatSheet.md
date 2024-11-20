@@ -2639,9 +2639,11 @@ ssh-add -d </path/.ssh/privatekey_file>
 ssh-add -D
 ```
 
-#### Let's Encrypt:
+#### ACME:
 
 ##### Certbot:
+
+> **Note** Defaults to Let's Encrypt.
 
 ```bash
 # Show ACME account:

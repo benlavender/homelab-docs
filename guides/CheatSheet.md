@@ -2771,6 +2771,22 @@ New-PAOrder -Name <'name'> -Domain <'domain'> -Install
 # Create a new order with a custom name and change the archive encryption password:
 New-PAOrder -Name <'name'> -Domain <'domain'> -PfxPass <password>
 ```
+```powershell
+# Get authorisation status of an order, its domains and verification methods:
+Get-PAOrder -Name <'name'> | Get-PAAuthorization
+# Get HTTP-01 token name for an order:
+Get-PAOrder | Get-PAAuthorization | Select-Object -Property HTTP01Token
+# Get HTTP-01 token value for an order:
+Get-KeyAuthorization -Token (Get-PAOrder -Name <'name'> | Get-PAAuthorization).HTTP01Token
+# Get DNS-01 authorisation value (RDATA) for an order:
+Get-KeyAuthorization -Token (Get-PAOrder -Name <'name'> | Get-PAAuthorization).DNS01Token -ForDNS
+```
+```powershell
+# Request the ACME server verify the authorisation methods setup for an order using HTTP-01:
+Send-ChallengeAck -ChallengeUrl (Get-PAOrder -Name <'name'> | Get-PAAuthorization).HTTP01Url
+# Request the ACME server verify the authorisation methods setup for an order using DNS-01:
+Send-ChallengeAck -ChallengeUrl (Get-PAOrder -Name <'name'> | Get-PAAuthorization).DNS01Url
+```
 
 ### SMTP:
 

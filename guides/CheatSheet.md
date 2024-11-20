@@ -2782,6 +2782,10 @@ Get-KeyAuthorization -Token (Get-PAOrder -Name <'name'> | Get-PAAuthorization).H
 Get-KeyAuthorization -Token (Get-PAOrder -Name <'name'> | Get-PAAuthorization).DNS01Token -ForDNS
 ```
 ```powershell
+# Revoke ACME-cached authorisations for an order. This will require re-authorisation for these domains:
+Get-PAorder -Name <'name'> | Revoke-PAAuthorization -Force
+```
+```powershell
 # Request the ACME server verify the authorisation methods setup for an order using HTTP-01:
 Send-ChallengeAck -ChallengeUrl (Get-PAOrder -Name <'name'> | Get-PAAuthorization).HTTP01Url
 # Request the ACME server verify the authorisation methods setup for an order using DNS-01:

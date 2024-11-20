@@ -2639,9 +2639,11 @@ ssh-add -d </path/.ssh/privatekey_file>
 ssh-add -D
 ```
 
-#### Let's Encrypt:
+#### ACME:
 
 ##### Certbot:
+
+> **Note** Defaults to Let's Encrypt.
 
 ```bash
 # Show ACME account:
@@ -2720,6 +2722,109 @@ certbot revoke --cert-name <Certificate Name> --delete-after-revoke
 ```bash
 # Delete a certificate managed by certbot (usually for expired certificates only):
 certbot delete --cert-name <Certificate Name>
+```
+
+##### Posh-ACME:
+
+```powershell
+# Set the ACME environement to either staging or production (see https://poshac.me/docs/latest/Tutorial/#picking-a-server for list of shortcuts):
+Set-PAServer <'name'>
+```
+```powershell
+# Show ACME account:
+Get-PAAccount
+```
+```powershell
+# Update the e-mail address on an ACME account:
+Set-PAAccount -ID <'ID'> -Contact <'smtp'>
+# or if only one account is registered:
+Set-PAAccount -Contact <'smtp'>
+```
+```powershell
+# Create a new LE account:
+New-PAAccount -Contact <smtp>
+```
+```powershell
+# Generate a new order:
+New-PAOrder -Domain <domain> 
+```
+```powershell
+# Remove an order:
+Remove-PAOrder -Name <'name'>
+```
+```powershell
+# These commands automatically manage associated orders and handle the validation process if required.
+# Generate a new certificate with a single domain:
+New-PACertificate -Domain <'domain'> -Contact <'smtp'>
+# Generate a new certificate with multiple domains.
+# The first domain in the -Domain list will be the name in the X509 subject field:
+New-PACertificate -Domain <'domain1','domain2'> -Contact <'smtp'>
+```
+```powershell
+# Renew a certificate for an existing order (if required) with no DNS plugin:
+Get-PAOrder | Submit-Renewal -NoSkipManualDns
+# Renew a certificate for an existing order regardless of expiry with no DNS plugin:
+Get-PAOrder | Submit-Renewal -NoSkipManualDns -Force
+# Renew all certificates for all orders (if required) with no DNS plugin:
+Submit-Renewal -AllOrders
+```
+```powershell
+# Review https://poshac.me/docs/v4/Functions/Revoke-PACertificate/#-reason for revocation reasons.
+# Revoke certificate(s) for an existing order:
+Get-PAOrder -Name <'name'> | Revoke-PACertificate -Reason <RevocationReasons>
+# Revoke a certificate by cert file:
+Revoke-PACertificate -CertFile <'path\cert.cer'> -Reason <RevocationReasons>
+```
+```powershell
+# Create a new order with a single domain:
+New-PAOrder -Domain <'domain'>
+# Create a new order with multiple domains.
+# The first domain in the -Domain list will be the name in the X509 subject field:
+New-PAOrder -Domain <'domain1','domain2'>
+# Create a new order with a custom name:
+New-PAOrder -Name <'name'> -Domain <'domain'>
+# Create a new order with a custom name from an existing CSR:
+New-PAOrder -Name <'name'> -CSRPath <'path\csr.csr'>
+# Create a new order with a custom name and a specific certificate validity:
+New-PAOrder -Name <'name'> -Domain <'domain'> -LifetimeDays <days>
+# Create a new order with a custom name where all certificates will install to local machine personal store (requires elevation):
+New-PAOrder -Name <'name'> -Domain <'domain'> -Install
+# Create a new order with a custom name and change the archive encryption password:
+New-PAOrder -Name <'name'> -Domain <'domain'> -PfxPass <password>
+```
+```powershell
+# Get authorisation status of an order, its domains and verification methods:
+Get-PAOrder -Name <'name'> | Get-PAAuthorization
+# Get HTTP-01 token name for an order:
+Get-PAOrder | Get-PAAuthorization | Select-Object -Property HTTP01Token
+# Get HTTP-01 token value for an order:
+Get-KeyAuthorization -Token (Get-PAOrder -Name <'name'> | Get-PAAuthorization).HTTP01Token
+# Get DNS-01 authorisation value (RDATA) for an order:
+Get-KeyAuthorization -Token (Get-PAOrder -Name <'name'> | Get-PAAuthorization).DNS01Token -ForDNS
+```
+```powershell
+# Revoke ACME-cached authorisations for an order. This will require re-authorisation for these domains:
+Get-PAorder -Name <'name'> | Revoke-PAAuthorization -Force
+```
+```powershell
+# Request the ACME server verify the authorisation methods setup for an order using HTTP-01:
+Send-ChallengeAck -ChallengeUrl (Get-PAOrder -Name <'name'> | Get-PAAuthorization).HTTP01Url
+# Request the ACME server verify the authorisation methods setup for an order using DNS-01:
+Send-ChallengeAck -ChallengeUrl (Get-PAOrder -Name <'name'> | Get-PAAuthorization).DNS01Url
+```
+```powershell
+# Refresh the status of all orders:
+Get-PAOrder -Refresh
+# Refresh the status of a specific order:
+Get-PAOrder -Name <'name'> -Refresh
+```
+```powershell
+# Submit a verified order to the ACME server:
+Submit-OrderFinalize -Order (Get-PAOrder -Name <'name'>)
+```
+```powershell
+# Export certificate files to storage:
+Complete-PAOrder -Order (Get-PAOrder -Name <'name'>)
 ```
 
 ### SMTP:
@@ -3501,6 +3606,7 @@ Disconnect-MgGraph
 # Invoke API calls directly:
 Invoke-MgGraphRequest -Method <method> <URI>
 ```
+
 #### Microsoft Entra ID:
 
 ```powershell

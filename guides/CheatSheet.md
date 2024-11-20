@@ -2747,12 +2747,31 @@ New-PAAccount -Contact <smtp>
 New-PAOrder -Domain <domain> 
 ```
 ```powershell
+# Remove an order:
+Remove-PAOrder -Name <'name'>
+```
+```powershell
 # These commands automatically manage associated orders and handle the validation process if required.
 # Generate a new certificate with a single domain:
 New-PACertificate -Domain <'domain'> -Contact <'smtp'>
 # Generate a new certificate with multiple domains.
 # The first domain in the -Domain list will be the name in the X509 subject field:
 New-PACertificate -Domain <'domain1','domain2'> -Contact <'smtp'>
+```
+```powershell
+# Renew a certificate for an existing order (if required) with no DNS plugin:
+Get-PAOrder | Submit-Renewal -NoSkipManualDns
+# Renew a certificate for an existing order regardless of expiry with no DNS plugin:
+Get-PAOrder | Submit-Renewal -NoSkipManualDns -Force
+# Renew all certificates for all orders (if required) with no DNS plugin:
+Submit-Renewal -AllOrders
+```
+```powershell
+# Review https://poshac.me/docs/v4/Functions/Revoke-PACertificate/#-reason for revocation reasons.
+# Revoke certificate(s) for an existing order:
+Get-PAOrder -Name <'name'> | Revoke-PACertificate -Reason <RevocationReasons>
+# Revoke a certificate by cert file:
+Revoke-PACertificate -CertFile <'path\cert.cer'> -Reason <RevocationReasons>
 ```
 ```powershell
 # Create a new order with a single domain:

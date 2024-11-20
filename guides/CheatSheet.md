@@ -2787,6 +2787,20 @@ Send-ChallengeAck -ChallengeUrl (Get-PAOrder -Name <'name'> | Get-PAAuthorizatio
 # Request the ACME server verify the authorisation methods setup for an order using DNS-01:
 Send-ChallengeAck -ChallengeUrl (Get-PAOrder -Name <'name'> | Get-PAAuthorization).DNS01Url
 ```
+```powershell
+# Refresh the status of all orders:
+Get-PAOrder -Refresh
+# Refresh the status of a specific order:
+Get-PAOrder -Name <'name'> -Refresh
+```
+```powershell
+# Submit a verified order to the ACME server:
+Submit-OrderFinalize -Order (Get-PAOrder -Name <'name'>)
+```
+```powershell
+# Export certificate files to storage:
+Complete-PAOrder -Order (Get-PAOrder -Name <'name'>)
+```
 
 ### SMTP:
 

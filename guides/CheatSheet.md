@@ -3457,6 +3457,8 @@ docker run --hostname <hostname> <image>
 docker run --dns <ip.addr> <image>
 # Run a container based on an image with a specific DNS search list:
 docker run --dns-search <domain> <image>
+# Run a container based on an image with and set an environment variable:
+docker run --env <variable=value> <image>
 # Show all published ports of a running container:
 docker port <containerID | name>
 # Attach to a running container:

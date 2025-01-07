@@ -1435,6 +1435,41 @@ wuauclt /DetectNow /ReportNow
 REM Install the 
 ```
 
+### Fonts:
+
+#### Fontconfig:
+
+> **Note**: Manual local user fonts are stored in `~/.local/share/fonts` and manaual system fonts are stored in `/usr/local/share/fonts`. Package fonts are stored in `/usr/share/fonts`.
+
+```bash
+# Use --verbose to show more information.
+# List available fonts:
+fc-list
+# List available fonts supporting a specific style, such as Bold or Regular:
+fc-list :style=<style>
+# List available fonts supporting a specific language:
+fc-list :lang=<lang>
+# List available fonts supporting a specific fontformat:
+fc-list :fontformat=<fontformat>
+```
+```bash
+# Use --verbose to show more information.
+# Rescan font directories:
+fc-cache
+# Rescan only system font directories:
+fc-cache --system-only
+# Rescan font directories and force update timestamps:
+fc-cache --force
+# Erase cache and rescan font directories:
+fc-cache --really-force
+```
+```bash
+# Scan a font file for information:
+fc-scan <filename>
+# Scan a directory containing font files for information:
+fc-scan <directory>
+```
+
 ## <ins>Roles:</ins>
 
 ### ADDS:
@@ -2046,7 +2081,9 @@ dig AXFR <zonename> <NS>
 dig +trace <QNAME>
 ```
 
-### Certificates, OpenSSL/GPG and CryptoAPI:
+### Certificates, Key-based Authentication, and Encryption:
+
+#### OpenSSL:
 
 ```bash
 # Creating and converting with OpenSSL
@@ -2239,20 +2276,6 @@ openssl pkeyutl -decrypt -in ciphertext.bin -inkey private-b.key -out received-m
 openssl dgst -sha1 -verify public-a.key -signature signiture.bin received-message.txt
 ```
 ```bash
-# Password encrypt a file for sharing between user A => user B with GPG using symmetrical encryption only. 
-# Enter passphrase when prompted:
-gpg --symmetric --output <file.gpg> <file_to_encrypt> 
-# User B can now decrypt the file using the passphrase
-# Enter passphrase when prompted:
-gpg --output <output_file> --decrypt <file_to_decrpy.gpg>
-# Password encrypt a file for sharing between user A => user B with GPG using symmetrical encryption only but using AES256.
-# Enter passphrase when prompted:
-gpg --symmetric --cipher-algo AES256 --output <file.gpg> <file_to_encrypt>
-# User B can now decrypt the file using the passphrase
-# Enter passphrase when prompted:
-gpg --output <output_file> --decrypt <file_to_decrpy.gpg>
-```
-```bash
 # Load a SSL/TLS server for debugging:
 openssl s_server -port 443 -cert certificate.pem -key private.key -status 
 # Support HTTP by adding -www to return a / on HTTP GET:
@@ -2378,7 +2401,158 @@ certreq -submit -config <"CA"> -attrib "CertificateTemplate:<Template-Name>" <Re
 REM If the certificate requires approval, approve the request in ADCS:
 ```
 
-#### Key-based Authentication:
+#### OpenPGP/GnuPG:
+
+> **Note:** All gpg commands are based on gpg 2.4.x.
+
+```bash
+# List all keys in the public keyring:
+gpg --list-keys
+# List all keys based on a specific user ID in the public keyring:
+gpg --list-keys <USER-ID>
+# List all keys from the secret keyring:
+gpg --list-secret-keys
+# Show the fingerprint of a key:
+gpg --fingerprint <USER-ID>
+```
+```bash
+# Generate a new key pair.
+# Follow the interactive guide:
+gpg --generate-key
+# Generate a new key pair with a specific key type and validity.
+# Follow the interactive guide:
+gpg --full-generate-key
+# Generate a new key pair with only the USER-ID field.
+# Follow the interactive guide:
+gpg --quick-generate-key <USER-ID>
+```
+```bash
+# Generate a revocation certificate so that it can be used to revoke a key.
+# Follow the interactive guide:
+gpg --output <file.asc> --gen-revoke <USER-ID | fingerprint> 
+```
+```bash
+# Remove a secret key from the secret keyring:
+gpg --delete-secret-keys <USER-ID | fingerprint>
+# Remove a public key from the public keyring:
+gpg --delete-keys <USER-ID | fingerprint>
+# Remove both the secret and public key from the keyrings:
+gpg --delete-secret-and-public-key <USER-ID | fingerprint>
+```
+```bash
+# Export a public key from the public keyring to stdout:
+gpg --export <USER-ID | fingerprint>
+# Export a public key from the public keyring to stdout as Base64:
+gpg --export --armor <USER-ID | fingerprint>
+# Export a public key from the public keyring to a file as Base64:
+gpg --export --output <file> --armour <USER-ID | fingerprint>
+# Export a secret key from the secret keyring to stdout:
+gpg --export-secret-keys <USER-ID | fingerprint>
+# Export a secret key from the secret keyring to stdout as Base64:
+gpg --export-secret-keys --armor <USER-ID | fingerprint>
+# Export a secret key from the secret keyring to a file as Base64:
+gpg --export-secret-keys --output <file> --armour <USER-ID | fingerprint>
+```
+```bash
+# Import a key(s) into the keyrings:
+gpg --import <file>
+# Perform a dry run import of a key(s) into the keyrings:
+gpg --import --import-options show-only <file>
+# Import a key(s) into the keyrings and update existing keys only, no new keys will be imported:
+gpg --import --import-options merge-only <file>
+```
+```bash
+# Edit a key.
+# Follow the interactive guide and use ? or help to provide subcommands:
+gpg --edit-key <USER-ID | fingerprint>
+# Add additional USER-ID:
+adduid
+save
+# Delete a USER-ID:
+uid <#>
+deluid
+save
+# Change expiration date.
+# Follow the interactive guide:
+expire
+save
+# Sign a key that has been imported.
+# Follow the interactive guide:
+sign
+save
+```
+```bash
+# Encryption.
+# Use --version to show supported ciphers.
+# Symmetrically encrypt a file with a passphrase using AES256.
+# Enter passphrase when prompted:
+gpg --symmetric --output <cypher_file> <file_to_encrypt>
+# Symmetrically encrypt a file with a passphrase using AES256 where cipher spec is Base64):
+# Enter passphrase when prompted:
+gpg --symmetric --armor --output <cypher_file> <file_to_encrypt>
+# Symmetrically encrypt a file with a passphrase using AES128.
+# Enter passphrase when prompted:
+gpg --symmetric --cipher-algo AES128 --output <cypher_file> <file_to_encrypt>
+# Symmetrically encrypt a file with a passphrase using CAMELLIA256.
+# Enter passphrase when prompted:
+gpg --symmetric --cipher-algo CAMELLIA256 --output <cypher_file> <file_to_encrypt>
+# Encrypt a message from stdin using AES256 to a file with the default secret key and associated with a specific public key(s).
+# Use Ctrl+D to end input:
+gpg --encrypt --output <cypher_file> --recipient <USER-ID | fingerprint>
+# Encrypt a file using AES256 with the default secret key and associated with a specific public key(s):
+gpg --encrypt --output <cypher_file> --recipient <USER-ID | fingerprint> <file_to_encrypt>
+# Encrypt a file using AES128 with the default secret key and associated with a specific public key(s):
+gpg --encrypt --cipher-algo AES128 --output <cypher_file> --recipient <USER-ID | fingerprint> <file_to_encrypt>
+```
+```bash
+# Signing.
+# Sign an existing public key in the public keyring with the default private key:
+gpg --sign-key <USER-ID | fingerprint>
+# Sign an existing public key in the public keyring with a specific private key:
+gpg --sign-key <USER-ID | fingerprint> --default-key <USER-ID | fingerprint>
+# Locally sign an existing public key in the public keyring with the default private key:
+gpg --lsign-key <USER-ID | fingerprint>
+# Sign and compress a file with a private key and export to a binary signature file.
+# Enter passphrase if prompted:
+gpg --output <signed_file> --sign <file_to_sign>
+# Clearsign a file with a private key and export to file.
+# Enter passphrase if prompted:
+gpg --output <signed_file> --clearsign <file_to_sign>
+# Sign a file with a private key and export to a detached signature file.
+# Enter passphrase if prompted:
+gpg --output <signed_file> --detach-sign <file_to_sign>
+# Verify a signed signature file:
+gpg --verify <signed_file>
+# Verify a signed signature file and its corresponding detached signature file:
+gpg --verify <signed_file> <detached_signature_file>
+```
+```bash
+# Decryption.
+# Use --version to show supported ciphers.
+# Decrypt a symmetrically encrypted file to stdout:
+gpg --decrypt <cypher_file>
+# Decrypt a symmetrically encrypted file to a file:
+gpg --output <filename> --decrypt <cypher_file>
+# Decrypt a file using the public key associated with the encrypted file to stdout:
+gpg --decrypt <cypher_file>
+# Decrypt a signed signature file and output original to a file:
+gpg --output <filename> --decrypt <signed_file>
+# Decrypt a file using the public key associated with the encrypted file:
+gpg --output <filename> --decrypt <cypher_file>
+```
+```bash
+# Working with Web Key Directorys (WKD).
+# Query a WKD server for Web Key Service (WKS) support:
+gpg-wks-client --verbose --supported <domain>
+# Check if a public key exists for an email address:
+gpg-wks-client --verbose --check <email>
+# Find USER-ID and corresponding mailboxes for an email address:
+gpg-wks-client --print-wkd-hash <email>
+# Show the URIs used to fetch the public key for an email address:
+gpg-wks-client --print-wkd-url <email>
+```
+
+#### OpenSSH:
 
 ```bash
 # Creating and managing OpenSSH keys with ssh-keygen.
@@ -2465,9 +2639,11 @@ ssh-add -d </path/.ssh/privatekey_file>
 ssh-add -D
 ```
 
-#### Let's Encrypt:
+#### ACME:
 
 ##### Certbot:
+
+> **Note** Defaults to Let's Encrypt.
 
 ```bash
 # Show ACME account:
@@ -2546,6 +2722,109 @@ certbot revoke --cert-name <Certificate Name> --delete-after-revoke
 ```bash
 # Delete a certificate managed by certbot (usually for expired certificates only):
 certbot delete --cert-name <Certificate Name>
+```
+
+##### Posh-ACME:
+
+```powershell
+# Set the ACME environement to either staging or production (see https://poshac.me/docs/latest/Tutorial/#picking-a-server for list of shortcuts):
+Set-PAServer <'name'>
+```
+```powershell
+# Show ACME account:
+Get-PAAccount
+```
+```powershell
+# Update the e-mail address on an ACME account:
+Set-PAAccount -ID <'ID'> -Contact <'smtp'>
+# or if only one account is registered:
+Set-PAAccount -Contact <'smtp'>
+```
+```powershell
+# Create a new LE account:
+New-PAAccount -Contact <smtp>
+```
+```powershell
+# Generate a new order:
+New-PAOrder -Domain <domain> 
+```
+```powershell
+# Remove an order:
+Remove-PAOrder -Name <'name'>
+```
+```powershell
+# These commands automatically manage associated orders and handle the validation process if required.
+# Generate a new certificate with a single domain:
+New-PACertificate -Domain <'domain'> -Contact <'smtp'>
+# Generate a new certificate with multiple domains.
+# The first domain in the -Domain list will be the name in the X509 subject field:
+New-PACertificate -Domain <'domain1','domain2'> -Contact <'smtp'>
+```
+```powershell
+# Renew a certificate for an existing order (if required) with no DNS plugin:
+Get-PAOrder | Submit-Renewal -NoSkipManualDns
+# Renew a certificate for an existing order regardless of expiry with no DNS plugin:
+Get-PAOrder | Submit-Renewal -NoSkipManualDns -Force
+# Renew all certificates for all orders (if required) with no DNS plugin:
+Submit-Renewal -AllOrders
+```
+```powershell
+# Review https://poshac.me/docs/v4/Functions/Revoke-PACertificate/#-reason for revocation reasons.
+# Revoke certificate(s) for an existing order:
+Get-PAOrder -Name <'name'> | Revoke-PACertificate -Reason <RevocationReasons>
+# Revoke a certificate by cert file:
+Revoke-PACertificate -CertFile <'path\cert.cer'> -Reason <RevocationReasons>
+```
+```powershell
+# Create a new order with a single domain:
+New-PAOrder -Domain <'domain'>
+# Create a new order with multiple domains.
+# The first domain in the -Domain list will be the name in the X509 subject field:
+New-PAOrder -Domain <'domain1','domain2'>
+# Create a new order with a custom name:
+New-PAOrder -Name <'name'> -Domain <'domain'>
+# Create a new order with a custom name from an existing CSR:
+New-PAOrder -Name <'name'> -CSRPath <'path\csr.csr'>
+# Create a new order with a custom name and a specific certificate validity:
+New-PAOrder -Name <'name'> -Domain <'domain'> -LifetimeDays <days>
+# Create a new order with a custom name where all certificates will install to local machine personal store (requires elevation):
+New-PAOrder -Name <'name'> -Domain <'domain'> -Install
+# Create a new order with a custom name and change the archive encryption password:
+New-PAOrder -Name <'name'> -Domain <'domain'> -PfxPass <password>
+```
+```powershell
+# Get authorisation status of an order, its domains and verification methods:
+Get-PAOrder -Name <'name'> | Get-PAAuthorization
+# Get HTTP-01 token name for an order:
+Get-PAOrder | Get-PAAuthorization | Select-Object -Property HTTP01Token
+# Get HTTP-01 token value for an order:
+Get-KeyAuthorization -Token (Get-PAOrder -Name <'name'> | Get-PAAuthorization).HTTP01Token
+# Get DNS-01 authorisation value (RDATA) for an order:
+Get-KeyAuthorization -Token (Get-PAOrder -Name <'name'> | Get-PAAuthorization).DNS01Token -ForDNS
+```
+```powershell
+# Revoke ACME-cached authorisations for an order. This will require re-authorisation for these domains:
+Get-PAorder -Name <'name'> | Revoke-PAAuthorization -Force
+```
+```powershell
+# Request the ACME server verify the authorisation methods setup for an order using HTTP-01:
+Send-ChallengeAck -ChallengeUrl (Get-PAOrder -Name <'name'> | Get-PAAuthorization).HTTP01Url
+# Request the ACME server verify the authorisation methods setup for an order using DNS-01:
+Send-ChallengeAck -ChallengeUrl (Get-PAOrder -Name <'name'> | Get-PAAuthorization).DNS01Url
+```
+```powershell
+# Refresh the status of all orders:
+Get-PAOrder -Refresh
+# Refresh the status of a specific order:
+Get-PAOrder -Name <'name'> -Refresh
+```
+```powershell
+# Submit a verified order to the ACME server:
+Submit-OrderFinalize -Order (Get-PAOrder -Name <'name'>)
+```
+```powershell
+# Export certificate files to storage:
+Complete-PAOrder -Order (Get-PAOrder -Name <'name'>)
 ```
 
 ### SMTP:
@@ -2806,14 +3085,22 @@ git remote add <name> <URI>
 git remote show <name>
 # Change the custom name of a remote:
 git remote rename <name> <new_name>
+# Remove a stale remote:
+git remote prune <name>
 # Remove a remote:
 git remote remove <name>
 # Fetch all updates from the origin:
 get fetch
 # Fetch updates from a specific remote:
 git fetch <name>
-# Push all commits to origin from the main branch:
-git push origin <master | main>
+# Fetch updates from all remotes:
+git fetch --all
+# Push all commits to a remote from the current branch:
+git push <remote> HEAD
+# Push all commits to a remote from a specific branch:
+git push <remote> <branch>
+# Push all commits to a remote from a specific local branch but with a different name:
+git push <remote> <local_branch>:<remote_branch>
 ```
 ```bash
 # Working with files and stages in Git.
@@ -2899,6 +3186,8 @@ git branch -a
 git branch -v
 # List both remote-tracking and local branches with their last commit message:
 git branch -av
+# List both remote-tracking and local branches with their last commit message as well as the upstream branch:
+git branch -avv
 # List branches that havn't yet been merged with HEAD:
 git branch --no-merged
 # List branches that have been merged with HEAD:
@@ -2911,6 +3200,12 @@ git branch --no-merged <branch>
 git branch <name>
 # Create a new local branch and switch to it:
 git checkout -b <name>
+# If remote tracking branch is available then create a local branch and switch to it:
+git checkout <branch>
+# Create a new local branch from a remote tracking branch and switch to it:
+git checkout -b <localbranch> <remote/branch>
+# Set the upstream branch for the current branch:
+git branch --set-upstream-to <remote/branch>
 # Rename a local branch (use -m for short):
 git branch --move <oldname> <newname>
 # Rename a local branch (use -m for short) and push to remote:
@@ -2929,8 +3224,17 @@ git branch -dr <remote/branch>
 ```
 ```bash
 # Merging with Git.
+# Merge changes between branches:
+git merge <src_branch> <branch>
 # Merge changes into the current branch (HEAD):
 git merge <branch>
+# Merge changes into the current branch (HEAD) via a single commit (no preservation of history):
+git merge --squash <branch>
+git commit
+# Merge changes into the current branch (HEAD) and force a merge commit:
+git merge --no-ff <branch>
+# Merge changes into the current branch (HEAD) from a remote tracking branch:
+git merge <remote/branch>
 # Perform a dry-run merge where a merge is completed but not committed (does not apply to fast-forward merges):
 git merge --no-commit <branch>
 # Perform a dry-run merge where a merge is completed but not committed (forces no fast-forward merges):
@@ -2990,6 +3294,12 @@ git difftool --tool=<toolname>
 ### 🐳 Docker: 
 
 ```bash
+# Show Docker version information:
+docker version
+# Show Docker system information:
+docker info
+```
+```bash
 # Working with Docker registries.
 # Login to a container registry, default being Docker Hub.
 # Using default credsStore:
@@ -3016,8 +3326,8 @@ docker search <string> --filter stars=<#>
 docker search <string> --filter is-official=true
 ```
 ```bash
-# Download Docker images.
-## All image locations are from Docker Hub.
+# Download / upload Docker images.
+# All image locations are from Docker Hub by default.
 # Download a Docker image by name (defaults to latest):
 docker pull <name>
 # Download a Docker image by name and tag:
@@ -3028,6 +3338,8 @@ docker pull <name@sha256:digest>
 docker pull <FQDN:port/name>
 # Pull all Docker images:
 docker pull <name> --all-tags
+# Push a Docker image to a registry repository:
+docker push <name>
 ```
 ```bash
 # Managing Docker images.
@@ -3066,6 +3378,35 @@ docker ps --all --size
 docker rm <name>
 # Stop a container:
 docker stop <containerID | name>
+# Copy files and directories between containers.
+# Copy files and directories from local host to a container:
+docker cp <src_path> <containerID | name:dst_path>
+# Copy files and directories from a container to local host:
+docker cp <containerID | name:src_path> <dst_path>
+```
+```bash
+# Building Docker containers.
+# Create a number of base starter files to assist with building a container, optionally select a project type for those starter files.
+# Follow the interactive guide:
+docker init 
+# Create a new container from a Dockerfile (path must contain a Dockerfile):
+docker build <path>
+# Create a new container from a Dockerfile (path must contain a Dockerfile) with a tag:
+docker build --tag <name> <path>
+# Create a new image from a container's changes:
+docker commit <containerID | name> <name>
+# Create a new image from a container's changes with a message/comment:
+docker commit --message <containerID | name> <name>
+# Create a new image from a container's changes and apply Dockerfile instruction to the created image:
+docker commit --change <instruction> <containerID | name> <name>
+# Show history changes of an image:
+docker history <containerID | name>
+```
+```bash
+# Tag an existing Docker container:
+docker tag <containerID | name> <name:tag>
+# Or 
+docker tag <containerID | name> <tag>
 ```
 ```bash
 # Running Docker containers.
@@ -3197,6 +3538,10 @@ terraform apply -auto-approve
 terraform apply -var <"variable=value">
 ```
 ```bash
+# Import an existing resource into the state file:
+terraform import <provider/resource> <ID>
+```
+```bash
 # Show terraform destroy changes:
 terraform plan -destroy
 # Destroy nfrastructure based on the repository changes (if any):
@@ -3261,6 +3606,7 @@ Disconnect-MgGraph
 # Invoke API calls directly:
 Invoke-MgGraphRequest -Method <method> <URI>
 ```
+
 #### Microsoft Entra ID:
 
 ```powershell

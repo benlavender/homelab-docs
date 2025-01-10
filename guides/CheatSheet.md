@@ -1580,6 +1580,51 @@ REM Add a CNAME record as test to test.com:
 dnscmd /RecordAdd <zonename> test CNAME test.com
 ```
 
+#### resolvconf:
+
+> **Note:** Requires systemd-resolved.
+
+```bash
+# Show detailed server information:
+resolvectl show-server-state <domain>
+```
+```bash
+# Show current DNS settings for all interfaces:
+resolvectl status
+# Show DNS settings for a specific interface:
+resolvectl dns <interface>
+```
+```bash
+# Set DNS servers for a specific interface:
+resolvectl dns <interface> <dns1> | <dns2>
+```
+```bash
+# Show DNS search listsfor a specific interface:
+resolvectl domain <interface>
+```
+```bash
+# Set DNS search domains for a specific interface:
+resolvectl domain <interface> <domain1> | <domain2>
+```
+```bash
+# Reset DNS settings for a specific interface:
+resolvectl revert <interface>
+```
+```bash
+# Show active local DNS queries and their responses:
+resolvectl monitor
+```
+```bash
+# Resolve an A and or AAAA record:
+resolvectl query <domain>
+# Resolve a specific RRType:
+resolvectl query --type=<RRType> <domain>
+```
+```bash
+# Show the stub resolver cache:
+resolvectl show-cache
+```
+
 ### Storage Replica:
 
 ```powershell

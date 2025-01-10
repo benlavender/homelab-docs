@@ -6,7 +6,123 @@
 
 ## Configuration:
 
-The primary configuration file for `systemd-resolved` is `/etc/systemd/resolved.conf` (see `resolved.conf`(5)). If using `systemd-networkd` for network configuration then any `.network` files will be read from `/etc/systemd/network`. Any dynamic link configurations from DHCP are also read or information provided by `resolvectl`(1) as well as the current state of `/etc/resolv.conf`.
+The primary configuration file for `systemd-resolved` is `/etc/systemd/resolved.conf` (see `resolved.conf`(5) for more locations). If using `systemd-networkd` for network configuration then any `.network` files will be read from `/etc/systemd/network`. Any dynamic link configurations from DHCP are also read or information provided by `resolvectl`(1) as well as the current state of `/etc/resolv.conf`.
+
+For system administrators the `/etc/systemd/resolved.conf` is to be used, for programmes they need to use drop-in files at the `/usr` directories documented via `resolved.conf`(5).
+
+> **Note:** To disable a config file use a symlink to `/dev/null`.
+
+### Override examples:
+
+#### Servers:
+
+```plaintext
+[Resolve]
+DNS=10.0.0.1 10.0.0.2 10.0.0.3:5053 2620:fe::9
+```
+
+#### Fallback servers:
+
+```plaintext
+[Resolve]
+FallbackDNS=1.1.1.1 2620:fe::9
+```
+
+#### Search lists:
+
+> **Note:** Search lists are ordered.
+
+```plaintext
+[Resolve]
+Domains=example.com example.org 
+```
+
+#### DNS-over-TLS:
+
+> **Note:** Server must support DoT and using the `address#server_name` format
+
+```plaintext
+[Resolve]
+DNSOverTLS=yes
+```
+
+#### DNS-over-TLS downgrade:
+
+> **Note:** Server must be using the `address#server_name` format
+
+```plaintext
+[Resolve]
+DNSOverTLS=opportunistic
+```
+
+#### Disable LLMNR:
+
+```plaintext
+[Resolve]
+LLMNR=no
+```
+
+#### LLMNR resolve only:
+
+```plaintext
+[Resolve]
+LLMNR=resolve
+```
+
+#### Disable MDNS:
+
+```plaintext
+[Resolve]
+MulticastDNS=no
+```
+
+#### MDNS resolve only:
+
+```plaintext
+[Resolve]
+MulticastDNS=resolve
+```
+
+#### Disable DNSSEC validation:
+
+```plaintext
+[Resolve]
+DNSSEC=no
+```
+
+#### Force DNSSEC validation:
+
+> **Note:** No validation done on LLMNR or MDNS.<br>
+> **Note:** DNS server must support DNSSEC or queries will fail.
+
+```plaintext
+[Resolve]
+DNSSEC=true
+```
+
+#### DNSSEC downgrade:
+
+> **Note:** No validation done on LLMNR or MDNS.<br>
+> **Note:** Validation is opportunistic depending on the server.
+
+```plaintext
+[Resolve]
+DNSSEC=allow-downgrade
+```
+
+#### Disable the cache:
+
+```plaintext
+[Resolve]
+Cache=yes
+```
+
+#### Disable negative caching:
+
+```plaintext
+[Resolve]
+Cache=no-negative
+```
 
 ## Hanlding /etc/resolv.conf:
 

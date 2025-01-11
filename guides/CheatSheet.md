@@ -556,6 +556,10 @@ pacman -Sc
 paccache -rk0
 ```
 ```bash
+# Install a package from a local file:
+pacman -U </path/to/package.pkg.tar.zst>
+```
+```bash
 # Remove all cached packages older than -3x versions earlier (use the -u switch to target only uninstalled packages):
 paccache -r
 ```

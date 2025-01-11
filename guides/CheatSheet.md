@@ -484,79 +484,9 @@ dpkg -i package.deb
 # Show reverse dependency information for a package:
 apt-cache rdepends <package>
 ```
-```bash
-# Pacman refresh and update packages
-pacman -Syu --noconfirm
-```
-```bash
-# Install package
-pacman -S <packagename>
-```
-```bash
-# Print the download targets only insteading of downloading and installing:
-pacman -S --print <package>
-```
-```bash
-# Query packages:
-pacman -Ss <packagename>
-```
-```bash
-# View package group members:
-pacman -Sg <package>
-```
-```bash
-# Query package information:
-pacman -Si <package>
-```
-```bash
-# Remove any non-installed cached packages from /var/cache/pacman/pkg:
-# Use -Scc to clear all regardless
-pacman -Sc
-# or (use the -u switch to target only uninstalled packages):
-paccache -rk0
-```
-```bash
-# Remove all cached packages older than -3x versions earlier (use the -u switch to target only uninstalled packages):
-paccache -r
-```
-```bash
-# Remove -1x versions earlier (use the -u switch to target only uninstalled packages):
-paccache -rk1
-```
-```bash
-# Query installed packages:
-pacman -Q <packagename>
-```
-```bash
-# Query installed package with info:
-pacman -Qi <packagename>
-```
-```bash
-# Query list of files installed within a package:
-pacman -Ql <packagename>
-```
-```bash
-# List all files that are part of a remote package (add -y to update the databases):
-pacman -Fl <packagename>
-```
-```bash
-# List which remote package this file belongs to (add -y to update the databases):
-pacman -F <filename or /path/to/file>
-````
-```bash
-# Query orphaned packages that no longer are depends:
-pacman -Qtd
-# To remove them:
-pacman -Rns $(pacman -Qtdq)
-```
-```bash
-# Remove an installed package, use -Rs to remove depends:
-pacman -R <packagename> 
-```
-```bash
-# Pacman info and operation verbosity, add --debug to any operation:
-pacman --verbose
-```
+
+#### Winget:
+
 ```bat
 REM List Windows Package Manager info:
 winget --info
@@ -586,6 +516,75 @@ winget source list
 ```bat
 REM Update all configured sources:
 winget source update
+```
+
+#### Pacman / Arch Linux:
+
+```bash
+# Syncing packages from remote repositories.
+# Pacman refresh and update packages:
+pacman -Syu --noconfirm
+# Install package:
+pacman -S <packagename>
+# Print the download targets only instead of downloading and installing:
+pacman -S --print <package>
+# Download a package but do not install:
+pacman -Sw <package>
+# Query packages:
+pacman -Ss <packagename>
+# View package group members:
+pacman -Sg <package>
+# Query package information:
+pacman -Si <package>
+```
+```bash
+# Remove any non-installed cached packages from /var/cache/pacman/pkg:
+# Use -Scc to clear all regardless
+pacman -Sc
+# or (use the -u switch to target only uninstalled packages):
+paccache -rk0
+```
+```bash
+# Upgrading and adding packages locally or from a remote source.
+# Install a package from a local file:
+pacman -U </path/to/package.pkg.tar.zst>
+# Install a package from a URI:
+pacman -U <URI>
+```
+```bash
+# Removing packages.
+# Remove an installed package, use -Rs to remove depends:
+pacman -R <packagename> 
+# Remove all cached packages older than -3x versions earlier (use the -u switch to target only uninstalled packages):
+paccache -r
+# Remove -1x versions earlier (use the -u switch to target only uninstalled packages):
+paccache -rk1
+```
+```bash
+# Querying the local package database and files.
+# Query installed packages:
+pacman -Q <packagename>
+# Query installed package with info:
+pacman -Qi <packagename>
+# Query list of files installed within a package:
+pacman -Ql <packagename>
+```
+```bash
+# Query files in the synced database.
+# List all files that are part of a remote package (add -y to update the databases):
+pacman -Fl <packagename>
+# List which remote package this file belongs to (add -y to update the databases):
+pacman -F <filename or /path/to/file>
+````
+```bash
+# Query orphaned packages that no longer are depends:
+pacman -Qtd
+# To remove them:
+pacman -Rns $(pacman -Qtdq)
+```
+```bash
+# Pacman info and operation verbosity, add --debug to any operation:
+pacman --verbose
 ```
 
 ### WinEvents:

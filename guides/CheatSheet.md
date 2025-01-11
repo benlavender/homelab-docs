@@ -484,6 +484,42 @@ dpkg -i package.deb
 # Show reverse dependency information for a package:
 apt-cache rdepends <package>
 ```
+
+#### Winget:
+
+```bat
+REM List Windows Package Manager info:
+winget --info
+```
+```bat
+REM List packages managed by WPM:
+winget list
+```
+```bat
+REM List all packages available to install with WPM:
+winget search
+REM append package name for search:
+winget search <package>
+```
+```bat
+REM Search for a package in a specific source, such as winget:
+winget search --source <winget> <packagename>
+```
+```bat
+REM show package info (Use --id for specific package):
+winget show <package>
+```
+```bat
+REM List all configured package sources:
+winget source list
+```
+```bat
+REM Update all configured sources:
+winget source update
+```
+
+#### Pacman / Arch Linux:
+
 ```bash
 # Pacman refresh and update packages
 pacman -Syu --noconfirm
@@ -493,8 +529,12 @@ pacman -Syu --noconfirm
 pacman -S <packagename>
 ```
 ```bash
-# Print the download targets only insteading of downloading and installing:
+# Print the download targets only instead of downloading and installing:
 pacman -S --print <package>
+```
+```bash
+# Download a package but do not install:
+pacman -Sw <package>
 ```
 ```bash
 # Query packages:
@@ -556,36 +596,6 @@ pacman -R <packagename>
 ```bash
 # Pacman info and operation verbosity, add --debug to any operation:
 pacman --verbose
-```
-```bat
-REM List Windows Package Manager info:
-winget --info
-```
-```bat
-REM List packages managed by WPM:
-winget list
-```
-```bat
-REM List all packages available to install with WPM:
-winget search
-REM append package name for search:
-winget search <package>
-```
-```bat
-REM Search for a package in a specific source, such as winget:
-winget search --source <winget> <packagename>
-```
-```bat
-REM show package info (Use --id for specific package):
-winget show <package>
-```
-```bat
-REM List all configured package sources:
-winget source list
-```
-```bat
-REM Update all configured sources:
-winget source update
 ```
 
 ### WinEvents:

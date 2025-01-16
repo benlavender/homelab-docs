@@ -539,7 +539,7 @@ pacman -Si <package>
 ```
 ```bash
 # Remove any non-installed cached packages from /var/cache/pacman/pkg:
-# Use -Scc to clear all regardless
+# Use -Scc to clear all regardless1
 pacman -Sc
 # or (use the -u switch to target only uninstalled packages):
 paccache -rk0
@@ -4029,6 +4029,8 @@ az network private-dns record-set txt delete --name @ --zone-name <fqdn> --resou
 ```
 
 #### Storage:
+
+> **Note:** --upload-size-bytes requires a value that is +512 bytes of a value divisible by 1024.
 
 ```bash
 # Create a disk for the purpose of uploading from an alternate source.

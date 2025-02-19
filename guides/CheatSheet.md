@@ -763,6 +763,28 @@ Get-ItemProperty -Path 'file/dir' | Format-List -Property *
 # List files created and modified today, in descending order by lastwritetime and include the name, lwt and size:
 Get-ChildItem -Path <dir> -Recurse | Where-Object {$_.LastWriteTime.date -eq (Get-Date).Date} | Sort-Object LastWriteTime -Descending | Select-Object -Property Name,LastWriteTime,Length | Format-Table -AutoSize
 ```
+```bash
+# Reading files with dd.
+# Read a file and output to stdout:
+dd if=<file>
+# Read a file and convert to all to uppercase:
+dd if=<file> conv=ucase
+# Read a file and convert to all to lowercase:
+dd if=<file> conv=lcase
+# Read a file but limit to specific block(s) of 512 bytes:
+dd if=<file> count=#
+```
+```bash
+# Copying files with dd.
+# Read a file and output to another file (can be used to copy a file):
+dd if=<file> of=<file>
+# Copy an entire partition to another partition (omit oflag=sync to disable synchronous writes):
+dd if=<dev> of=<dev> oflag=sync
+# Copy an entire disk to another disk (omit oflag=sync to disable synchronous writes):
+dd if=<dev> of=<dev> oflag=sync
+# Create an image file of an entire disk (omit oflag=sync to disable synchronous writes):
+dd if=<dev> of=<image.img> oflag=sync
+```
 ```bat
 REM Robocopy mirror sync:
 ROBOCOPY <src> <dst> /MIR /Z /W:5 /R:5

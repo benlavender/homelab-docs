@@ -790,6 +790,8 @@ dd if=<dev> of=<image.img>
 dd if=<image.iso> of=</dev>
 # Create an ISO image for a CD/DVD mount of either a file or device:
 dd if=<file | dev> of=<file | dev>
+# Copy either a file or device but do not stop on errors:
+dd if=<file | dev> of=<file | dev> conv=noerror
 # Copy either a file or device with syncronous writes (slower but safer for data integrity):
 dd if=<file | dev> of=<file | dev> oflag=sync
 # Copy either a file or device with direct I/O (bypass kernel read/write caches):
@@ -800,6 +802,9 @@ dd if=<file | dev> of=<file | dev> conv=notrunc
 dd if=<file | dev> of=<file | dev> conv=fdatasync
 # or with +metadata:
 dd if=<file | dev> of=<file | dev> conv=fsync
+# Copy either a file or device and change the input/output block size in bytes or k or M (default is 512).
+# 512 bytes is typical of spindle disks, 4k is typical of SSDs so the default is somewhat out of data. A typical value of 64k can be used:
+dd if=<file | dev> of=<file | dev> bs=<#>
 ```
 ```bash
 # Wiping block devices with dd.

@@ -763,6 +763,52 @@ Get-ItemProperty -Path 'file/dir' | Format-List -Property *
 # List files created and modified today, in descending order by lastwritetime and include the name, lwt and size:
 Get-ChildItem -Path <dir> -Recurse | Where-Object {$_.LastWriteTime.date -eq (Get-Date).Date} | Sort-Object LastWriteTime -Descending | Select-Object -Property Name,LastWriteTime,Length | Format-Table -AutoSize
 ```
+```bash
+# Reading files with dd.
+# Use status=progress to print progress.
+# Read a file and output to stdout:
+dd if=<file>
+# Read a file and convert to all to uppercase:
+dd if=<file> conv=ucase
+# Read a file and convert to all to lowercase:
+dd if=<file> conv=lcase
+# Read a file but limit to specific block(s) of 512 bytes:
+dd if=<file> count=#
+```
+```bash
+# Copying files with dd.
+# Use status=progress to print progress.
+# Read a file and output to another file (can be used to copy a file):
+dd if=<file> of=<file>
+# Copy an entire partition to another partition (ensure target parition is not mounted):
+dd if=<dev> of=<dev> 
+# Copy an entire disk to another disk:
+dd if=<dev> of=<dev> 
+# Create an image file of an entire disk:
+dd if=<dev> of=<image.img>
+# Create a bootable USB from an ISO image:
+dd if=<image.iso> of=</dev>
+# Create an ISO image for a CD/DVD mount of either a file or device:
+dd if=<file | dev> of=<file | dev>
+# Copy either a file or device with syncronous writes (slower but safer for data integrity):
+dd if=<file | dev> of=<file | dev> oflag=sync
+# Copy either a file or device with direct I/O (bypass kernel read/write caches):
+dd if=<file | dev> of=<file | dev> oflag=direct
+# Copy either a file or device with but do not overwrite any targets:
+dd if=<file | dev> of=<file | dev> conv=notrunc
+# Copy either a file or device with full data syncronization:
+dd if=<file | dev> of=<file | dev> conv=fdatasync
+# or with +metadata:
+dd if=<file | dev> of=<file | dev> conv=fsync
+```
+```bash
+# Wiping block devices with dd.
+# Use status=progress to print progress.
+# Wipe an entire device with dd:
+dd if=/dev/zero of=<dev>
+# Randomize an entire device (useful for security if ran before dd if=/dev/zero):
+dd if=/dev/urandom of=<dev>
+```
 ```bat
 REM Robocopy mirror sync:
 ROBOCOPY <src> <dst> /MIR /Z /W:5 /R:5

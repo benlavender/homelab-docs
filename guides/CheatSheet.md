@@ -765,6 +765,7 @@ Get-ChildItem -Path <dir> -Recurse | Where-Object {$_.LastWriteTime.date -eq (Ge
 ```
 ```bash
 # Reading files with dd.
+# Use status=progress to print progress.
 # Read a file and output to stdout:
 dd if=<file>
 # Read a file and convert to all to uppercase:
@@ -776,9 +777,10 @@ dd if=<file> count=#
 ```
 ```bash
 # Copying files with dd.
+# Use status=progress to print progress.
 # Read a file and output to another file (can be used to copy a file):
 dd if=<file> of=<file>
-# Copy an entire partition to another partition:
+# Copy an entire partition to another partition (ensure target parition is not mounted):
 dd if=<dev> of=<dev> 
 # Copy an entire disk to another disk:
 dd if=<dev> of=<dev> 
@@ -786,13 +788,14 @@ dd if=<dev> of=<dev>
 dd if=<dev> of=<image.img>
 # Create an ISO image for a CD/DVD mount of either a file or device:
 dd if=<file | dev> of=<file | dev>
-# Copy either a file or device with syncronous writes:
+# Copy either a file or device with syncronous writes (slower but safer for data integrity):
 dd if=<file | dev> of=<file | dev> oflag=sync
 # Copy either a file or device with but do not overwrite any targets:
 dd if=<file | dev> of=<file | dev> conv=notrunc
 ```
 ```bash
 # Wiping block devices with dd.
+# Use status=progress to print progress.
 # Wipe an entire device with dd:
 dd if=/dev/zero of=<dev>
 # Randomize an entire device:

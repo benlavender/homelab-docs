@@ -786,19 +786,27 @@ dd if=<dev> of=<dev>
 dd if=<dev> of=<dev> 
 # Create an image file of an entire disk:
 dd if=<dev> of=<image.img>
+# Create a bootable USB from an ISO image:
+dd if=<image.iso> of=</dev>
 # Create an ISO image for a CD/DVD mount of either a file or device:
 dd if=<file | dev> of=<file | dev>
 # Copy either a file or device with syncronous writes (slower but safer for data integrity):
 dd if=<file | dev> of=<file | dev> oflag=sync
+# Copy either a file or device with direct I/O (bypass kernel read/write caches):
+dd if=<file | dev> of=<file | dev> oflag=direct
 # Copy either a file or device with but do not overwrite any targets:
 dd if=<file | dev> of=<file | dev> conv=notrunc
+# Copy either a file or device with full data syncronization:
+dd if=<file | dev> of=<file | dev> conv=fdatasync
+# or with +metadata:
+dd if=<file | dev> of=<file | dev> conv=fsync
 ```
 ```bash
 # Wiping block devices with dd.
 # Use status=progress to print progress.
 # Wipe an entire device with dd:
 dd if=/dev/zero of=<dev>
-# Randomize an entire device:
+# Randomize an entire device (useful for security if ran before dd if=/dev/zero):
 dd if=/dev/urandom of=<dev>
 ```
 ```bat

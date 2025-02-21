@@ -778,12 +778,25 @@ dd if=<file> count=#
 # Copying files with dd.
 # Read a file and output to another file (can be used to copy a file):
 dd if=<file> of=<file>
-# Copy an entire partition to another partition (omit oflag=sync to disable synchronous writes):
-dd if=<dev> of=<dev> oflag=sync
-# Copy an entire disk to another disk (omit oflag=sync to disable synchronous writes):
-dd if=<dev> of=<dev> oflag=sync
-# Create an image file of an entire disk (omit oflag=sync to disable synchronous writes):
-dd if=<dev> of=<image.img> oflag=sync
+# Copy an entire partition to another partition:
+dd if=<dev> of=<dev> 
+# Copy an entire disk to another disk:
+dd if=<dev> of=<dev> 
+# Create an image file of an entire disk:
+dd if=<dev> of=<image.img>
+# Create an ISO image for a CD/DVD mount of either a file or device:
+dd if=<file | dev> of=<file | dev>
+# Copy either a file or device with syncronous writes:
+dd if=<file | dev> of=<file | dev> oflag=sync
+# Copy either a file or device with but do not overwrite any targets:
+dd if=<file | dev> of=<file | dev> conv=notrunc
+```
+```bash
+# Wiping block devices with dd.
+# Wipe an entire device with dd:
+dd if=/dev/zero of=<dev>
+# Randomize an entire device:
+dd if=/dev/urandom of=<dev>
 ```
 ```bat
 REM Robocopy mirror sync:

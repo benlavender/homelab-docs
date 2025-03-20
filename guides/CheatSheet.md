@@ -104,7 +104,7 @@ $ = Match the end of the line.
 diff file1 file2
 ```
 ```bash
-# Displays charachter infomation of a text file:
+# Displays character information of a text file:
 wc file
 ```
 ```bash
@@ -207,20 +207,20 @@ END = Process once at the termination of the command.
 
 #### Vi:
 
-Default mode is command mode, then use i for intert mode.
+Default mode is command mode, then use i for insert mode.
 
 ##### Insert mode:
 
 ###### write
 :w  
 
-###### write and overrite:               
+###### write and overwrite:                              
 :w!
 
 ###### Write and exit:
 :wq 
 
-###### Write, overrite and exit:
+###### Write, overwrite and exit:
 :wq! 
 
 ###### Quit:
@@ -598,7 +598,7 @@ Get-WinEvent -ListLog *
 Get-WinEvent -LogName Security
 ```
 ```powershell
-# Get last 10 securtity logs (oldest):
+# Get last 10 security logs (oldest):
 Get-WinEvent -LogName Security -Last 10
 ```
 ```powershell
@@ -649,11 +649,11 @@ find <dir> -type d -name <'filename'> -print
 find <dir> -type f -name <'filename'> -maxdepth 1
 # or:
 find <dir> -type d -name <'filename'> -maxdepth 1
-# Don't recurse into mounted directorties for files and directories:
+# Don't recurse into mounted directories for files and directories:
 find <dir> -mount -name <'filename'>
 ```
 ```bash
-# Cronological file searching with find command.
+# Chronological file searching with find command.
 # 'n' = Exact.
 # '+n' = After.
 # '-n' = Before.

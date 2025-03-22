@@ -104,7 +104,7 @@ $ = Match the end of the line.
 diff file1 file2
 ```
 ```bash
-# Displays charachter infomation of a text file:
+# Displays character information of a text file:
 wc file
 ```
 ```bash
@@ -207,20 +207,20 @@ END = Process once at the termination of the command.
 
 #### Vi:
 
-Default mode is command mode, then use i for intert mode.
+Default mode is command mode, then use i for insert mode.
 
 ##### Insert mode:
 
 ###### write
 :w  
 
-###### write and overrite:               
+###### write and overwrite:                              
 :w!
 
 ###### Write and exit:
 :wq 
 
-###### Write, overrite and exit:
+###### Write, overwrite and exit:
 :wq! 
 
 ###### Quit:
@@ -484,79 +484,9 @@ dpkg -i package.deb
 # Show reverse dependency information for a package:
 apt-cache rdepends <package>
 ```
-```bash
-# Pacman refresh and update packages
-pacman -Syu --noconfirm
-```
-```bash
-# Install package
-pacman -S <packagename>
-```
-```bash
-# Print the download targets only insteading of downloading and installing:
-pacman -S --print <package>
-```
-```bash
-# Query packages:
-pacman -Ss <packagename>
-```
-```bash
-# View package group members:
-pacman -Sg <package>
-```
-```bash
-# Query package information:
-pacman -Si <package>
-```
-```bash
-# Remove any non-installed cached packages from /var/cache/pacman/pkg:
-# Use -Scc to clear all regardless
-pacman -Sc
-# or (use the -u switch to target only uninstalled packages):
-paccache -rk0
-```
-```bash
-# Remove all cached packages older than -3x versions earlier (use the -u switch to target only uninstalled packages):
-paccache -r
-```
-```bash
-# Remove -1x versions earlier (use the -u switch to target only uninstalled packages):
-paccache -rk1
-```
-```bash
-# Query installed packages:
-pacman -Q <packagename>
-```
-```bash
-# Query installed package with info:
-pacman -Qi <packagename>
-```
-```bash
-# Query list of files installed within a package:
-pacman -Ql <packagename>
-```
-```bash
-# List all files that are part of a remote package (add -y to update the databases):
-pacman -Fl <packagename>
-```
-```bash
-# List which remote package this file belongs to (add -y to update the databases):
-pacman -F <filename or /path/to/file>
-````
-```bash
-# Query orphaned packages that no longer are depends:
-pacman -Qtd
-# To remove them:
-pacman -Rns $(pacman -Qtdq)
-```
-```bash
-# Remove an installed package, use -Rs to remove depends:
-pacman -R <packagename> 
-```
-```bash
-# Pacman info and operation verbosity, add --debug to any operation:
-pacman --verbose
-```
+
+#### Winget:
+
 ```bat
 REM List Windows Package Manager info:
 winget --info
@@ -588,6 +518,75 @@ REM Update all configured sources:
 winget source update
 ```
 
+#### Pacman / Arch Linux:
+
+```bash
+# Syncing packages from remote repositories.
+# Pacman refresh and update packages:
+pacman -Syu --noconfirm
+# Install package:
+pacman -S <packagename>
+# Print the download targets only instead of downloading and installing:
+pacman -S --print <package>
+# Download a package but do not install:
+pacman -Sw <package>
+# Query packages:
+pacman -Ss <packagename>
+# View package group members:
+pacman -Sg <package>
+# Query package information:
+pacman -Si <package>
+```
+```bash
+# Remove any non-installed cached packages from /var/cache/pacman/pkg:
+# Use -Scc to clear all regardless1
+pacman -Sc
+# or (use the -u switch to target only uninstalled packages):
+paccache -rk0
+```
+```bash
+# Upgrading and adding packages locally or from a remote source.
+# Install a package from a local file:
+pacman -U </path/to/package.pkg.tar.zst>
+# Install a package from a URI:
+pacman -U <URI>
+```
+```bash
+# Removing packages.
+# Remove an installed package, use -Rs to remove depends:
+pacman -R <packagename> 
+# Remove all cached packages older than -3x versions earlier (use the -u switch to target only uninstalled packages):
+paccache -r
+# Remove -1x versions earlier (use the -u switch to target only uninstalled packages):
+paccache -rk1
+```
+```bash
+# Querying the local package database and files.
+# Query installed packages:
+pacman -Q <packagename>
+# Query installed package with info:
+pacman -Qi <packagename>
+# Query list of files installed within a package:
+pacman -Ql <packagename>
+```
+```bash
+# Query files in the synced database.
+# List all files that are part of a remote package (add -y to update the databases):
+pacman -Fl <packagename>
+# List which remote package this file belongs to (add -y to update the databases):
+pacman -F <filename or /path/to/file>
+````
+```bash
+# Query orphaned packages that no longer are depends:
+pacman -Qtd
+# To remove them:
+pacman -Rns $(pacman -Qtdq)
+```
+```bash
+# Pacman info and operation verbosity, add --debug to any operation:
+pacman --verbose
+```
+
 ### WinEvents:
 
 ```powershell
@@ -599,7 +598,7 @@ Get-WinEvent -ListLog *
 Get-WinEvent -LogName Security
 ```
 ```powershell
-# Get last 10 securtity logs (oldest):
+# Get last 10 security logs (oldest):
 Get-WinEvent -LogName Security -Last 10
 ```
 ```powershell
@@ -650,11 +649,11 @@ find <dir> -type d -name <'filename'> -print
 find <dir> -type f -name <'filename'> -maxdepth 1
 # or:
 find <dir> -type d -name <'filename'> -maxdepth 1
-# Don't recurse into mounted directorties for files and directories:
+# Don't recurse into mounted directories for files and directories:
 find <dir> -mount -name <'filename'>
 ```
 ```bash
-# Cronological file searching with find command.
+# Chronological file searching with find command.
 # 'n' = Exact.
 # '+n' = After.
 # '-n' = Before.
@@ -763,6 +762,57 @@ Get-ItemProperty -Path 'file/dir' | Format-List -Property *
 ```powershell
 # List files created and modified today, in descending order by lastwritetime and include the name, lwt and size:
 Get-ChildItem -Path <dir> -Recurse | Where-Object {$_.LastWriteTime.date -eq (Get-Date).Date} | Sort-Object LastWriteTime -Descending | Select-Object -Property Name,LastWriteTime,Length | Format-Table -AutoSize
+```
+```bash
+# Reading files with dd.
+# Use status=progress to print progress.
+# Read a file and output to stdout:
+dd if=<file>
+# Read a file and convert to all to uppercase:
+dd if=<file> conv=ucase
+# Read a file and convert to all to lowercase:
+dd if=<file> conv=lcase
+# Read a file but limit to specific block(s) of 512 bytes:
+dd if=<file> count=#
+```
+```bash
+# Copying files with dd.
+# Use status=progress to print progress.
+# Read a file and output to another file (can be used to copy a file):
+dd if=<file> of=<file>
+# Copy an entire partition to another partition (ensure target parition is not mounted):
+dd if=<dev> of=<dev> 
+# Copy an entire disk to another disk:
+dd if=<dev> of=<dev> 
+# Create an image file of an entire disk:
+dd if=<dev> of=<image.img>
+# Create a bootable USB from an ISO image:
+dd if=<image.iso> of=</dev>
+# Create an ISO image for a CD/DVD mount of either a file or device:
+dd if=<file | dev> of=<file | dev>
+# Copy either a file or device but do not stop on errors:
+dd if=<file | dev> of=<file | dev> conv=noerror
+# Copy either a file or device with syncronous writes (slower but safer for data integrity):
+dd if=<file | dev> of=<file | dev> oflag=sync
+# Copy either a file or device with direct I/O (bypass kernel read/write caches):
+dd if=<file | dev> of=<file | dev> oflag=direct
+# Copy either a file or device with but do not overwrite any targets:
+dd if=<file | dev> of=<file | dev> conv=notrunc
+# Copy either a file or device with full data syncronization:
+dd if=<file | dev> of=<file | dev> conv=fdatasync
+# or with +metadata:
+dd if=<file | dev> of=<file | dev> conv=fsync
+# Copy either a file or device and change the input/output block size in bytes or k or M (default is 512).
+# 512 bytes is typical of spindle disks, 4k is typical of SSDs so the default is somewhat out of data. A typical value of 64k can be used:
+dd if=<file | dev> of=<file | dev> bs=<#>
+```
+```bash
+# Wiping block devices with dd.
+# Use status=progress to print progress.
+# Wipe an entire device with dd:
+dd if=/dev/zero of=<dev>
+# Randomize an entire device (useful for security if ran before dd if=/dev/zero):
+dd if=/dev/urandom of=<dev>
 ```
 ```bat
 REM Robocopy mirror sync:
@@ -1578,6 +1628,51 @@ dnscmd /RecordDelete <zonename> <QNAME> <QTYPE>
 ```bat
 REM Add a CNAME record as test to test.com:
 dnscmd /RecordAdd <zonename> test CNAME test.com
+```
+
+#### resolvconf:
+
+> **Note:** Requires systemd-resolved.
+
+```bash
+# Show detailed server information:
+resolvectl show-server-state <domain>
+```
+```bash
+# Show current DNS settings for all interfaces:
+resolvectl status
+# Show DNS settings for a specific interface:
+resolvectl dns <interface>
+```
+```bash
+# Set DNS servers for a specific interface:
+resolvectl dns <interface> <dns1> | <dns2>
+```
+```bash
+# Show DNS search listsfor a specific interface:
+resolvectl domain <interface>
+```
+```bash
+# Set DNS search domains for a specific interface:
+resolvectl domain <interface> <domain1> | <domain2>
+```
+```bash
+# Reset DNS settings for a specific interface:
+resolvectl revert <interface>
+```
+```bash
+# Show active local DNS queries and their responses:
+resolvectl monitor
+```
+```bash
+# Resolve an A and or AAAA record:
+resolvectl query <domain>
+# Resolve a specific RRType:
+resolvectl query --type=<RRType> <domain>
+```
+```bash
+# Show the stub resolver cache:
+resolvectl show-cache
 ```
 
 ### Storage Replica:
@@ -3987,6 +4082,8 @@ az network private-dns record-set txt delete --name @ --zone-name <fqdn> --resou
 ```
 
 #### Storage:
+
+> **Note:** --upload-size-bytes requires a value that is +512 bytes of a value divisible by 1024.
 
 ```bash
 # Create a disk for the purpose of uploading from an alternate source.

@@ -3588,6 +3588,8 @@ docker network ls
 docker network inspect <networkID>
 # Connect a container to a network:
 docker network connect <networkID> <containerID>
+# Disconnect a container from a network:
+docker network disconnect <networkID> <containerID>
 # Connect a container to a network and specificy its IPv4 address:
 docker network connect --ip <ip.addr> <networkID> <containerID>
 # Disconnect a container from a network:

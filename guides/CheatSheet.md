@@ -363,6 +363,17 @@ locale-gen
 localectl set-locale LANG=en_GB.UTF-8
 ```
 
+### Bootloaders and boot managers:
+
+#### efibootmgr:
+
+> **Note:** Requires EFI firmware support.
+
+```bash
+# Show the current EFI boot order (use -v for verbose output):
+efibootmgr
+```
+
 ### RH subscription manager:
 
 ```bash
@@ -1457,6 +1468,10 @@ lvextend -r -l +100%FREE <LV Path>
 # Optionally you can increase the FS (XFS in this case) without using the -r switch in the previous command:
 xfs_growfs <FS>
 ```
+
+#### nvme-cli:
+
+
 
 ### O/S Updates:
 

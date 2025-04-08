@@ -373,6 +373,30 @@ localectl set-locale LANG=en_GB.UTF-8
 # Show the current EFI boot order (use -v for verbose output):
 efibootmgr
 ```
+```bash
+# Change the BootOrder value for permanent boot order:
+efibootmgr -o <#>,<#>
+```
+```bash
+# Change the BootNext value for next boot only:
+efibootmgr -n <#>
+```
+```bash
+# Deactivate a boot option:
+efibootmgr -b <#> -A
+```
+```bash
+# Activate a boot option:
+efibootmgr -b <#> -a
+```
+```bash
+# Create a new boot option:
+efibootmgr -c -d <dev> -p <part#> -L <LABEL> -l <path/to/.efi>
+```
+```bash
+# Delete a boot option:
+efibootmgr -b <#> -B
+```
 
 ### RH subscription manager:
 

@@ -3201,13 +3201,15 @@ man git-<verb>
 # Working with repositories in Git.
 # Create a new local repository:
 git init
+# Create a new local repository for sharing with no working tree or .git directory:
+git init --bare
 # Clone a remote repository:
 git clone <PATH>
 # Clone a remote repository to a specified location:
 git clone <PATH> <filepath>
 # Clone a remote repository with more verbosity:
 git clone <PATH> --verbose
-# Clone a remote repository with only .Git file:
+# Clone a remote repository for sharing with no working tree or .git directory:
 git clone <PATH> --bare
 # Clone a remote repository with a custom remote name:
 git clone <PATH> --origin <name>

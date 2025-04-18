@@ -849,6 +849,28 @@ dd if=/dev/zero of=<dev>
 # Randomize an entire device (useful for security if ran before dd if=/dev/zero):
 dd if=/dev/urandom of=<dev>
 ```
+
+#### GNU Stow:
+
+> **Note:**
+> - Stow will use the working directory as the stow directory unless changed.
+> - The term `package` refers to the `directory` containing the files to be managed. The stow `directory` must match the target tree for `defaults` to work.
+> - The term `target` refers to the directory where the files will be symlinked from, at default this is the parent directory of the package.
+
+```bash
+# Stow a package:
+stow <package>
+# Stow a package with verbose output:
+stow <package> --verbose
+# Stow a package as a dry run only:
+stow <package> --verbose --simulate
+# Stow a package even if the target files exist:
+stow <package> --adopt
+# Stow a package with a specific target directory:
+stow <package> --target <target>
+# Stow a package with a specific target directory and a specific stow directory:
+stow <package> --target <target> --dir <directory>
+```
 ```bat
 REM Robocopy mirror sync:
 ROBOCOPY <src> <dst> /MIR /Z /W:5 /R:5

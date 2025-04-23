@@ -864,7 +864,7 @@ stow <package>
 stow <package> --verbose
 # Stow a package as a dry run only:
 stow <package> --verbose --simulate
-# Stow a package even if the target files exist:
+# Stow a package even if the target files exist (files will be overwritten in the stow directory):
 stow <package> --adopt
 # Stow a package with a specific target directory:
 stow <package> --target <target>

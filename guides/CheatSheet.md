@@ -866,7 +866,7 @@ stow <package> --verbose
 stow <package> --verbose --simulate
 # Stow a package even if the target files exist (files will be overwritten in the stow directory):
 stow <package> --adopt
-# Stow a package but do not merge/un-merge directories with a similar stucture:
+# Stow a package but do not merge/un-merge directories with a similar structure:
 stow <package> --no-folding
 # Stow a package with a specific target directory:
 stow <package> --target <target>

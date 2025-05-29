@@ -398,6 +398,15 @@ efibootmgr -c -d <dev> -p <part#> -L <LABEL> -l <path/to/.efi>
 efibootmgr -b <#> -B
 ```
 
+### PulseAudio/PipeWire:
+
+```bash
+# Show PulseAudio server information:
+pactl info
+```
+
+
+
 ### RH subscription manager:
 
 ```bash

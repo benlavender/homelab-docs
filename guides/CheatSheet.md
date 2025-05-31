@@ -423,6 +423,7 @@ pactl info
 pactl list
 ```
 ```bash
+# Append short for brief output.
 # List all sinks:
 pactl list sinks
 # List all clients:
@@ -435,6 +436,42 @@ pactl list modules
 ```bash
 # Get default sink:
 pactl get-default-sink
+```
+```bash
+# Change the default sink:
+pactl set-default-sink <sink_name>
+```
+```bash
+# Change sink volume:
+pactl set-sink-volume <sink_name> <#%>
+# or
+pactl set-sink-volume @DEFAULT_SINK@ <#%>
+```
+
+### WirePlumber:
+
+```bash
+# Show WirePlumber version and device information:
+wpctl status
+```
+```bash
+# Show all properties on an object:
+wpctl inspect <id>
+```
+```bash
+# Get a sink volume:
+wpctl get-volume <id>
+# or 
+wpctl get-volume @DEFAULT_SINK@
+```
+```bash
+# Use the --save switch to save the configuration.
+# Show all WirePlumber settings:
+wpctl settings
+# Get a specific setting:
+wpctl settings <Name>
+# Set a specific setting:
+wpctl settings <Name> <Value>
 ```
 
 ### RH subscription manager:

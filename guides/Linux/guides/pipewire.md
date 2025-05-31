@@ -35,6 +35,11 @@ On most distributions, PipeWire is installed with the `pipewire` package. To use
 
 To interact with PipeWire both `pipewire.service` & `pipewire-pulse.service` user services must be started.
 
+### Configuration:
+
+For backup purposes the default configuration file is located at `/usr/share/pipewire/pipewire.conf` so do not edit these files directly. For system-wide create the configuration file at `/etc/pipewire/ ` and for user-specific configuration create at `~/.config/pipewire/pipewire.conf`.
+
+
 ## WirePlumber:
 
 WirePlumber is a session and policy manager for for both PipeWire and PulseAudio. It is used for managing streams to and from their respective devices and applications.

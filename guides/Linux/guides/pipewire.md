@@ -19,7 +19,7 @@ On most distributions, PipeWire is installed with the `pipewire` package. To use
 
 ### Terminology:
 
-- **Clients:** Clients connect to PipeWire to produce or consume audio and video data. 
+- **Clients:** Clients are open connections to PipeWire to produce or consume audio and video data.
 - **Nodes:** A node is an audio or video processor such as a speaker, microphone, camera, or application that produces or consumes data.
 - **Modules:** Loadable components that extend PipeWire's functionality, i.e bluetooth or JACK support.
 - **Ports:** Ports are the input and output interfaces for a node. A port can either be used for input or output (but not both).

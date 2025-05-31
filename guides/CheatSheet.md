@@ -400,12 +400,31 @@ efibootmgr -b <#> -B
 
 ### PulseAudio/PipeWire:
 
+> **Note:** Refer to [PipeWire](../guides/Linux/guides/pipewire.md) for terminology and concepts.
+
 ```bash
 # Show PulseAudio server information:
 pactl info
 ```
-
-
+```bash
+# List all sinks, clients, modules and sources etc:
+pactl list
+```
+```bash
+# List all sinks:
+pactl list sinks
+# List all clients:
+pactl list clients
+# List all cards:
+pactl list cards
+```
+```bash
+# Get default sink:
+pactl get-default-sink
+```
+```bash
+# 
+```
 
 ### RH subscription manager:
 

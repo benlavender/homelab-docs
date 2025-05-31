@@ -30,6 +30,8 @@ On most distributions, PipeWire is installed with the `pipewire` package. To use
 - **Samples:** Built-in data types that represent audio and video data in PipeWire for testing, like an audio clip.
 - **Cards:** Cards are physical or virtual devices that provide audio/video capabilities, such as PCI sound cards, USB interfaces, HDMI devices or bluetooth devices. 
 - **Profiles:** Profiles are pre-configured card capabilities used to define how a card can be used, such as stereo output, mono output, hdmi-surround sound etc.
+- **Source-outputs:** Source-inputs are the audio streams that are being captured by applications like media players or browsers.
+- **Sink-inputs:** Sink-inputs are the audio streams that are being played by applications to a sink.
 
 ## WirePlumber:
 

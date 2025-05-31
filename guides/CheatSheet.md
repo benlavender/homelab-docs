@@ -398,6 +398,93 @@ efibootmgr -c -d <dev> -p <part#> -L <LABEL> -l <path/to/.efi>
 efibootmgr -b <#> -B
 ```
 
+### PulseAudio/PipeWire:
+
+> **Note:** Refer to [PipeWire](../guides/Linux/guides/pipewire.md) for terminology and concepts.
+
+```bash
+# Show current configuration:
+pw-config list
+# How all all configuration files to be used:
+pw-config
+```
+```bash
+# List all running node and device statistics:
+pw-top
+# Show properties on a specific node:
+pw-cli info <ID>
+```
+```bash
+# Show PulseAudio server information:
+pactl info
+```
+```bash
+# List all sinks, clients, modules and sources etc:
+pactl list
+```
+```bash
+# Append short for brief output.
+# List all sinks:
+pactl list sinks
+# List all clients:
+pactl list clients
+# List all cards:
+pactl list cards
+# List all modules/plugins:
+pactl list modules
+```
+```bash
+# Get default sink:
+pactl get-default-sink
+```
+```bash
+# Change the default sink:
+pactl set-default-sink <sink_name>
+```
+```bash
+# Change sink volume:
+pactl set-sink-volume <sink_name> <#%>
+# or
+pactl set-sink-volume @DEFAULT_SINK@ <#%>
+```
+```bash
+# Play a sample sound file.
+# Type needs to be understood by libsndfile.
+# First upload the file to the sample cache:
+pactl upload-sample <path/to/sample>
+# Find the sample in the cache:
+pactl list samples
+# Play the sample out of the default sink.
+# Use sink-name to play on a specific sink:
+pactl play-sample <sample_name>
+```
+
+### WirePlumber:
+
+```bash
+# Show WirePlumber version and device information:
+wpctl status
+```
+```bash
+# Show all properties on an object:
+wpctl inspect <id>
+```
+```bash
+# Get a sink volume:
+wpctl get-volume <id>
+# or 
+wpctl get-volume @DEFAULT_SINK@
+```
+```bash
+# Use the --save switch to save the configuration.
+# Show all WirePlumber settings:
+wpctl settings
+# Get a specific setting:
+wpctl settings <Name>
+# Set a specific setting:
+wpctl settings <Name> <Value>
+```
+
 ### RH subscription manager:
 
 ```bash

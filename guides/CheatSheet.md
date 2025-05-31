@@ -409,6 +409,12 @@ pw-config list
 pw-config
 ```
 ```bash
+# List all running node and device statistics:
+pw-top
+# Show properties on a specific node:
+pw-cli info <ID>
+```
+```bash
 # Show PulseAudio server information:
 pactl info
 ```
@@ -429,10 +435,6 @@ pactl list modules
 ```bash
 # Get default sink:
 pactl get-default-sink
-```
-```bash
-# List all running node and device statistics:
-pw-top
 ```
 
 ### RH subscription manager:

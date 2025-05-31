@@ -403,6 +403,12 @@ efibootmgr -b <#> -B
 > **Note:** Refer to [PipeWire](../guides/Linux/guides/pipewire.md) for terminology and concepts.
 
 ```bash
+# Show current configuration:
+pw-config list
+# How all all configuration files to be used:
+pw-config
+```
+```bash
 # Show PulseAudio server information:
 pactl info
 ```
@@ -417,13 +423,16 @@ pactl list sinks
 pactl list clients
 # List all cards:
 pactl list cards
+# List all modules/plugins:
+pactl list modules
 ```
 ```bash
 # Get default sink:
 pactl get-default-sink
 ```
 ```bash
-# 
+# List all running node and device statistics:
+pw-top
 ```
 
 ### RH subscription manager:

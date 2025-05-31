@@ -42,10 +42,12 @@ For backup purposes the default configuration file is located at `/usr/share/pip
 
 ## WirePlumber:
 
-WirePlumber is a session and policy manager for for both PipeWire and PulseAudio. It is used for managing streams to and from their respective devices and applications.
+WirePlumber is a session and policy manager for for both PipeWire and PulseAudio. It is used for managing streams to and from their respective devices and applications and is useful on desktops when we may switch to different devices.
 
 On most distributions the `wireplumber` package can be installed to provide this session manager. 
 
 ### Configuration:
 
-For backup purposes the default configuration files are located in `/usr/share/wireplumber/` so do not edit these files directly. For system-wide create configuration files in `/etc/wireplumber/` and for user-specific configuration create files in `~/.config/wireplumber/`.
+For backup purposes the default configuration file is located in `/usr/share/wireplumber/wireplumber.conf` so do not edit this directly. For system-wide create configuration files in `/etc/wireplumber/` and for user-specific configuration create files in `~/.config/wireplumber/`.
+
+> **Note:** Configuration files are prioritised by number and the the default files end with `50-` so create custom files starting with `-51` for example.

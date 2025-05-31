@@ -33,6 +33,8 @@ On most distributions, PipeWire is installed with the `pipewire` package. To use
 - **Source-outputs:** Source-inputs are the audio streams that are being captured by applications like media players or browsers.
 - **Sink-inputs:** Sink-inputs are the audio streams that are being played by applications to a sink.
 
+To interact with PipeWire both `pipewire.service` & `pipewire-pulse.service` user services must be started.
+
 ## WirePlumber:
 
 WirePlumber is a session and policy manager for for both PipeWire and PulseAudio. It is used for managing streams to and from their respective devices and applications.

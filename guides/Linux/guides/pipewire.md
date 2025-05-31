@@ -37,3 +37,8 @@ On most distributions, PipeWire is installed with the `pipewire` package. To use
 
 WirePlumber is a session and policy manager for for both PipeWire and PulseAudio. It is used for managing streams to and from their respective devices and applications.
 
+On most distributions the `wireplumber` package can be installed to provide this session manager. 
+
+### Configuration:
+
+For backup purposes the default configuration files are located in `/usr/share/wireplumber/` so do not edit these files directly. For system-wide create configuration files in `/etc/wireplumber/` and for user-specific configuration create files in `~/.config/wireplumber/`.

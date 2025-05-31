@@ -447,6 +447,17 @@ pactl set-sink-volume <sink_name> <#%>
 # or
 pactl set-sink-volume @DEFAULT_SINK@ <#%>
 ```
+```bash
+# Play a sample sound file.
+# Type needs to be understood by libsndfile.
+# First upload the file to the sample cache:
+pactl upload-sample <path/to/sample>
+# Find the sample in the cache:
+pactl list samples
+# Play the sample out of the default sink.
+# Use sink-name to play on a specific sink:
+pactl play-sample <sample_name>
+```
 
 ### WirePlumber:
 

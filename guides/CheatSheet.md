@@ -398,6 +398,42 @@ efibootmgr -c -d <dev> -p <part#> -L <LABEL> -l <path/to/.efi>
 efibootmgr -b <#> -B
 ```
 
+### BlueZ (bluetooth):
+
+> **Note:** `bluez-utils` package is required for the following commands.
+
+```bash
+# List available controllers:
+bluetoothctl list
+```
+```bash
+# Show controller information:
+bluetoothctl show <controller>
+```
+```bash
+# Usage of bluetoothctl.
+# Follow the interactive guide and type help to provide subcommands.
+# Device becomes immediately pairable when in interactive mode.
+# Change controller power state:
+power <on|off>
+# Scan for nearby devices:
+scan on
+# List available devices:
+devices
+# Show device info:
+info <mac>
+# Pair with a device:
+pair <mac>
+# Connect to a device:
+connect <mac>
+# Trust for auto-connect:
+trust <mac>
+# Disconnect from a device:
+disconnect <mac>
+# Remove a device:
+remove <mac>
+```
+
 ### PulseAudio/PipeWire:
 
 > **Note:** Refer to [PipeWire](../guides/Linux/guides/pipewire.md) for terminology and concepts.

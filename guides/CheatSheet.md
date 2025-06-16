@@ -1642,6 +1642,27 @@ xfs_growfs <FS>
 
 #### nvme-cli:
 
+> **Note:** Requires `nvme-cli` package.
+
+```bash
+# List nvme subsystems
+nvme list-subsys
+# List subsystems for a specific device:
+nvme list-subsys <dev>
+```
+```bash
+# List all NVMe devices and namespaces:
+nvme list
+# List all namespaces on a device:
+nvme list-ns <dev>
+# Get namespace IDs on a specific device:
+nvme get-ns-id <dev>
+# Show detailed information on a specific namespace of a device (remove --human-readable to show in hex):
+nvme id-ns <dev> --namespace-id=# --human-readable
+# Show detailed information on all namespaces of a device (remove --human-readable to show in hex):
+nvme id-ns <dev> --human-readable
+```
+
 
 
 ### O/S Updates:

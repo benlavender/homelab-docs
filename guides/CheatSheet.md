@@ -1642,7 +1642,71 @@ xfs_growfs <FS>
 
 #### nvme-cli:
 
+> **Note:** Requires `nvme-cli` package.
 
+> **Note:** `ctrl` refers to the NVMe controller (`/dev/nvme0`) where `dev` refers to the device with namespace ID (`/dev/nvme0n1`) for example.
+
+> **Note:** Use `nvme id-ctrl` to find controller capabilities such as `NS Management` or `Sanitize` for example as some of the commands may not be supported.
+
+```bash
+# List nvme subsystems
+nvme list-subsys
+```
+```bash
+# Show controller information assoicated with an NVMe device:
+nvme id-ctrl <ctrl>
+# Show controller information assoicated with an NVMe device with human readable output:
+nvme id-ctrl <ctrl> --human-readable
+```
+```bash
+# Show a topology of an NVMe device:
+nvme show-topology <dev>
+```
+```bash
+# List all NVMe devices and namespaces:
+nvme list
+# List all namespaces on a device:
+nvme list-ns <ctrl>
+# Get namespace IDs on a specific block device:
+nvme get-ns-id <dev>
+# Show detailed information on a specific namespace of a device (remove --human-readable to show in hex):
+nvme id-ns <ctrl> --namespace-id=<#> --human-readable
+# Show detailed information on all namespaces of a device (remove --human-readable to show in hex):
+nvme id-ns <dev> --human-readable
+```
+```bash
+# Format a namespace.
+# Warning: This will erase all data on the namespace within 10 seconds.
+# Use --force to skip the 10 second wait.
+nvme format <ctrl> --namespace-id=<#> --reset
+```
+```bash
+# Format a namespace with secure erase.
+# Warning: This will erase all data on the namespace within 10 seconds.
+# Use --force to skip the 10 second wait.
+# Perform a block secure erase on the namespace:
+nvme format <ctrl> --namespace-id=<#> --ses=1 --reset
+# Perform a crypto secure erase on the namespace:
+nvme format <ctrl> --namespace-id=<#> --ses=2 --reset
+```
+```bash
+# Sanitize a device.
+# Perform a block sanitize on the device:
+nvme sanitize <ctrl> --sanact=2
+# Perform a crypto sanitize on the device:
+nvme sanitize <ctrl> --sanact=4
+```
+```bash
+# Get the firmware versions of all the slots including the active slot.
+# Use --output-format=json for human readable:
+nvme fw-log <ctrl>
+# Get the device error log.
+# Use --log-entries=<#> to limit the number of entries returned.
+# Use --output-format=json for human readable:
+nvme error-log <ctrl>
+# Show SMART log for an NVMe device:
+nvme smart-log <ctrl> --human-readable
+```
 
 ### O/S Updates:
 

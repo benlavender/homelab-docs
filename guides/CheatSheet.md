@@ -1646,12 +1646,16 @@ xfs_growfs <FS>
 
 > **Note:** `ctrl` refers to the NVMe controller (`/dev/nvme0`) where `dev` refers to the device with namespace ID (`/dev/nvme0n1`) for example.
 
+> **Note:** Use `nvme id-ctrl` to find controller capabilities such as `NS Management` or `Sanitize` for example as some of the commands may not be supported.
+
 ```bash
 # List nvme subsystems
 nvme list-subsys
 ```
 ```bash
-# Show controller information assoicated with an NVMe device (remove --human-readable to show in hex):
+# Show controller information assoicated with an NVMe device:
+nvme id-ctrl <ctrl>
+# Show controller information assoicated with an NVMe device with human readable output:
 nvme id-ctrl <ctrl> --human-readable
 ```
 ```bash
@@ -1678,7 +1682,6 @@ nvme format <ctrl> --namespace-id=<#> --reset
 ```
 ```bash
 # Format a namespace with secure erase.
-# Use nvme id-ctrl to check support.
 # Warning: This will erase all data on the namespace within 10 seconds.
 # Use --force to skip the 10 second wait.
 # Perform a block secure erase on the namespace:
@@ -1688,7 +1691,6 @@ nvme format <ctrl> --namespace-id=<#> --ses=2 --reset
 ```
 ```bash
 # Sanitize a device.
-# Use nvme id-ctrl to check support.
 # Perform a block sanitize on the device:
 nvme sanitize <ctrl> --sanact=2
 # Perform a crypto sanitize on the device:

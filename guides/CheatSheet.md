@@ -523,88 +523,90 @@ wpctl settings <Name> <Value>
 
 ### RH subscription manager:
 
+> **Note:** Commands usually require elevation.
+
 ```bash
 # Show all subscription-manager configs:
-sudo subscription-manager config --list
+subscription-manager config --list
 # Delete a config value:
-sudo subscription-manager config --remove=<section.name>
+subscription-manager config --remove=<section.name>
 # Adds a config value:
-sudo subscription-manager config --<section.name=value>
+subscription-manager config --<section.name=value>
 ```
 ```bash
 # Show system registration status:
-sudo subscription-manager status
+subscription-manager status
 ```
 ```bash
 # Show system registration status and product information:
-sudo subscription-manager list
+subscription-manager list
 # List available subscriptions for the system not currently attached:
-sudo subscription-manager list --available
+subscription-manager list --available
 # List all available subscriptions for the system:
-sudo subscription-manager list --all --available
+subscription-manager list --all --available
 # List all subscriptions matching installed products:
-sudo subscription-manager list --available --match-installed
+subscription-manager list --available --match-installed
 # List all subscriptions currently attached to the system:
-sudo subscription-manager list --consumed
+subscription-manager list --consumed
 # List products installed on the system, regardless if subscribed or not:
-sudo subscription-manager list --installed
+subscription-manager list --installed
 ```
 ```bash
 # Registering to RedHat customer portal (use --force to force re-registration).
 # Register a system using a username:
-sudo subscription-manager register --username=<username>
+subscription-manager register --username=<username>
 # or with inline password:
-sudo subscription-manager register --username=<username> --password=<password>
+subscription-manager register --username=<username> --password=<password>
 # Register a system to RH customer portal using an activation key:
-sudo subscription-manager register --activationkey=<SKU>
+subscription-manager register --activationkey=<SKU>
 # Register a system using a username and password then attach best matched subscriptions:
-sudo subscription-manager register --auto-attach
+subscription-manager register --auto-attach
 ```
 ```bash
 # Unregister a system from the RH customer portal:
-sudo subscription-manager unregister
+subscription-manager unregister
 # Remove all subscriptions and un-register the system:
-sudo subscription-manager clean
+subscription-manager clean
 ```
 ```bash
 # Attach a subscription to the system:
-sudo subscription-manager attach --pool=<id>
+subscription-manager attach --pool=<id>
 # Attach best matched subscriptions automatically:
-sudo subscription-manager attach --auto
+subscription-manager attach --auto
 # Checks auto-attach status (Runs every 4 hours):
-sudo subscription-manager auto-attach --show
+subscription-manager auto-attach --show
 # Enable auto-attach:
-sudo subscription-manager auto-attach --enable
+subscription-manager auto-attach --enable
 # Disable auto-attach:
-sudo subscription-manager auto-attach --disable
+subscription-manager auto-attach --disable
 ```
 ```bash
 # Remove a subscription from the system by pool ID:
-sudo subscription-manager remove --pool=<id>
+subscription-manager remove --pool=<id>
 # or via serial:
-sudo subscription-manager remove --serial=<serial>
+subscription-manager remove --serial=<serial>
 # Or straight out remove all:
-sudo subscription-manager remove --all
+subscription-manager remove --all
 ```
 ```bash
 # List all the organizations associated with an account:
-sudo subscription-manager orgs
+subscription-manager orgs
 ```
 ```bash
 # Show all available system releases:
-sudo subscription-manager release --list
+subscription-manager release --list
 # Set a stick release for use with packages and updates:
-sudo subscription-manager release --set=<value>
+subscription-manager release --set=<value>
 # Removes current sticky release:
-sudo subscription-manager release --unset
+subscription-manager release --unset
 ```
 ```bash
 # List all available repos provided by the CDN:
-sudo subscription-manager repos --list
+subscription-manager repos --list
 # Disable a specific repo:
-sudo subscription-manager repos --disable=<Repo-ID>
+subscription-manager repos --disable=<Repo-ID>
 # Enable a specific repo:
-sudo subscription-manager repos --enable=<Repo-ID>
+subscription-manager repos --enable=<Repo-ID>
 ```
 
 ### Service control:

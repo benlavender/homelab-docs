@@ -367,7 +367,7 @@ localectl set-locale LANG=en_GB.UTF-8
 
 #### efibootmgr:
 
-> **Note:** Requires EFI firmware support.
+> ℹ️ **Note:** Requires EFI firmware support.
 
 ```bash
 # Show the current EFI boot order (use -v for verbose output):
@@ -400,7 +400,7 @@ efibootmgr -b <#> -B
 
 ### BlueZ (bluetooth):
 
-> **Note:** `bluez-utils` package is required for the following commands.
+> ℹ️ **Note:** `bluez-utils` package is required for the following commands.
 
 ```bash
 # List available controllers:
@@ -436,7 +436,7 @@ remove <mac>
 
 ### PulseAudio/PipeWire:
 
-> **Note:** Refer to [PipeWire](../guides/Linux/guides/pipewire.md) for terminology and concepts.
+> ℹ️ **Note:** Refer to [PipeWire](../guides/Linux/guides/pipewire.md) for terminology and concepts.
 
 ```bash
 # Show current configuration:
@@ -523,7 +523,7 @@ wpctl settings <Name> <Value>
 
 ### RH subscription manager:
 
-> **Note:** Commands usually require elevation.
+> ℹ️ **Note:** Commands usually require elevation.
 
 ```bash
 # Show all subscription-manager configs:
@@ -977,7 +977,7 @@ dd if=/dev/urandom of=<dev>
 
 #### GNU Stow:
 
-> **Note:**
+> ℹ️ **Note:**
 > - Stow will use the working directory as the stow directory unless changed.
 > - The term `package` refers to the `directory` containing the files to be managed. The stow `directory` must match the target tree for `defaults` to work.
 > - The term `target` refers to the directory where the files will be symlinked from, at default this is the parent directory of the package.
@@ -1490,7 +1490,7 @@ wpa_cli scan_results -i <int>
 
 #### systemd-networkd:
 
-> **Note:** Ensure the systemd-networkd.service unit is loaded. See [systemd-networkd - Network manager](./Linux/guides/systemd-networkd.md) for more information.
+> ℹ️ **Note:** Ensure the systemd-networkd.service unit is loaded. See [systemd-networkd - Network manager](./Linux/guides/systemd-networkd.md) for more information.
 
 ```bash
 # List all links on system:
@@ -1644,11 +1644,11 @@ xfs_growfs <FS>
 
 #### nvme-cli:
 
-> **Note:** Requires `nvme-cli` package.
+> ℹ️ **Note:** Requires `nvme-cli` package.
 
-> **Note:** `ctrl` refers to the NVMe controller (`/dev/nvme0`) where `dev` refers to the device with namespace ID (`/dev/nvme0n1`) for example.
+> ℹ️ **Note:** `ctrl` refers to the NVMe controller (`/dev/nvme0`) where `dev` refers to the device with namespace ID (`/dev/nvme0n1`) for example.
 
-> **Note:** Use `nvme id-ctrl` to find controller capabilities such as `NS Management` or `Sanitize` for example as some of the commands may not be supported.
+> ℹ️ **Note:** Use `nvme id-ctrl` to find controller capabilities such as `NS Management` or `Sanitize` for example as some of the commands may not be supported.
 
 ```bash
 # List nvme subsystems
@@ -1884,7 +1884,7 @@ dnscmd /RecordAdd <zonename> test CNAME test.com
 
 #### resolvconf:
 
-> **Note:** Requires systemd-resolved.
+> ℹ️ **Note:** Requires systemd-resolved.
 
 ```bash
 # Show detailed server information:
@@ -2133,6 +2133,15 @@ vertarget
 dt <structure*>
 
 ## Applications:
+
+### Flatpak:
+
+> ℹ️ **Note:** Commands usually require elevation.
+
+```bash
+# List installed remote repositories:
+flatpak remotes
+```
 
 ### Exchange On-Premise:
 
@@ -2750,7 +2759,7 @@ REM If the certificate requires approval, approve the request in ADCS:
 
 #### OpenPGP/GnuPG:
 
-> **Note:** All gpg commands are based on gpg 2.4.x.
+> ℹ️ **Note:** All gpg commands are based on gpg 2.4.x.
 
 ```bash
 # List all keys in the public keyring:
@@ -4339,7 +4348,7 @@ az network private-dns record-set txt delete --name @ --zone-name <fqdn> --resou
 
 #### Storage:
 
-> **Note:** --upload-size-bytes requires a value that is +512 bytes of a value divisible by 1024.
+> ℹ️ **Note:** --upload-size-bytes requires a value that is +512 bytes of a value divisible by 1024.
 
 ```bash
 # Create a disk for the purpose of uploading from an alternate source.

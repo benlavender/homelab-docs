@@ -367,7 +367,7 @@ localectl set-locale LANG=en_GB.UTF-8
 
 #### efibootmgr:
 
-> **Note:** Requires EFI firmware support.
+> ℹ️ **Note:** Requires EFI firmware support.
 
 ```bash
 # Show the current EFI boot order (use -v for verbose output):
@@ -400,7 +400,7 @@ efibootmgr -b <#> -B
 
 ### BlueZ (bluetooth):
 
-> **Note:** `bluez-utils` package is required for the following commands.
+> ℹ️ **Note:** `bluez-utils` package is required for the following commands.
 
 ```bash
 # List available controllers:
@@ -436,7 +436,7 @@ remove <mac>
 
 ### PulseAudio/PipeWire:
 
-> **Note:** Refer to [PipeWire](../guides/Linux/guides/pipewire.md) for terminology and concepts.
+> ℹ️ **Note:** Refer to [PipeWire](../guides/Linux/guides/pipewire.md) for terminology and concepts.
 
 ```bash
 # Show current configuration:
@@ -523,88 +523,90 @@ wpctl settings <Name> <Value>
 
 ### RH subscription manager:
 
+> ℹ️ **Note:** Commands usually require elevation.
+
 ```bash
 # Show all subscription-manager configs:
-sudo subscription-manager config --list
+subscription-manager config --list
 # Delete a config value:
-sudo subscription-manager config --remove=<section.name>
+subscription-manager config --remove=<section.name>
 # Adds a config value:
-sudo subscription-manager config --<section.name=value>
+subscription-manager config --<section.name=value>
 ```
 ```bash
 # Show system registration status:
-sudo subscription-manager status
+subscription-manager status
 ```
 ```bash
 # Show system registration status and product information:
-sudo subscription-manager list
+subscription-manager list
 # List available subscriptions for the system not currently attached:
-sudo subscription-manager list --available
+subscription-manager list --available
 # List all available subscriptions for the system:
-sudo subscription-manager list --all --available
+subscription-manager list --all --available
 # List all subscriptions matching installed products:
-sudo subscription-manager list --available --match-installed
+subscription-manager list --available --match-installed
 # List all subscriptions currently attached to the system:
-sudo subscription-manager list --consumed
+subscription-manager list --consumed
 # List products installed on the system, regardless if subscribed or not:
-sudo subscription-manager list --installed
+subscription-manager list --installed
 ```
 ```bash
 # Registering to RedHat customer portal (use --force to force re-registration).
 # Register a system using a username:
-sudo subscription-manager register --username=<username>
+subscription-manager register --username=<username>
 # or with inline password:
-sudo subscription-manager register --username=<username> --password=<password>
+subscription-manager register --username=<username> --password=<password>
 # Register a system to RH customer portal using an activation key:
-sudo subscription-manager register --activationkey=<SKU>
+subscription-manager register --activationkey=<SKU>
 # Register a system using a username and password then attach best matched subscriptions:
-sudo subscription-manager register --auto-attach
+subscription-manager register --auto-attach
 ```
 ```bash
 # Unregister a system from the RH customer portal:
-sudo subscription-manager unregister
+subscription-manager unregister
 # Remove all subscriptions and un-register the system:
-sudo subscription-manager clean
+subscription-manager clean
 ```
 ```bash
 # Attach a subscription to the system:
-sudo subscription-manager attach --pool=<id>
+subscription-manager attach --pool=<id>
 # Attach best matched subscriptions automatically:
-sudo subscription-manager attach --auto
+subscription-manager attach --auto
 # Checks auto-attach status (Runs every 4 hours):
-sudo subscription-manager auto-attach --show
+subscription-manager auto-attach --show
 # Enable auto-attach:
-sudo subscription-manager auto-attach --enable
+subscription-manager auto-attach --enable
 # Disable auto-attach:
-sudo subscription-manager auto-attach --disable
+subscription-manager auto-attach --disable
 ```
 ```bash
 # Remove a subscription from the system by pool ID:
-sudo subscription-manager remove --pool=<id>
+subscription-manager remove --pool=<id>
 # or via serial:
-sudo subscription-manager remove --serial=<serial>
+subscription-manager remove --serial=<serial>
 # Or straight out remove all:
-sudo subscription-manager remove --all
+subscription-manager remove --all
 ```
 ```bash
 # List all the organizations associated with an account:
-sudo subscription-manager orgs
+subscription-manager orgs
 ```
 ```bash
 # Show all available system releases:
-sudo subscription-manager release --list
+subscription-manager release --list
 # Set a stick release for use with packages and updates:
-sudo subscription-manager release --set=<value>
+subscription-manager release --set=<value>
 # Removes current sticky release:
-sudo subscription-manager release --unset
+subscription-manager release --unset
 ```
 ```bash
 # List all available repos provided by the CDN:
-sudo subscription-manager repos --list
+subscription-manager repos --list
 # Disable a specific repo:
-sudo subscription-manager repos --disable=<Repo-ID>
+subscription-manager repos --disable=<Repo-ID>
 # Enable a specific repo:
-sudo subscription-manager repos --enable=<Repo-ID>
+subscription-manager repos --enable=<Repo-ID>
 ```
 
 ### Service control:
@@ -975,7 +977,7 @@ dd if=/dev/urandom of=<dev>
 
 #### GNU Stow:
 
-> **Note:**
+> ℹ️ **Note:**
 > - Stow will use the working directory as the stow directory unless changed.
 > - The term `package` refers to the `directory` containing the files to be managed. The stow `directory` must match the target tree for `defaults` to work.
 > - The term `target` refers to the directory where the files will be symlinked from, at default this is the parent directory of the package.
@@ -1488,7 +1490,7 @@ wpa_cli scan_results -i <int>
 
 #### systemd-networkd:
 
-> **Note:** Ensure the systemd-networkd.service unit is loaded. See [systemd-networkd - Network manager](./Linux/guides/systemd-networkd.md) for more information.
+> ℹ️ **Note:** Ensure the systemd-networkd.service unit is loaded. See [systemd-networkd - Network manager](./Linux/guides/systemd-networkd.md) for more information.
 
 ```bash
 # List all links on system:
@@ -1642,11 +1644,11 @@ xfs_growfs <FS>
 
 #### nvme-cli:
 
-> **Note:** Requires `nvme-cli` package.
+> ℹ️ **Note:** Requires `nvme-cli` package.
 
-> **Note:** `ctrl` refers to the NVMe controller (`/dev/nvme0`) where `dev` refers to the device with namespace ID (`/dev/nvme0n1`) for example.
+> ℹ️ **Note:** `ctrl` refers to the NVMe controller (`/dev/nvme0`) where `dev` refers to the device with namespace ID (`/dev/nvme0n1`) for example.
 
-> **Note:** Use `nvme id-ctrl` to find controller capabilities such as `NS Management` or `Sanitize` for example as some of the commands may not be supported.
+> ℹ️ **Note:** Use `nvme id-ctrl` to find controller capabilities such as `NS Management` or `Sanitize` for example as some of the commands may not be supported.
 
 ```bash
 # List nvme subsystems
@@ -1882,7 +1884,7 @@ dnscmd /RecordAdd <zonename> test CNAME test.com
 
 #### resolvconf:
 
-> **Note:** Requires systemd-resolved.
+> ℹ️ **Note:** Requires systemd-resolved.
 
 ```bash
 # Show detailed server information:
@@ -2131,6 +2133,61 @@ vertarget
 dt <structure*>
 
 ## Applications:
+
+### Flatpak:
+
+> ℹ️ **Note:** All commands are system-wide unless `--user` is specified.
+
+> ℹ️ **Note:** If the user is in `wheel` and **not** on a PTS session then elevation is usually required.
+
+```bash
+# Working with repositories.
+# List installed repositories:
+flatpak remotes
+# Add a new repository:
+flatpak remote-add <custom_name> <URI>
+# Remove a repository:
+flatpak remote-delete <custom_name>
+# List all applications and runtimes in a repository:
+flatpak remote-ls <custom_name>
+```
+```bash
+# Search for applications:
+flatpak search <string>
+# Search for applications and display only a specific field:
+flatpak search spotify --columns=<FIELD>
+```
+```bash
+# Working with flatpak applications and runtimes.
+# Update all applications and runtimes:
+flatpak update
+# Update a specific application or runtime:
+flatpak update <id>
+# List installed applications:
+flatpak list
+# Show information about a runtime or application:
+flatpak remote-info <repo> <ref|id>
+# Run a flatpak application:
+flatpak run <id>
+# Show running flatpak applications:
+flatpak ps
+# Kill a running flatpak application:
+flatpak kill <instance|id>
+```
+```bash
+# Installing and removing flatpak applications and runtimes.
+# Use --noninteractive to skip prompts.
+# Install an application or runtime:
+flatpak install <repo> <ref|id>
+# Install an application or runtime with just the name (may give conflicts):
+flatpak install <name>
+# Remove an application or runtime:
+flatpak uninstall <ref|id>
+```
+```bash
+# Show activity log of flatpak:
+flatpak history
+```
 
 ### Exchange On-Premise:
 
@@ -2748,7 +2805,7 @@ REM If the certificate requires approval, approve the request in ADCS:
 
 #### OpenPGP/GnuPG:
 
-> **Note:** All gpg commands are based on gpg 2.4.x.
+> ℹ️ **Note:** All gpg commands are based on gpg 2.4.x.
 
 ```bash
 # List all keys in the public keyring:
@@ -4337,7 +4394,7 @@ az network private-dns record-set txt delete --name @ --zone-name <fqdn> --resou
 
 #### Storage:
 
-> **Note:** --upload-size-bytes requires a value that is +512 bytes of a value divisible by 1024.
+> ℹ️ **Note:** --upload-size-bytes requires a value that is +512 bytes of a value divisible by 1024.
 
 ```bash
 # Create a disk for the purpose of uploading from an alternate source.

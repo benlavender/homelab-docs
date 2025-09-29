@@ -1178,6 +1178,8 @@ tar -tzvf <tarball.tar>
 # Omit the -v to remove verbosity
 # Create a tarball using tar:
 tar -cvf <archive.tar> <file1> <file2> <file3>
+# Create a tarball using tar and check in to the directory first (minimal directory structure):
+tar -cvf <archive.tar> -C <directory> .
 # Create a tarball using tar and maintain directory structure:
 tar -cvf <archive.tar> <directory>
 # Create a tarball with wildcard expression like archiving all .JSON files in the current directory:
@@ -1208,12 +1210,15 @@ Expand-Archive -Path <archive.zip> -DestinationPath <directory>
 ```bash
 # Extracting archives with tar
 # Omit the -v to remove verbosity
-# Extract a tarball with tar to current directory:
+# Extract a tarball with tar to the current directory:
 tar -xvf <archive.tar>
 # Extract a single file from a tarball:
 tar -xvf <archive.tar> <file_in_archive.file>
 # Extract a tarball with tar to different existing directory:
 tar -xvf <archive.tar> --directory <directory>
+# Extract a tarball with tar to the current directory but remove # number of parent directories.
+# If the archive is less than the number of directories to be stripped, then it will remove the data:
+tar --strip-components=<#> -xvf <archive.tar> 
 # Extract a compressed tarball to the current directory:
 tar -zxvf <archive.tar.gz>
 # Uncompress and extract to a directory named the same as the archive base level:

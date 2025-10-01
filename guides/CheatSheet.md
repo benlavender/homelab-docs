@@ -398,6 +398,50 @@ efibootmgr -c -d <dev> -p <part#> -L <LABEL> -l <path/to/.efi>
 efibootmgr -b <#> -B
 ```
 
+### Loginctl:
+
+```bash
+# List current sessions:
+loginctl list-sessions
+```
+```bash
+# Show login manager properties:
+loginctl show-session
+# Show properties for a specific session:
+loginctl show-session <id>
+# Show 
+```
+```bash
+# Activate screen lock for a specific session:
+loginctl lock-session <id>
+# Activate screen unlock on all supporting sessions:
+loginctl lock-sessions
+# Deactivate screen lock for a specific session:
+loginctl unlock-session <id>
+```
+```bash
+# If no session is specified the current session running the command will be used.
+# Terminate an active session:
+loginctl terminate-session <id>
+# Kill an active session (sends SIGTERM to units):
+loginctl kill-session <id>
+```
+```bash
+# List current logged in users:
+loginctl list-users
+```
+```bash
+# Show properties of a logged in user:
+loginctl show-user <id|name>
+```
+```bash
+# If no user is specified the current user running the command will be used.
+# Terminate all sessions for a user:
+loginctl terminate-user <id|name>
+# Kill all processes of a user (sends SIGTERM):
+loginctl kill-user <id|name>
+```
+
 ### BlueZ (bluetooth):
 
 > ℹ️ **Note:** `bluez-utils` package is required for the following commands.

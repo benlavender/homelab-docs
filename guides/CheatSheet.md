@@ -2251,7 +2251,7 @@ v4l2-ctl --device <device> --info
 v4l2-ctl --device <device> --all
 ```
 ```bash
-# List controls available for a specific device:#
+# List controls available for a specific device:
 v4l2-ctl --device <device> --list-ctrls
 ```
 

@@ -2238,6 +2238,23 @@ flatpak uninstall <ref|id>
 flatpak history
 ```
 
+### video4linux:
+
+```bash
+# List all v4l devices:
+v4l2-ctl --list-devices
+```
+```bash
+# Show driver info for a specific device:
+v4l2-ctl --device <device> --info
+# Show detailed device information:
+v4l2-ctl --device <device> --all
+```
+```bash
+# List controls available for a specific device:#
+v4l2-ctl --device <device> --list-ctrls
+```
+
 ### Exchange On-Premise:
 
 ```powershell

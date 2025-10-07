@@ -442,6 +442,31 @@ loginctl terminate-user <id|name>
 loginctl kill-user <id|name>
 ```
 
+### Timeshift: 
+
+> ℹ️ **Note:** Commands usually require elevation.
+
+```bash
+# Listing snapshots and devices.
+# List devices for backup:
+timeshift --list-devices
+# List all snapshots:
+timeshift --list
+# List snapshots for a specific device:
+timeshift --list --snapshot-device <dev>
+```
+```bash
+# Backing up with Timeshift.
+# Create a snapshot only if scheduled.
+# Follow the interactive guide and select a device:
+timeshift --check
+# Create a snapshot only if scheduled on a specific device:
+timeshift --check --snapshot-device <dev>
+# Create a snapshot.
+# Follow the interactive guide and select a device:
+timeshift --create
+```
+
 ### BlueZ (bluetooth):
 
 > ℹ️ **Note:** `bluez-utils` package is required for the following commands.

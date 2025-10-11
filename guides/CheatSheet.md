@@ -442,6 +442,55 @@ loginctl terminate-user <id|name>
 loginctl kill-user <id|name>
 ```
 
+### Timeshift: 
+
+> ℹ️ **Note:** Commands usually require elevation.
+
+> ℹ️ **Note:** Commands assume `/etc/timeshift/timeshift.json` is configured.
+
+```bash
+# Listing snapshots and devices.
+# List devices for backup:
+timeshift --list-devices
+# List all snapshots:
+timeshift --list
+# List snapshots for a specific device:
+timeshift --list --snapshot-device <dev>
+```
+```bash
+# Backing up with Timeshift.
+# Create a snapshot only if scheduled:
+timeshift --check
+# Create a snapshot only if scheduled on a specific device:
+timeshift --check --snapshot-device <dev>
+# Create a snapshot:
+timeshift --create
+# Create a snapshot with a custom description:
+timeshift --create --comments '<description>'
+```
+```bash
+# Deleting snapshots.
+# Delete a specific snapshot.
+# # Follow the interactive guide and select a snapshot:
+timeshift --delete
+# or
+timeshift --delete --snapshot <name>
+# Delete all snapshots:
+timeshift --delete-all
+```
+```bash
+# Restoring from snapshots.
+# Restore from a snapshot.
+# Follow the interactive guide and select a snapshot:
+timeshift --restore
+# Restore from a specific snapshot.
+# Follow the interactive guide:
+timeshift --restore --snapshot <name>
+# Restore from a snapshot but ignore the GRUB2 option.
+# Follow the interactive guide and select a snapshot:
+timeshift --restore --skip-grub
+```
+
 ### BlueZ (bluetooth):
 
 > ℹ️ **Note:** `bluez-utils` package is required for the following commands.

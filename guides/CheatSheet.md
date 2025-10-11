@@ -104,7 +104,7 @@ $ = Match the end of the line.
 diff file1 file2
 ```
 ```bash
-# Displays charachter infomation of a text file:
+# Displays character information of a text file:
 wc file
 ```
 ```bash
@@ -207,20 +207,20 @@ END = Process once at the termination of the command.
 
 #### Vi:
 
-Default mode is command mode, then use i for intert mode.
+Default mode is command mode, then use i for insert mode.
 
 ##### Insert mode:
 
 ###### write
 :w  
 
-###### write and overrite:               
+###### write and overwrite:                              
 :w!
 
 ###### Write and exit:
 :wq 
 
-###### Write, overrite and exit:
+###### Write, overwrite and exit:
 :wq! 
 
 ###### Quit:
@@ -363,90 +363,343 @@ locale-gen
 localectl set-locale LANG=en_GB.UTF-8
 ```
 
+### Bootloaders and boot managers:
+
+#### efibootmgr:
+
+> ℹ️ **Note:** Requires EFI firmware support.
+
+```bash
+# Show the current EFI boot order (use -v for verbose output):
+efibootmgr
+```
+```bash
+# Change the BootOrder value for permanent boot order:
+efibootmgr -o <#>,<#>
+```
+```bash
+# Change the BootNext value for next boot only:
+efibootmgr -n <#>
+```
+```bash
+# Deactivate a boot option:
+efibootmgr -b <#> -A
+```
+```bash
+# Activate a boot option:
+efibootmgr -b <#> -a
+```
+```bash
+# Create a new boot option:
+efibootmgr -c -d <dev> -p <part#> -L <LABEL> -l <path/to/.efi>
+```
+```bash
+# Delete a boot option:
+efibootmgr -b <#> -B
+```
+
+### Loginctl:
+
+```bash
+# List current sessions:
+loginctl list-sessions
+```
+```bash
+# Show login manager properties:
+loginctl show-session
+# Show properties for a specific session:
+loginctl show-session <id>
+# Show 
+```
+```bash
+# Activate screen lock for a specific session:
+loginctl lock-session <id>
+# Activate screen unlock on all supporting sessions:
+loginctl lock-sessions
+# Deactivate screen lock for a specific session:
+loginctl unlock-session <id>
+```
+```bash
+# If no session is specified the current session running the command will be used.
+# Terminate an active session:
+loginctl terminate-session <id>
+# Kill an active session (sends SIGTERM to units):
+loginctl kill-session <id>
+```
+```bash
+# List current logged in users:
+loginctl list-users
+```
+```bash
+# Show properties of a logged in user:
+loginctl show-user <id|name>
+```
+```bash
+# If no user is specified the current user running the command will be used.
+# Terminate all sessions for a user:
+loginctl terminate-user <id|name>
+# Kill all processes of a user (sends SIGTERM):
+loginctl kill-user <id|name>
+```
+
+### Timeshift: 
+
+> ℹ️ **Note:** Commands usually require elevation.
+
+> ℹ️ **Note:** Commands assume `/etc/timeshift/timeshift.json` is configured.
+
+```bash
+# Listing snapshots and devices.
+# List devices for backup:
+timeshift --list-devices
+# List all snapshots:
+timeshift --list
+# List snapshots for a specific device:
+timeshift --list --snapshot-device <dev>
+```
+```bash
+# Backing up with Timeshift.
+# Create a snapshot only if scheduled:
+timeshift --check
+# Create a snapshot only if scheduled on a specific device:
+timeshift --check --snapshot-device <dev>
+# Create a snapshot:
+timeshift --create
+# Create a snapshot with a custom description:
+timeshift --create --comments '<description>'
+```
+```bash
+# Deleting snapshots.
+# Delete a specific snapshot.
+# # Follow the interactive guide and select a snapshot:
+timeshift --delete
+# or
+timeshift --delete --snapshot <name>
+# Delete all snapshots:
+timeshift --delete-all
+```
+```bash
+# Restoring from snapshots.
+# Restore from a snapshot.
+# Follow the interactive guide and select a snapshot:
+timeshift --restore
+# Restore from a specific snapshot.
+# Follow the interactive guide:
+timeshift --restore --snapshot <name>
+# Restore from a snapshot but ignore the GRUB2 option.
+# Follow the interactive guide and select a snapshot:
+timeshift --restore --skip-grub
+```
+
+### BlueZ (bluetooth):
+
+> ℹ️ **Note:** `bluez-utils` package is required for the following commands.
+
+```bash
+# List available controllers:
+bluetoothctl list
+```
+```bash
+# Show controller information:
+bluetoothctl show <controller>
+```
+```bash
+# Usage of bluetoothctl.
+# Follow the interactive guide and type help to provide subcommands.
+# Device becomes immediately pairable when in interactive mode.
+# Change controller power state:
+power <on|off>
+# Scan for nearby devices:
+scan on
+# List available devices:
+devices
+# Show device info:
+info <mac>
+# Pair with a device:
+pair <mac>
+# Connect to a device:
+connect <mac>
+# Trust for auto-connect:
+trust <mac>
+# Disconnect from a device:
+disconnect <mac>
+# Remove a device:
+remove <mac>
+```
+
+### PulseAudio/PipeWire:
+
+> ℹ️ **Note:** Refer to [PipeWire](../guides/Linux/guides/pipewire.md) for terminology and concepts.
+
+```bash
+# Show current configuration:
+pw-config list
+# How all all configuration files to be used:
+pw-config
+```
+```bash
+# List all running node and device statistics:
+pw-top
+# Show properties on a specific node:
+pw-cli info <ID>
+```
+```bash
+# Show PulseAudio server information:
+pactl info
+```
+```bash
+# List all sinks, clients, modules and sources etc:
+pactl list
+```
+```bash
+# Append short for brief output.
+# List all sinks:
+pactl list sinks
+# List all clients:
+pactl list clients
+# List all cards:
+pactl list cards
+# List all modules/plugins:
+pactl list modules
+```
+```bash
+# Get default sink:
+pactl get-default-sink
+```
+```bash
+# Change the default sink:
+pactl set-default-sink <sink_name>
+```
+```bash
+# Change sink volume:
+pactl set-sink-volume <sink_name> <#%>
+# or
+pactl set-sink-volume @DEFAULT_SINK@ <#%>
+```
+```bash
+# Play a sample sound file.
+# Type needs to be understood by libsndfile.
+# First upload the file to the sample cache:
+pactl upload-sample <path/to/sample>
+# Find the sample in the cache:
+pactl list samples
+# Play the sample out of the default sink.
+# Use sink-name to play on a specific sink:
+pactl play-sample <sample_name>
+```
+
+### WirePlumber:
+
+```bash
+# Show WirePlumber version and device information:
+wpctl status
+```
+```bash
+# Show all properties on an object:
+wpctl inspect <id>
+```
+```bash
+# Get a sink volume:
+wpctl get-volume <id>
+# or 
+wpctl get-volume @DEFAULT_SINK@
+```
+```bash
+# Use the --save switch to save the configuration.
+# Show all WirePlumber settings:
+wpctl settings
+# Get a specific setting:
+wpctl settings <Name>
+# Set a specific setting:
+wpctl settings <Name> <Value>
+```
+
 ### RH subscription manager:
+
+> ℹ️ **Note:** Commands usually require elevation.
 
 ```bash
 # Show all subscription-manager configs:
-sudo subscription-manager config --list
+subscription-manager config --list
 # Delete a config value:
-sudo subscription-manager config --remove=<section.name>
+subscription-manager config --remove=<section.name>
 # Adds a config value:
-sudo subscription-manager config --<section.name=value>
+subscription-manager config --<section.name=value>
 ```
 ```bash
 # Show system registration status:
-sudo subscription-manager status
+subscription-manager status
 ```
 ```bash
 # Show system registration status and product information:
-sudo subscription-manager list
+subscription-manager list
 # List available subscriptions for the system not currently attached:
-sudo subscription-manager list --available
+subscription-manager list --available
 # List all available subscriptions for the system:
-sudo subscription-manager list --all --available
+subscription-manager list --all --available
 # List all subscriptions matching installed products:
-sudo subscription-manager list --available --match-installed
+subscription-manager list --available --match-installed
 # List all subscriptions currently attached to the system:
-sudo subscription-manager list --consumed
+subscription-manager list --consumed
 # List products installed on the system, regardless if subscribed or not:
-sudo subscription-manager list --installed
+subscription-manager list --installed
 ```
 ```bash
 # Registering to RedHat customer portal (use --force to force re-registration).
 # Register a system using a username:
-sudo subscription-manager register --username=<username>
+subscription-manager register --username=<username>
 # or with inline password:
-sudo subscription-manager register --username=<username> --password=<password>
+subscription-manager register --username=<username> --password=<password>
 # Register a system to RH customer portal using an activation key:
-sudo subscription-manager register --activationkey=<SKU>
+subscription-manager register --activationkey=<SKU>
 # Register a system using a username and password then attach best matched subscriptions:
-sudo subscription-manager register --auto-attach
+subscription-manager register --auto-attach
 ```
 ```bash
 # Unregister a system from the RH customer portal:
-sudo subscription-manager unregister
+subscription-manager unregister
 # Remove all subscriptions and un-register the system:
-sudo subscription-manager clean
+subscription-manager clean
 ```
 ```bash
 # Attach a subscription to the system:
-sudo subscription-manager attach --pool=<id>
+subscription-manager attach --pool=<id>
 # Attach best matched subscriptions automatically:
-sudo subscription-manager attach --auto
+subscription-manager attach --auto
 # Checks auto-attach status (Runs every 4 hours):
-sudo subscription-manager auto-attach --show
+subscription-manager auto-attach --show
 # Enable auto-attach:
-sudo subscription-manager auto-attach --enable
+subscription-manager auto-attach --enable
 # Disable auto-attach:
-sudo subscription-manager auto-attach --disable
+subscription-manager auto-attach --disable
 ```
 ```bash
 # Remove a subscription from the system by pool ID:
-sudo subscription-manager remove --pool=<id>
+subscription-manager remove --pool=<id>
 # or via serial:
-sudo subscription-manager remove --serial=<serial>
+subscription-manager remove --serial=<serial>
 # Or straight out remove all:
-sudo subscription-manager remove --all
+subscription-manager remove --all
 ```
 ```bash
 # List all the organizations associated with an account:
-sudo subscription-manager orgs
+subscription-manager orgs
 ```
 ```bash
 # Show all available system releases:
-sudo subscription-manager release --list
+subscription-manager release --list
 # Set a stick release for use with packages and updates:
-sudo subscription-manager release --set=<value>
+subscription-manager release --set=<value>
 # Removes current sticky release:
-sudo subscription-manager release --unset
+subscription-manager release --unset
 ```
 ```bash
 # List all available repos provided by the CDN:
-sudo subscription-manager repos --list
+subscription-manager repos --list
 # Disable a specific repo:
-sudo subscription-manager repos --disable=<Repo-ID>
+subscription-manager repos --disable=<Repo-ID>
 # Enable a specific repo:
-sudo subscription-manager repos --enable=<Repo-ID>
+subscription-manager repos --enable=<Repo-ID>
 ```
 
 ### Service control:
@@ -484,79 +737,9 @@ dpkg -i package.deb
 # Show reverse dependency information for a package:
 apt-cache rdepends <package>
 ```
-```bash
-# Pacman refresh and update packages
-pacman -Syu --noconfirm
-```
-```bash
-# Install package
-pacman -S <packagename>
-```
-```bash
-# Print the download targets only insteading of downloading and installing:
-pacman -S --print <package>
-```
-```bash
-# Query packages:
-pacman -Ss <packagename>
-```
-```bash
-# View package group members:
-pacman -Sg <package>
-```
-```bash
-# Query package information:
-pacman -Si <package>
-```
-```bash
-# Remove any non-installed cached packages from /var/cache/pacman/pkg:
-# Use -Scc to clear all regardless
-pacman -Sc
-# or (use the -u switch to target only uninstalled packages):
-paccache -rk0
-```
-```bash
-# Remove all cached packages older than -3x versions earlier (use the -u switch to target only uninstalled packages):
-paccache -r
-```
-```bash
-# Remove -1x versions earlier (use the -u switch to target only uninstalled packages):
-paccache -rk1
-```
-```bash
-# Query installed packages:
-pacman -Q <packagename>
-```
-```bash
-# Query installed package with info:
-pacman -Qi <packagename>
-```
-```bash
-# Query list of files installed within a package:
-pacman -Ql <packagename>
-```
-```bash
-# List all files that are part of a remote package (add -y to update the databases):
-pacman -Fl <packagename>
-```
-```bash
-# List which remote package this file belongs to (add -y to update the databases):
-pacman -F <filename or /path/to/file>
-````
-```bash
-# Query orphaned packages that no longer are depends:
-pacman -Qtd
-# To remove them:
-pacman -Rns $(pacman -Qtdq)
-```
-```bash
-# Remove an installed package, use -Rs to remove depends:
-pacman -R <packagename> 
-```
-```bash
-# Pacman info and operation verbosity, add --debug to any operation:
-pacman --verbose
-```
+
+#### Winget:
+
 ```bat
 REM List Windows Package Manager info:
 winget --info
@@ -588,6 +771,75 @@ REM Update all configured sources:
 winget source update
 ```
 
+#### Pacman / Arch Linux:
+
+```bash
+# Syncing packages from remote repositories.
+# Pacman refresh and update packages:
+pacman -Syu --noconfirm
+# Install package:
+pacman -S <packagename>
+# Print the download targets only instead of downloading and installing:
+pacman -S --print <package>
+# Download a package but do not install:
+pacman -Sw <package>
+# Query packages:
+pacman -Ss <packagename>
+# View package group members:
+pacman -Sg <package>
+# Query package information:
+pacman -Si <package>
+```
+```bash
+# Remove any non-installed cached packages from /var/cache/pacman/pkg:
+# Use -Scc to clear all regardless1
+pacman -Sc
+# or (use the -u switch to target only uninstalled packages):
+paccache -rk0
+```
+```bash
+# Upgrading and adding packages locally or from a remote source.
+# Install a package from a local file:
+pacman -U </path/to/package.pkg.tar.zst>
+# Install a package from a URI:
+pacman -U <URI>
+```
+```bash
+# Removing packages.
+# Remove an installed package, use -Rs to remove depends:
+pacman -R <packagename> 
+# Remove all cached packages older than -3x versions earlier (use the -u switch to target only uninstalled packages):
+paccache -r
+# Remove -1x versions earlier (use the -u switch to target only uninstalled packages):
+paccache -rk1
+```
+```bash
+# Querying the local package database and files.
+# Query installed packages:
+pacman -Q <packagename>
+# Query installed package with info:
+pacman -Qi <packagename>
+# Query list of files installed within a package:
+pacman -Ql <packagename>
+```
+```bash
+# Query files in the synced database.
+# List all files that are part of a remote package (add -y to update the databases):
+pacman -Fl <packagename>
+# List which remote package this file belongs to (add -y to update the databases):
+pacman -F <filename or /path/to/file>
+````
+```bash
+# Query orphaned packages that no longer are depends:
+pacman -Qtd
+# To remove them:
+pacman -Rns $(pacman -Qtdq)
+```
+```bash
+# Pacman info and operation verbosity, add --debug to any operation:
+pacman --verbose
+```
+
 ### WinEvents:
 
 ```powershell
@@ -599,7 +851,7 @@ Get-WinEvent -ListLog *
 Get-WinEvent -LogName Security
 ```
 ```powershell
-# Get last 10 securtity logs (oldest):
+# Get last 10 security logs (oldest):
 Get-WinEvent -LogName Security -Last 10
 ```
 ```powershell
@@ -650,11 +902,11 @@ find <dir> -type d -name <'filename'> -print
 find <dir> -type f -name <'filename'> -maxdepth 1
 # or:
 find <dir> -type d -name <'filename'> -maxdepth 1
-# Don't recurse into mounted directorties for files and directories:
+# Don't recurse into mounted directories for files and directories:
 find <dir> -mount -name <'filename'>
 ```
 ```bash
-# Cronological file searching with find command.
+# Chronological file searching with find command.
 # 'n' = Exact.
 # '+n' = After.
 # '-n' = Before.
@@ -763,6 +1015,81 @@ Get-ItemProperty -Path 'file/dir' | Format-List -Property *
 ```powershell
 # List files created and modified today, in descending order by lastwritetime and include the name, lwt and size:
 Get-ChildItem -Path <dir> -Recurse | Where-Object {$_.LastWriteTime.date -eq (Get-Date).Date} | Sort-Object LastWriteTime -Descending | Select-Object -Property Name,LastWriteTime,Length | Format-Table -AutoSize
+```
+```bash
+# Reading files with dd.
+# Use status=progress to print progress.
+# Read a file and output to stdout:
+dd if=<file>
+# Read a file and convert to all to uppercase:
+dd if=<file> conv=ucase
+# Read a file and convert to all to lowercase:
+dd if=<file> conv=lcase
+# Read a file but limit to specific block(s) of 512 bytes:
+dd if=<file> count=#
+```
+```bash
+# Copying files with dd.
+# Use status=progress to print progress.
+# Read a file and output to another file (can be used to copy a file):
+dd if=<file> of=<file>
+# Copy an entire partition to another partition (ensure target parition is not mounted):
+dd if=<dev> of=<dev> 
+# Copy an entire disk to another disk:
+dd if=<dev> of=<dev> 
+# Create an image file of an entire disk:
+dd if=<dev> of=<image.img>
+# Create a bootable USB from an ISO image:
+dd if=<image.iso> of=</dev>
+# Create an ISO image for a CD/DVD mount of either a file or device:
+dd if=<file | dev> of=<file | dev>
+# Copy either a file or device but do not stop on errors:
+dd if=<file | dev> of=<file | dev> conv=noerror
+# Copy either a file or device with syncronous writes (slower but safer for data integrity):
+dd if=<file | dev> of=<file | dev> oflag=sync
+# Copy either a file or device with direct I/O (bypass kernel read/write caches):
+dd if=<file | dev> of=<file | dev> oflag=direct
+# Copy either a file or device with but do not overwrite any targets:
+dd if=<file | dev> of=<file | dev> conv=notrunc
+# Copy either a file or device with full data syncronization:
+dd if=<file | dev> of=<file | dev> conv=fdatasync
+# or with +metadata:
+dd if=<file | dev> of=<file | dev> conv=fsync
+# Copy either a file or device and change the input/output block size in bytes or k or M (default is 512).
+# 512 bytes is typical of spindle disks, 4k is typical of SSDs so the default is somewhat out of data. A typical value of 64k can be used:
+dd if=<file | dev> of=<file | dev> bs=<#>
+```
+```bash
+# Wiping block devices with dd.
+# Use status=progress to print progress.
+# Wipe an entire device with dd:
+dd if=/dev/zero of=<dev>
+# Randomize an entire device (useful for security if ran before dd if=/dev/zero):
+dd if=/dev/urandom of=<dev>
+```
+
+#### GNU Stow:
+
+> ℹ️ **Note:**
+> - Stow will use the working directory as the stow directory unless changed.
+> - The term `package` refers to the `directory` containing the files to be managed. The stow `directory` must match the target tree for `defaults` to work.
+> - The term `target` refers to the directory where the files will be symlinked from, at default this is the parent directory of the package.
+
+```bash
+# Stow a package:
+stow <package>
+# Stow a package with verbose output:
+stow <package> --verbose
+# Stow a package as a dry run only:
+stow <package> --verbose --simulate
+# Stow a package even if the target files exist (files will be overwritten in the stow directory):
+stow <package> --adopt
+# Stow a package but do not merge/un-merge directories with a similar structure:
+stow <package> --no-folding
+# Stow a package with a specific target directory:
+stow <package> --target <target>
+# Stow a package with a specific target directory and a specific stow directory:
+stow <package> --target <target> --dir <directory>
 ```
 ```bat
 REM Robocopy mirror sync:
@@ -944,6 +1271,8 @@ tar -tzvf <tarball.tar>
 # Omit the -v to remove verbosity
 # Create a tarball using tar:
 tar -cvf <archive.tar> <file1> <file2> <file3>
+# Create a tarball using tar and check in to the directory first (minimal directory structure):
+tar -cvf <archive.tar> -C <directory> .
 # Create a tarball using tar and maintain directory structure:
 tar -cvf <archive.tar> <directory>
 # Create a tarball with wildcard expression like archiving all .JSON files in the current directory:
@@ -974,12 +1303,15 @@ Expand-Archive -Path <archive.zip> -DestinationPath <directory>
 ```bash
 # Extracting archives with tar
 # Omit the -v to remove verbosity
-# Extract a tarball with tar to current directory:
+# Extract a tarball with tar to the current directory:
 tar -xvf <archive.tar>
 # Extract a single file from a tarball:
 tar -xvf <archive.tar> <file_in_archive.file>
 # Extract a tarball with tar to different existing directory:
 tar -xvf <archive.tar> --directory <directory>
+# Extract a tarball with tar to the current directory but remove # number of parent directories.
+# If the archive is less than the number of directories to be stripped, then it will remove the data:
+tar --strip-components=<#> -xvf <archive.tar> 
 # Extract a compressed tarball to the current directory:
 tar -zxvf <archive.tar.gz>
 # Uncompress and extract to a directory named the same as the archive base level:
@@ -1262,6 +1594,41 @@ wpa_cli scan -i <int>
 wpa_cli scan_results -i <int>
 ```
 
+#### systemd-networkd:
+
+> ℹ️ **Note:** Ensure the systemd-networkd.service unit is loaded. See [systemd-networkd - Network manager](./Linux/guides/systemd-networkd.md) for more information.
+
+```bash
+# List all links on system:
+networkctl list
+# List specific link information:
+networkctl list <link|idx>
+```
+```bash
+# Show all links on system with service logs:
+networkctl status
+# Show the service status:
+systemctl status systemd-networkd
+# Show all link status information:
+networkctl status --all
+# Show specific link information:
+networkctl status <link|idx>
+```
+```bash
+# Reload .network and .netdev files:
+networkctl reload
+```
+```bash
+# Bring a link down:
+networkctl down <link|idx>
+# Bring a link up:
+networkctl up <link|idx>
+```
+```bash
+# Renew DHCP lease on a link:
+networkctl renew <link|idx>
+```
+
 ### Storage:
 
 ```bat
@@ -1381,6 +1748,74 @@ lvextend -r -l +100%FREE <LV Path>
 xfs_growfs <FS>
 ```
 
+#### nvme-cli:
+
+> ℹ️ **Note:** Requires `nvme-cli` package.
+
+> ℹ️ **Note:** `ctrl` refers to the NVMe controller (`/dev/nvme0`) where `dev` refers to the device with namespace ID (`/dev/nvme0n1`) for example.
+
+> ℹ️ **Note:** Use `nvme id-ctrl` to find controller capabilities such as `NS Management` or `Sanitize` for example as some of the commands may not be supported.
+
+```bash
+# List nvme subsystems
+nvme list-subsys
+```
+```bash
+# Show controller information assoicated with an NVMe device:
+nvme id-ctrl <ctrl>
+# Show controller information assoicated with an NVMe device with human readable output:
+nvme id-ctrl <ctrl> --human-readable
+```
+```bash
+# Show a topology of an NVMe device:
+nvme show-topology <dev>
+```
+```bash
+# List all NVMe devices and namespaces:
+nvme list
+# List all namespaces on a device:
+nvme list-ns <ctrl>
+# Get namespace IDs on a specific block device:
+nvme get-ns-id <dev>
+# Show detailed information on a specific namespace of a device (remove --human-readable to show in hex):
+nvme id-ns <ctrl> --namespace-id=<#> --human-readable
+# Show detailed information on all namespaces of a device (remove --human-readable to show in hex):
+nvme id-ns <dev> --human-readable
+```
+```bash
+# Format a namespace.
+# Warning: This will erase all data on the namespace within 10 seconds.
+# Use --force to skip the 10 second wait.
+nvme format <ctrl> --namespace-id=<#> --reset
+```
+```bash
+# Format a namespace with secure erase.
+# Warning: This will erase all data on the namespace within 10 seconds.
+# Use --force to skip the 10 second wait.
+# Perform a block secure erase on the namespace:
+nvme format <ctrl> --namespace-id=<#> --ses=1 --reset
+# Perform a crypto secure erase on the namespace:
+nvme format <ctrl> --namespace-id=<#> --ses=2 --reset
+```
+```bash
+# Sanitize a device.
+# Perform a block sanitize on the device:
+nvme sanitize <ctrl> --sanact=2
+# Perform a crypto sanitize on the device:
+nvme sanitize <ctrl> --sanact=4
+```
+```bash
+# Get the firmware versions of all the slots including the active slot.
+# Use --output-format=json for human readable:
+nvme fw-log <ctrl>
+# Get the device error log.
+# Use --log-entries=<#> to limit the number of entries returned.
+# Use --output-format=json for human readable:
+nvme error-log <ctrl>
+# Show SMART log for an NVMe device:
+nvme smart-log <ctrl> --human-readable
+```
+
 ### O/S Updates:
 
 ```powershell
@@ -1406,6 +1841,41 @@ REM This entirley depends on the AU settings configured on the host machine at H
 REM Immediately detected Windows update settings:
 wuauclt /DetectNow /ReportNow
 REM Install the 
+```
+
+### Fonts:
+
+#### Fontconfig:
+
+> **Note**: Manual local user fonts are stored in `~/.local/share/fonts` and manaual system fonts are stored in `/usr/local/share/fonts`. Package fonts are stored in `/usr/share/fonts`.
+
+```bash
+# Use --verbose to show more information.
+# List available fonts:
+fc-list
+# List available fonts supporting a specific style, such as Bold or Regular:
+fc-list :style=<style>
+# List available fonts supporting a specific language:
+fc-list :lang=<lang>
+# List available fonts supporting a specific fontformat:
+fc-list :fontformat=<fontformat>
+```
+```bash
+# Use --verbose to show more information.
+# Rescan font directories:
+fc-cache
+# Rescan only system font directories:
+fc-cache --system-only
+# Rescan font directories and force update timestamps:
+fc-cache --force
+# Erase cache and rescan font directories:
+fc-cache --really-force
+```
+```bash
+# Scan a font file for information:
+fc-scan <filename>
+# Scan a directory containing font files for information:
+fc-scan <directory>
 ```
 
 ## <ins>Roles:</ins>
@@ -1516,6 +1986,51 @@ dnscmd /RecordDelete <zonename> <QNAME> <QTYPE>
 ```bat
 REM Add a CNAME record as test to test.com:
 dnscmd /RecordAdd <zonename> test CNAME test.com
+```
+
+#### resolvconf:
+
+> ℹ️ **Note:** Requires systemd-resolved.
+
+```bash
+# Show detailed server information:
+resolvectl show-server-state <domain>
+```
+```bash
+# Show current DNS settings for all interfaces:
+resolvectl status
+# Show DNS settings for a specific interface:
+resolvectl dns <interface>
+```
+```bash
+# Set DNS servers for a specific interface:
+resolvectl dns <interface> <dns1> | <dns2>
+```
+```bash
+# Show DNS search listsfor a specific interface:
+resolvectl domain <interface>
+```
+```bash
+# Set DNS search domains for a specific interface:
+resolvectl domain <interface> <domain1> | <domain2>
+```
+```bash
+# Reset DNS settings for a specific interface:
+resolvectl revert <interface>
+```
+```bash
+# Show active local DNS queries and their responses:
+resolvectl monitor
+```
+```bash
+# Resolve an A and or AAAA record:
+resolvectl query <domain>
+# Resolve a specific RRType:
+resolvectl query --type=<RRType> <domain>
+```
+```bash
+# Show the stub resolver cache:
+resolvectl show-cache
 ```
 
 ### Storage Replica:
@@ -1724,6 +2239,78 @@ vertarget
 dt <structure*>
 
 ## Applications:
+
+### Flatpak:
+
+> ℹ️ **Note:** All commands are system-wide unless `--user` is specified.
+
+> ℹ️ **Note:** If the user is in `wheel` and **not** on a PTS session then elevation is usually required.
+
+```bash
+# Working with repositories.
+# List installed repositories:
+flatpak remotes
+# Add a new repository:
+flatpak remote-add <custom_name> <URI>
+# Remove a repository:
+flatpak remote-delete <custom_name>
+# List all applications and runtimes in a repository:
+flatpak remote-ls <custom_name>
+```
+```bash
+# Search for applications:
+flatpak search <string>
+# Search for applications and display only a specific field:
+flatpak search spotify --columns=<FIELD>
+```
+```bash
+# Working with flatpak applications and runtimes.
+# Update all applications and runtimes:
+flatpak update
+# Update a specific application or runtime:
+flatpak update <id>
+# List installed applications:
+flatpak list
+# Show information about a runtime or application:
+flatpak remote-info <repo> <ref|id>
+# Run a flatpak application:
+flatpak run <id>
+# Show running flatpak applications:
+flatpak ps
+# Kill a running flatpak application:
+flatpak kill <instance|id>
+```
+```bash
+# Installing and removing flatpak applications and runtimes.
+# Use --noninteractive to skip prompts.
+# Install an application or runtime:
+flatpak install <repo> <ref|id>
+# Install an application or runtime with just the name (may give conflicts):
+flatpak install <name>
+# Remove an application or runtime:
+flatpak uninstall <ref|id>
+```
+```bash
+# Show activity log of flatpak:
+flatpak history
+```
+
+### video4linux:
+
+```bash
+# List all v4l devices:
+v4l2-ctl --list-devices
+```
+```bash
+# Show driver info for a specific device:
+v4l2-ctl --device <device> --info
+# Show detailed device information:
+v4l2-ctl --device <device> --all
+```
+```bash
+# List controls available for a specific device:
+v4l2-ctl --device <device> --list-ctrls
+```
 
 ### Exchange On-Premise:
 
@@ -2019,7 +2606,9 @@ dig AXFR <zonename> <NS>
 dig +trace <QNAME>
 ```
 
-### Certificates, OpenSSL/GPG and CryptoAPI:
+### Certificates, Key-based Authentication, and Encryption:
+
+#### OpenSSL:
 
 ```bash
 # Creating and converting with OpenSSL
@@ -2212,20 +2801,6 @@ openssl pkeyutl -decrypt -in ciphertext.bin -inkey private-b.key -out received-m
 openssl dgst -sha1 -verify public-a.key -signature signiture.bin received-message.txt
 ```
 ```bash
-# Password encrypt a file for sharing between user A => user B with GPG using symmetrical encryption only. 
-# Enter passphrase when prompted:
-gpg --symmetric --output <file.gpg> <file_to_encrypt> 
-# User B can now decrypt the file using the passphrase
-# Enter passphrase when prompted:
-gpg --output <output_file> --decrypt <file_to_decrpy.gpg>
-# Password encrypt a file for sharing between user A => user B with GPG using symmetrical encryption only but using AES256.
-# Enter passphrase when prompted:
-gpg --symmetric --cipher-algo AES256 --output <file.gpg> <file_to_encrypt>
-# User B can now decrypt the file using the passphrase
-# Enter passphrase when prompted:
-gpg --output <output_file> --decrypt <file_to_decrpy.gpg>
-```
-```bash
 # Load a SSL/TLS server for debugging:
 openssl s_server -port 443 -cert certificate.pem -key private.key -status 
 # Support HTTP by adding -www to return a / on HTTP GET:
@@ -2351,7 +2926,158 @@ certreq -submit -config <"CA"> -attrib "CertificateTemplate:<Template-Name>" <Re
 REM If the certificate requires approval, approve the request in ADCS:
 ```
 
-#### Key-based Authentication:
+#### OpenPGP/GnuPG:
+
+> ℹ️ **Note:** All gpg commands are based on gpg 2.4.x.
+
+```bash
+# List all keys in the public keyring:
+gpg --list-keys
+# List all keys based on a specific user ID in the public keyring:
+gpg --list-keys <USER-ID>
+# List all keys from the secret keyring:
+gpg --list-secret-keys
+# Show the fingerprint of a key:
+gpg --fingerprint <USER-ID>
+```
+```bash
+# Generate a new key pair.
+# Follow the interactive guide:
+gpg --generate-key
+# Generate a new key pair with a specific key type and validity.
+# Follow the interactive guide:
+gpg --full-generate-key
+# Generate a new key pair with only the USER-ID field.
+# Follow the interactive guide:
+gpg --quick-generate-key <USER-ID>
+```
+```bash
+# Generate a revocation certificate so that it can be used to revoke a key.
+# Follow the interactive guide:
+gpg --output <file.asc> --gen-revoke <USER-ID | fingerprint> 
+```
+```bash
+# Remove a secret key from the secret keyring:
+gpg --delete-secret-keys <USER-ID | fingerprint>
+# Remove a public key from the public keyring:
+gpg --delete-keys <USER-ID | fingerprint>
+# Remove both the secret and public key from the keyrings:
+gpg --delete-secret-and-public-key <USER-ID | fingerprint>
+```
+```bash
+# Export a public key from the public keyring to stdout:
+gpg --export <USER-ID | fingerprint>
+# Export a public key from the public keyring to stdout as Base64:
+gpg --export --armor <USER-ID | fingerprint>
+# Export a public key from the public keyring to a file as Base64:
+gpg --export --output <file> --armour <USER-ID | fingerprint>
+# Export a secret key from the secret keyring to stdout:
+gpg --export-secret-keys <USER-ID | fingerprint>
+# Export a secret key from the secret keyring to stdout as Base64:
+gpg --export-secret-keys --armor <USER-ID | fingerprint>
+# Export a secret key from the secret keyring to a file as Base64:
+gpg --export-secret-keys --output <file> --armour <USER-ID | fingerprint>
+```
+```bash
+# Import a key(s) into the keyrings:
+gpg --import <file>
+# Perform a dry run import of a key(s) into the keyrings:
+gpg --import --import-options show-only <file>
+# Import a key(s) into the keyrings and update existing keys only, no new keys will be imported:
+gpg --import --import-options merge-only <file>
+```
+```bash
+# Edit a key.
+# Follow the interactive guide and use ? or help to provide subcommands:
+gpg --edit-key <USER-ID | fingerprint>
+# Add additional USER-ID:
+adduid
+save
+# Delete a USER-ID:
+uid <#>
+deluid
+save
+# Change expiration date.
+# Follow the interactive guide:
+expire
+save
+# Sign a key that has been imported.
+# Follow the interactive guide:
+sign
+save
+```
+```bash
+# Encryption.
+# Use --version to show supported ciphers.
+# Symmetrically encrypt a file with a passphrase using AES256.
+# Enter passphrase when prompted:
+gpg --symmetric --output <cypher_file> <file_to_encrypt>
+# Symmetrically encrypt a file with a passphrase using AES256 where cipher spec is Base64):
+# Enter passphrase when prompted:
+gpg --symmetric --armor --output <cypher_file> <file_to_encrypt>
+# Symmetrically encrypt a file with a passphrase using AES128.
+# Enter passphrase when prompted:
+gpg --symmetric --cipher-algo AES128 --output <cypher_file> <file_to_encrypt>
+# Symmetrically encrypt a file with a passphrase using CAMELLIA256.
+# Enter passphrase when prompted:
+gpg --symmetric --cipher-algo CAMELLIA256 --output <cypher_file> <file_to_encrypt>
+# Encrypt a message from stdin using AES256 to a file with the default secret key and associated with a specific public key(s).
+# Use Ctrl+D to end input:
+gpg --encrypt --output <cypher_file> --recipient <USER-ID | fingerprint>
+# Encrypt a file using AES256 with the default secret key and associated with a specific public key(s):
+gpg --encrypt --output <cypher_file> --recipient <USER-ID | fingerprint> <file_to_encrypt>
+# Encrypt a file using AES128 with the default secret key and associated with a specific public key(s):
+gpg --encrypt --cipher-algo AES128 --output <cypher_file> --recipient <USER-ID | fingerprint> <file_to_encrypt>
+```
+```bash
+# Signing.
+# Sign an existing public key in the public keyring with the default private key:
+gpg --sign-key <USER-ID | fingerprint>
+# Sign an existing public key in the public keyring with a specific private key:
+gpg --sign-key <USER-ID | fingerprint> --default-key <USER-ID | fingerprint>
+# Locally sign an existing public key in the public keyring with the default private key:
+gpg --lsign-key <USER-ID | fingerprint>
+# Sign and compress a file with a private key and export to a binary signature file.
+# Enter passphrase if prompted:
+gpg --output <signed_file> --sign <file_to_sign>
+# Clearsign a file with a private key and export to file.
+# Enter passphrase if prompted:
+gpg --output <signed_file> --clearsign <file_to_sign>
+# Sign a file with a private key and export to a detached signature file.
+# Enter passphrase if prompted:
+gpg --output <signed_file> --detach-sign <file_to_sign>
+# Verify a signed signature file:
+gpg --verify <signed_file>
+# Verify a signed signature file and its corresponding detached signature file:
+gpg --verify <signed_file> <detached_signature_file>
+```
+```bash
+# Decryption.
+# Use --version to show supported ciphers.
+# Decrypt a symmetrically encrypted file to stdout:
+gpg --decrypt <cypher_file>
+# Decrypt a symmetrically encrypted file to a file:
+gpg --output <filename> --decrypt <cypher_file>
+# Decrypt a file using the public key associated with the encrypted file to stdout:
+gpg --decrypt <cypher_file>
+# Decrypt a signed signature file and output original to a file:
+gpg --output <filename> --decrypt <signed_file>
+# Decrypt a file using the public key associated with the encrypted file:
+gpg --output <filename> --decrypt <cypher_file>
+```
+```bash
+# Working with Web Key Directorys (WKD).
+# Query a WKD server for Web Key Service (WKS) support:
+gpg-wks-client --verbose --supported <domain>
+# Check if a public key exists for an email address:
+gpg-wks-client --verbose --check <email>
+# Find USER-ID and corresponding mailboxes for an email address:
+gpg-wks-client --print-wkd-hash <email>
+# Show the URIs used to fetch the public key for an email address:
+gpg-wks-client --print-wkd-url <email>
+```
+
+#### OpenSSH:
 
 ```bash
 # Creating and managing OpenSSH keys with ssh-keygen.
@@ -2438,10 +3164,28 @@ ssh-add -d </path/.ssh/privatekey_file>
 ssh-add -D
 ```
 
-#### Let's Encrypt:
+#### ACME:
 
 ##### Certbot:
 
+> **Note** Defaults to Let's Encrypt.
+
+```bash
+# Show ACME account:
+certbot show_account
+```
+```bash
+# Register a new ACME account (use --agree-tos to agree to the TOS):
+certbot register --email <smtp>
+# Unregister an ACME account:
+certbot unregister --account <ACCOUNT_ID> 
+```
+```bash
+# Update the e-mail address on the ACME account:
+certbot update_account 
+# or:
+certbot update_account --email <smtp>
+```
 ```bash
 # List working certificates:
 certbot certificates
@@ -2491,12 +3235,121 @@ certbot certonly --manual --expand -d <existing.com,example.com,newdomain.com> -
 certbot certonly --expand -d <existing.com,example.com,newdomain.com> --cert-name <Certificate Name>
 ```
 ```bash
-# Revoke a certificate managed by certbot and delete:
-certbot revoke --cert-name <Certificate Name> --delete-after-revoke 
+# Revoke a certificate managed by certbot by certificate name:
+certbot revoke --cert-name <Certificate Name>
 # Revoke by using the private key:
-certbot revoke --cert-path <path/to/cert/cert.pem> --key-path <path/to/privkey.pem> --delete-after-revoke
+certbot revoke --cert-path <path/to/cert/cert.pem> --key-path <path/to/privkey.pem>
 # Generally use a revocation reason:
-certbot revoke --cert-name <Certificate Name> --delete-after-revoke --reason {unspecified,keycompromise,affiliationchanged,superseded,cessationofoperation}
+certbot revoke --cert-name <Certificate Name> --reason {unspecified,keycompromise,affiliationchanged,superseded,cessationofoperation}
+# Revoke a certificate managed by certbot and delete:
+certbot revoke --cert-name <Certificate Name> --delete-after-revoke
+```
+```bash
+# Delete a certificate managed by certbot (usually for expired certificates only):
+certbot delete --cert-name <Certificate Name>
+```
+
+##### Posh-ACME:
+
+```powershell
+# Set the ACME environement to either staging or production (see https://poshac.me/docs/latest/Tutorial/#picking-a-server for list of shortcuts):
+Set-PAServer <'name'>
+```
+```powershell
+# Show ACME account:
+Get-PAAccount
+```
+```powershell
+# Update the e-mail address on an ACME account:
+Set-PAAccount -ID <'ID'> -Contact <'smtp'>
+# or if only one account is registered:
+Set-PAAccount -Contact <'smtp'>
+```
+```powershell
+# Create a new LE account:
+New-PAAccount -Contact <smtp>
+```
+```powershell
+# Generate a new order:
+New-PAOrder -Domain <domain> 
+```
+```powershell
+# Remove an order:
+Remove-PAOrder -Name <'name'>
+```
+```powershell
+# These commands automatically manage associated orders and handle the validation process if required.
+# Generate a new certificate with a single domain:
+New-PACertificate -Domain <'domain'> -Contact <'smtp'>
+# Generate a new certificate with multiple domains.
+# The first domain in the -Domain list will be the name in the X509 subject field:
+New-PACertificate -Domain <'domain1','domain2'> -Contact <'smtp'>
+```
+```powershell
+# Renew a certificate for an existing order (if required) with no DNS plugin:
+Get-PAOrder | Submit-Renewal -NoSkipManualDns
+# Renew a certificate for an existing order regardless of expiry with no DNS plugin:
+Get-PAOrder | Submit-Renewal -NoSkipManualDns -Force
+# Renew all certificates for all orders (if required) with no DNS plugin:
+Submit-Renewal -AllOrders
+```
+```powershell
+# Review https://poshac.me/docs/v4/Functions/Revoke-PACertificate/#-reason for revocation reasons.
+# Revoke certificate(s) for an existing order:
+Get-PAOrder -Name <'name'> | Revoke-PACertificate -Reason <RevocationReasons>
+# Revoke a certificate by cert file:
+Revoke-PACertificate -CertFile <'path\cert.cer'> -Reason <RevocationReasons>
+```
+```powershell
+# Create a new order with a single domain:
+New-PAOrder -Domain <'domain'>
+# Create a new order with multiple domains.
+# The first domain in the -Domain list will be the name in the X509 subject field:
+New-PAOrder -Domain <'domain1','domain2'>
+# Create a new order with a custom name:
+New-PAOrder -Name <'name'> -Domain <'domain'>
+# Create a new order with a custom name from an existing CSR:
+New-PAOrder -Name <'name'> -CSRPath <'path\csr.csr'>
+# Create a new order with a custom name and a specific certificate validity:
+New-PAOrder -Name <'name'> -Domain <'domain'> -LifetimeDays <days>
+# Create a new order with a custom name where all certificates will install to local machine personal store (requires elevation):
+New-PAOrder -Name <'name'> -Domain <'domain'> -Install
+# Create a new order with a custom name and change the archive encryption password:
+New-PAOrder -Name <'name'> -Domain <'domain'> -PfxPass <password>
+```
+```powershell
+# Get authorisation status of an order, its domains and verification methods:
+Get-PAOrder -Name <'name'> | Get-PAAuthorization
+# Get HTTP-01 token name for an order:
+Get-PAOrder | Get-PAAuthorization | Select-Object -Property HTTP01Token
+# Get HTTP-01 token value for an order:
+Get-KeyAuthorization -Token (Get-PAOrder -Name <'name'> | Get-PAAuthorization).HTTP01Token
+# Get DNS-01 authorisation value (RDATA) for an order:
+Get-KeyAuthorization -Token (Get-PAOrder -Name <'name'> | Get-PAAuthorization).DNS01Token -ForDNS
+```
+```powershell
+# Revoke ACME-cached authorisations for an order. This will require re-authorisation for these domains:
+Get-PAorder -Name <'name'> | Revoke-PAAuthorization -Force
+```
+```powershell
+# Request the ACME server verify the authorisation methods setup for an order using HTTP-01:
+Send-ChallengeAck -ChallengeUrl (Get-PAOrder -Name <'name'> | Get-PAAuthorization).HTTP01Url
+# Request the ACME server verify the authorisation methods setup for an order using DNS-01:
+Send-ChallengeAck -ChallengeUrl (Get-PAOrder -Name <'name'> | Get-PAAuthorization).DNS01Url
+```
+```powershell
+# Refresh the status of all orders:
+Get-PAOrder -Refresh
+# Refresh the status of a specific order:
+Get-PAOrder -Name <'name'> -Refresh
+```
+```powershell
+# Submit a verified order to the ACME server:
+Submit-OrderFinalize -Order (Get-PAOrder -Name <'name'>)
+```
+```powershell
+# Export certificate files to storage:
+Complete-PAOrder -Order (Get-PAOrder -Name <'name'>)
 ```
 
 ### SMTP:
@@ -2739,13 +3592,15 @@ man git-<verb>
 # Working with repositories in Git.
 # Create a new local repository:
 git init
+# Create a new local repository for sharing with no working tree or .git directory:
+git init --bare
 # Clone a remote repository:
 git clone <PATH>
 # Clone a remote repository to a specified location:
 git clone <PATH> <filepath>
 # Clone a remote repository with more verbosity:
 git clone <PATH> --verbose
-# Clone a remote repository with only .Git file:
+# Clone a remote repository for sharing with no working tree or .git directory:
 git clone <PATH> --bare
 # Clone a remote repository with a custom remote name:
 git clone <PATH> --origin <name>
@@ -2757,14 +3612,22 @@ git remote add <name> <URI>
 git remote show <name>
 # Change the custom name of a remote:
 git remote rename <name> <new_name>
+# Remove a stale remote:
+git remote prune <name>
 # Remove a remote:
 git remote remove <name>
 # Fetch all updates from the origin:
 get fetch
 # Fetch updates from a specific remote:
 git fetch <name>
-# Push all commits to origin from the main branch:
-git push origin <master | main>
+# Fetch updates from all remotes:
+git fetch --all
+# Push all commits to a remote from the current branch:
+git push <remote> HEAD
+# Push all commits to a remote from a specific branch:
+git push <remote> <branch>
+# Push all commits to a remote from a specific local branch but with a different name:
+git push <remote> <local_branch>:<remote_branch>
 ```
 ```bash
 # Working with files and stages in Git.
@@ -2850,6 +3713,8 @@ git branch -a
 git branch -v
 # List both remote-tracking and local branches with their last commit message:
 git branch -av
+# List both remote-tracking and local branches with their last commit message as well as the upstream branch:
+git branch -avv
 # List branches that havn't yet been merged with HEAD:
 git branch --no-merged
 # List branches that have been merged with HEAD:
@@ -2862,6 +3727,12 @@ git branch --no-merged <branch>
 git branch <name>
 # Create a new local branch and switch to it:
 git checkout -b <name>
+# If remote tracking branch is available then create a local branch and switch to it:
+git checkout <branch>
+# Create a new local branch from a remote tracking branch and switch to it:
+git checkout -b <localbranch> <remote/branch>
+# Set the upstream branch for the current branch:
+git branch --set-upstream-to <remote/branch>
 # Rename a local branch (use -m for short):
 git branch --move <oldname> <newname>
 # Rename a local branch (use -m for short) and push to remote:
@@ -2880,8 +3751,17 @@ git branch -dr <remote/branch>
 ```
 ```bash
 # Merging with Git.
+# Merge changes between branches:
+git merge <src_branch> <branch>
 # Merge changes into the current branch (HEAD):
 git merge <branch>
+# Merge changes into the current branch (HEAD) via a single commit (no preservation of history):
+git merge --squash <branch>
+git commit
+# Merge changes into the current branch (HEAD) and force a merge commit:
+git merge --no-ff <branch>
+# Merge changes into the current branch (HEAD) from a remote tracking branch:
+git merge <remote/branch>
 # Perform a dry-run merge where a merge is completed but not committed (does not apply to fast-forward merges):
 git merge --no-commit <branch>
 # Perform a dry-run merge where a merge is completed but not committed (forces no fast-forward merges):
@@ -2941,6 +3821,12 @@ git difftool --tool=<toolname>
 ### 🐳 Docker: 
 
 ```bash
+# Show Docker version information:
+docker version
+# Show Docker system information:
+docker info
+```
+```bash
 # Working with Docker registries.
 # Login to a container registry, default being Docker Hub.
 # Using default credsStore:
@@ -2967,8 +3853,8 @@ docker search <string> --filter stars=<#>
 docker search <string> --filter is-official=true
 ```
 ```bash
-# Download Docker images.
-## All image locations are from Docker Hub.
+# Download / upload Docker images.
+# All image locations are from Docker Hub by default.
 # Download a Docker image by name (defaults to latest):
 docker pull <name>
 # Download a Docker image by name and tag:
@@ -2979,6 +3865,8 @@ docker pull <name@sha256:digest>
 docker pull <FQDN:port/name>
 # Pull all Docker images:
 docker pull <name> --all-tags
+# Push a Docker image to a registry repository:
+docker push <name>
 ```
 ```bash
 # Managing Docker images.
@@ -3017,6 +3905,35 @@ docker ps --all --size
 docker rm <name>
 # Stop a container:
 docker stop <containerID | name>
+# Copy files and directories between containers.
+# Copy files and directories from local host to a container:
+docker cp <src_path> <containerID | name:dst_path>
+# Copy files and directories from a container to local host:
+docker cp <containerID | name:src_path> <dst_path>
+```
+```bash
+# Building Docker containers.
+# Create a number of base starter files to assist with building a container, optionally select a project type for those starter files.
+# Follow the interactive guide:
+docker init 
+# Create a new container from a Dockerfile (path must contain a Dockerfile):
+docker build <path>
+# Create a new container from a Dockerfile (path must contain a Dockerfile) with a tag:
+docker build --tag <name> <path>
+# Create a new image from a container's changes:
+docker commit <containerID | name> <name>
+# Create a new image from a container's changes with a message/comment:
+docker commit --message <containerID | name> <name>
+# Create a new image from a container's changes and apply Dockerfile instruction to the created image:
+docker commit --change <instruction> <containerID | name> <name>
+# Show history changes of an image:
+docker history <containerID | name>
+```
+```bash
+# Tag an existing Docker container:
+docker tag <containerID | name> <name:tag>
+# Or 
+docker tag <containerID | name> <tag>
 ```
 ```bash
 # Running Docker containers.
@@ -3067,6 +3984,8 @@ docker run --hostname <hostname> <image>
 docker run --dns <ip.addr> <image>
 # Run a container based on an image with a specific DNS search list:
 docker run --dns-search <domain> <image>
+# Run a container based on an image with and set an environment variable:
+docker run --env <variable=value> <image>
 # Show all published ports of a running container:
 docker port <containerID | name>
 # Attach to a running container:
@@ -3101,6 +4020,8 @@ docker network ls
 docker network inspect <networkID>
 # Connect a container to a network:
 docker network connect <networkID> <containerID>
+# Disconnect a container from a network:
+docker network disconnect <networkID> <containerID>
 # Connect a container to a network and specificy its IPv4 address:
 docker network connect --ip <ip.addr> <networkID> <containerID>
 # Disconnect a container from a network:
@@ -3146,6 +4067,10 @@ terraform apply
 terraform apply -auto-approve
 # Apply changes to infrastructure based on the repository changes (if any) and override a variable:
 terraform apply -var <"variable=value">
+```
+```bash
+# Import an existing resource into the state file:
+terraform import <provider/resource> <ID>
 ```
 ```bash
 # Show terraform destroy changes:
@@ -3212,6 +4137,7 @@ Disconnect-MgGraph
 # Invoke API calls directly:
 Invoke-MgGraphRequest -Method <method> <URI>
 ```
+
 #### Microsoft Entra ID:
 
 ```powershell
@@ -3590,6 +4516,8 @@ az network private-dns record-set txt delete --name @ --zone-name <fqdn> --resou
 ```
 
 #### Storage:
+
+> ℹ️ **Note:** --upload-size-bytes requires a value that is +512 bytes of a value divisible by 1024.
 
 ```bash
 # Create a disk for the purpose of uploading from an alternate source.

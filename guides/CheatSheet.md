@@ -1586,9 +1586,55 @@ wpa_cli scan -i <int>
 wpa_cli scan_results -i <int>
 ```
 
+#### NetworkManager:
+
+> ℹ️ **Note:** Ensure the NetworkManager.service unit is active.
+
+```bash
+# Show NetworkManager status:
+nmcli general status
+```
+```bash
+# Get network connectivity state:
+nmcli networking connectivity
+```
+```bash
+# Show all NetworkManager activity logs in realtime:
+nmcli monitor
+# Show activity logs for a specific device:
+nmcli device monitor
+# Show activity logs for a specific connection:
+nmcli connection monitor <con-name>
+```
+```bash
+# Show all device status:
+nmcli device status
+# Show detailed information for all devices:
+nmcli device show
+# Show detailed information for a specific device:
+nmcli device show <name>
+```
+```bash
+# Down a device:
+nmcli device down <name>
+# Bring up a device:
+nmcli device up <name>
+```
+```bash
+# Modify properties of a device. 
+# Use nm-settings-nmcli(5) for properties.
+# 
+nmcli device modify lo ...
+```
+```bash
+# Working with connections using NetworkManager.
+# 
+```
+
+
 #### systemd-networkd:
 
-> ℹ️ **Note:** Ensure the systemd-networkd.service unit is loaded. See [systemd-networkd - Network manager](./Linux/guides/systemd-networkd.md) for more information.
+> ℹ️ **Note:** Ensure the systemd-networkd.service unit is active. See [systemd-networkd - Network manager](./Linux/guides/systemd-networkd.md) for more information.
 
 ```bash
 # List all links on system:

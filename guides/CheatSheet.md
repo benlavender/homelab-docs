@@ -1694,13 +1694,6 @@ nmcli device wifi connect <BSSID | SSID>  --ask
 nmcli device wifi connect <BSSID | SSID> password <psk> wep-key-type phrase
 ```
 
-```bash
-# Modify properties of a device. 
-# Use nm-settings-nmcli(5) for properties.
-# 
-nmcli device modify <name> 
-```
-
 #### systemd-networkd:
 
 > ℹ️ **Note:** Ensure the systemd-networkd.service unit is active. See [systemd-networkd - Network manager](./Linux/guides/systemd-networkd.md) for more information.

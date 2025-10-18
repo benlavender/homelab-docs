@@ -1535,7 +1535,7 @@ wpa_cli scan_results -i <int>
 
 > ℹ️ **Note:** Ensure the NetworkManager.service unit is active.
 
-> ℹ️ **Note:** Modify cvommands usually require elevation.
+> ℹ️ **Note:** Modify commands usually require elevation.
 
 ```bash
 # Show NetworkManager status:
@@ -1569,14 +1569,19 @@ nmcli general reload
 # Reload NetworkManager configuration files (no connections):
 nmcli general reload conf
 ```
-
 ```bash
 # Show all connections:
 nmcli connection show
 # Show only active connections:
 nmcli connection show --active
+# Show detailed information for all connections:
+nmcli -p -m multiline -f all connection show
+# Show specific field information for all connections:
+nmcli -p -f <field> connection show
 # Show detailed information for a specific connection:
-nmcli connection show <name | uuid>
+nmcli -p -f all connection show <name | uuid>
+# Show specific field information for a specific connection:
+nmcli -p -f <field.name> connection show <name | uuid>
 ```
 ```bash
 # Reload connection files from disk:
@@ -1639,6 +1644,10 @@ verify
 verify fix
 ```
 ```bash
+# Delete a connection:
+nmcli connection delete <name | uuid>
+```
+```bash
 # Disable WLAN radio:
 nmcli radio wifi off
 # Enable WLAN radio:
@@ -1647,10 +1656,18 @@ nmcli radio wifi on
 ```bash
 # Show all device status:
 nmcli device status
-# Show detailed information for all devices:
+# Show general information for all devices:
 nmcli device show
-# Show detailed information for a specific device:
+# Show detailed information of all devices:
+nmcli -p -f all dev show
+# Show specific field information of all devices:
+nmcli -p -f <field.name> dev show
+# Show general information for a specific device:
 nmcli device show <name>
+# Show detailed information of a specific device:
+nmcli -p -f all dev show <name>
+# Show specific field information of a specific device:
+nmcli -p -f <field.name> dev show <name>
 ```
 ```bash
 # Down a device:
@@ -1667,9 +1684,14 @@ nmcli device wifi list --rescan yes
 nmcli device wifi list ifname <name>
 ```
 ```bash
-# Connect to a wifi access point:
+# Connect to an open wifi access point:
 nmcli device wifi connect <BSSID | SSID>
-
+# Connect to a hidden open wifi access point:
+sudo nmcli device wifi connect <SSID> hidden yes
+# Connect to a secured (WPA) wifi access point with the psk as a prompt:
+nmcli device wifi connect <BSSID | SSID>  --ask
+# Connect to a secured (WPA) wifi access point with the psk inline:
+nmcli device wifi connect <BSSID | SSID> password <psk> wep-key-type phrase
 ```
 
 ```bash

@@ -1604,9 +1604,11 @@ nmcli connection down <name | uuid>
 nmcli connection up <name | uuid>
 ```
 ```bash
-# Create a new connection and save to disk.
-# Use nm-settings-nmcli(5) for properties:
+# Use nm-settings-nmcli(5) for properties.
+# Create a new connection and save to disk:
 nmcli connection add save yes type <connection.type | alias> ifname <name>
+# Create a new connection and save to disk with a custom name:
+nmcli connection add con-name <name> save yes type <connection.type | alias> ifname <name> 
 ```
 ```bash
 # Modify properties of a connection.

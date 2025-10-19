@@ -93,3 +93,28 @@ servers=10.0.0.2
 [global-dns]
 searches=mydomain.com,mydomain2.com
 ```
+
+## Example connection files:
+
+> ℹ️ **Note:** When modifying or creating a connection associated with a device you can issue `nmcli connection up <name | uuid>` to apply the changes without downing the connection.
+
+### Configure a single static IP4 address, gateway and DNS settings for an ethernet device:
+
+```plaintext
+[ipv4]
+address1=10.0.0.90/32
+dns=1.1.1.1;9.9.9.9;
+gateway=10.0.0.255
+method=manual
+```
+
+### Configure a a device with multiple IPv4 addresses, gateway and DNS settings:
+
+```plaintext
+[ipv4]
+address1=10.0.0.90/32
+address2=10.0.90.90/32
+dns=1.1.1.1;9.9.9.9;
+gateway=10.0.0.255
+method=manual
+```

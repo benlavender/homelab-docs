@@ -1533,7 +1533,7 @@ wpa_cli scan_results -i <int>
 
 #### NetworkManager:
 
-> ℹ️ **Note:** Ensure the NetworkManager.service unit is active.
+> ℹ️ **Note:** Ensure the NetworkManager.service unit is active. See [NetworkManager](../guides/Linux/guides/NetworkManager.md) for more information.
 
 > ℹ️ **Note:** Modify commands usually require elevation.
 
@@ -1674,6 +1674,10 @@ nmcli -p -f <field.name> dev show <name>
 nmcli device down <name>
 # Bring up a device:
 nmcli device up <name>
+```
+```bash
+# Temporarily disable management of a device:
+nmcli device set <name> managed no
 ```
 ```bash
 # List available wifi access points:

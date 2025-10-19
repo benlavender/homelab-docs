@@ -1538,6 +1538,14 @@ wpa_cli scan_results -i <int>
 > ℹ️ **Note:** Modify commands usually require elevation.
 
 ```bash
+# Show NetworkManager version:
+NetworkManager --version
+```
+```bash
+# Show NetworkManager daemon configuration at runtime:
+NetworkManager --print-config
+```
+```bash
 # Show NetworkManager status:
 nmcli general status
 ```

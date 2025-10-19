@@ -20,6 +20,14 @@
 
 At default `NetworkManager` manages all ethernet devices without their own connection configured on disk; where each connection would be named `Wired connection #` etc. These connections have DHCPv4 and IPV6 features enabled.
 
+## DHCP:
+
+By default `NetworkManager` uses its own DHCP, likely based on `n-dhcp4` but it can be changed for another one.
+
+## DNS:
+
+At default `NetworkManager` updates `/etc/resolv.conf` with the nameservers provided by the connections. There is no cache unless another library is used.
+
 ## Configurations files:
 
 Configuration files are in the `key=value` pair style in sections denoted by `[section-name]` with hashes as comments.

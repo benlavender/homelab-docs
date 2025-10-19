@@ -52,16 +52,44 @@ At default `NetworkManager` updates `/etc/resolv.conf` with the nameservers prov
 
 > ℹ️ **Note:** Ensure to reload NetworkManager after making configuration changes.
 
-### Disable automatic management of all ethernet devices:
+### Do not create connections for all ethernet devices:
 
 ```plaintext
 [main]
 no-auto-default=*
 ```
 
-### Disable automatic management of a specific device by name:
+### Do not create connections for specific devices:
 
 ```plaintext
 [main]
 no-auto-default=eth1
+```
+
+### Disable management of a specific device:
+
+```plaintext
+[[keyfile]]
+unmanaged-devices=eth1
+```
+
+### Set all interfaces to use a specific DNS server for all domains:
+
+```plaintext
+[global-dns-domain-*]
+servers=1.1.1.1
+```
+
+### Set all connections to use a specific DNS server for a specific domain:
+
+```plaintext
+[global-dns-domain-<domain>]
+servers=10.0.0.2
+```
+
+### Set all connections to use a specific DNS search list:
+
+```plaintext
+[global-dns]
+searches=mydomain.com,mydomain2.com
 ```

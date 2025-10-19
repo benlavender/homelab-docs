@@ -1600,57 +1600,6 @@ dhclient -r
 # Renews DHCP allocation on eth0 with no release:
 dhclient eth0 
 ```
-```bash            
-# To view the status of NetworkManager:
-nmcli -t -f RUNNING general
-```
-```bash               
-# When updating files in /etc/sysconfig/network-scripts, you need to notify NetworkManager of the chanages using:
-mcli con reload
-```
-```bash
-# Loading interface files manually:
-nmcli con load /etc/sysconfig/network-scripts/ifcfg-ifname
-```
-```bash
-# Down and up and interface:
-nmcli con down eth0
-# or
-nmcli con up eth0
-```
-```bash
-# Shows all configured connections:            
-nmcli con show 
-```
-```bash                
-# Show general status of NetworkManager:
-nmcli general status
-```
-```bash                
-# Show device information that NetworkManager is managing:
-nmcli dev show [<eth0>]
-```
-```bash          
-# Create a new connection profile for eth0:
-nmcli con add con-name <"Eth0-Work"> type <ethernet> ifname <ifname>
-```
-```bash
-# Add static IP address and default gw to interface:
-sudo nmcli con mod <"Eth0-Work"> ipv4.addresses <"192.168.20.100/24 192.168.20.1">
-```
-```bash
-# Add static IP address, gateway, multiple DNS server addresses, set the connection to auto connect and the boot proto to manual:
-nmcli con mod Eth1-Test ipv4.addresses 192.168.2.20/22 ipv4.gateway 192.168.2.1 ipv4.dns 192.168.1.1 +ipv4.dns 192.168.3.1 connection.autoconnect yes ipv4.method manual
-```
-```bash
-# Remove static IP address from connection:
-nmcli con mod <con-name> -ipv4.addresses 192.168.2.20/22
-nmcli con up <con-name>
-```
-```bash
-# Bring up a NetworkManager connection:
-nmcli con up <con-name>
-```
 ```bash
 # Show installed WLAN NICs using iw:
 iw dev
@@ -1666,18 +1615,196 @@ iwconfig <dev>
 iwlist <dev> scanning
 ```
 ```bash
-# Scan for available APs using nmcli
-nmcli dev wifi list
-```
-```bash
 # Scan for available APs using wpa_cli, gives more info than nmcli:
 wpa_cli scan -i <int>
 wpa_cli scan_results -i <int>
 ```
 
+#### NetworkManager:
+
+> ℹ️ **Note:** Ensure the NetworkManager.service unit is active. See [NetworkManager](../guides/Linux/guides/NetworkManager.md) for more information.
+
+> ℹ️ **Note:** Modify commands usually require elevation.
+
+```bash
+# Show NetworkManager version:
+NetworkManager --version
+```
+```bash
+# Show NetworkManager daemon configuration at runtime:
+NetworkManager --print-config
+```
+```bash
+# Show NetworkManager status:
+nmcli general status
+```
+```bash
+# Show general connection and device state configuration:
+nmcli -g general
+```
+```bash
+# Get network connectivity state:
+nmcli networking connectivity
+```
+```bash
+# Disable all networking managed by NetworkManager:
+nmcli networking off
+# Enable all networking managed by NetworkManager:
+nmcli networking on
+```
+```bash
+# Show all NetworkManager activity logs in realtime:
+nmcli monitor
+# Show activity logs for a specific device:
+nmcli device monitor
+# Show activity logs for a specific connection:
+nmcli connection monitor <con-name>
+```
+```bash
+# Reload NetworkManager:
+nmcli general reload
+# Reload NetworkManager configuration files (no connections):
+nmcli general reload conf
+```
+```bash
+# Show all connections:
+nmcli connection show
+# Show only active connections:
+nmcli connection show --active
+# Show detailed information for all connections:
+nmcli -p -m multiline -f all connection show
+# Show specific field information for all connections:
+nmcli -p -f <field> connection show
+# Show detailed information for a specific connection:
+nmcli -p -f all connection show <name | uuid>
+# Show specific field information for a specific connection:
+nmcli -p -f <field.name> connection show <name | uuid>
+```
+```bash
+# Reload connection files from disk:
+nmcli connection reload
+# Load a specific connection file from disk and reload:
+nmcli connection load <filename>
+```
+```bash
+# Add new connections.
+# Use nm-settings-nmcli(5) for properties.
+# Create a new connection and save to disk:
+nmcli connection add save yes type <connection.type | alias> ifname <name>
+# Create a new connection and save to disk with a custom name:
+nmcli connection add con-name <name> save yes type <connection.type | alias> ifname <name>
+# Create a new connection and save to disk with specific properties:
+nmcli connection add save yes type <connection.type | alias> ifname <name> <setting>.<prop> <value> <setting>.<prop> <value | 'value value'>
+```
+```bash
+# Modify properties of a connection.
+# Use nm-settings-nmcli(5) for properties
+# If the property is multi-value then the whole list will be replaced:
+nmcli connection modify <name | uuid> <setting>.<prop> <value>
+# Add a value to a multi-value property (if supported):
+nmcli connection modify <name | uuid> +<setting>.<prop> <value | 'value value'>
+# Remove a value from a multi-value property (if supported):
+nmcli connection modify <name | uuid> -<setting>.<prop> <value | 'value value'>
+# Modify multiple properties at once:
+nmcli connection modify <name | uuid> <setting>.<prop> <value> <setting>.<prop> <value>
+```
+```bash
+# Modify properties of a connection interactively.
+# Use nm-settings-nmcli(5) for properties.
+# Follow the interactive guide. Use ? or help for help:
+nmcli connection edit <name | uuid>
+# Show all properties of the connection:
+print
+# Show all properties of the connection by setting:
+print <setting>
+# Describe a property:
+describe <setting>.<prop>
+# Describe a section and show all properties:
+describe <setting>
+# Go to a specific section:
+goto <setting>
+back
+# Modify a property:
+set <setting>.<prop> <value>
+# Modify a property when in a section:
+set <prop> <value>
+# Remove a property:
+remove <setting>.<prop> <value>
+# Remove a property when in a section:
+remove <prop> <value>
+# Save changes:
+save
+# Activate the connection:
+activate
+# Validate the configuration for errors:
+verify
+# Attempt to fix the error automatically:
+verify fix
+```
+```bash
+# Activate a connection (even after modification):
+nmcli connection up <name | uuid>
+# Deactivate a connection:
+nmcli connection down <name | uuid>
+```
+```bash
+# Delete a connection:
+nmcli connection delete <name | uuid>
+```
+```bash
+# Disable WLAN radio:
+nmcli radio wifi off
+# Enable WLAN radio:
+nmcli radio wifi on
+```
+```bash
+# Show all device status:
+nmcli device status
+# Show general information for all devices:
+nmcli device show
+# Show detailed information of all devices:
+nmcli -p -f all dev show
+# Show specific field information of all devices:
+nmcli -p -f <field.name> dev show
+# Show general information for a specific device:
+nmcli device show <name>
+# Show detailed information of a specific device:
+nmcli -p -f all dev show <name>
+# Show specific field information of a specific device:
+nmcli -p -f <field.name> dev show <name>
+```
+```bash
+# Down a device:
+nmcli device down <name>
+# Bring up a device:
+nmcli device up <name>
+```
+```bash
+# Temporarily disable management of a device:
+nmcli device set <name> managed no
+```
+```bash
+# List available wifi access points:
+nmcli device wifi list
+# List available wifi access points and force a rescan first:
+nmcli device wifi list --rescan yes
+# List available wifi access points for a specific device:
+nmcli device wifi list ifname <name>
+```
+```bash
+# Connect to an open wifi access point:
+nmcli device wifi connect <BSSID | SSID>
+# Connect to a hidden open wifi access point:
+sudo nmcli device wifi connect <SSID> hidden yes
+# Connect to a secured (WPA) wifi access point with the psk as a prompt:
+nmcli device wifi connect <BSSID | SSID>  --ask
+# Connect to a secured (WPA) wifi access point with the psk inline:
+nmcli device wifi connect <BSSID | SSID> password <psk> wep-key-type phrase
+```
+
 #### systemd-networkd:
 
-> ℹ️ **Note:** Ensure the systemd-networkd.service unit is loaded. See [systemd-networkd - Network manager](./Linux/guides/systemd-networkd.md) for more information.
+> ℹ️ **Note:** Ensure the systemd-networkd.service unit is active. See [systemd-networkd - Network manager](./Linux/guides/systemd-networkd.md) for more information.
 
 ```bash
 # List all links on system:

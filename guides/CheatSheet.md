@@ -1408,10 +1408,10 @@ firewall-cmd --set-log-denied=<all|unicast|broadcast|multicast|off>
 firewall-cmd --get-zones
 # Get default zone:
 firewall-cmd --get-default-zone
-# Get detailed information of a specific zone:
-firewall-cmd --info-zone=<zone>
 # Get active zones and their associated interfaces and sources:
 firewall-cmd --get-active-zones
+# Get detailed information of a specific zone:
+firewall-cmd --info-zone=<zone>
 # Get the zone of a specific interface:
 firewall-cmd --get-zone-of-interface=<name>
 # Get the name of the zone a source is bound to (if any):

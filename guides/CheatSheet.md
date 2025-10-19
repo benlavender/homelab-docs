@@ -1371,6 +1371,95 @@ sudo timedatectl set-ntp <true|false>
 
 ### Networking:
 
+#### netfilter:
+
+Front-ends to the netfilter framework.
+
+##### firewalld:
+
+> ℹ️ **Note:** Commands usually require elevation.
+
+> ℹ️ **Note:** All commands are runtime only. Use each command as `firewall-cmd --permanent <...>`  to make permanent after reload if not already stated or use `firewall-cmd --runtime-to-permanent` then reload. 
+
+> ℹ️ **Note:** Print commands can be used with `--permanent` when viewing permanent settings not in runtime.
+
+```bash
+# Working with the firewall daemon (firewalld).
+# Show firewalld running state:
+firewall-cmd --state
+# Reload firewalld (all runtime only changes will be lost where permanent will become new runtime):
+firewall-cmd --reload
+# Reload firewalld as well as kernel modules and active connections (all runtime only changes will be lost).
+# Active connections will not be dropped!
+firewall-cmd --complete-reload
+# Reset firewalld to defaults.
+# Active connections will not be dropped!
+firewall-cmd --reset-to-defaults
+# Save runtime configurations to permanent:
+firewall-cmd --runtime-to-permanent
+# Print the log denied setting:
+firewall-cmd --get-log-denied
+# Set the log denied setting for all chains and zones (this will also reload the firewall and is permanent):
+firewall-cmd --set-log-denied=<all|unicast|broadcast|multicast|off>
+```
+```bash
+# Working with zones.
+# Get all predefined zones:
+firewall-cmd --get-zones
+# Get default zone:
+firewall-cmd --get-default-zone
+# Get active zones and their associated interfaces and sources:
+firewall-cmd --get-active-zones
+# Get detailed information of a specific zone:
+firewall-cmd --info-zone=<zone>
+# Get the zone of a specific interface:
+firewall-cmd --get-zone-of-interface=<name>
+# Get the name of the zone a source is bound to (if any):
+firewall-cmd --get-zone-of-source=<MAC|IP.addr/CIDR>
+# Create a new zone.
+firewall-cmd --permanent --new-zone=<zone>
+# Set the default zone (permanent):
+firewall-cmd --set-default-zone=<zone>
+# Print the path of the zone file for a specific zone:
+firewall-cmd --permanent --path-zone=<zone>
+# Delete a zone: 
+firewall-cmd --permanent --delete-zone=<zone>
+```
+```bash
+# Working with policies.
+# Get all policies:
+firewall-cmd --get-policies
+# Print detailed information of all policies:
+firewall-cmd --list-all-policies
+# Print detailed information of a specific policy:
+firewall-cmd --info-policy=<policy>
+# Add a new policy:
+firewall-cmd --permanent --new-policy=<policy>
+# Delete a policy:
+firewall-cmd --permanent --delete-policy=<policy>
+# Load a default policy:
+firewall-cmd --permanent --load-policy-defaults=<policy>
+```
+```bash
+# Working with services and ports.
+# Get predefined services:
+firewall-cmd --get-services
+# Print information about a service:
+firewall-cmd --info-service=<service>
+# Print description of a service:
+firewall-cmd --permanent --service=<service> --get-short
+# Print description of a service:
+firewall-cmd --permanent --service=<service> --get-description
+# Print ports associated with a service:
+firewall-cmd --permanent --service=<service> --get-ports
+# Create a new service:
+firewall-cmd --permanent --new-service=<name>
+# Add ports to a service:
+firewall-cmd --permanent --service=<service> --add-port=<port/proto>
+# Print the path of the service file:
+firewall-cmd --permanent --path-service=<service>
+```
+
 ```powershell
 # Get firewall profile associations with interfaces:
 Get-NetConnectionProfile

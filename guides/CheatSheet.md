@@ -1598,17 +1598,14 @@ nmcli connection reload
 nmcli connection load <filename>
 ```
 ```bash
-# Deactivate a connection:
-nmcli connection down <name | uuid>
-# Activate a connection:
-nmcli connection up <name | uuid>
-```
-```bash
+# Add new connections.
 # Use nm-settings-nmcli(5) for properties.
 # Create a new connection and save to disk:
 nmcli connection add save yes type <connection.type | alias> ifname <name>
 # Create a new connection and save to disk with a custom name:
-nmcli connection add con-name <name> save yes type <connection.type | alias> ifname <name> 
+nmcli connection add con-name <name> save yes type <connection.type | alias> ifname <name>
+# Create a new connection and save to disk with specific properties:
+nmcli connection add save yes type <connection.type | alias> ifname <name> <setting>.<prop> <value> <setting>.<prop> <value | 'value value'>
 ```
 ```bash
 # Modify properties of a connection.
@@ -1629,6 +1626,8 @@ nmcli connection modify <name | uuid> <setting>.<prop> <value> <setting>.<prop> 
 nmcli connection edit <name | uuid>
 # Show all properties of the connection:
 print
+# Show all properties of the connection by setting:
+print <setting>
 # Describe a property:
 describe <setting>.<prop>
 # Describe a section and show all properties:
@@ -1652,6 +1651,12 @@ activate
 verify
 # Attempt to fix the error automatically:
 verify fix
+```
+```bash
+# Activate a connection (even after modification):
+nmcli connection up <name | uuid>
+# Deactivate a connection:
+nmcli connection down <name | uuid>
 ```
 ```bash
 # Delete a connection:

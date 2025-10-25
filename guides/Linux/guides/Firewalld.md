@@ -94,4 +94,44 @@ ssh
 - modules: Deprecated.
 - destination: Optional element to restrict the service to a specific destination ipv4 and or ipv6 address.
 - includes: Optional multi-use elements to include other services as part of this service.
-- helpers: Optional multi-use elements of helpers.
+- helpers: Optional multi-use elements of configurations for connection tracking helpers.
+
+### Policies:
+
+Policies apply rules to traffic flowing inter-zone. They are a set of rules that affect traffic in a stateful unidirectional manner. Policies relate to zones by defining ingress and egress zones. Since policies are unidirectional, they affect the traffic flowing from ingress zones to the egress zones, but not reciprocally. For workstations this wasn't really an issue unless inter-zone traffic was required to be filtered; like for hypervisors.
+
+At default, a policy is inactive and only becomes active when the following are true:
+
+- The ingress zones list contains at least one regular or symbolic zone.
+- The egress zones list contains at least one regular or symbolic zone.
+- If a regular zone is listed, it must have assigned interfaces or sources.
+
+#### Symbolic zones:
+
+Symbolic zones are special zone names that represent non-zonal traffic. The pre-defined zones represent situational traffic (topology-based) but not traffic to and from the host for example. There are two symbolic zones:
+
+- Host: Represents traffic flowing to or from the host. 
+- Any: Applies to all zones other than host. 
+
+Looking inside a policy, which in this case is the default `allow-host-ipv6` policy:
+
+```plaintext
+  priority: -15000      
+  target: CONTINUE      
+  ingress-zones: ANY    
+  egress-zones: HOST    
+  services: 
+  ports: 
+  protocols:
+  masquerade: no
+  forward-ports:
+  source-ports:
+  icmp-blocks:
+  rich rules:
+        rule family="ipv6" icmp-type name="neighbour-advertisement" accept
+        rule family="ipv6" icmp-type name="neighbour-solicitation" accept
+        rule family="ipv6" icmp-type name="redirect" accept
+        rule family="ipv6" icmp-type name="router-advertisement" accept
+```
+
+- priority:

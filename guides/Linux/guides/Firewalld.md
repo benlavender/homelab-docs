@@ -106,13 +106,6 @@ At default, a policy is inactive and only becomes active when the following are 
 - The egress zones list contains at least one regular or symbolic zone.
 - If a regular zone is listed, it must have assigned interfaces or sources.
 
-#### Symbolic zones:
-
-Symbolic zones are special zone names that represent non-zonal traffic. The pre-defined zones represent situational traffic (topology-based) but not traffic to and from the host for example. There are two symbolic zones:
-
-- Host: Represents traffic flowing to or from the host. 
-- Any: Applies to all zones other than host. 
-
 Looking inside a policy, which in this case is the default `allow-host-ipv6` policy:
 
 ```plaintext
@@ -134,4 +127,21 @@ Looking inside a policy, which in this case is the default `allow-host-ipv6` pol
         rule family="ipv6" icmp-type name="router-advertisement" accept
 ```
 
-- priority:
+- priority: Priority ordering of this zone, this is used when multiple policies may match the traffic. Values are between `-32768` and `32767` where `-1` is the default priority and `0` is reserved. Values of `< 0` will execute before all rules in a zone whereas values `> 0` will execute after all rules in a zone.
+- target: Action taken when no rules match. These are either `DROP`, `REJECT`, `ACCEPT` or `CONTINUE` where `CONTINUE` passes the packet to the next matching policy or zone.
+- ingress-zones: List of ingress zones for this policy.
+- egress-zones: List of egress zones for this policy.
+- services: Optional list of services allowed in this policy.
+- ports: Optional list of ports allowed in this policy.
+- protocols: Optional list of protocols allowed in this policy.
+- forward-ports: Optional multiple use elements to forwarded ports.
+- source-ports: Optional multiple use elements for source ports.
+- icmp-blocks: Optional multiple use elements for blocking specific ICMP types.
+- rich rules: Optional. These are custom rules associated with the policy.
+
+#### Symbolic zones:
+
+Symbolic zones are special zone names that represent non-zonal traffic. The pre-defined zones represent situational traffic (topology-based) but not traffic to and from the host for example. There are two symbolic zones:
+
+- Host: Represents traffic flowing to or from the host. 
+- Any: Applies to all zones other than host. 

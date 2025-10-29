@@ -1439,6 +1439,16 @@ firewall-cmd --permanent --new-policy=<policy>
 firewall-cmd --permanent --delete-policy=<policy>
 # Load a default policy:
 firewall-cmd --permanent --load-policy-defaults=<policy>
+# Add an ingress zone to an existing policy:
+firewall-cmd --policy <policy> --add-ingress-zone <zone>
+# Add an egress zone to an existing policy:
+firewall-cmd --policy <policy> --add-egress-zone <zone>
+# Add a service to an existing policy:
+firewall-cmd --policy <policy> --add-service <service>
+# Modify the priority of an existing policy:
+firewall-cmd --policy <policy> --set-priority <#>
+# Modify the target of an existing policy:
+firewall-cmd --policy <policy> --set-target <CONTINUE | ACCEPT | REJECT |DROP>
 ```
 ```bash
 # Working with services and ports.

@@ -1404,6 +1404,7 @@ firewall-cmd --set-log-denied=<all|unicast|broadcast|multicast|off>
 ```
 ```bash
 # Working with zones.
+# If --zone is not specified when modifying a zone the default is used.
 # Get all predefined zones:
 firewall-cmd --get-zones
 # Get default zone:
@@ -1415,7 +1416,7 @@ firewall-cmd --info-zone=<zone>
 # Get the zone of a specific interface:
 firewall-cmd --get-zone-of-interface=<name>
 # Get the name of the zone a source is bound to (if any):
-firewall-cmd --get-zone-of-source=<MAC|IP.addr/CIDR>
+firewall-cmd --get-zone-of-source=<MAC|CIDR>
 # Create a new zone.
 firewall-cmd --permanent --new-zone=<zone>
 # Set the default zone (permanent):
@@ -1428,14 +1429,18 @@ firewall-cmd --permanent --delete-zone=<zone>
 firewall-cmd --zone=<zone> --add-interface=<name>
 # Remove an interface from a zone:
 firewall-cmd --zone=<zone> --remove-interface=<name>
-# Add a service to the default zone:
-firewall-cmd --add-service=<service>
-# Add a port to the default zone:
-firewall-cmd --add-port=<port/proto>
-# Add a service to a zone:
+# Add a source to an existing zone:
+firewall-cmd --zone=<zone> --add-source=<MAC|CIDR>
+# Remove a source from an existing zone:
+firewall-cmd --zone=<zone> --remove-source=<MAC|CIDR>
+# Add a service to an existing zone:
 firewall-cmd --zone=<zone> --add-service=<service>
-# Add a port to a zone:
+# Remove a service from an existing zone:
+firewall-cmd --zone=<zone> --remove-service=<service>
+# Add a port to an existing zone:
 firewall-cmd --zone=<zone> --add-port=<port/proto>
+# Remove a port from an existing zone:
+firewall-cmd --zone=<zone> --remove-port=<port/proto>
 ```
 ```bash
 # Working with policies.

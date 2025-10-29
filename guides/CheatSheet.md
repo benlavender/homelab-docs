@@ -1390,7 +1390,7 @@ firewall-cmd --state
 # Reload firewalld (all runtime only changes will be lost where permanent will become new runtime):
 firewall-cmd --reload
 # Reload firewalld as well as kernel modules and active connections (all runtime only changes will be lost).
-# Active connections will not be dropped!
+# Active connections will be dropped!
 firewall-cmd --complete-reload
 # Reset firewalld to defaults.
 # Active connections will not be dropped!
@@ -1427,6 +1427,8 @@ firewall-cmd --permanent --path-zone=<zone>
 firewall-cmd --permanent --delete-zone=<zone>
 # Add an interface to a zone:
 firewall-cmd --zone=<zone> --add-interface=<name>
+# Change the zone of an interface if associated with another:
+firewall-cmd --zone=<zone> --change-interface=<name>
 # Remove an interface from a zone:
 firewall-cmd --zone=<zone> --remove-interface=<name>
 # Add a source to an existing zone:
@@ -1486,7 +1488,14 @@ firewall-cmd --permanent --service=<service> --add-port=<port/proto>
 # Print the path of the service file:
 firewall-cmd --permanent --path-service=<service>
 ```
-
+```bash
+# Print predefined icmp types:
+firewall-cmd --get-icmptypes
+# Show detailed information on an icmp type:
+firewall-cmd --info-icmptype=<icmptype>
+# Query if an icmp type is currently blocked:
+firewall-cmd --query-icmp-block=<icmptype>
+```
 ```powershell
 # Get firewall profile associations with interfaces:
 Get-NetConnectionProfile

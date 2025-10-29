@@ -14,7 +14,7 @@ The main configuration file for `firewalld` is located at `/etc/firewalld/firewa
 
 ## Concepts:
 
-There are five basic concepts in `firewalld`; zones, services, policies, interfaces and sources.
+There are three basic concepts in `firewalld`; zones, services and policies. Others we'll describe later.
 
 ### Zones:
 
@@ -156,8 +156,38 @@ Interfaces represent the network interface cards (NICs) either physical or virtu
 
 Sources allow for zone routing based on the source IP address or range instead of the interface associated with the packet.
 
+### Rich rules:
+
+Rich rules are custom rule lists that can be applied to zones and policies. They allow for more complex configurations outside of the `firewalld` zones and policies properties. These are a bit like crafting a list of `iptables` or `ip6tables` rules but in the `firewalld` syntax.
+
 ### Logging:
 
 Logging is controlled either via the command `firewall-cmd --set-log-denied` or via the `LogDenied` option in the main configuration file. The command option will renew the configuration but the update of the config file will not so ensure you issue `firewall-cmd --reload`.
 
 Logs are printed by the kernel so one way of viewing this is via `journalctl --boot --follow` for an interactive view of rule logs. 
+
+### Examples:
+
+In this example I have a Linux workstation behind a single VDSL router performing NAT so I can connect to the internet.
+
+The default zone would be `public` which will permit only `dhcpv6-client` and `ssh` services inbound and permit all outbound traffic. There is also a policy named `allow-host-ipv6` which allows for IPv6 neighbour discovery ICMP messages inbound to the host.
+
+I'm going to make this a little more secure by only permitting ssh from my home network. A small critique of the `firewalld` default zone `public` is that it permits ssh from any source which isn't ideal. Even for laptop clients this may allow connections from any device on a public coffee shop network.
+
+1. First we wil create a new zone named `myhome`.
+
+```bash
+sudo firewall-cmd --permanent --new-zone=myhome
+```
+
+2. Next we will create a source entry for our home network. This will force all traffic from this source to be associated with the `myhome` zone.
+
+```bash
+sudo firewall-cmd --permanent --zone=myhome --add-source=10.0.0.0/8
+```
+
+3. Now create a service entry for `ssh` in the `myhome` zone:
+
+```bash
+sudo firewall-cmd --permanent --zone=myhome --add-service=ssh
+```

@@ -1379,7 +1379,7 @@ Front-ends to the netfilter framework.
 
 > ℹ️ **Note:** Commands usually require elevation.
 
-> ℹ️ **Note:** All commands are runtime only. Use each command as `firewall-cmd --permanent <...>`  to make permanent after reload if not already stated or use `firewall-cmd --runtime-to-permanent` then reload. 
+> ℹ️ **Note:** All commands are runtime only. Use each command as `firewall-cmd --permanent <...>` to make permanent after reload if not already stated or use `firewall-cmd --runtime-to-permanent` then reload. 
 
 > ℹ️ **Note:** Print commands can be used with `--permanent` when viewing permanent settings not in runtime.
 
@@ -1424,6 +1424,18 @@ firewall-cmd --set-default-zone=<zone>
 firewall-cmd --permanent --path-zone=<zone>
 # Delete a zone: 
 firewall-cmd --permanent --delete-zone=<zone>
+# Add an interface to a zone:
+firewall-cmd --zone=<zone> --add-interface=<name>
+# Remove an interface from a zone:
+firewall-cmd --zone=<zone> --remove-interface=<name>
+# Add a service to the default zone:
+firewall-cmd --add-service=<service>
+# Add a port to the default zone:
+firewall-cmd --add-port=<port/proto>
+# Add a service to a zone:
+firewall-cmd --zone=<zone> --add-service=<service>
+# Add a port to a zone:
+firewall-cmd --zone=<zone> --add-port=<port/proto>
 ```
 ```bash
 # Working with policies.

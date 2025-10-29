@@ -54,7 +54,7 @@ Looking inside a zone as printed by `firewall-cmd --info-zone=public` it shows t
   rich rules:
 ```
 
-- target: This is the action taken when a packet **does not** match any rule in the zone. These are either drop, reject or accept where default is reject.
+- target: This is the action taken when a packet **does not** match any rule in the zone. These are either `drop`, `reject` or `accept` where `default` is reject.
 - ingress-priority: Allows for ingress zone prioritisation. Zones with a lower number have a higher priority. This allows for custom ordering of zones.
 - egress-priority: Allows for egress zone prioritisation. Zones with a lower number have a higher priority. This allows for custom ordering of zones.
 - icmp-block-inversion: Reverts the setting where ICMP packets would be blocked; now allowed.
@@ -145,3 +145,9 @@ Symbolic zones are special zone names that represent non-zonal traffic. The pre-
 
 - Host: Represents traffic flowing to or from the host. 
 - Any: Applies to all zones other than host. 
+
+### Logging:
+
+Logging is controlled either via the command `firewall-cmd --set-log-denied` or via the `LogDenied` option in the main configuration file. The command option will renew the configuration but the update of the config file will not so ensure you issue `firewall-cmd --reload`.
+
+Logs are printed by the kernel so one way of viewing this is via `journalctl --boot --follow` for an interactive view of rule logs. 

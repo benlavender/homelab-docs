@@ -14,7 +14,7 @@ The main configuration file for `firewalld` is located at `/etc/firewalld/firewa
 
 ## Concepts:
 
-There are three basic concepts in `firewalld`; zones, services and policies.
+There are five basic concepts in `firewalld`; zones, services, policies, interfaces and sources.
 
 ### Zones:
 
@@ -149,6 +149,12 @@ Symbolic zones are special zone names that represent non-zonal traffic. The pre-
 
 - Host: Represents traffic flowing to or from the host. 
 - Any: Applies to all zones other than host. 
+
+### Interfaces and Sources:
+
+Interfaces represent the network interface cards (NICs) either physical or virtual, sources are source IP ranges. Both of these can be assigned to numerous components of `firewalld`.
+
+Sources allow for zone routing based on the source IP address or range instead of the interface associated with the packet.
 
 ### Logging:
 

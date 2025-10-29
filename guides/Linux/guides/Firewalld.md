@@ -37,6 +37,7 @@ Usually public is the default zone.
 Looking inside a zone as printed by `firewall-cmd --info-zone=public` it shows the following:
 
 ```plaintext
+public (default, active)
   target: default
   ingress-priority: 0
   egress-priority: 0
@@ -54,6 +55,7 @@ Looking inside a zone as printed by `firewall-cmd --info-zone=public` it shows t
   rich rules:
 ```
 
+- name: The name of the zone. If this zone is default there will be a `(default)` after the name. If this zone is also active there will be an `(active)` after the name.
 - target: This is the action taken when a packet **does not** match any rule in the zone. These are either `drop`, `reject` or `accept` where `default` is reject.
 - ingress-priority: Allows for ingress zone prioritisation. Zones with a lower number have a higher priority. This allows for custom ordering of zones.
 - egress-priority: Allows for egress zone prioritisation. Zones with a lower number have a higher priority. This allows for custom ordering of zones.
@@ -106,9 +108,10 @@ At default, a policy is inactive and only becomes active when the following are 
 - The egress zones list contains at least one regular or symbolic zone.
 - If a regular zone is listed, it must have assigned interfaces or sources.
 
-Looking inside a policy, which in this case is the default `allow-host-ipv6` policy:
+Looking inside a policy as printed by `firewall-cmd --info-policy=`; which in this case is the default `allow-host-ipv6` policy:
 
 ```plaintext
+allow-host-ipv6 (active)
   priority: -15000      
   target: CONTINUE      
   ingress-zones: ANY    
@@ -127,6 +130,7 @@ Looking inside a policy, which in this case is the default `allow-host-ipv6` pol
         rule family="ipv6" icmp-type name="router-advertisement" accept
 ```
 
+- name: The name of the policy. If this policy is active there will be an `(active)` after the name.
 - priority: Priority ordering of this zone, this is used when multiple policies may match the traffic. Values are between `-32768` and `32767` where `-1` is the default priority and `0` is reserved. Values of `< 0` will execute before all rules in a zone whereas values `> 0` will execute after all rules in a zone.
 - target: Action taken when no rules match. These are either `DROP`, `REJECT`, `ACCEPT` or `CONTINUE` where `CONTINUE` passes the packet to the next matching policy or zone.
 - ingress-zones: List of ingress zones for this policy.

@@ -154,11 +154,27 @@ Symbolic zones are special zone names that represent non-zonal traffic. The pre-
 
 Interfaces represent the network interface cards (NICs) either physical or virtual, sources are source IP ranges. Both of these can be assigned to numerous components of `firewalld`.
 
-Sources allow for zone routing based on the source IP address or range instead of the interface associated with the packet.
+Sources allow for zone routing based on the source IP address or range instead of the interface associated with the packet. This may be used to force traffic from a specific host to a specific zone.
 
 ### Rich rules:
 
 Rich rules are custom rule lists that can be applied to zones and policies. They allow for more complex configurations outside of the `firewalld` zones and policies properties. These are a bit like crafting a list of `iptables` or `ip6tables` rules but in the `firewalld` syntax.
+
+What cannot be done easily inside a zone or a policy should be doable via a rich rule.
+
+The basic structure of a rich rule is as follows:
+
+```plaintext
+rule 
+```
+
+- rule: Optional. This defines the rule family or priority; which is either `family=ipv4` or `family=ipv6` or `priority=<#>`. This element is mandatory if source or destination or port and packet forwarding are provided. If no family is provided then both ipv4 and ipv6 are assumed. The priority element allows for ordering of rich rules within a zone or policy and must be between `-32768` and `32767`, where **lower** values are matched first.
+- source: Optional element for the source address of the packet, either IPv4 or IPv6. This can either be CIDR notation, singular IP addresses, MAC addresses or an IPSets. The string `not` cam be used after the `source` element to revert the match.
+- destination: Optional element for the destination address of the packet, either IPv4 or IPv6. This can either be CIDR notation, singular IP addresses, MAC addresses or an IPSets. The string `not` cam be used after the `destination` element to revert the match.
+- service: Firewalld service name to match. Do not conflict with destination addresses inside a pre-existing service.
+- port: Optional element for the port and protocols to match; which is either `port=#` and `protocol=tcp|udp|sctp|dccp`. The use of port ranges like `port=1000-2000` is also supported.
+- protocol: Optional element for the protocol name/number to match as defined in `/etc/protocols`.
+- Tcp-Mss-Clamp: Optional value to adjust the maximum segment size of the packet.
 
 ### Logging:
 

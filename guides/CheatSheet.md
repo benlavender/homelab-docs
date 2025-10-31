@@ -1443,6 +1443,12 @@ firewall-cmd --zone=<zone> --remove-service=<service>
 firewall-cmd --zone=<zone> --add-port=<port/proto>
 # Remove a port from an existing zone:
 firewall-cmd --zone=<zone> --remove-port=<port/proto>
+# List rich rules in a zone:
+firewall-cmd --zone=<zone> --list-rich-rules
+# Add a rich rule to a zone:
+firewall-cmd --zone=<zone> --add-rich-rule='<string>'
+# Remove a rich rule from a zone:
+firewall-cmd --zone=<zone> --remove-rich-rule='<string>'
 ```
 ```bash
 # Working with policies.

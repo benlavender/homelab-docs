@@ -35,6 +35,8 @@ Repository store for all my homelab build docs and configs. 😎
 * **systemd:**
     * [systemd-networkd - Network manager](guides/Linux/guides/systemd-networkd.md)
     * [systemd-resolved - Network Name Resolution manager](guides/Linux/guides/systemd-resolved.md)
+* [Firewalld](guides/Linux/guides/Firewalld.md)
+* [NetworkManager](guides/Linux/guides/NetworkManager.md)
 
 ### General:
 

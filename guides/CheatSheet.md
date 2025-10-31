@@ -1379,7 +1379,7 @@ Front-ends to the netfilter framework.
 
 > ℹ️ **Note:** Commands usually require elevation.
 
-> ℹ️ **Note:** All commands are runtime only. Use each command as `firewall-cmd --permanent <...>`  to make permanent after reload if not already stated or use `firewall-cmd --runtime-to-permanent` then reload. 
+> ℹ️ **Note:** All commands are runtime only. Use each command as `firewall-cmd --permanent <...>` to make permanent after reload if not already stated or use `firewall-cmd --runtime-to-permanent` then reload. 
 
 > ℹ️ **Note:** Print commands can be used with `--permanent` when viewing permanent settings not in runtime.
 
@@ -1390,7 +1390,7 @@ firewall-cmd --state
 # Reload firewalld (all runtime only changes will be lost where permanent will become new runtime):
 firewall-cmd --reload
 # Reload firewalld as well as kernel modules and active connections (all runtime only changes will be lost).
-# Active connections will not be dropped!
+# Active connections will be dropped!
 firewall-cmd --complete-reload
 # Reset firewalld to defaults.
 # Active connections will not be dropped!
@@ -1404,6 +1404,7 @@ firewall-cmd --set-log-denied=<all|unicast|broadcast|multicast|off>
 ```
 ```bash
 # Working with zones.
+# If --zone is not specified when modifying a zone the default is used.
 # Get all predefined zones:
 firewall-cmd --get-zones
 # Get default zone:
@@ -1415,7 +1416,7 @@ firewall-cmd --info-zone=<zone>
 # Get the zone of a specific interface:
 firewall-cmd --get-zone-of-interface=<name>
 # Get the name of the zone a source is bound to (if any):
-firewall-cmd --get-zone-of-source=<MAC|IP.addr/CIDR>
+firewall-cmd --get-zone-of-source=<MAC|CIDR>
 # Create a new zone.
 firewall-cmd --permanent --new-zone=<zone>
 # Set the default zone (permanent):
@@ -1424,6 +1425,30 @@ firewall-cmd --set-default-zone=<zone>
 firewall-cmd --permanent --path-zone=<zone>
 # Delete a zone: 
 firewall-cmd --permanent --delete-zone=<zone>
+# Add an interface to a zone:
+firewall-cmd --zone=<zone> --add-interface=<name>
+# Change the zone of an interface if associated with another:
+firewall-cmd --zone=<zone> --change-interface=<name>
+# Remove an interface from a zone:
+firewall-cmd --zone=<zone> --remove-interface=<name>
+# Add a source to an existing zone:
+firewall-cmd --zone=<zone> --add-source=<MAC|CIDR>
+# Remove a source from an existing zone:
+firewall-cmd --zone=<zone> --remove-source=<MAC|CIDR>
+# Add a service to an existing zone:
+firewall-cmd --zone=<zone> --add-service=<service>
+# Remove a service from an existing zone:
+firewall-cmd --zone=<zone> --remove-service=<service>
+# Add a port to an existing zone:
+firewall-cmd --zone=<zone> --add-port=<port/proto>
+# Remove a port from an existing zone:
+firewall-cmd --zone=<zone> --remove-port=<port/proto>
+# List rich rules in a zone:
+firewall-cmd --zone=<zone> --list-rich-rules
+# Add a rich rule to a zone:
+firewall-cmd --zone=<zone> --add-rich-rule='<string>'
+# Remove a rich rule from a zone:
+firewall-cmd --zone=<zone> --remove-rich-rule='<string>'
 ```
 ```bash
 # Working with policies.
@@ -1439,6 +1464,16 @@ firewall-cmd --permanent --new-policy=<policy>
 firewall-cmd --permanent --delete-policy=<policy>
 # Load a default policy:
 firewall-cmd --permanent --load-policy-defaults=<policy>
+# Add an ingress zone to an existing policy:
+firewall-cmd --policy <policy> --add-ingress-zone <zone>
+# Add an egress zone to an existing policy:
+firewall-cmd --policy <policy> --add-egress-zone <zone>
+# Add a service to an existing policy:
+firewall-cmd --policy <policy> --add-service <service>
+# Modify the priority of an existing policy:
+firewall-cmd --policy <policy> --set-priority <#>
+# Modify the target of an existing policy:
+firewall-cmd --policy <policy> --set-target <CONTINUE | ACCEPT | REJECT |DROP>
 ```
 ```bash
 # Working with services and ports.
@@ -1459,7 +1494,14 @@ firewall-cmd --permanent --service=<service> --add-port=<port/proto>
 # Print the path of the service file:
 firewall-cmd --permanent --path-service=<service>
 ```
-
+```bash
+# Print predefined icmp types:
+firewall-cmd --get-icmptypes
+# Show detailed information on an icmp type:
+firewall-cmd --info-icmptype=<icmptype>
+# Query if an icmp type is currently blocked:
+firewall-cmd --query-icmp-block=<icmptype>
+```
 ```powershell
 # Get firewall profile associations with interfaces:
 Get-NetConnectionProfile

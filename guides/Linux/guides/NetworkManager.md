@@ -69,7 +69,7 @@ no-auto-default=eth1
 ### Disable management of a specific device:
 
 ```plaintext
-[[keyfile]]
+[keyfile]
 unmanaged-devices=eth1
 ```
 

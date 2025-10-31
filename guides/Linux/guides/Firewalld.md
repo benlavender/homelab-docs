@@ -268,3 +268,22 @@ sudo firewall-cmd --permanent --zone=myhome --add-service=dhcpv6-client
 ```bash
 sudo firewall-cmd --permanent --zone=myhome --add-rich-rule='rule family=ipv4 source address=192.168.0.3/32 service name=ssh accept'
 ```
+
+4. Typically on a workstation we'll have NetworkManager managing the interfaces so we can assign our primary interface to this zone. You will need to find the connection id or name using `nmcli connection show`:
+
+```bash
+sudo nmcli connection modify 3f27b3e7-bac5-48e4-aa4f-ec61fe734f0c connection.zone myhome
+```
+
+5. Finally reload the firewall to apply the changes:
+
+```bash
+sudo firewall-cmd --reload
+```
+
+6. (Optional) We could simply change the default zone for all interfaces instead of getting NetworkManager to assign it:
+
+```bash
+sudo firewall-cmd --set-default-zone=myhome
+sudo firewall-cmd --reload
+```

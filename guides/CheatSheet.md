@@ -1449,6 +1449,10 @@ firewall-cmd --zone=<zone> --list-rich-rules
 firewall-cmd --zone=<zone> --add-rich-rule='<string>'
 # Remove a rich rule from a zone:
 firewall-cmd --zone=<zone> --remove-rich-rule='<string>'
+# Add a protocol to an existing zone:
+firewall-cmd --zone=<zone> --add-protocol=<protocol>
+# Remove a protocol from an existing zone:
+firewall-cmd --zone=<zone> --remove-protocol=<protocol>
 ```
 ```bash
 # Working with policies.

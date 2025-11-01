@@ -266,7 +266,7 @@ sudo firewall-cmd --permanent --zone=myhome --add-service=dhcpv6-client
 3. For ssh we'll add a rich rule to only permit ssh from our home network:
 
 ```bash
-sudo firewall-cmd --permanent --zone=myhome --add-rich-rule='rule family=ipv4 source address=192.168.0.3/32 service name=ssh accept'
+sudo firewall-cmd --permanent --zone=myhome --add-rich-rule='rule family=ipv4 source address=10.0.0.0/8 service name=ssh accept'
 ```
 
 4. Typically on a workstation we'll have NetworkManager managing the interfaces so we can assign our primary interface to this zone. You will need to find the connection id or name using `nmcli connection show`:

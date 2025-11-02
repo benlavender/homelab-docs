@@ -2070,6 +2070,24 @@ nvme error-log <ctrl>
 nvme smart-log <ctrl> --human-readable
 ```
 
+#### wipefs:
+
+> ℹ️ **Note:** Commands usually require elevation.
+
+```bash
+# List all signatures on a block device:
+wipefs <dev>
+```
+```bash
+# Use --no-act to perform a dry run.
+# Erase all partition, filesystem and RAID signitures on a block device:
+wipefs --all <dev>
+# Erase all partition, filesystem and RAID signitures on a block device even if mounted:
+wipefs --force --all <dev>
+# Erase all partition, filesystem and RAID signitures on a block device and create a backup file:
+wipefs --backup=<dir> --all <dev>
+```
+
 ### O/S Updates:
 
 ```powershell

@@ -1056,7 +1056,7 @@ dd if=<file | dev> of=<file | dev> conv=fdatasync
 # or with +metadata:
 dd if=<file | dev> of=<file | dev> conv=fsync
 # Copy either a file or device and change the input/output block size in bytes or k or M (default is 512).
-# 512 bytes is typical of spindle disks, 4k is typical of SSDs so the default is somewhat out of data. A typical value of 64k can be used:
+# 512 bytes is typical of spindle disks, 4k is typical of SSDs so the default is somewhat out of date. This can be the physical block size of the device like 4096:
 dd if=<file | dev> of=<file | dev> bs=<#>
 ```
 ```bash
@@ -3435,6 +3435,10 @@ ssh-add -d </path/.ssh/privatekey_file>
 # Or use -D to remove all:
 ssh-add -D
 ```
+
+#### dm-crypt:
+
+
 
 #### ACME:
 

@@ -1026,7 +1026,7 @@ dd if=<file> conv=ucase
 # Read a file and convert to all to lowercase:
 dd if=<file> conv=lcase
 # Read a file but limit to specific block(s) of 512 bytes:
-dd if=<file> count=#
+dd if=<file> count=<#>
 ```
 ```bash
 # Copying files with dd.
@@ -1065,7 +1065,7 @@ dd if=<file | dev> of=<file | dev> bs=<#>
 # Wipe an entire device with dd:
 dd if=/dev/zero of=<dev>
 # Randomize an entire device (useful for security if ran before dd if=/dev/zero):
-dd if=/dev/urandom of=<dev>
+dd if=/dev/urandom of=<dev> iflag=fullblock
 ```
 
 #### GNU Stow:
@@ -3435,10 +3435,6 @@ ssh-add -d </path/.ssh/privatekey_file>
 # Or use -D to remove all:
 ssh-add -D
 ```
-
-#### dm-crypt:
-
-
 
 #### ACME:
 

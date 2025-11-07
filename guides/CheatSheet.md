@@ -1070,7 +1070,7 @@ dd if=/dev/urandom of=<dev> iflag=fullblock
 
 #### GNU Stow:
 
-> ℹ️ **Note:**
+> ℹ️ **Notes:**
 > - Stow will use the working directory as the stow directory unless changed.
 > - The term `package` refers to the `directory` containing the files to be managed. The stow `directory` must match the target tree for `defaults` to work.
 > - The term `target` refers to the directory where the files will be symlinked from, at default this is the parent directory of the package.
@@ -2000,6 +2000,22 @@ vgdisplay <VG Name>
 lvextend -r -l +100%FREE <LV Path>
 # Optionally you can increase the FS (XFS in this case) without using the -r switch in the previous command:
 xfs_growfs <FS>
+```
+
+#### hdparm:
+
+> ℹ️ **Notes:** 
+> - `hdparm(8)` was originally designed for ATA drives but also supports SATA and SAS drives via libata.
+> - `sdparm(8)` is designed for SCSI drives.
+> - The terms IDE, ATA and PATA are synonymous.
+
+> ℹ️ **Note:** Commands usually require elevation.
+
+```bash
+# Get drive identification information from boot time:
+hdparm -i <dev>
+# Get detailed information directly from the drive:
+hdparm -I <dev>
 ```
 
 #### nvme-cli:

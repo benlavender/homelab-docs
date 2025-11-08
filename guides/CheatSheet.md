@@ -2007,15 +2007,61 @@ xfs_growfs <FS>
 > ℹ️ **Notes:** 
 > - `hdparm(8)` was originally designed for ATA drives but also supports SATA and SAS drives via libata.
 > - `sdparm(8)` is designed for SCSI drives.
-> - The terms IDE, ATA and PATA are synonymous.
+> - The terms IDE and ATA are synonymous, where once SATA was introduced ATA was renamed to PATA.
 
 > ℹ️ **Note:** Commands usually require elevation.
 
 ```bash
-# Get drive identification information from boot time:
+# Get disk identification information from boot time:
 hdparm -i <dev>
-# Get detailed information directly from the drive:
+# Get detailed information directly from the disk:
 hdparm -I <dev>
+```
+```bash
+# Get disk power management (APM) settings:
+hdparm -B <dev>
+# Set disk power management settings.
+# Values between 1-127 enable APM spindown (lower is more aggressive) and values between 128-254 do not permit spindown (highest provides maximum I/O):
+hdparm -B <value> <dev>
+```
+```bash
+# Get disk acoustic management (AAM) settings:
+hdparm -M <dev>
+# Set disk acoustic management settings to speed down the head to reduce noise.
+# Values between 0-254 where 128 is the slowest (most quiet) and 254 is the fastest (loudest). 
+# For disks with simple support use 0 (off), 128 (quiet) or 254 (fast):
+hdparm -M <value> <dev>
+```
+```bash
+# Set the disk standby (spindown) timeout value.
+# Values are 0 (disabled), 1-240 specifies timeouts in multiples of 5 seconds from 5 seconds to 20 minutes, and values 241-251 specify 1 to 11 units of 30 minutes (30 minutes to 5.5 hours) finally 255 os 21 minutes plus 15 seconds:
+hdparm -S <value> <dev>
+```
+```bash
+# Get power mode status of a disk:
+hdparm -C <dev>
+# Put the disk into standby mode and spin down:
+hdparm -y <dev>
+# Put the disk into sleep mode causing it to shutdown:
+hdparm -Y <dev>
+```
+```bash
+# Get the current disk write cache status:
+hdparm -W <dev>
+# Enable or disable the disk write cache:
+hdparm -W <0|1> <dev>
+```
+```bash
+# Perform a timed buffered sequential read test on a disk
+# This provides a benchmark of the disks throughput when reading via the kernel page cache:
+hdparm -t <dev>
+# Perform a raw sequential read test on a disk bypassing the kernel page cache:
+hdparm -t --direct <dev>
+# Perform a timed cached sequential read test on a disk.
+# This provides a benchmark of the disks throughput when reading data directly from the kernel page cache, not the disk:
+hdparm -T <dev>
+# Perform both buffered and cached read tests on a disk:
+hdparm -tT <dev>
 ```
 
 #### nvme-cli:

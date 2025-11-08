@@ -2002,7 +2002,7 @@ lvextend -r -l +100%FREE <LV Path>
 xfs_growfs <FS>
 ```
 
-#### hdparm:
+#### hdparm and sdparm:
 
 > ℹ️ **Notes:** 
 > - `hdparm(8)` was originally designed for ATA drives but also supports SATA and SAS drives via libata.

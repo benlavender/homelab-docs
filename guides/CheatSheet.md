@@ -3688,7 +3688,7 @@ Complete-PAOrder -Order (Get-PAOrder -Name <'name'>)
 
 #### dm-crypt:
 
-
+> ℹ️ **Note:** See [dm-crypt / LUKS](../guides/Linux/guides/dm-crypt-luks.md) for more details.
 
 ### SMTP:
 

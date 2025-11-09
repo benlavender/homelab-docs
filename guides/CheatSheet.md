@@ -1377,11 +1377,11 @@ Front-ends to the netfilter framework.
 
 ##### firewalld:
 
+> ℹ️ **Notes:**
+> - All commands are runtime only. Use each command as `firewall-cmd --permanent <...>` to make permanent after reload if not already stated or use `firewall-cmd --runtime-to-permanent` then reload. 
+> - Print commands can be used with `--permanent` when viewing permanent settings not in runtime.
+
 > ℹ️ **Note:** Commands usually require elevation.
-
-> ℹ️ **Note:** All commands are runtime only. Use each command as `firewall-cmd --permanent <...>` to make permanent after reload if not already stated or use `firewall-cmd --runtime-to-permanent` then reload. 
-
-> ℹ️ **Note:** Print commands can be used with `--permanent` when viewing permanent settings not in runtime.
 
 ```bash
 # Working with the firewall daemon (firewalld).

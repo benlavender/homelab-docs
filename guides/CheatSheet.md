@@ -3688,7 +3688,19 @@ Complete-PAOrder -Order (Get-PAOrder -Name <'name'>)
 
 #### dm-crypt:
 
-> ℹ️ **Note:** See [dm-crypt / LUKS](../guides/Linux/guides/dm-crypt-luks.md) for more details.
+> ℹ️ **Notes:** 
+> - See [dm-crypt / LUKS](../guides/Linux/guides/dm-crypt-luks.md) for more details.
+> - To view supported ciphers and key sizes etc, use the `/proc/crypto` file.
+
+```bash
+# Benchmarking.
+# Run a common configuration benchmark test with numerous ciphers and key sizes:
+cryptsetup benchmark
+# Run a benchmark test on a specific cipher:
+cryptsetup benchmark --cipher <name>
+# Run a benchmark test on a specific key size and cipher.
+cryptsetup benchmark --key-size <bits> --cipher <name>
+```
 
 ### SMTP:
 

@@ -3692,6 +3692,8 @@ Complete-PAOrder -Order (Get-PAOrder -Name <'name'>)
 > - See [dm-crypt / LUKS](../guides/Linux/guides/dm-crypt-luks.md) for more details.
 > - To view supported ciphers and key sizes etc, use the `/proc/crypto` file.
 
+> ℹ️ **Note:** Commands usually require elevation.
+
 ```bash
 # Benchmarking.
 # Run a common configuration benchmark test with numerous ciphers and key sizes:
@@ -3700,6 +3702,21 @@ cryptsetup benchmark
 cryptsetup benchmark --cipher <name>
 # Run a benchmark test on a specific key size and cipher.
 cryptsetup benchmark --key-size <bits> --cipher <name>
+```
+```bash
+# Creating encrypted volumes.
+# Initialize a new LUKS2 header and volume key on a block device via a passphrase from stdin with defaults. 
+# Follow the interactive guide:
+cryptsetup luksFormat <dev>
+# Initialize a new LUKS2 header and volume key on a block device via a key file with defaults. 
+# Follow the interactive guide:
+cryptsetup luksFormat --key-file <file> <dev> 
+# Initialize a new plain encrypted volume on a block device via a passphrase from stdin:
+cryptsetup open --type plain --cipher <cipher> --key-size <#> --hash <alg> --verify-passphrase <dev> <name>
+
+
+# Initialize a new plain encrypted volume on a block device via a keyfile.
+cryptsetup open --type plain --cipher <cipher> --key-size <#> --key-file <file> <dev> <name>
 ```
 
 ### SMTP:

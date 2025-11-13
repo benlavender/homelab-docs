@@ -3691,6 +3691,7 @@ Complete-PAOrder -Order (Get-PAOrder -Name <'name'>)
 > ℹ️ **Notes:** 
 > - See [dm-crypt / LUKS](../guides/Linux/guides/dm-crypt-luks.md) for more details.
 > - To view supported ciphers and key sizes etc, use the `/proc/crypto` file.
+> - Use `--verbose` before each subcommand for more detailed output.
 
 > ℹ️ **Note:** Commands usually require elevation.
 
@@ -3711,12 +3712,27 @@ cryptsetup luksFormat <dev>
 # Initialize a new LUKS2 header and volume key on a block device via a key file with defaults. 
 # Follow the interactive guide:
 cryptsetup luksFormat --key-file <file> <dev> 
+# Initialize a new LUKS2 header and volume key on a block device using a specific block size with a passphrase from stdin where the rest is defaults.
+# Follow the interactive guide:
+cryptsetup luksFormat --sector-size <#> <dev>
+# Follow the interactive guide:
+cryptsetup luksFormat --cipher <cipher> --key-size <#> <dev>
 # Initialize a new plain encrypted volume on a block device via a passphrase from stdin:
 cryptsetup open --type plain --cipher <cipher> --key-size <#> --hash <alg> --verify-passphrase <dev> <name>
-
-
 # Initialize a new plain encrypted volume on a block device via a keyfile.
 cryptsetup open --type plain --cipher <cipher> --key-size <#> --key-file <file> <dev> <name>
+```
+```bash
+# Open a LUKS container and setup a device mapping.
+cryptsetup open <dev> <name>
+```
+```bash
+# Get header information on a LUKS container:
+cryptsetup luksDump <dev>
+# Get the actual volume key used to encrypt the LUKS container.
+# Warning: Be warned this exposes the sensitive key and if lost you are comprompised...
+# Follow the interactive guide:
+cryptsetup luksDump --dump-volume-key <dev>
 ```
 
 ### SMTP:

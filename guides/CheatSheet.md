@@ -3715,6 +3715,9 @@ cryptsetup luksFormat --key-file <file> <dev>
 # Initialize a new LUKS2 header and volume key on a block device using a specific block size with a passphrase from stdin where the rest is defaults.
 # Follow the interactive guide:
 cryptsetup luksFormat --sector-size <#> <dev>
+# Initialize a new LUKS2 header and volume key on a block device using a detached header file with a passphrase from stdin.
+# Follow the interactive guide:
+cryptsetup luksFormat <dev> --header <file>
 # Initialize a new LUKS2 header and volume key on a block device using a specific cipher and key size with a passphrase from stdin.
 # Follow the interactive guide:
 cryptsetup luksFormat --cipher <cipher> --key-size <#> <dev>
@@ -3784,6 +3787,10 @@ cryptsetup luksRemoveKey --key-file <file> <dev>
 # Remove a keyslot by specifying the keyslot number from an existing LUKS container.
 # First passphrase prompt is an existing one:
 cryptsetup luksKillSlot <dev> <#>
+# Remove all keyslots and the volume key from an existing LUKS container. 
+# Warning: Be warned this will make the data irrecoverable if no backup of the data or headers exists.
+# Follow the interactive guide:
+cryptsetup luksErase <dev>
 ```
 
 ### SMTP:

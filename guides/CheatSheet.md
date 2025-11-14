@@ -2768,7 +2768,7 @@ curl localhost :9200/_cat/count/<indice_name>
 # List connected YubiKey devices:
 ykman list
 # Show full information of connected YubiKey devices:
-ykman show
+ykman info
 # Show full information of specific connected YubiKey device:
 ykman --device <sku> info
 # List applications enabled by interface:

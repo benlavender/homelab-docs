@@ -19,11 +19,11 @@ There is also limited support for the below encryption types:
 
 There is two types of keys used by `dm-crypt` that protect the master key:
 
-- **Passphrase:** Password of up to 512 characters in length.
+- **Passphrase:** Password of up to 512 characters in length (usually via stdin).
 - **Keyfile:** Binary file of up to 8192 KiB.
 
 LUKS containers allow for multiple slots of this key whereas plain does not as and per earlier; plain containers are encrypted with a non-salted hash of the key.
 
 ## cryptsetup:
 
-`cryptsetup(8)` is a utility for managing `dm-crypt`. This is documented in [dm-crypt](../../CheatSheet.md#dm-crypt). 
+`cryptsetup(8)` is a utility for managing `dm-crypt`. This is documented in [dm-crypt](../../CheatSheet.md#dm-crypt).

@@ -37,6 +37,7 @@ Repository store for all my homelab build docs and configs. 😎
     * [systemd-resolved - Network Name Resolution manager](guides/Linux/guides/systemd-resolved.md)
 * [Firewalld](guides/Linux/guides/Firewalld.md)
 * [NetworkManager](guides/Linux/guides/NetworkManager.md)
+* [dm-crypt / LUKS](guides/Linux/guides/dm-crypt-luks.md)
 
 ### General:
 

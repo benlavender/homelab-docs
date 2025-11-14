@@ -3715,8 +3715,12 @@ cryptsetup luksFormat --key-file <file> <dev>
 # Initialize a new LUKS2 header and volume key on a block device using a specific block size with a passphrase from stdin where the rest is defaults.
 # Follow the interactive guide:
 cryptsetup luksFormat --sector-size <#> <dev>
+# Initialize a new LUKS2 header and volume key on a block device using a specific cipher and key size with a passphrase from stdin.
 # Follow the interactive guide:
 cryptsetup luksFormat --cipher <cipher> --key-size <#> <dev>
+# Initialize a new LUKS1 header and volume key on a block device with a passphrase from stdin with defaults.
+# Follow the interactive guide:
+cryptsetup luksFormat --type luks1 <dev>
 # Initialize a new plain encrypted volume on a block device via a passphrase from stdin:
 cryptsetup open --type plain --cipher <cipher> --key-size <#> --hash <alg> --verify-passphrase <dev> <name>
 # Initialize a new plain encrypted volume on a block device via a keyfile.
@@ -3727,12 +3731,34 @@ cryptsetup open --type plain --cipher <cipher> --key-size <#> --key-file <file> 
 cryptsetup open <dev> <name>
 ```
 ```bash
+# Remove device mapping and associated volume key:
+cryptsetup close <name>
+```
+```bash
+# Get status of a device mapping:
+cryptsetup status <name>
+```
+```bash
+# Check if a device is a LUKS2 container:
+cryptsetup -v isLuks <dev>
+# Check if a device is a specific type of LUKS container:
+cryptsetup -v isLuks --type <luks1 | luks2> <dev>
+```
+```bash
 # Get header information on a LUKS container:
 cryptsetup luksDump <dev>
 # Get the actual volume key used to encrypt the LUKS container.
 # Warning: Be warned this exposes the sensitive key and if lost you are comprompised...
 # Follow the interactive guide:
 cryptsetup luksDump --dump-volume-key <dev>
+```
+```bash
+# Backing up and restoring LUKS headers.
+# Backup LUKS header to a file:
+cryptsetup luksHeaderBackup --header-backup-file <file> <dev>
+# Restore LUKS header from a file.
+# Warning: Any existing keyslots on the LUKS container will be replaced, including extra ones outside the backup:
+cryptsetup luksHeaderRestore --header-backup-file <file> <dev>
 ```
 
 ### SMTP:

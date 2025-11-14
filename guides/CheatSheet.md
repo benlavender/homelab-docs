@@ -3760,6 +3760,31 @@ cryptsetup luksHeaderBackup --header-backup-file <file> <dev>
 # Warning: Any existing keyslots on the LUKS container will be replaced, including extra ones outside the backup:
 cryptsetup luksHeaderRestore --header-backup-file <file> <dev>
 ```
+```bash
+# Managing LUKS keyslots.
+# Add a new keyslot with a passphrase from stdin to an existing LUKS container.
+# First passphrase prompt is an existing one:
+cryptsetup luksAddKey <dev>
+# Add a new keyslot with a passphrase where an existing key is in the keyfile to an existing LUKS container:
+cryptsetup luksAddKey --key-file <file> <dev>
+# Add a new keyslot based on a key file to an existing LUKS container.
+# First passphrase prompt is an existing one:
+cryptsetup luksAddKey --new-keyfile <file> <dev>
+# Change a keyslot passphrase on an existing LUKS container.
+# First passphrase prompt is the passphrase to be changed:
+cryptsetup luksChangeKey <dev>
+# Change a keyslot passphrase on an existing LUKS container where the existing passphrase is in a key file via stdin:
+cryptsetup luksChangeKey --key-file <file> <dev>
+# Change a keyslot passphrase on an existing LUKS container where the existing passphrase is in a key file via a key file:
+cryptsetup luksChangeKey --key-file <file> <dev> <new_key_file>
+# Remove a keyslot from an existing LUKS container by specifying the actual assoicated passphrase:
+cryptsetup luksRemoveKey <dev>
+# Remove a keyslot from an existing LUKS container by providing the actual assoicated key file:
+cryptsetup luksRemoveKey --key-file <file> <dev>
+# Remove a keyslot by specifying the keyslot number from an existing LUKS container.
+# First passphrase prompt is an existing one:
+cryptsetup luksKillSlot <dev> <#>
+```
 
 ### SMTP:
 

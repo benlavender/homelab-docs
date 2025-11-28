@@ -73,3 +73,45 @@ sudo cryptsetup status encrypted_part
 ```bash
 sudo mkfs.fat -F32 /dev/mapper/encrypted_part
 ```
+
+### Encrypt a USB drive with LUKS using a passphrase:
+
+We have a new USB stick that we want to encrypt for when we carry it around.
+
+The partition table is as follows:
+
+| Disk | Size |
+| --- | --- |
+/dev/sdb | 58 GiB |
+
+| Device | Partition Table |
+| --- | --- |
+/dev/sdb | GPT |
+
+| Partition # | Sectors | Partition Type | Size | Filesystem |
+| --- | --- | --- | --- |
+1 | 2048 - 121108479 | Linux filesystem | 57.7G | None |
+
+1. Encrypt the the partition with LUKS2 and confirm the passphrase when prompted:
+
+```bash
+sudo cryptsetup luksFormat /dev/sdb1
+```
+
+2. To open and map this device run the following and pass in the passphrase when prompted:
+
+```bash
+cryptsetup open /dev/sdb1 encrypted_stick
+```
+
+3. The device should now be mapped to /dev/mapper/encrypted_stick which can be verified with:
+
+```bash
+sudo cryptsetup status encrypted_stick
+```
+
+4. Now we can create a filesystem on the mapped device:
+
+```bash
+sudo mkfs.fat -F32 /dev/mapper/encrypted_stick
+```

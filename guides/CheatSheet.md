@@ -2053,7 +2053,7 @@ hdparm -W <0|1> <dev>
 ```
 ```bash
 # Perform a timed buffered sequential read test on a disk
-# This provides a benchmark of the disks throughput when reading via the kernel page cache:
+# This provides a benchmark of the disks throughput when reading via the kernel page cache without any prior caching:
 hdparm -t <dev>
 # Perform a raw sequential read test on a disk bypassing the kernel page cache:
 hdparm -t --direct <dev>

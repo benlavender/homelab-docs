@@ -3793,6 +3793,53 @@ cryptsetup luksKillSlot <dev> <#>
 cryptsetup luksErase <dev>
 ```
 
+#### systemd-cryptenroll:
+
+> ℹ️ **Notes:** 
+> - Requires libfido2 package.
+> - FIDO2 devices must support hmac-secret.
+
+> ℹ️ **Note:** Commands usually require elevation.
+
+```bash
+# Show devices that contain a LUKS superblock:
+systemd-cryptenroll --list-devices
+```
+```bash
+# List keyslots on LUKS2 container:
+systemd-cryptenroll <dev>
+```
+```bash
+# Enroll a new passphrase in an existing LUKS2 container.
+# Follow the interactive guide:
+systemd-cryptenroll --password <dev>
+```
+```bash
+# Enroll a FIDO2 device in an existing LUKS2 container automatically.
+# This command requires there to be only ONE FIDO2 device connected but no more.
+# Follow the interactive guide:
+systemd-cryptenroll --fido2-device=auto <dev>
+# Enroll a specific FIDO2 device in an existing LUKS2 container.
+# Follow the interactive guide:
+systemd-cryptenroll --fido2-device=<hidraw_dev> <dev>
+# Enroll a specific FIDO2 device in an existing LUKS2 container without a client pin prompt (if supported).
+# Follow the interactive guide:
+systemd-cryptenroll --fido2-device=<hidraw_dev> --fido2-with-client-pin=no <dev>
+# Enroll a specific FIDO2 device in an existing LUKS2 container without user presence prompt (if supported).
+# Follow the interactive guide:
+systemd-cryptenroll --fido2-device=<hidraw_dev> --fido2-with-user-presence=no <dev>
+```
+```bash
+# Remove a keyslot from a LUKS2 container:
+systemd-cryptenroll --wipe-slot=<#> <dev>
+# Remove a keyslot from a LUKS2 container based on the FIDO2 type:
+systemd-cryptenroll --wipe-slot=fido2 <dev>
+# Remove a keyslot from a LUKS2 container based on the TPM type:
+systemd-cryptenroll --wipe-slot=tpm2 <dev>
+# Remove a keyslot from a LUKS2 container based on the passphrase type:
+systemd-cryptenroll --wipe-slot=password <dev>
+```
+
 ### SMTP:
 
 ```console

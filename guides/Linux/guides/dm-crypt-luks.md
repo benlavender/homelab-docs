@@ -24,9 +24,12 @@ There is two types of keys used by `dm-crypt` that protect the master key:
 
 LUKS containers allow for multiple slots of this key whereas plain does not as and per earlier; plain containers are encrypted with a non-salted hash of the key.
 
-## cryptsetup:
+## Managing encrypted volumes:
 
-`cryptsetup(8)` is a utility for managing `dm-crypt`. This is documented in [dm-crypt](../../CheatSheet.md#dm-crypt).
+Managing, including creating volumes, is usually done by `cryptsetup(8)`. Typically these encrypted volumes need to be opened before exposing the encrypted data. This can be done manually or automatically using a few methods: 
+
+- `cryptsetup(8)`: A utility for managing `dm-crypt`. This is documented in [dm-crypt](../../CheatSheet.md#dm-crypt).
+- `crypttab(5)`: A file similar to `/etc/fstab` that is used for setting up encrypted volumes at boot.
 
 ## Examples:
 

@@ -3732,6 +3732,10 @@ cryptsetup open --type plain --cipher <cipher> --key-size <#> --key-file <file> 
 ```bash
 # Open a LUKS container and setup a device mapping.
 cryptsetup open <dev> <name>
+# Open a LUKS container with an enrolled FIDO2 device and setup a device mapping:
+cryptsetup open --token-only <dev> <name>
+# Open a LUKS container with a specific enrolled FIDO2 device and setup a device mapping:
+cryptsetup open --token-id=<#> <dev> <name>
 ```
 ```bash
 # Remove device mapping and associated volume key:
@@ -3793,7 +3797,7 @@ cryptsetup luksKillSlot <dev> <#>
 cryptsetup luksErase <dev>
 ```
 
-#### systemd-cryptenroll:
+#### systemd-cryptenroll / systemd-cryptsetup:
 
 > ℹ️ **Notes:** 
 > - Requires libfido2 package.
@@ -3810,11 +3814,16 @@ systemd-cryptenroll --list-devices
 systemd-cryptenroll <dev>
 ```
 ```bash
+# Show all connected FIDO2 devices:
+systemd-cryptenroll --fido2-device=list
+```
+```bash
 # Enroll a new passphrase in an existing LUKS2 container.
 # Follow the interactive guide:
 systemd-cryptenroll --password <dev>
 ```
 ```bash
+# FIDO2 enrollment.
 # Enroll a FIDO2 device in an existing LUKS2 container automatically.
 # This command requires there to be only ONE FIDO2 device connected but no more.
 # Follow the interactive guide:
@@ -3822,12 +3831,20 @@ systemd-cryptenroll --fido2-device=auto <dev>
 # Enroll a specific FIDO2 device in an existing LUKS2 container.
 # Follow the interactive guide:
 systemd-cryptenroll --fido2-device=<hidraw_dev> <dev>
-# Enroll a specific FIDO2 device in an existing LUKS2 container without a client pin prompt (if supported).
+# Enroll a specific FIDO2 device in an existing LUKS2 container without a client pin prompt at unlock (if supported).
 # Follow the interactive guide:
 systemd-cryptenroll --fido2-device=<hidraw_dev> --fido2-with-client-pin=no <dev>
-# Enroll a specific FIDO2 device in an existing LUKS2 container without user presence prompt (if supported).
+# Enroll a specific FIDO2 device in an existing LUKS2 container without user presence prompt at unlock (if supported).
 # Follow the interactive guide:
 systemd-cryptenroll --fido2-device=<hidraw_dev> --fido2-with-user-presence=no <dev>
+```
+```bash
+# Unlock a LUKS2 container using an enrolled FIDO2, PKCS#11 or TPM2 device:
+systemd-cryptsetup attach <name> <dev>
+```
+```bash
+# Close a LUKS2 device mapping:
+systemd-cryptsetup detach <name>
 ```
 ```bash
 # Remove a keyslot from a LUKS2 container:

@@ -3800,8 +3800,9 @@ cryptsetup luksErase <dev>
 #### systemd-cryptenroll / systemd-cryptsetup:
 
 > ℹ️ **Notes:** 
-> - Requires libfido2 package.
+> - Requires libfido2 and packages.
 > - FIDO2 devices must support hmac-secret.
+> - All TPM support is TPM2 at a minimum.
 
 > ℹ️ **Note:** Commands usually require elevation.
 
@@ -3816,6 +3817,10 @@ systemd-cryptenroll <dev>
 ```bash
 # Show all connected FIDO2 devices:
 systemd-cryptenroll --fido2-device=list
+```
+```bash
+# Show all connected TPM2 devices:
+systemd-cryptenroll --tpm2-device=list
 ```
 ```bash
 # Enroll a new passphrase in an existing LUKS2 container.
@@ -3837,6 +3842,17 @@ systemd-cryptenroll --fido2-device=<hidraw_dev> --fido2-with-client-pin=no <dev>
 # Enroll a specific FIDO2 device in an existing LUKS2 container without user presence prompt at unlock (if supported).
 # Follow the interactive guide:
 systemd-cryptenroll --fido2-device=<hidraw_dev> --fido2-with-user-presence=no <dev>
+```
+```bash
+# TPM2 enrollment.
+# Enroll a FIDO2 device in an existing LUKS2 container automatically.
+# This command requires there to be only ONE TPM2 device connected but no more.
+# Follow the interactive guide:
+systemd-cryptenroll --tpm2-device=auto <dev>
+# Enroll a FIDO2 device in an existing LUKS2 container automatically and prompt the user for a pin on unlock.
+# This command requires there to be only ONE TPM2 device connected but no more.
+# Follow the interactive guide:
+systemd-cryptenroll --tpm2-device=auto --tpm2-with-pin=yes <dev>
 ```
 ```bash
 # Unlock a LUKS2 container using an enrolled FIDO2, PKCS#11 or TPM2 device:

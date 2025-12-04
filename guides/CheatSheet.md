@@ -3845,14 +3845,18 @@ systemd-cryptenroll --fido2-device=<hidraw_dev> --fido2-with-user-presence=no <d
 ```
 ```bash
 # TPM2 enrollment.
-# Enroll a FIDO2 device in an existing LUKS2 container automatically.
+# Enroll a TPM2 device in an existing LUKS2 container automatically.
 # This command requires there to be only ONE TPM2 device connected but no more.
 # Follow the interactive guide:
 systemd-cryptenroll --tpm2-device=auto <dev>
-# Enroll a FIDO2 device in an existing LUKS2 container automatically and prompt the user for a pin on unlock.
+# Enroll a TPM2 device in an existing LUKS2 container automatically and prompt the user for a pin on unlock.
 # This command requires there to be only ONE TPM2 device connected but no more.
 # Follow the interactive guide:
 systemd-cryptenroll --tpm2-device=auto --tpm2-with-pin=yes <dev>
+# Enroll a TPM2 device in an existing LUKS2 container automatically and specifiy the PCR(s).
+# This command requires there to be only ONE TPM2 device connected but no more.
+# Follow the interactive guide:
+systemd-cryptenroll --tpm2-device=auto --tpm2-pcrs=<name+name+name> <dev>
 ```
 ```bash
 # Unlock a LUKS2 container using an enrolled FIDO2, PKCS#11 or TPM2 device:

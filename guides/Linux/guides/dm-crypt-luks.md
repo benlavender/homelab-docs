@@ -203,4 +203,4 @@ encrypted   UUID="8dd225a6-9f67-4af2-bbde-aa653b1b243b"    none     nofail,fido2
 
 > **Note:** (Optional) Make a backup of the FIDO2 token by enrolling multiple devices, however the missing token will, in this case, fallback to the key stored on disk so the risk pointer mentioned in the previous example notes still applies.
 
-> **Note:** The `--fido2-with-user-presence=no` in the man page isn't valid when using hmac secrets so there is some user interaction required with this method.
+> **Note:** The `--fido2-with-user-presence=no` in the man page isn't valid when using hmac secrets in this case so there is some user interaction required with this method.

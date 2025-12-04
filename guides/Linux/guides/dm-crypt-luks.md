@@ -120,7 +120,7 @@ sudo cryptsetup status encrypted_stick
 sudo mkfs.fat -F32 /dev/mapper/encrypted_stick
 ```
 
-### Open a LUKS container at boot #1:
+### Open a LUKS container at boot:
 
 We have a new disk that we want mounted during boot like the rest of the disks that is encrypted with LUKS. We will use a keyfile to unlock the volume and configure `systemd-cryptsetup(8)` to unlock at boot.
 
@@ -192,8 +192,10 @@ sudo systemd-cryptenroll --fido2-device=auto --fido2-with-client-pin=no --unlock
 The above options are as follows:
 
 - `--fido2-device=auto` auto selection of the FIDO2 token.
-- `--fido2-with-client-pin=no` does not prompt the token user for a PIN as this would interrupt the boot process.
+- `--fido2-with-client-pin=no` does not prompt the token user for a PIN. This only speeds up the process but technically weakens security; change to `yes` or do not include if you want to be prompted.
 - `--unlock-key-file=` this is the key file used to unlock and enrol the token.
+
+> **Note:** The `--fido2-with-user-presence=no` in the man page isn't compliant when using hmac secrets in this case, so most tokens are going to require some presence.
 
 4. Update `/etc/crypttab` to include the fido2 token:
 
@@ -202,5 +204,3 @@ encrypted   UUID="8dd225a6-9f67-4af2-bbde-aa653b1b243b"    none     nofail,fido2
 ```
 
 > **Note:** (Optional) Make a backup of the FIDO2 token by enrolling multiple devices, however the missing token will, in this case, fallback to the key stored on disk so the risk pointer mentioned in the previous example notes still applies.
-
-> **Note:** The `--fido2-with-user-presence=no` in the man page isn't valid when using hmac secrets in this case so there is some user interaction required with this method.

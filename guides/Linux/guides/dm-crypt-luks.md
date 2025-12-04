@@ -204,3 +204,29 @@ encrypted   UUID="8dd225a6-9f67-4af2-bbde-aa653b1b243b"    none     nofail,fido2
 ```
 
 > **Note:** (Optional) Make a backup of the FIDO2 token by enrolling multiple devices, however the missing token will, in this case, fallback to the key stored on disk so the risk pointer mentioned in the previous example notes still applies.
+
+### Open a LUKS container at boot with a TPM:
+
+We have a device that has a TPM installed. We want to use this as a key slot in a LUKS2 container.
+
+Again we will use the same container as the previous two examples by enrolling the TPM device.
+
+1. Enroll the TPM2 device using the existing key file with a number of PCRs:
+
+```bash
+sudo systemd-cryptenroll --tpm2-device=auto --tpm2-pcrs=platform-code+external-code+system-identity --unlock-key-file=/etc/cryptsetup-keys.d/encrypted.key /dev/sdc1
+```
+
+The above options are as follows:
+
+- `--tpm2-device=auto` auto selection of the TPM2 device.
+- `--tpm2-pcrs` these are the [PCRs](https://uapi-group.org/specifications/specs/linux_tpm_pcr_registry/) used. See `systemd-cryptenroll(1)` for explanation. We should have enough to cover main EFI firmware changes and a number of things on root (if not encrypted).
+- `--unlock-key-file=` this is the key file used to unlock and enrol the token.
+
+2. Update `/etc/crypttab` to include the fido2 token:
+
+```plaintext
+encrypted   UUID="8dd225a6-9f67-4af2-bbde-aa653b1b243b"    none     nofail,tpm-device=auto
+```
+
+> **Note:** This method requires the TPM2 to be active and the unwrap of the key. If any of the PCRs do not match it will not provide the key and a recovery or another key lost must be used. If this happens ensure to re-enrol the devices as per step 1.

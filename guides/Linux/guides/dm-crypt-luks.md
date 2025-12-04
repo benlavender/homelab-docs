@@ -226,7 +226,7 @@ The above options are as follows:
 2. Update `/etc/crypttab` to include the fido2 token:
 
 ```plaintext
-encrypted   UUID="8dd225a6-9f67-4af2-bbde-aa653b1b243b"    none     nofail,tpm-device=auto
+encrypted   UUID="8dd225a6-9f67-4af2-bbde-aa653b1b243b"    none     nofail,tpm2-device=auto
 ```
 
 > **Note:** This method requires the TPM2 to be active and the unwrap of the key. If any of the PCRs do not match it will not provide the key and a recovery or another key lost must be used. If this happens ensure to re-enrol the devices as per step 1.

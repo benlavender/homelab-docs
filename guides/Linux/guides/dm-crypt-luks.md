@@ -30,6 +30,7 @@ Managing, including creating volumes, is usually done by `cryptsetup(8)`. Typica
 
 - `cryptsetup(8)`: A utility for managing `dm-crypt`. This is documented in [dm-crypt](../../CheatSheet.md#dm-crypt).
 - `crypttab(5)`: A file similar to `/etc/fstab` that is used for setting up encrypted volumes at boot.
+- `systemd-cryptenroll(1)`: Systemd service unit for enrolling hardware devices like FIDO2 tokens and TPMs that can be used to unlock LUKS2 volumes.
 
 ## Examples:
 
@@ -118,3 +119,88 @@ sudo cryptsetup status encrypted_stick
 ```bash
 sudo mkfs.fat -F32 /dev/mapper/encrypted_stick
 ```
+
+### Open a LUKS container at boot #1:
+
+We have a new disk that we want mounted during boot like the rest of the disks that is encrypted with LUKS. We will use a keyfile to unlock the volume and configure `systemd-cryptsetup(8)` to unlock at boot.
+
+The partition table is as follows:
+
+| Disk | Size |
+| --- | --- |
+/dev/sdc | 1 GiB |
+
+| Device | Partition Table |
+| --- | --- |
+/dev/sdc | GPT |
+
+| Partition # | Sectors | Partition Type | Size | Filesystem |
+| --- | --- | --- | --- |
+1 | 2048 - 2095103 | Linux filesystem | 1G | None |
+
+1. Generate a key file and place it in `/etc/cryptsetup-keys.d/`:
+
+```bash
+sudo printf '%s' <'passphrase'> | sudo install -m 0600 /dev/stdin /etc/cryptsetup-keys.d/encrypted.key
+```
+
+2. Encrypt the the partition with LUKS2 using the key file:
+
+```bash
+sudo cryptsetup luksFormat --key-file /etc/cryptsetup-keys.d/encrypted.key /dev/sdc1
+```
+
+3. We will need the partition UUID:
+
+```bash
+sudo blkid /dev/sdc1
+```
+
+4. Update `/etc/crypttab` to include the new encrypted partition:
+
+```plaintext
+encrypted   UUID="8dd225a6-9f67-4af2-bbde-aa653b1b243b"    none     nofail
+```
+
+The above options are as follows:
+
+1. First section is the name of the LUKS container once mapped.
+2. Second option is the ID of the disk or partition, in this case it is a partition that is encrypted.
+3. Third option defines the location of the key file, using either `-` or `none` will result in a key named the same as the first option proceeding `.key` being loaded from `/etc/cryptsetup-keys.d/` and `/run/cryptsetup-keys.d/`
+4. The forth section are options defined at `crypttab(5)` and in our case the `nofail` option doesn't delay the boot process if the key isn't retrievable. 
+
+> **Note:** Obviously the key is available on the root partition, if this is not protected beyond simple filesystem permissions then it will likely be retrievable offline.
+
+### Open a LUKS container at boot with a FIDO2 token:
+
+Using the same encrypted container as the above example, we also might want to use a FIDO2 token to unlock at boot. The device must be connected during the setup.
+
+1. Ensure `libfido2` is installed.
+
+2. Ensure the device is connected to the system.
+
+```bash
+sudo systemd-cryptenroll --fido2-device=list
+```
+
+3. Enrol this device into a key slot on the existing container:
+
+```bash
+sudo systemd-cryptenroll --fido2-device=auto --fido2-with-client-pin=no --unlock-key-file=/etc/cryptsetup-keys.d/encrypted.key /dev/sdc1
+```
+
+The above options are as follows:
+
+- `--fido2-device=auto` auto selection of the FIDO2 token.
+- `--fido2-with-client-pin=no` does not prompt the token user for a PIN as this would interrupt the boot process.
+- `--unlock-key-file=` this is the key file used to unlock and enrol the token.
+
+4. Update `/etc/crypttab` to include the fido2 token:
+
+```plaintext
+encrypted   UUID="8dd225a6-9f67-4af2-bbde-aa653b1b243b"    none     nofail,fido2-device=auto
+```
+
+> **Note:** (Optional) Make a backup of the FIDO2 token by enrolling multiple devices, however the missing token will, in this case, fallback to the key stored on disk so the risk pointer mentioned in the previous example notes still applies.
+
+> **Note:** The `--fido2-with-user-presence=no` in the man page isn't valid when using hmac secrets so there is some user interaction required with this method.

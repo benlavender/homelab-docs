@@ -3738,6 +3738,10 @@ cryptsetup open --token-only <dev> <name>
 cryptsetup open --token-id=<#> <dev> <name>
 # Open a LUKS2 container and setup a device mapping and allow the ATA Trim command:
 cryptsetup open --allow-discards <dev> <name>
+# Open a LUKS2 container and setup a device mapping and allow the ATA Trim command permanently in metadata:
+cryptsetup open --allow-discards --persistent <dev> <name>
+# Open a LUKS2 container and setup a device mapping and remove the persitent ATA Trim setting in metadata:
+cryptsetup open --persistent <dev> <name>
 ```
 ```bash
 # Remove device mapping and associated volume key:

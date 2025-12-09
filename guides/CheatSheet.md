@@ -3736,6 +3736,8 @@ cryptsetup open <dev> <name>
 cryptsetup open --token-only <dev> <name>
 # Open a LUKS container with a specific enrolled FIDO2 device and setup a device mapping:
 cryptsetup open --token-id=<#> <dev> <name>
+# Open a LUKS2 container and setup a device mapping and allow the ATA Trim command:
+cryptsetup open --allow-discards <dev> <name>
 ```
 ```bash
 # Remove device mapping and associated volume key:

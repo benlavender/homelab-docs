@@ -230,3 +230,49 @@ encrypted   UUID="8dd225a6-9f67-4af2-bbde-aa653b1b243b"    none     nofail,tpm2-
 ```
 
 > **Note:** This method requires the TPM2 to be active and the unwrap of the key. If any of the PCRs do not match it will not provide the key and a recovery or another key lost must be used. If this happens ensure to re-enrol the devices as per step 1.
+
+### Trim support:
+
+The ATA Trim command is not and never will be enabled by default until security issues are resolved with this function in SSDs. These are cell block devices i.e NAND for example. 
+
+None of the examples so far have enabled trim (discard). When Trim is used on SSDs the operating system, which in Linux is `fstrim(8)`, informs the SSD controller of the file deletions so that the controller can mark the pages as unused (INVALID) for it's own garbage collection schedule. If this Trim was disabled, which is recommended for LUKS2, garbage collection would have no idea what pages contain valid data because the controller has no knowledge of the filesystem; it only knows about invalid and valid pages. Therefore when running, usually at idle, garbage collection may relocate both valid and deleted data to new blocks before erasing the previous block.
+
+The issue at a security standpoint with Trim is that it informs the controller what exactly is valid and not valid data, which might be the cyphertext. This can lead to the storage profile forming patterns where potentially both the filesystem and the type of files are identified. This does not reveal any encrypted data though. Effectively this may provide hints to forensic analysis of what type of data is potentially stored and where it is on the disk; making the encryption and the owner less anonymous.
+
+There are three ways to enable Trim (presuming the disk supports it):
+
+1. When creating the mapping manually just once.
+2. When creating the mapping and permanently enabling trim by writing to the header.
+3. When creating the mapping at boot with `crypttab(5)`.
+
+> **Note:** `fstrim(8)` is a separate process that isn't documented here. 
+
+#### Enabling Trim manually:
+
+1. When creating a file mapping, you can enable Trim for this mapping only, this then will be removed once the mapping is closed:
+
+```bash
+sudo cryptsetup open --allow-discards <dev> <name>
+```
+
+2. To store this permanently in the LUKS2 header:
+
+```bash
+sudo cryptsetup open --allow-discards --persistent <dev> <name>
+```
+
+3. Now then querying the header with `sudo cryptsetup luksDump <dev>` you can see the flag: 
+
+```plaintext
+Flags:          allow-discards
+```
+
+4. (Optional) This can be removed with `sudo cryptsetup close <name>` & `sudo cryptsetup open --persistent <dev> <name>` if required.
+
+#### Enabling Trim with crypttab:
+
+1. The option `discard` can be used to allow Trim in the mapping:
+
+```plaintext
+encrypted   UUID="8dd225a6-9f67-4af2-bbde-aa653b1b243b"    none     discard
+```

@@ -2064,6 +2064,17 @@ hdparm -T <dev>
 hdparm -tT <dev>
 ```
 
+#### sedutil-cli:
+
+> ℹ️ **Note:** Requires the `sedutil` package.
+
+> ℹ️ **Note:** Commands usually require elevation.
+
+```bash
+# Scan for OPAL compliant disks:
+sedutil-cli --scan
+```
+
 #### nvme-cli:
 
 > ℹ️ **Note:** Requires `nvme-cli` package.

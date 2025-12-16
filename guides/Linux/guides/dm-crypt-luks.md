@@ -32,6 +32,10 @@ Managing, including creating volumes, is usually done by `cryptsetup(8)`. Typica
 - `crypttab(5)`: A file similar to `/etc/fstab` that is used for setting up encrypted volumes at boot.
 - `systemd-cryptenroll(1)`: Systemd service unit for enrolling hardware devices like FIDO2 tokens and TPMs that can be used to unlock LUKS2 volumes.
 
+## Disk preparation:
+
+When preparing a disk for block-level encryption you should overwrite the entire disk with random data, especially when reusing a disk that contained data previously.
+
 ## Examples:
 
 ### Encrypt a partition with LUKS using a passsphrase then create a FAT filesystem:

@@ -2145,7 +2145,7 @@ nvme format <ctrl> --namespace-id=<#> --reset
 # Format a namespace with secure erase.
 # Warning: This will erase all data on the namespace within 10 seconds.
 # Use --force to skip the 10 second wait.
-# Perform a block secure erase on the namespace:
+# Perform a user secure erase on the namespace:
 nvme format <ctrl> --namespace-id=<#> --ses=1 --reset
 # Perform a crypto secure erase on the namespace:
 nvme format <ctrl> --namespace-id=<#> --ses=2 --reset

@@ -2063,6 +2063,43 @@ hdparm -T <dev>
 # Perform both buffered and cached read tests on a disk:
 hdparm -tT <dev>
 ```
+```bash
+# ATA Security.
+# DO NOT use these commands via different interfaces other than an ATA-type, i.e USB or USB to SATA converter etc.
+# Ensure the device is NOT frozen.
+# Hints on device security status are outputted to the Security section with "hdparm -I <dev>".
+# Freeze the drives security settings until reset (usually issued on boot by most motherboards):
+hdparm --security-freeze <dev>
+# Set a user password and lock the device.
+# Enter password when prompted (to use NULL do not enter a password):
+hdparm --security-prompt-for-password --user-master u --security-set-pass <dev>
+# Unlock a locked device.
+# Enter password when prompted (to use NULL do not enter a password):
+hdparm --security-prompt-for-password --security-unlock <dev>
+# Disable drive locking. 
+# Enter password when prompted (to use NULL do not enter a password):
+hdparm --security-prompt-for-password --security-disable <dev>
+# Perform a security erase on a locked device.
+# Device needs to be locked to perform this function.
+# Enter password when prompted (to use NULL do not enter a password):
+hdparm --security-prompt-for-password --user-master u --security-erase <dev>
+# Perform an enhanced security erase on a locked device.
+# If both SECURITY ERASE UNIT and ENHANCED SECURITY ERASE UNIT are of the same time value then they probably are the same function and not worth comparing.
+# Device needs to be locked to perform this function.
+# Enter password when prompted (to use NULL do not enter a password):
+hdparm --security-prompt-for-password --user-master u --security-erase-enhanced <dev>
+```
+
+#### sedutil-cli:
+
+> ℹ️ **Note:** Requires the `sedutil` package.
+
+> ℹ️ **Note:** Commands usually require elevation.
+
+```bash
+# Scan for OPAL compliant disks:
+sedutil-cli --scan
+```
 
 #### nvme-cli:
 
@@ -2108,7 +2145,7 @@ nvme format <ctrl> --namespace-id=<#> --reset
 # Format a namespace with secure erase.
 # Warning: This will erase all data on the namespace within 10 seconds.
 # Use --force to skip the 10 second wait.
-# Perform a block secure erase on the namespace:
+# Perform a user secure erase on the namespace:
 nvme format <ctrl> --namespace-id=<#> --ses=1 --reset
 # Perform a crypto secure erase on the namespace:
 nvme format <ctrl> --namespace-id=<#> --ses=2 --reset

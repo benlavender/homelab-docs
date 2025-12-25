@@ -34,7 +34,165 @@ Managing, including creating volumes, is usually done by `cryptsetup(8)`. Typica
 
 ## Disk preparation:
 
-When preparing a disk for block-level encryption you should overwrite the entire disk with random data, especially when reusing a disk that contained data previously.
+When preparing a disk for block-level encryption, we need to consider securely erasing the data, even for disks that we may have just acquired new from factory and especially when re-using disks that were used previously to store data. Furthermore, before creating an encrypted container the device should be filled with random data.
+
+### Wiping disks:
+
+Typically wiping a disk with all zeros across all its user data areas is satisfactory for removing remanent data. However, different operations need to be performed on different types of disks. These may be cell-based (flash) drives like SSDs or spindle/magnetic disks like HDDs.
+
+For completion times I've ran these on two types of disks for testing:
+
+- **HDD:** Hitachi HTS542525K9SA00.
+- **SSD (SATA):** Dogfish SSD 128GB (Branded Gamerking).
+
+#### Hard disk drives:
+
+To fill a HDD with zeros or ones there is two methods, a userland application that can write zeros to the disk or the ATA Security Erase feature (depending on controller support). 
+
+The ATA Security Erase feature is noted a number of times further on and has has two functions: **Security Erase** and **Security Erase Enhanced**:
+
+1. The **Security Erase** method results in all user areas being written with zeros. 
+2. The **Security Erase Enhanced** method is known to apply predetermined data patterns, potentially random, to all user areas on the disk. 
+
+It is noted throughout this guide that if the calculated minute numbers are the same then the function likely is exactly the same and the manufacturer didn't implement it. 
+
+On a HDD, there are areas of the disk, both on and off the platters, that are used for operating and managing the disk itself. These areas are not directly accessible to the OS and the host writeable area is separate to this:
+
+- **Host Protected Area (HPA):** 
+
+
+##### ATA Security Erase:
+
+1. Ensure `hdparm` is installed.
+
+2. Confirm the device supports this feature:
+
+```bash
+sudo hdparm -I /dev/sda
+```
+
+3. Confirm the `Security` feature is supported, in our case this is our output:
+
+```plaintext
+106min for SECURITY ERASE UNIT. 108min for ENHANCED SECURITY ERASE UNIT.
+```
+
+4. The controller works out the time it takes to perform each type, if the minute values are the same it is safe to consider the enhanced version will do the exact same function as the first.
+
+5. Confirm the drive is not frozen as show in the same `Security` section:
+
+```bash
+sudo hdparm -I /dev/sda
+```
+
+In our case this device was frozen, as this commonly done by motherboard firmware at boot:
+
+```plaintext
+frozen
+```
+
+6. Usually the easiest way to unfreeze the device is to sleep the system and wake it back up. In our case we can use `sudo systemctl sleep` then wake it back up.
+
+7. Now the device should show:
+
+```plaintext
+not     frozen
+```
+
+8. Now we need to lock the device with a user password. When prompted, either enter a desired password or just press return to enter a blank one:
+
+```bash
+sudo hdparm --security-prompt-for-password --user-master u --security-set-pass /dev/sda
+```
+
+9. Now issue the erase command with the same password when prompted:
+
+```bash
+sudo hdparm --security-prompt-for-password --user-master u --security-erase-enhanced /dev/sda
+```
+
+10. Once done the command will complete, my time on this was approx 88min so the device calculation was somewhat accurate. 
+
+##### User tools:
+
+A popular tool I use to zero all the blocks on a HDD is `dd(1)`. On the disk I tested it took approx 280 minutes to zero out all the blocks:
+
+1. First we need to find the physical sector size of the disk:
+
+```bash
+lsblk -o NAME,PHY-SeC /dev/sda
+```
+
+```plaintext
+NAME PHY-SEC
+sda      512
+```
+
+2. Wipe the disk with zeros: 
+
+```bash
+sudo dd if=/dev/zero of=/dev/sda bs=512 status=progress
+```
+
+3. Once done the command will complete with "No space left on device". My time on this was approx 90 minutes.
+
+#### Flash drives:
+
+These devices are in a league of their own. Because of their nature to degrade over time due to cell charge trapping, manufacturers employ a number of techniques to balance writes amongst cells. These are summarised as "Wear Levelling". At a data erasure standpoint, erasing data from an SSD sometimes can be troublesome because data is moved around and stored in caches by the controller, regardless of where the data was written to originally. These usually cannot be disabled, especially on consumer grade disks. Some SSDs are also self-encrypting drives (SED) which allow for key management and encryption offered by the controller and sometimes erasure commands simply result in this key being wiped and therefore data no longer is accessible, but it still could exist in encrypted form. 
+
+There are two methods which usually will end up with all data being inaccessible on an SSD. Like the HDD method we want to fill the SSD with zeros or ones. A userland application that can write zeros to the disk or the ATA Security Erase feature (depending on controller support).
+
+##### ATA Security Erase:
+
+1. Ensure `hdparm` is installed.
+
+2. Confirm the device supports this feature:
+
+```bash
+sudo hdparm -I /dev/sda
+```
+
+3. Confirm the `Security` feature is supported, in our case this is our output:
+
+```plaintext
+2min for SECURITY ERASE UNIT. 2min for ENHANCED SECURITY ERASE UNIT.
+```
+
+4. The controller works out the time it takes to perform each type, if the minute values are the same it is safe to consider the enhanced version will do the exact same function as the first.
+
+5. Confirm the drive is not frozen as show in the same `Security` section:
+
+```bash
+sudo hdparm -I /dev/sda
+```
+
+In our case this device was frozen, as this commonly done by motherboard firmware at boot:
+
+```plaintext
+frozen
+```
+
+6. Usually the easiest way to unfreeze the device is to sleep the system and wake it back up. In our case we can use `sudo systemctl sleep` then wake it back up.
+
+7. Now the device should show:
+
+```plaintext
+not     frozen
+```
+
+8. Now we need to lock the device with a user password. When prompted, either enter a desired password or just press return to enter a blank one:
+
+```bash
+sudo hdparm --security-prompt-for-password --user-master u --security-set-pass /dev/sda
+```
+
+9. Now issue the erase command with the same password when prompted:
+
+```bash
+sudo hdparm --security-prompt-for-password --user-master u --security-erase /dev/sda
+```
+
+10. Once done the command will complete, my time on this was about 5 seconds. In this case it is likely that the device is a SED (even if not advertised by the firmware with OPAL support) and the controller likely reset the key. 
 
 ## Examples:
 

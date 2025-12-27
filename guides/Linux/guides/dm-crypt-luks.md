@@ -56,10 +56,17 @@ The ATA Security Erase feature is noted a number of times further on and has has
 
 It is noted throughout this guide that if the calculated minute numbers are the same then the function likely is exactly the same and the manufacturer didn't implement it. 
 
-On a HDD, there are areas of the disk, both on and off the platters, that are used for operating and managing the disk itself. These areas are not directly accessible to the OS and the host writeable area is separate to this:
+On a HDD, there are areas of the disk, both on and off the platters, that are used for operating and managing the disk itself. These areas are not directly accessible to the OS and the host writeable area is separate. Not all HDDs will have these areas (depending on the ATA version) but usually they are used for these purposes when they do:
 
-- **Host Protected Area (HPA):** 
+- **Disk Firmware Area:** Also known as the Service Area, usually the very first part of the platter(s) have reserved manufacturer storage although they may exist elsewhere and can be duplicated for resiliency. The DFA is used by the firmware for a number of uses (called Modules):
+    - **P-LIST:** Manufacturer configured defects/bad blocks.
+    - **G-LIST:** Lifetime defects/bad blocks developed during use.
+    - **SMART logs:** Disk stats like temperature and failure pointers etc.
+    - **Security modules**
+- **Host Protected Area (HPA):** Introduced with ATA-4. The HPA usually exists after the user writeable area and stores the boot sector and other disk utilities that may be used by the manufacturer. 
+- **Device Configuration Overlay (DCO):** Introduced with ATA-6. The DCO is usually used by the manufacturer to set HDD parameters and enable/disable HDD settings.
 
+Detecting the presence and data in these areas require specific forensic analysis tools and vendor specific functions but they can be viewed and potentially edited by an end user. So if you are paranoid about any potential data leakage a full physical destruction (shredding or grinding) service needs to be arranged unless you have the no-how to access these areas. In-fact any paranoia beyond an erasure of the data area should be followed by this method.
 
 ##### ATA Security Erase:
 
@@ -105,7 +112,7 @@ not     frozen
 sudo hdparm --security-prompt-for-password --user-master u --security-set-pass /dev/sda
 ```
 
-9. Now issue the erase command with the same password when prompted:
+9. I will elect to use the enhanced version. Now issue the erase command with the same password when prompted:
 
 ```bash
 sudo hdparm --security-prompt-for-password --user-master u --security-erase-enhanced /dev/sda
@@ -138,9 +145,9 @@ sudo dd if=/dev/zero of=/dev/sda bs=512 status=progress
 
 #### Flash drives:
 
-These devices are in a league of their own. Because of their nature to degrade over time due to cell charge trapping, manufacturers employ a number of techniques to balance writes amongst cells. These are summarised as "Wear Levelling". At a data erasure standpoint, erasing data from an SSD sometimes can be troublesome because data is moved around and stored in caches by the controller, regardless of where the data was written to originally. These usually cannot be disabled, especially on consumer grade disks. Some SSDs are also self-encrypting drives (SED) which allow for key management and encryption offered by the controller and sometimes erasure commands simply result in this key being wiped and therefore data no longer is accessible, but it still could exist in encrypted form. 
+These devices are in a league of their own. Because of their nature to degrade over time due to cell charge trapping, manufacturers employ a number of techniques to balance writes amongst cells. These are summarised as "Wear Levelling". At a data erasure standpoint, erasing data from an SSD sometimes can be troublesome because data is moved around and stored in caches and other areas of the disk by the controller, regardless of where the data was written to originally. These usually cannot be disabled, especially on consumer grade disks. Some SSDs are also self-encrypting drives (SED) which allow for key management and encryption offered by the controller and sometimes erasure commands simply result in this key being wiped and therefore data no longer is accessible, but it still could exist in encrypted form. 
 
-There are two methods which usually will end up with all data being inaccessible on an SSD. Like the HDD method we want to fill the SSD with zeros or ones. A userland application that can write zeros to the disk or the ATA Security Erase feature (depending on controller support).
+There are a few methods which usually will end up with all data being inaccessible on an SSD. Like the HDD method we want to fill the SSD with zeros or ones. A userland application that can write zeros to the disk or the ATA Security Erase feature (depending on controller support):
 
 ##### ATA Security Erase:
 
@@ -186,13 +193,35 @@ not     frozen
 sudo hdparm --security-prompt-for-password --user-master u --security-set-pass /dev/sda
 ```
 
-9. Now issue the erase command with the same password when prompted:
+9. I elected to use the non-enhanced version. Now issue the erase command with the same password when prompted:
 
 ```bash
 sudo hdparm --security-prompt-for-password --user-master u --security-erase /dev/sda
 ```
 
 10. Once done the command will complete, my time on this was about 5 seconds. In this case it is likely that the device is a SED (even if not advertised by the firmware with OPAL support) and the controller likely reset the key. 
+
+##### User tools:
+
+A tool I use to create zeros across all blocks on an SSD is `blkdiscard(8)`. `blkdiscard` is used to discard device sectors on SSDs by using the ATA Trim function (if supported). However it can be used to write zeros across all sectors of the disk if Trim is not supported: 
+
+1. Ensure `util-linux` is installed.
+
+2. Using the `--secure` flag will also ensure that any discarded blocks created by the controller garbage collection routine are also erased. This depends on firmware support:
+
+```bash
+sudo blkdiscard --secure --force /dev/sda
+```
+
+```plaintext
+blkdiscard: BLKSECDISCARD: /dev/sda ioctl failed: Operation not supported
+```
+
+3. In this case the operation wasn't supported so an alternative is to use this command to zero all the blocks manually:
+
+```bash
+sudo blkdiscard --zeroout --force /dev/sda
+```
 
 ## Examples:
 

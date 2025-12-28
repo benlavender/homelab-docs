@@ -2170,7 +2170,7 @@ nvme sanitize <ctrl> --sanact=4
 ```
 ```bash
 # View sanitize log statistics:
-nvme sanitize-log <dev>
+nvme sanitize-log <dev> --human-readable
 ```
 ```bash
 # Get the firmware versions of all the slots including the active slot.

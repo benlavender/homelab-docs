@@ -2089,6 +2089,17 @@ hdparm --security-prompt-for-password --user-master u --security-erase <dev>
 # Enter password when prompted (to use NULL do not enter a password):
 hdparm --security-prompt-for-password --user-master u --security-erase-enhanced <dev>
 ```
+```bash
+# Sanitize.
+# These commands are subject to controller support of each type.
+# When a sanitize operation begins, it cannot be stopped, even if the device is powered down it will just start back up again so check the status if the device isn't responding after.
+# Get status of the sanitize operation:
+hdparm --sanitize-status <dev>
+# Perform a crypto erase:
+hdparm --yes-i-know-what-i-am-doing --sanitize-crypto-scramble <dev>
+# Perform a block erase:
+hdparm --yes-i-know-what-i-am-doing --sanitize-block-erase <dev>
+```
 
 #### sedutil-cli:
 

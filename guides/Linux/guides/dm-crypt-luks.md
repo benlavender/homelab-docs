@@ -44,7 +44,8 @@ For completion times I've ran these on two types of disks for testing:
 
 - **HDD:** Hitachi HTS542525K9SA00.
 - **SSD (SATA):** Dogfish SSD 128GB (Branded Gamerking).
-
+- **SSD (NVME):** HighRel 512GB SSD.
+ 
 #### Hard disk drives:
 
 On a HDD, there are areas of the disk, both on and off the platters, that are used for operating and managing the disk itself. These areas are not directly accessible to the OS and the host writeable area is separate. Not all HDDs will have these areas (depending on the ATA version) but usually they are used for these purposes when they do:
@@ -147,7 +148,9 @@ sudo dd if=/dev/zero of=/dev/sda bs=512 status=progress
 
 These devices are in a league of their own. Because of their nature to degrade over time due to cell charge trapping, manufacturers employ a number of techniques to balance writes amongst cells. These are summarised as "Wear Levelling". At a data erasure standpoint, erasing data from an SSD sometimes can be troublesome because data is moved around and stored in caches and other areas of the disk by the controller, regardless of where the data was written to originally. These usually cannot be disabled, especially on consumer grade disks. Some SSDs are also self-encrypting drives (SED) which allow for key management and encryption offered by the controller and sometimes erasure commands simply result in this key being wiped and therefore data no longer is accessible, but it still could exist in encrypted form. 
 
-There are a few methods which usually will end up with all data being inaccessible on an SSD. Like the HDD method we want to fill the SSD with zeros or ones and wipe as much of the controller areas as possible. The ATA Security Erase or Sanitize features (depending on controller support) or userland application that can write zeros to the disk can be used. Sanitize commands are preferred on modern SSDs when supported.
+There are a few methods which usually will end up with all data being inaccessible on an SSD. Like the HDD method we want to fill the SSD with zeros or ones and wipe as much of the controller areas as possible. The ATA Security Erase or Sanitize features (depending on controller support) or userland application that can write zeros to the disk can be used. Sanitize commands are preferred on modern SSDs when supported as they apparently do not contribute to cell wear and can reset the device back to factory performance as an addition to clearing the cells.
+
+> **Note:** Non-Volatile Memory Express (NVMe) disks also support their own specification for wiping disks and are covered after this section.
 
 ##### Sanitize:
 
@@ -157,8 +160,33 @@ There are a few types of sanitize instructions (depending on support) that SSDs 
 - **Block Erase:** The block erase issues a command to the firmware to erase all blocks on the disk containing user data. Support can be confirmed with the `BLOCK_ERASE_EXT command` as printed by `hdparm`.
 - **Overwrite Erase:** Overwrites all user data blocks with a specific pattern and supports a specifiable number of passes, i.e 1 - 16. It will also remove data in caches etc. Support can be confirmed with the `OVERWRITE_EXT command` as printed by `hdparm`.
 
+1. Ensure `hdparm` is installed.
 
+2. Perform one of the commands depending on what is supported by the controller. In the case of my SSD it only supported block erase:
 
+```bash
+sudo hdparm --yes-i-know-what-i-am-doing --sanitize-block-erase /dev/sda
+```
+
+3. The command will be sent to the disk and exits, you will need to monitor the command with `sudo hdparm --sanitize-status /dev/sda` to monitor progress:
+
+```plaintext
+/dev/sda:
+Issuing SANITIZE_STATUS command
+Sanitize status:
+    State:    SD2 Sanitize operation In Process
+    Progress: 0xde6e (86%)
+```
+
+```plaintext
+/dev/sda:
+Issuing SANITIZE_STATUS command
+Sanitize status:
+    State:    SD0 Sanitize Idle
+    Last Sanitize Operation Completed Without Error
+```
+
+> **Note:** When sanitize commands are ran, they must complete. If the device looses power during this operation and it hasn't finished it will begin again once back up until it has. If a drive is large and it appears unresponsive then check the output of `hdparm --sanitize-status` to see if a sanitize operation is in progress. 
 
 ##### ATA Security Erase:
 
@@ -233,6 +261,40 @@ blkdiscard: BLKSECDISCARD: /dev/sda ioctl failed: Operation not supported
 ```bash
 sudo blkdiscard --zeroout --force /dev/sda
 ```
+
+#### NVM Express disks:
+
+NVMe disks also support the sanitise operation but via the `nvme-cli(1)` commands. There are three types of sanitize operations:
+
+- **Block Erase:** The block erase issues a command to the firmware to erase all blocks on the disk containing user data as well as any cache or controller memory buffers. The controller may also automatically reset the key if encrypted.
+- **Crypto Erase:** Usually involves resetting the key used to encrypt the data on SED devices. Normally these are OPAL devices providing key management support that can be confirmed with `sedutil-cli --scan`
+- **Overwrite:** Overwrites all user data blocks, caches and buffers with a specific pattern and supports a specifiable number of passes.
+
+Support for each type can be confirmed with: `sudo nvme id-ctrl <ctrl> --human-readable`:
+
+```plaintext
+  [2:2] : 0     Overwrite Sanitize Operation Not Supported
+  [1:1] : 0x1   Block Erase Sanitize Operation Supported
+  [0:0] : 0     Crypto Erase Sanitize Operation Not Supported
+```
+
+1. Ensure `nvme-cli` is installed.
+
+2. Perform one of the commands depending on what is supported by the controller. In the case of my NVMe it only supported block erase:
+
+```bash
+sudo nvme sanitize /dev/nvme0 --sanact=2
+```
+
+3. Monitor the command with `sudo nvme id-ctrl /dev/nvme0 --human-readable` until it completes as below:
+
+```plaintext
+Sanitize Progress                      (SPROG) :  65535
+Sanitize Status                        (SSTAT) :  0x1
+  [2:0] : Sanitize Operation Status  : 0x1      Most Recent Sanitize Command Completed Successfully.
+```
+
+> **Note:** When sanitize commands are ran, they must complete. If the device looses power during this operation and it hasn't finished it will begin again once back up until it has. If a drive is large and it appears unresponsive then check the output of `nvme sanitize-log` to see if a sanitize operation is in progress. 
 
 ## Examples:
 

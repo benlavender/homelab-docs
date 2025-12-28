@@ -32,6 +32,270 @@ Managing, including creating volumes, is usually done by `cryptsetup(8)`. Typica
 - `crypttab(5)`: A file similar to `/etc/fstab` that is used for setting up encrypted volumes at boot.
 - `systemd-cryptenroll(1)`: Systemd service unit for enrolling hardware devices like FIDO2 tokens and TPMs that can be used to unlock LUKS2 volumes.
 
+## Disk preparation:
+
+When preparing a disk for block-level encryption, we need to consider securely erasing the data, even for disks that we may have just acquired new from factory and especially when re-using disks that were used previously to store data. Furthermore, before creating an encrypted container the device should be filled with random data.
+
+### Wiping disks:
+
+Typically wiping a disk with all zeros across all its user data areas is satisfactory for removing remanent data. However, different operations need to be performed on different types of disks. These may be cell-based (flash) drives like SSDs or spindle/magnetic disks like HDDs.
+
+For completion times I've ran these on two types of disks for testing:
+
+- **HDD:** Hitachi HTS542525K9SA00.
+- **SSD (SATA):** Dogfish SSD 128GB (Branded Gamerking).
+- **SSD (NVME):** HighRel 512GB SSD.
+ 
+#### Hard disk drives:
+
+On a HDD, there are areas of the disk, both on and off the platters, that are used for operating and managing the disk itself. These areas are not directly accessible to the OS and the host writeable area is separate. Not all HDDs will have these areas (depending on the ATA version) but usually they are used for these purposes when they do:
+
+- **Disk Firmware Area:** Also known as the Service Area, usually the very first part of the platter(s) have reserved manufacturer storage although they may exist elsewhere and can be duplicated for resiliency. The DFA is used by the firmware for a number of uses (called Modules):
+    - **P-LIST:** Manufacturer configured defects/bad blocks.
+    - **G-LIST:** Lifetime defects/bad blocks developed during use.
+    - **SMART logs:** Disk stats like temperature and failure pointers etc.
+    - **Security modules**
+- **Host Protected Area (HPA):** Introduced with ATA-4. The HPA usually exists after the user writeable area and stores the boot sector and other disk utilities that may be used by the manufacturer. 
+- **Device Configuration Overlay (DCO):** Introduced with ATA-6. The DCO is usually used by the manufacturer to set HDD parameters and enable/disable HDD settings.
+
+Detecting the presence and data in these areas require specific forensic analysis tools and vendor specific functions but they can be viewed and potentially edited by an end user. So if you are paranoid about any potential data leakage a full physical destruction (shredding or grinding) service needs to be arranged unless you have the no-how to access these areas. In-fact any paranoia beyond an erasure of the data area should be followed by this method.
+
+To fill a HDD with zeros or ones there is two methods, a userland application that can write zeros to the disk or the ATA Security Erase feature (depending on controller support). 
+
+The ATA Security Erase feature is noted a number of times further on and has has two functions: **Security Erase** and **Security Erase Enhanced**:
+
+1. The **Security Erase** method results in all user areas being written with zeros. 
+2. The **Security Erase Enhanced** method is known to apply predetermined data patterns, potentially random, to all user areas on the disk. 
+
+It is noted throughout this guide that if the calculated minute numbers are the same then the function likely is exactly the same and the manufacturer didn't implement it. Areas like the DFA, DCO and HPA *should* be cleared with the ATA commands but there is usually no proof of this without forensic analysis.
+
+##### ATA Security Erase:
+
+1. Ensure `hdparm` is installed.
+
+2. Confirm the device supports this feature:
+
+```bash
+sudo hdparm -I /dev/sda
+```
+
+3. Confirm the `Security` feature is supported, in our case this is our output:
+
+```plaintext
+106min for SECURITY ERASE UNIT. 108min for ENHANCED SECURITY ERASE UNIT.
+```
+
+4. The controller works out the time it takes to perform each type, if the minute values are the same it is safe to consider the enhanced version will do the exact same function as the first.
+
+5. Confirm the drive is not frozen as show in the same `Security` section:
+
+```bash
+sudo hdparm -I /dev/sda
+```
+
+In our case this device was frozen, as this commonly done by motherboard firmware at boot:
+
+```plaintext
+frozen
+```
+
+6. Usually the easiest way to unfreeze the device is to sleep the system and wake it back up. In our case we can use `sudo systemctl sleep` then wake it back up.
+
+7. Now the device should show:
+
+```plaintext
+not     frozen
+```
+
+8. Now we need to lock the device with a user password. When prompted, either enter a desired password or just press return to enter a blank one:
+
+```bash
+sudo hdparm --security-prompt-for-password --user-master u --security-set-pass /dev/sda
+```
+
+9. I will elect to use the enhanced version. Now issue the erase command with the same password when prompted:
+
+```bash
+sudo hdparm --security-prompt-for-password --user-master u --security-erase-enhanced /dev/sda
+```
+
+10. Once done the command will complete, my time on this was approx 88min so the device calculation was somewhat accurate. 
+
+##### User tools:
+
+A popular tool I use to zero all the blocks on a HDD is `dd(1)`. On the disk I tested it took approx 280 minutes to zero out all the blocks:
+
+1. First we need to find the physical sector size of the disk:
+
+```bash
+lsblk -o NAME,PHY-SeC /dev/sda
+```
+
+```plaintext
+NAME PHY-SEC
+sda      512
+```
+
+2. Wipe the disk with zeros: 
+
+```bash
+sudo dd if=/dev/zero of=/dev/sda bs=512 status=progress
+```
+
+3. Once done the command will complete with "No space left on device". My time on this was approx 90 minutes.
+
+#### Flash drives:
+
+These devices are in a league of their own. Because of their nature to degrade over time due to cell charge trapping, manufacturers employ a number of techniques to balance writes amongst cells. These are summarised as "Wear Levelling". At a data erasure standpoint, erasing data from an SSD sometimes can be troublesome because data is moved around and stored in caches and other areas of the disk by the controller, regardless of where the data was written to originally. These usually cannot be disabled, especially on consumer grade disks. Some SSDs are also self-encrypting drives (SED) which allow for key management and encryption offered by the controller and sometimes erasure commands simply result in this key being wiped and therefore data no longer is accessible, but it still could exist in encrypted form. 
+
+There are a few methods which usually will end up with all data being inaccessible on an SSD. Like the HDD method we want to fill the SSD with zeros or ones and wipe as much of the controller areas as possible. The ATA Security Erase or Sanitize features (depending on controller support) or userland application that can write zeros to the disk can be used. Sanitize commands are preferred on modern SSDs when supported as they apparently do not contribute to cell wear and can reset the device back to factory performance as an addition to clearing the cells.
+
+> **Note:** Non-Volatile Memory Express (NVMe) disks also support their own specification for wiping disks and are covered after this section.
+
+##### Sanitize:
+
+There are a few types of sanitize instructions (depending on support) that SSDs can perform:
+
+- **Crypto Erase:** Usually involves resetting the key used to encrypt the data on SED devices. Normally these are OPAL devices providing key management support that can be confirmed with `sedutil-cli --scan` or `CRYPTO_SCRAMBLE_EXT command` as printed by `hdparm`. 
+- **Block Erase:** The block erase issues a command to the firmware to erase all blocks on the disk containing user data. Support can be confirmed with the `BLOCK_ERASE_EXT command` as printed by `hdparm`.
+- **Overwrite Erase:** Overwrites all user data blocks with a specific pattern and supports a specifiable number of passes, i.e 1 - 16. It will also remove data in caches etc. Support can be confirmed with the `OVERWRITE_EXT command` as printed by `hdparm`.
+
+1. Ensure `hdparm` is installed.
+
+2. Perform one of the commands depending on what is supported by the controller. In the case of my SSD it only supported block erase:
+
+```bash
+sudo hdparm --yes-i-know-what-i-am-doing --sanitize-block-erase /dev/sda
+```
+
+3. The command will be sent to the disk and exits, you will need to monitor the command with `sudo hdparm --sanitize-status /dev/sda` to monitor progress:
+
+```plaintext
+/dev/sda:
+Issuing SANITIZE_STATUS command
+Sanitize status:
+    State:    SD2 Sanitize operation In Process
+    Progress: 0xde6e (86%)
+```
+
+```plaintext
+/dev/sda:
+Issuing SANITIZE_STATUS command
+Sanitize status:
+    State:    SD0 Sanitize Idle
+    Last Sanitize Operation Completed Without Error
+```
+
+> **Note:** When sanitize commands are ran, they must complete. If the device looses power during this operation and it hasn't finished it will begin again once back up until it has. If a drive is large and it appears unresponsive then check the output of `hdparm --sanitize-status` to see if a sanitize operation is in progress. 
+
+##### ATA Security Erase:
+
+1. Ensure `hdparm` is installed.
+
+2. Confirm the device supports this feature:
+
+```bash
+sudo hdparm -I /dev/sda
+```
+
+3. Confirm the `Security` feature is supported, in our case this is our output:
+
+```plaintext
+2min for SECURITY ERASE UNIT. 2min for ENHANCED SECURITY ERASE UNIT.
+```
+
+4. The controller works out the time it takes to perform each type, if the minute values are the same it is safe to consider the enhanced version will do the exact same function as the first.
+
+5. Confirm the drive is not frozen as show in the same `Security` section:
+
+```bash
+sudo hdparm -I /dev/sda
+```
+
+In our case this device was frozen, as this commonly done by motherboard firmware at boot:
+
+```plaintext
+frozen
+```
+
+6. Usually the easiest way to unfreeze the device is to sleep the system and wake it back up. In our case we can use `sudo systemctl sleep` then wake it back up.
+
+7. Now the device should show:
+
+```plaintext
+not     frozen
+```
+
+8. Now we need to lock the device with a user password. When prompted, either enter a desired password or just press return to enter a blank one:
+
+```bash
+sudo hdparm --security-prompt-for-password --user-master u --security-set-pass /dev/sda
+```
+
+9. I elected to use the non-enhanced version. Now issue the erase command with the same password when prompted:
+
+```bash
+sudo hdparm --security-prompt-for-password --user-master u --security-erase /dev/sda
+```
+
+10. Once done the command will complete, my time on this was about 5 seconds. In this case it is likely that the device is a SED (even if not advertised by the firmware with OPAL support) and the controller likely reset the key. 
+
+##### User tools:
+
+A tool I use to create zeros across all blocks on an SSD is `blkdiscard(8)`. `blkdiscard` is used to discard device sectors on SSDs by using the ATA Trim function (if supported). However it can be used to write zeros across all sectors of the disk if Trim is not supported: 
+
+1. Ensure `util-linux` is installed.
+
+2. Using the `--secure` flag will also ensure that any discarded blocks created by the controller garbage collection routine are also erased. This depends on firmware support:
+
+```bash
+sudo blkdiscard --secure --force /dev/sda
+```
+
+```plaintext
+blkdiscard: BLKSECDISCARD: /dev/sda ioctl failed: Operation not supported
+```
+
+3. In this case the operation wasn't supported so an alternative is to use this command to zero all the blocks manually:
+
+```bash
+sudo blkdiscard --zeroout --force /dev/sda
+```
+
+#### NVM Express disks:
+
+NVMe disks also support the sanitise operation but via the `nvme-cli(1)` commands. There are three types of sanitize operations:
+
+- **Block Erase:** The block erase issues a command to the firmware to erase all blocks on the disk containing user data as well as any cache or controller memory buffers. The controller may also automatically reset the key if encrypted.
+- **Crypto Erase:** Usually involves resetting the key used to encrypt the data on SED devices. Normally these are OPAL devices providing key management support that can be confirmed with `sedutil-cli --scan`
+- **Overwrite:** Overwrites all user data blocks, caches and buffers with a specific pattern and supports a specifiable number of passes.
+
+Support for each type can be confirmed with: `sudo nvme id-ctrl <ctrl> --human-readable`:
+
+```plaintext
+  [2:2] : 0     Overwrite Sanitize Operation Not Supported
+  [1:1] : 0x1   Block Erase Sanitize Operation Supported
+  [0:0] : 0     Crypto Erase Sanitize Operation Not Supported
+```
+
+1. Ensure `nvme-cli` is installed.
+
+2. Perform one of the commands depending on what is supported by the controller. In the case of my NVMe it only supported block erase:
+
+```bash
+sudo nvme sanitize /dev/nvme0 --sanact=2
+```
+
+3. Monitor the command with `sudo nvme id-ctrl /dev/nvme0 --human-readable` until it completes as below:
+
+```plaintext
+Sanitize Progress                      (SPROG) :  65535
+Sanitize Status                        (SSTAT) :  0x1
+  [2:0] : Sanitize Operation Status  : 0x1      Most Recent Sanitize Command Completed Successfully.
+```
+
+> **Note:** When sanitize commands are ran, they must complete. If the device looses power during this operation and it hasn't finished it will begin again once back up until it has. If a drive is large and it appears unresponsive then check the output of `nvme sanitize-log` to see if a sanitize operation is in progress. 
+
 ## Examples:
 
 ### Encrypt a partition with LUKS using a passsphrase then create a FAT filesystem:
@@ -230,3 +494,49 @@ encrypted   UUID="8dd225a6-9f67-4af2-bbde-aa653b1b243b"    none     nofail,tpm2-
 ```
 
 > **Note:** This method requires the TPM2 to be active and the unwrap of the key. If any of the PCRs do not match it will not provide the key and a recovery or another key lost must be used. If this happens ensure to re-enrol the devices as per step 1.
+
+### Trim support:
+
+The ATA Trim command is not and never will be enabled by default until security issues are resolved with this function in SSDs. These are cell block devices i.e NAND for example. 
+
+None of the examples so far have enabled trim (discard). When Trim is used on SSDs the operating system, which in Linux is `fstrim(8)`, informs the SSD controller of the file deletions so that the controller can mark the pages as unused (INVALID) for it's own garbage collection schedule. If this Trim was disabled, which is recommended for LUKS2, garbage collection would have no idea what pages contain valid data because the controller has no knowledge of the filesystem; it only knows about invalid and valid pages. Therefore when running, usually at idle, garbage collection may relocate both valid and deleted data to new blocks before erasing the previous block.
+
+The issue at a security standpoint with Trim is that it informs the controller what exactly is valid and not valid data, which might be the cyphertext. This can lead to the storage profile forming patterns where potentially both the filesystem and the type of files are identified. This does not reveal any encrypted data though. Effectively this may provide hints to forensic analysis of what type of data is potentially stored and where it is on the disk; making the encryption and the owner less anonymous.
+
+There are three ways to enable Trim (presuming the disk supports it):
+
+1. When creating the mapping manually just once.
+2. When creating the mapping and permanently enabling trim by writing to the header.
+3. When creating the mapping at boot with `crypttab(5)`.
+
+> **Note:** `fstrim(8)` is a separate process that isn't documented here. 
+
+#### Enabling Trim manually:
+
+1. When creating a file mapping, you can enable Trim for this mapping only, this then will be removed once the mapping is closed:
+
+```bash
+sudo cryptsetup open --allow-discards <dev> <name>
+```
+
+2. To store this permanently in the LUKS2 header:
+
+```bash
+sudo cryptsetup open --allow-discards --persistent <dev> <name>
+```
+
+3. Now then querying the header with `sudo cryptsetup luksDump <dev>` you can see the flag: 
+
+```plaintext
+Flags:          allow-discards
+```
+
+4. (Optional) This can be removed with `sudo cryptsetup close <name>` & `sudo cryptsetup open --persistent <dev> <name>` if required.
+
+#### Enabling Trim with crypttab:
+
+1. The option `discard` can be used to allow Trim in the mapping:
+
+```plaintext
+encrypted   UUID="8dd225a6-9f67-4af2-bbde-aa653b1b243b"    none     discard
+```

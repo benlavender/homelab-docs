@@ -147,7 +147,18 @@ sudo dd if=/dev/zero of=/dev/sda bs=512 status=progress
 
 These devices are in a league of their own. Because of their nature to degrade over time due to cell charge trapping, manufacturers employ a number of techniques to balance writes amongst cells. These are summarised as "Wear Levelling". At a data erasure standpoint, erasing data from an SSD sometimes can be troublesome because data is moved around and stored in caches and other areas of the disk by the controller, regardless of where the data was written to originally. These usually cannot be disabled, especially on consumer grade disks. Some SSDs are also self-encrypting drives (SED) which allow for key management and encryption offered by the controller and sometimes erasure commands simply result in this key being wiped and therefore data no longer is accessible, but it still could exist in encrypted form. 
 
-There are a few methods which usually will end up with all data being inaccessible on an SSD. Like the HDD method we want to fill the SSD with zeros or ones. A userland application that can write zeros to the disk or the ATA Security Erase feature (depending on controller support):
+There are a few methods which usually will end up with all data being inaccessible on an SSD. Like the HDD method we want to fill the SSD with zeros or ones and wipe as much of the controller areas as possible. The ATA Security Erase or Sanitize features (depending on controller support) or userland application that can write zeros to the disk can be used. Sanitize commands are preferred on modern SSDs when supported.
+
+##### Sanitize:
+
+There are a few types of sanitize instructions (depending on support) that SSDs can perform:
+
+- **Crypto Erase:** Usually involves resetting the key used to encrypt the data on SED devices. Normally these are OPAL devices providing key management support that can be confirmed with `sedutil-cli --scan` or `CRYPTO_SCRAMBLE_EXT command` as printed by `hdparm`. 
+- **Block Erase:** The block erase issues a command to the firmware to erase all blocks on the disk containing user data. Support can be confirmed with the `BLOCK_ERASE_EXT command` as printed by `hdparm`.
+- **Overwrite Erase:** Overwrites all user data blocks with a specific pattern and supports a specifiable number of passes, i.e 1 - 16. It will also remove data in caches etc. Support can be confirmed with the `OVERWRITE_EXT command` as printed by `hdparm`.
+
+
+
 
 ##### ATA Security Erase:
 

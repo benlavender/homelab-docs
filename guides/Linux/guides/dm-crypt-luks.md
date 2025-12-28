@@ -47,15 +47,6 @@ For completion times I've ran these on two types of disks for testing:
 
 #### Hard disk drives:
 
-To fill a HDD with zeros or ones there is two methods, a userland application that can write zeros to the disk or the ATA Security Erase feature (depending on controller support). 
-
-The ATA Security Erase feature is noted a number of times further on and has has two functions: **Security Erase** and **Security Erase Enhanced**:
-
-1. The **Security Erase** method results in all user areas being written with zeros. 
-2. The **Security Erase Enhanced** method is known to apply predetermined data patterns, potentially random, to all user areas on the disk. 
-
-It is noted throughout this guide that if the calculated minute numbers are the same then the function likely is exactly the same and the manufacturer didn't implement it. 
-
 On a HDD, there are areas of the disk, both on and off the platters, that are used for operating and managing the disk itself. These areas are not directly accessible to the OS and the host writeable area is separate. Not all HDDs will have these areas (depending on the ATA version) but usually they are used for these purposes when they do:
 
 - **Disk Firmware Area:** Also known as the Service Area, usually the very first part of the platter(s) have reserved manufacturer storage although they may exist elsewhere and can be duplicated for resiliency. The DFA is used by the firmware for a number of uses (called Modules):
@@ -67,6 +58,15 @@ On a HDD, there are areas of the disk, both on and off the platters, that are us
 - **Device Configuration Overlay (DCO):** Introduced with ATA-6. The DCO is usually used by the manufacturer to set HDD parameters and enable/disable HDD settings.
 
 Detecting the presence and data in these areas require specific forensic analysis tools and vendor specific functions but they can be viewed and potentially edited by an end user. So if you are paranoid about any potential data leakage a full physical destruction (shredding or grinding) service needs to be arranged unless you have the no-how to access these areas. In-fact any paranoia beyond an erasure of the data area should be followed by this method.
+
+To fill a HDD with zeros or ones there is two methods, a userland application that can write zeros to the disk or the ATA Security Erase feature (depending on controller support). 
+
+The ATA Security Erase feature is noted a number of times further on and has has two functions: **Security Erase** and **Security Erase Enhanced**:
+
+1. The **Security Erase** method results in all user areas being written with zeros. 
+2. The **Security Erase Enhanced** method is known to apply predetermined data patterns, potentially random, to all user areas on the disk. 
+
+It is noted throughout this guide that if the calculated minute numbers are the same then the function likely is exactly the same and the manufacturer didn't implement it. Areas like the DFA, DCO and HPA *should* be cleared with the ATA commands but there is usually no proof of this without forensic analysis.
 
 ##### ATA Security Erase:
 

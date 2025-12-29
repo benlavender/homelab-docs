@@ -34,7 +34,7 @@ Managing, including creating volumes, is usually done by `cryptsetup(8)`. Typica
 
 ## Disk preparation:
 
-When preparing a disk for block-level encryption, we need to consider securely erasing the data, even for disks that we may have just acquired new from factory and especially when re-using disks that were used previously to store data. Furthermore, before creating an encrypted container the device should be filled with random data.
+When preparing a disk for block-level encryption, we need to consider securely erasing the data, even for disks that we may have just acquired new from factory and especially when re-using disks that were used previously to store data. Furthermore, before then creating an encrypted container the device should be filled with [random data](#random-data).
 
 ### Wiping disks:
 
@@ -295,6 +295,20 @@ Sanitize Status                        (SSTAT) :  0x1
 ```
 
 > **Note:** When sanitize commands are ran, they must complete. If the device looses power during this operation and it hasn't finished it will begin again once back up until it has. If a drive is large and it appears unresponsive then check the output of `nvme sanitize-log` to see if a sanitize operation is in progress. 
+
+### Random data:
+
+Before encrypting, the disk should be filled with random writes. This is to ensure the data written afterwards, which is LUKS to begin with, is not identifiable from other uniform random data because as stated [here](#trim-support); there is potential for identifying the type of data as well as the filesystem.
+
+> **Note:** Do not wipe an SSD with random data if you plan to use Trim. Unused blocks will be marked as empty and the controller will eventually erase the data rendering the random write effort pointless.
+
+A simple way to prepare a disk with crypt-grade randomness is to create a temporary LUKS container with a random password 
+
+1. Create a new LUKS container:
+
+```bash
+sudo cryptsetup open --type plain --key-file /dev/urandom --key-size 4096 /dev/sda to_be_wiped
+```
 
 ## Examples:
 

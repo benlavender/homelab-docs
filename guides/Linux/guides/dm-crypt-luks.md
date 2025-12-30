@@ -302,13 +302,34 @@ Before encrypting, the disk should be filled with random writes. This is to ensu
 
 > **Note:** Do not wipe an SSD with random data if you plan to use Trim. Unused blocks will be marked as empty and the controller will eventually erase the data rendering the random write effort pointless.
 
-A simple way to prepare a disk with crypt-grade randomness is to create a temporary LUKS container with a random password 
+A simple way to prepare a disk with crypto-grade randomness is to create a temporary plain LUKS container with a random password and use the builtin `/dev/urandum` pseudo-device for randomness. Plain encrypts the device sector-by-sector with a single non-salted hash of the passphrase (random). We then fill the container with zeros to implement this:
 
 1. Create a new LUKS container:
 
 ```bash
-sudo cryptsetup open --type plain --key-file /dev/urandom --key-size 4096 /dev/sda to_be_wiped
+sudo cryptsetup open --type plain --key-file /dev/urandom --key-size 256 --sector-size 4096 --cipher aes-xts-plain64 /dev/sda to_be_wiped
 ```
+
+2. Use `dd` to write zeros inside the container:
+
+```bash
+sudo dd if=/dev/urandom of=/dev/mapper/to_be_wiped bs=1M status=progress
+```
+
+3. Once completed the command will output something like:
+
+```plaintext
+dd: error writing '/dev/mapper/to_be_wiped': No space left on device
+```
+
+4. Close the container:
+
+```bash
+sudo cryptsetup close to_be_wiped
+```
+
+5. Then proceed to encrypt the disk again with the desired settings.
+
 
 ## Examples:
 

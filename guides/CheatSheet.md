@@ -3541,6 +3541,10 @@ eval $(ssh-agent)
 ssh-add </path/.ssh/privatekey_file>
 ```
 ```bash
+# Kill the current ssh-agent:
+ssh-agent -k
+```
+```bash
 # Managing keys used by ssh-agent
 # View all the keys stored in the ssh-agent cache:
 ssh-add -l

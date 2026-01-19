@@ -137,7 +137,7 @@ sed -i 's/Windows/Linux/g' opsys
 # Removes any empty lines from the file windows:
 sed -i '/^$/ d' file 
 ```
-```bash                    
+```bash
 # Removes any lines beginning with '#':
 sed -i 's/#.*//g' file
 ```
@@ -2431,96 +2431,6 @@ Get-srpartnership | Remove-SRPartnership;Get-SRGroup | % { Remove-SRGroup -Name 
 New-SRPartnership -SourceComputerName {nb/ip.addr} -SourceRGName {NB name} -SourceVolumeName {mount point} -SourceLogVolumeName {mount point} -DestinationComputerName {nb/ip.addr} -DestinationRGName {NB name} -DestinationVolumeName {mount point (shold be same as source} -destinationlogvolumename {mount point} -LogSizeInBytes 1gb -ReplicationMode <mode>
 ```
 
-### Virtualisation and Hypervisors:
-
-#### Hyper-V:
-
-```powershell
-# VMnetwork Adapter VM Queing Weight (default was 100):
-Set-VMNetworkAdapter -ManagementOS -Name <switch_name> -VMQWeight 0 
-```
-```powershell
-# Create a new Hyper-V VM:
-New-VM -Name <hostname> -MemoryStartupBytes <bytes> -Generation <1|2> -NewVHDPath 'path\to\.vhdx' -NewVHDSizeBytes <bytes> -SwitchName <switchname> -Path <path\to\vmfiles>
-```
-```powershell
-# Create a DVD device and attach the .ISO to the VM:
-Add-VMDvdDrive -VMName <VMname> -ControllerLocation <#> -ControllerNumber <#> -Path <path\to\.iso>
-```
-```powershell
-# Disable dynamic memory:
-Set-VM -Name <VMname> -StaticMemory
-```
-```powershell
-# Mount an ISO and configure it for boot:
-$VMDVDDrive = Get-VMDvdDrive -VMName <vmname>
-Set-VMFirmware -VMName <vmname> -EnableSecureBoot Off -FirstBootDevice $VMDVDDrive
-```
-```powershell
-# Get VHD information:
-Get-VHD -Path <path\to\vhd>
-```
-```powershell
-# Resize VHD
-Resize-VHD -Path <path\to\vhd> -SizeBytes <bytes>
-```
-
-#### KVM-quemu / libvirt:
-
-```bash
-# Install KVM using RHEL yum groups:
-yum group install 'Virtualization Host' 'Virtualization Client'
-```
-```bash
-# Confirm module loaded:
-cat /proc/cpuinfo | grep -E 'vmx|svm'
-# or
-lsmod | grep kvm
-```
-
-#### virsh:
-
-```bash
-# Create new domain using virt-install:
-virt-install --name=tester1.example.com --ram=1024 --vcpus=2 --disk=/var/lib/libvirt/images/test1.example.com.img,size=16 --graphics=spice --location=ftp://192.168.1 22.1/pub/inst --os-type=Linux --os-variant=rhel7
-```
-```bash
-# Using an ISO for O/S deployment:
-virt-install --name=tester1.example.com --ram=1024 --vcpus=2 --disk=/var/lib/libvirt/images/test1.example.com.img,size=10 --location=/var/lib/libvirt/images/rhel-server-7.6-x86_64-dvd.iso --graphics=spice --os-type=Linux --os-variant=rhel7 
-```
-```bash
-# Don't wait for O/S installation:
-virt-install --name=tester1.example.com --ram=1024 --vcpus=2 --disk=/var/lib/libvirt/images/test1.example.com.img,size=10 --location=/var/lib/libvirt/images/rhel-server-7.6-x86_64-dvd.iso --graphics=spice --os-type=Linux --os-variant=rhel7 --noautoconsole --initrd-inject can be used with URL of .KS file.
-```
-```bash
-# Shutdown a domain gracefully:
-virsh shutdown <domain_name>
-```
-```bash
-# Terminate domain session:
-virsh destroy 'domain_name' --graceful
-# Non-gracefull:
-virsh destroy 'domain_name'
-```
-```bash
-# Remove domain but leave storage:
-virsh undefine tester1.example.com
-```
-```bash
-# Remove domain and associated storage
-virsh undefine tester1.example.com --remove-all-storage
-```
-```bash
-# Using extra arguments:
-# Specifying the kirkstart URI:
-virt-install --name=tester1.example.com --ram=1024 --vcpus=2 --disk=/var/lib/libvirt/images/test1.example.com.img,size=10 --location=/var/lib/libvirt/images/rhel-server-7.6-x86_64-dvd.iso --graphics=spice --os-type=Linux --os-variant=rhel7 --extra-args='ks=http://myserver/my.ks'
-```
-```bash
-# Enable / disable domain autostart at host boot:
-virsh autostart <domain_name>
-virsh autostart <domain_name> --disable
-```
-
 #### DFS-N/R:
 
 ```powershell
@@ -3541,6 +3451,10 @@ eval $(ssh-agent)
 ssh-add </path/.ssh/privatekey_file>
 ```
 ```bash
+# Kill the current ssh-agent:
+ssh-agent -k
+```
+```bash
 # Managing keys used by ssh-agent
 # View all the keys stored in the ssh-agent cache:
 ssh-add -l
@@ -4397,6 +4311,96 @@ git difftool -y
 git difftool --tool-help
 # View diff in a specific difftool:
 git difftool --tool=<toolname>
+```
+
+## Virtualisation:
+
+### Hyper-V:
+
+```powershell
+# VMnetwork Adapter VM Queing Weight (default was 100):
+Set-VMNetworkAdapter -ManagementOS -Name <switch_name> -VMQWeight 0 
+```
+```powershell
+# Create a new Hyper-V VM:
+New-VM -Name <hostname> -MemoryStartupBytes <bytes> -Generation <1|2> -NewVHDPath 'path\to\.vhdx' -NewVHDSizeBytes <bytes> -SwitchName <switchname> -Path <path\to\vmfiles>
+```
+```powershell
+# Create a DVD device and attach the .ISO to the VM:
+Add-VMDvdDrive -VMName <VMname> -ControllerLocation <#> -ControllerNumber <#> -Path <path\to\.iso>
+```
+```powershell
+# Disable dynamic memory:
+Set-VM -Name <VMname> -StaticMemory
+```
+```powershell
+# Mount an ISO and configure it for boot:
+$VMDVDDrive = Get-VMDvdDrive -VMName <vmname>
+Set-VMFirmware -VMName <vmname> -EnableSecureBoot Off -FirstBootDevice $VMDVDDrive
+```
+```powershell
+# Get VHD information:
+Get-VHD -Path <path\to\vhd>
+```
+```powershell
+# Resize VHD
+Resize-VHD -Path <path\to\vhd> -SizeBytes <bytes>
+```
+
+### KVM-quemu / libvirt:
+
+```bash
+# Install KVM using RHEL yum groups:
+yum group install 'Virtualization Host' 'Virtualization Client'
+```
+```bash
+# Confirm module loaded:
+cat /proc/cpuinfo | grep -E 'vmx|svm'
+# or
+lsmod | grep kvm
+```
+
+### virsh:
+
+```bash
+# Create new domain using virt-install:
+virt-install --name=tester1.example.com --ram=1024 --vcpus=2 --disk=/var/lib/libvirt/images/test1.example.com.img,size=16 --graphics=spice --location=ftp://192.168.1 22.1/pub/inst --os-type=Linux --os-variant=rhel7
+```
+```bash
+# Using an ISO for O/S deployment:
+virt-install --name=tester1.example.com --ram=1024 --vcpus=2 --disk=/var/lib/libvirt/images/test1.example.com.img,size=10 --location=/var/lib/libvirt/images/rhel-server-7.6-x86_64-dvd.iso --graphics=spice --os-type=Linux --os-variant=rhel7 
+```
+```bash
+# Don't wait for O/S installation:
+virt-install --name=tester1.example.com --ram=1024 --vcpus=2 --disk=/var/lib/libvirt/images/test1.example.com.img,size=10 --location=/var/lib/libvirt/images/rhel-server-7.6-x86_64-dvd.iso --graphics=spice --os-type=Linux --os-variant=rhel7 --noautoconsole --initrd-inject can be used with URL of .KS file.
+```
+```bash
+# Shutdown a domain gracefully:
+virsh shutdown <domain_name>
+```
+```bash
+# Terminate domain session:
+virsh destroy 'domain_name' --graceful
+# Non-gracefull:
+virsh destroy 'domain_name'
+```
+```bash
+# Remove domain but leave storage:
+virsh undefine tester1.example.com
+```
+```bash
+# Remove domain and associated storage
+virsh undefine tester1.example.com --remove-all-storage
+```
+```bash
+# Using extra arguments:
+# Specifying the kirkstart URI:
+virt-install --name=tester1.example.com --ram=1024 --vcpus=2 --disk=/var/lib/libvirt/images/test1.example.com.img,size=10 --location=/var/lib/libvirt/images/rhel-server-7.6-x86_64-dvd.iso --graphics=spice --os-type=Linux --os-variant=rhel7 --extra-args='ks=http://myserver/my.ks'
+```
+```bash
+# Enable / disable domain autostart at host boot:
+virsh autostart <domain_name>
+virsh autostart <domain_name> --disable
 ```
 
 ## Containerization:

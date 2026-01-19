@@ -4347,6 +4347,28 @@ Get-VHD -Path <path\to\vhd>
 Resize-VHD -Path <path\to\vhd> -SizeBytes <bytes>
 ```
 
+### QEMU:
+
+#### Images:
+
+```bash
+# Print information on an existing image:
+qemu-img info <filepath>
+```
+```bash
+# Create a new image:
+qemu-img create --format <format> <filepath> <bytes>
+# Create a new image where size is specified in prefixes (can be K, M, or G):
+qemu-img create --format <format> <filepath> <#[prefix]>
+```ls 
+
+#### x86_64 Emulation:
+
+```bash
+# View available x86_64 CPUs that can be emulated:
+qemu-system-x86_64 -cpu help
+```
+
 ### KVM-quemu / libvirt:
 
 ```bash

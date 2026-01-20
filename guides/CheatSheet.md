@@ -4360,9 +4360,17 @@ qemu-img info <filepath>
 qemu-img create --format <format> <filepath> <bytes>
 # Create a new image where size is specified in prefixes (can be K, M, or G):
 qemu-img create --format <format> <filepath> <#[prefix]>
-```ls 
+```
+```bash
+# Increase size of an existing image.
+# This can lead to data loss if the data contained is not considered:
+qemu-img resize --format <format> <filepath> <+bytes>
+# Decrease size of an existing image.
+# This can lead to data loss if the data contained is not considered:
+qemu-img resize --shrink --format <format> <filepath> <-bytes>
+```
 
-#### x86_64 Emulation:
+#### x86_64 System Emulation:
 
 ```bash
 # View available x86_64 CPUs that can be emulated:

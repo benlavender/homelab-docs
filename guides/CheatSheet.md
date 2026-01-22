@@ -4362,6 +4362,19 @@ qemu-img create --format <format> <filepath> <bytes>
 qemu-img create --format <format> <filepath> <#[prefix]>
 ```
 ```bash
+# List all supported options for an image format:
+qemu-img create --format <format> -o help
+# Create a new image while specifying format options:
+qemu-img create -o <name=string> --format <format> <filepath> <bytes>
+# Create a new image while specifying a number of format options:
+qemu-img create -o <name=string,name=string> --format <format> <filepath> <bytes>
+```
+```bash
+# Create a new image based on a backing image.
+# Remove --backing-format and the format will be probed:
+qemu-img create --format <format> --backing-format <format> --backing <filepath> 
+```
+```bash
 # Increase size of an existing image.
 # This can lead to data loss if the data contained is not considered:
 qemu-img resize --format <format> <filepath> <+bytes>
@@ -4369,25 +4382,22 @@ qemu-img resize --format <format> <filepath> <+bytes>
 # This can lead to data loss if the data contained is not considered:
 qemu-img resize --shrink --format <format> <filepath> <-bytes>
 ```
+```bash
+# List snapshots on an image:
+qemu-img snapshot --list <filepath>
+# Create a new snapshot of an image:
+qemu-img snapshot --create <name> <filepath>
+# Apply an existing snapshot to an image:
+qemu-img snapshot --apply <name> <filepath>
+# Delete an existing snapshot from an image:
+qemu-img snapshot --delete <name> <filepath>
+```
 
 #### x86_64 System Emulation:
 
 ```bash
 # View available x86_64 CPUs that can be emulated:
 qemu-system-x86_64 -cpu help
-```
-
-### KVM-quemu / libvirt:
-
-```bash
-# Install KVM using RHEL yum groups:
-yum group install 'Virtualization Host' 'Virtualization Client'
-```
-```bash
-# Confirm module loaded:
-cat /proc/cpuinfo | grep -E 'vmx|svm'
-# or
-lsmod | grep kvm
 ```
 
 ### virsh:

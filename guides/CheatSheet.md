@@ -4371,8 +4371,13 @@ qemu-img create -o <name=string,name=string> --format <format> <filepath> <bytes
 ```
 ```bash
 # Create a new image based on a backing image.
-# Remove --backing-format and the format will be probed:
-qemu-img create --format <format> --backing-format <format> --backing <filepath> 
+qemu-img create --format <format> --backing <filepath> <filepath>
+# Create a new image based on a backing image and specifiy the backing image format:
+qemu-img create --format <format> --backing-format <format> --backing <filepath> <filepath>
+# Change the backing file of an existing image:
+qemu-img rebase --backing-format <format> --backing <filepath> <filepath>
+# Change the backing file of an existing image even if the backing file cannot be read:
+qemu-img rebase --backing-unsafe --backing-format <format> --backing <filepath> <filepath>
 ```
 ```bash
 # Increase size of an existing image.
@@ -4391,6 +4396,12 @@ qemu-img snapshot --create <name> <filepath>
 qemu-img snapshot --apply <name> <filepath>
 # Delete an existing snapshot from an image:
 qemu-img snapshot --delete <name> <filepath>
+```
+```bash
+# Convert an image format:
+qemu-img convert --target-format <format> <filepath> <filepath>
+# Convert an image format and specify the source format:
+qemu-img convert --source-format <format> --target-format <format> <filepath> <filepath>
 ```
 
 #### x86_64 System Emulation:

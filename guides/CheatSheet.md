@@ -4349,6 +4349,8 @@ Resize-VHD -Path <path\to\vhd> -SizeBytes <bytes>
 
 ### QEMU:
 
+> **Note**: All commands as of version 10.1.2
+
 #### Images:
 
 ```bash
@@ -4409,7 +4411,25 @@ qemu-img convert --source-format <format> --target-format <format> <filepath> <f
 ```bash
 # View available x86_64 CPUs that can be emulated:
 qemu-system-x86_64 -cpu help
+# View available emulated machine types:
+qemu-system-x86_64 -machine help
+# View available emulated device types:
+qemu-system-x86_64 -device help
 ```
+```bash
+# Create and boot an x86_64 system virtual machine with the default machine and memory size (128MiB):
+qemu-system-x86_64
+# Create and boot an x86_64 system virtual machine with the default machine with a specific image file and memory size:
+qemu-system-x86_64 --drive file=<filepath> -m size=<bytes>
+# Create and boot an x86_64 system virtual machine with the default machine, a specific image file and memory using prefixs:
+qemu-system-x86_64 --drive file=<filepath> -m size=<#M|#G>
+# Create and boot an x86_64 system virtual machine with the default machine, a specific image file, memory and with a specific accelerator like KVM:
+qemu-system-x86_64 --drive file=<filepath> -m size=<bytes> -accel <name>
+# Create and boot an x86_64 system virtual machine with the default machine, a specific image file, memory and a cdrom with an attached image:
+qemu-system-x86_64 --drive file=<filepath> -m size=<bytes> -cdrom <filepath>
+```
+
+Arch-Linux-x86_64-cloudimg-20260115.482142.qcow2
 
 ### virsh:
 

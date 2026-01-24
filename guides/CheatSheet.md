@@ -4430,9 +4430,13 @@ qemu-system-x86_64 --drive file=<filepath> -m size=<bytes> -accel <name>
 qemu-system-x86_64 --drive file=<filepath> -m size=<bytes> -cdrom <filepath>
 # Create and boot an x86_64 system virtual machine with the default machine, a specific image file and memory size and disable networking:
 qemu-system-x86_64 --drive file=<filepath> -m size=<bytes> -nic none
+# Create and boot an x86_64 system virtual machine with the default machine, a specific image file, memory size with custom user networking IP range:
+qemu-system-x86_64 --drive file=<filepath> -m size=<bytes> -nic user,id=<network>,net=<cidr>
+# Create and boot an x86_64 system virtual machine with the default machine, a specific image file, memory size and amend the host (usually gateway) address:
+qemu-system-x86_64 --drive file=<filepath> -m size=<bytes> -nic user,id=<network>,host=<cidr>
+# Create and boot an x86_64 system virtual machine with the default machine, a specific image file, memory size and change the DHCP assignment starter range:
+qemu-system-x86_64 --drive file=<filepath> -m size=<bytes> -nic user,id=<network>,dhcpstart=<ip_range>
 ```
-
-Arch-Linux-x86_64-cloudimg-20260115.482142.qcow2
 
 ### virsh:
 

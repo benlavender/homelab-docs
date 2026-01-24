@@ -4417,16 +4417,19 @@ qemu-system-x86_64 -machine help
 qemu-system-x86_64 -device help
 ```
 ```bash
+# Creating basic x86_64 system virtual machines with default (SLIRP) networking.
 # Create and boot an x86_64 system virtual machine with the default machine and memory size (128MiB):
 qemu-system-x86_64
-# Create and boot an x86_64 system virtual machine with the default machine with a specific image file and memory size:
+# Create and boot an x86_64 system virtual machine with the default machine, a specific image file and memory size:
 qemu-system-x86_64 --drive file=<filepath> -m size=<bytes>
 # Create and boot an x86_64 system virtual machine with the default machine, a specific image file and memory using prefixs:
 qemu-system-x86_64 --drive file=<filepath> -m size=<#M|#G>
-# Create and boot an x86_64 system virtual machine with the default machine, a specific image file, memory and with a specific accelerator like KVM:
+# Create and boot an x86_64 system virtual machine with the default machine, a specific image file, memory size and with a specific accelerator like KVM:
 qemu-system-x86_64 --drive file=<filepath> -m size=<bytes> -accel <name>
-# Create and boot an x86_64 system virtual machine with the default machine, a specific image file, memory and a cdrom with an attached image:
+# Create and boot an x86_64 system virtual machine with the default machine, a specific image file, memory size and a cdrom with an attached image:
 qemu-system-x86_64 --drive file=<filepath> -m size=<bytes> -cdrom <filepath>
+# Create and boot an x86_64 system virtual machine with the default machine, a specific image file and memory size and disable networking:
+qemu-system-x86_64 --drive file=<filepath> -m size=<bytes> -nic none
 ```
 
 Arch-Linux-x86_64-cloudimg-20260115.482142.qcow2

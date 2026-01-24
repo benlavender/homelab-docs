@@ -4436,9 +4436,13 @@ qemu-system-x86_64 --drive file=<filepath> -m size=<bytes> -nic user,id=<network
 qemu-system-x86_64 --drive file=<filepath> -m size=<bytes> -nic user,id=<network>,host=<cidr>
 # Create and boot an x86_64 system virtual machine with the default machine, a specific image file, memory size and change the DHCP assignment starter range:
 qemu-system-x86_64 --drive file=<filepath> -m size=<bytes> -nic user,id=<network>,dhcpstart=<ip_range>
+# Create and boot an x86_64 system virtual machine with the default machine, a specific image file, memory size and forward a port to the host:
+qemu-system-x86_64 --drive file=<filepath> -m size=<bytes> -nic user,hostfwd=<proto>:<host_addr>:<host_port>-<address>:<port>
 ```
 
-### virsh:
+### libvirt
+
+#### virsh:
 
 ```bash
 # Create new domain using virt-install:

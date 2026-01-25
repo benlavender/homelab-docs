@@ -4490,6 +4490,10 @@ info spice
 info virtio
 # List TPM available TPM devices:
 info tpm
+```
+```bash
+# Modifying virtual machines with QEMU Monitor.
+# EMU Monitor is default on virtual machine creation and accessible via "CTRL+ALT+2".
 # Pause emulation of the guest:
 stop
 # Continue emulation of the paused guest:
@@ -4502,6 +4506,8 @@ system_powerdown
 savevm [name]
 # Commit a snapshot to to the guest:
 loadvm <name>
+# Eject removable media from a drive (use -f to force):
+eject <blockname>
 ```
 
 ### libvirt

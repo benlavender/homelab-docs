@@ -4428,6 +4428,10 @@ qemu-system-x86_64 --drive file=<filepath> -m size=<#M|#G>
 qemu-system-x86_64 --drive file=<filepath> -m size=<bytes> -accel <name>
 # Create and boot an x86_64 system virtual machine with the default machine, a specific image file, memory size and a cdrom with an attached image:
 qemu-system-x86_64 --drive file=<filepath> -m size=<bytes> -cdrom <filepath>
+# Create and boot an x86_64 system virtual machine with the default machine, a specific image file and memory size with a specific CPU type:
+qemu-system-x86_64 --drive file=<filepath> -m size=<bytes> -cpu <name>
+# Create and boot an x86_64 system virtual machine with the default machine, a specific image file and memory size and emulate the host CPU:
+qemu-system-x86_64 --drive file=<filepath> -m size=<bytes> -cpu host
 # Create and boot an x86_64 system virtual machine with the default machine, a specific image file and memory size and disable networking:
 qemu-system-x86_64 --drive file=<filepath> -m size=<bytes> -nic none
 # Create and boot an x86_64 system virtual machine with the default machine, a specific image file, memory size with custom user networking IP range:
@@ -4440,6 +4444,64 @@ qemu-system-x86_64 --drive file=<filepath> -m size=<bytes> -nic user,id=<network
 qemu-system-x86_64 --drive file=<filepath> -m size=<bytes> -nic user,hostfwd=<proto>:<host_addr>:<host_port>-<address>:<port>
 # Create and boot an x86_64 system virtual machine with the default machine, a specific image file, memory size using a specific NIC type:
 qemu-system-x86_64 --drive file=<filepath> -m size=<bytes> -nic user,model=<device>
+# Create and boot an x86_64 system virtual machine with the default machine, a specific image file and memory size from an existing snapshot on the image:
+qemu-system-x86_64 --drive file=<filepath> -m size=<bytes> -loadvm <name>
+```
+```bash
+# Monitoring virtual machines.
+# EMU Monitor is default on virtual machine creation and accessible via "CTRL+ALT+2".
+# List all available commands:
+help
+# List available parameters of a specific subcommand:
+help <subcommand> 
+# Show QEMU version the guest is running on:
+info version
+# Show guest running state:
+info status
+# Show CPU info:
+info cpus
+# Show memory backend information:
+info memdev
+# Show memory size information:
+info memdev
+# Show more information on block devices:
+info block
+# Show more information on block devices:
+info block -v
+# Show only named nodes of block devices:
+info block -n
+# Show information on a specific block device:
+info block <name>
+# Show statistics on block devices:
+info blockstats
+# Show information on snapshots if image supports:
+info snapshots
+# Show network information:
+info network
+# Show PCI device information:
+info pci
+# Show USB device information:
+info usb
+# Show VNC server status:
+info vnc
+# Show spice server status:
+info spice
+# List all available virtio devices:
+info virtio
+# List TPM available TPM devices:
+info tpm
+# Pause emulation of the guest:
+stop
+# Continue emulation of the paused guest:
+cont
+# Hard reset the guest:
+system_reset
+# Power off the guest:
+system_powerdown
+# Snapshot the guest with or without a name:
+savevm [name]
+# Commit a snapshot to to the guest:
+loadvm <name>
 ```
 
 ### libvirt

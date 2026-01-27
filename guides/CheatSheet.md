@@ -4536,6 +4536,8 @@ eject <blockname>
 # Forward a port to the host.
 # Omit guest address for default IP address.
 hostfwd_add <netdev_id> <proto>:<host_addr>:<host_port>-<address>:<port>
+# Remove an existing host-guest redirect:
+hostfwd_remove <netdev_id> <proto>:<host_addr>:<host_port>
 ```
 
 ### libvirt

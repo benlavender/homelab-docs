@@ -39,6 +39,31 @@ sudo mandb
 manpath
 ```
 
+#### Wikiman:
+
+```bash
+# List configured documentation sources:
+wikiman -S
+```
+```bash
+# Print all pages available:
+wikiman
+# Search all sources for a keyword:
+wikiman <string>
+# Search all sources for multiple keywords:
+wikiman <string,string>
+# Search and also show the source column:
+wikiman -c <string>
+```
+```bash
+# Print search results out of the TUI:
+wikiman -R <string>
+```
+```bash
+# Disable preview section:
+wikiman -p <string>
+```
+
 ### PowerShell Management:
 
 ```powershell

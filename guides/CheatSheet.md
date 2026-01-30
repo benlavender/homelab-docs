@@ -4189,9 +4189,13 @@ git config --global <setting> <value>
 git config --global alias.<name> <'git command to be ran'>
 ```
 ```bash
-# Get help from Git:
-git <verb> -h
-# Get help from Git via the web:
+# Show core concept guides on Git:
+git help --guides
+# Show command Git help sections:
+git help
+# Show all Git help sections:
+git help --all
+# Get help from Git for a specific section:
 git help <verb>
 # Get help from the man pages (UNIX-like):
 man git-<verb>

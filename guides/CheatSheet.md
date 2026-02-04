@@ -4548,6 +4548,62 @@ hostfwd_remove <netdev_id> <proto>:<host_addr>:<host_port>
 
 #### virsh:
 
+> ℹ️ **Note:** These commands focus only on QEMU, check `virsh(1)` for others.
+
+> ℹ️ **Note:** Commands ran without elevation will execute on the user (session) connection, not the root (system) connection. All commands unless specified are to be system.
+
+```bash
+# Get all subcommands and their sections:
+virsh help
+# Get help for a specific section of commands:
+virsh help <keyword>
+# Get help for a specific subcommand:
+virsh help <subcommand>
+```
+```bash
+# Find the local URI for the hypervisor.
+# Without elevation this will be user and not root:
+virsh uri
+# Connect to a local QEMU hypervisor as root:
+virsh connect --name qemu:///system
+# Connect to a local user QEMU hypervisor:
+virsh connect --name qemu:///session
+```
+```bash
+# Working with the hypervisor host:
+# Show node hardware information:
+virsh sysinfo
+# Show node compute information:
+virsh nodeinfo
+# Show maximum number of vCPUs for guests on this node:
+virsh maxvcpus
+# Print running memory statistics of the node:
+virsh nodememstats
+# Print all usable CPUs known by the hypervisor:
+virsh hypervisor-cpu-models
+# Print all CPU models known by the hypervisor for the architecture (some may not work):
+virsh hypervisor-cpu-models --all
+```
+```bash
+# Working with storage pools:
+# List existing pools:
+virsh pool-list
+# Print information of a specific pool:
+virsh pool-info <name|id>
+# Refresh a specific pool:
+virsh pool-refresh <name|id>
+# Start an inactive pool:
+virsh pool-start <name|id>
+# Stop a running pool:
+virsh pool-destroy <name|id>
+# Show events that can be monitored on a specific pool:
+virsh pool-event --pool <name|id> --list
+# Monitor for a type of event in realtime on a specific pool:
+virsh pool-event --pool <name|id> --event <type>
+```
+
+
+
 ```bash
 # Create new domain using virt-install:
 virt-install --name=tester1.example.com --ram=1024 --vcpus=2 --disk=/var/lib/libvirt/images/test1.example.com.img,size=16 --graphics=spice --location=ftp://192.168.1 22.1/pub/inst --os-type=Linux --os-variant=rhel7

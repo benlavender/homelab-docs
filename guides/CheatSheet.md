@@ -2751,10 +2751,12 @@ curl localhost :9200/_cat/count/<indice_name>
 
 ### Yubikey Manager:
 
+> **Note:** If multiple devices are present then the `--device` switch must be used before some subcommands.
+
 ```bash
 # List connected YubiKey devices:
 ykman list
-# Show full information of connected YubiKey devices:
+# Show full information of a connected YubiKey device:
 ykman info
 # Show full information of specific connected YubiKey device:
 ykman --device <sku> info

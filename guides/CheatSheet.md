@@ -162,7 +162,7 @@ sed -i 's/Windows/Linux/g' opsys
 # Removes any empty lines from the file windows:
 sed -i '/^$/ d' file 
 ```
-```bash                    
+```bash
 # Removes any lines beginning with '#':
 sed -i 's/#.*//g' file
 ```
@@ -2456,96 +2456,6 @@ Get-srpartnership | Remove-SRPartnership;Get-SRGroup | % { Remove-SRGroup -Name 
 New-SRPartnership -SourceComputerName {nb/ip.addr} -SourceRGName {NB name} -SourceVolumeName {mount point} -SourceLogVolumeName {mount point} -DestinationComputerName {nb/ip.addr} -DestinationRGName {NB name} -DestinationVolumeName {mount point (shold be same as source} -destinationlogvolumename {mount point} -LogSizeInBytes 1gb -ReplicationMode <mode>
 ```
 
-### Virtualisation and Hypervisors:
-
-#### Hyper-V:
-
-```powershell
-# VMnetwork Adapter VM Queing Weight (default was 100):
-Set-VMNetworkAdapter -ManagementOS -Name <switch_name> -VMQWeight 0 
-```
-```powershell
-# Create a new Hyper-V VM:
-New-VM -Name <hostname> -MemoryStartupBytes <bytes> -Generation <1|2> -NewVHDPath 'path\to\.vhdx' -NewVHDSizeBytes <bytes> -SwitchName <switchname> -Path <path\to\vmfiles>
-```
-```powershell
-# Create a DVD device and attach the .ISO to the VM:
-Add-VMDvdDrive -VMName <VMname> -ControllerLocation <#> -ControllerNumber <#> -Path <path\to\.iso>
-```
-```powershell
-# Disable dynamic memory:
-Set-VM -Name <VMname> -StaticMemory
-```
-```powershell
-# Mount an ISO and configure it for boot:
-$VMDVDDrive = Get-VMDvdDrive -VMName <vmname>
-Set-VMFirmware -VMName <vmname> -EnableSecureBoot Off -FirstBootDevice $VMDVDDrive
-```
-```powershell
-# Get VHD information:
-Get-VHD -Path <path\to\vhd>
-```
-```powershell
-# Resize VHD
-Resize-VHD -Path <path\to\vhd> -SizeBytes <bytes>
-```
-
-#### KVM-quemu / libvirt:
-
-```bash
-# Install KVM using RHEL yum groups:
-yum group install 'Virtualization Host' 'Virtualization Client'
-```
-```bash
-# Confirm module loaded:
-cat /proc/cpuinfo | grep -E 'vmx|svm'
-# or
-lsmod | grep kvm
-```
-
-#### virsh:
-
-```bash
-# Create new domain using virt-install:
-virt-install --name=tester1.example.com --ram=1024 --vcpus=2 --disk=/var/lib/libvirt/images/test1.example.com.img,size=16 --graphics=spice --location=ftp://192.168.1 22.1/pub/inst --os-type=Linux --os-variant=rhel7
-```
-```bash
-# Using an ISO for O/S deployment:
-virt-install --name=tester1.example.com --ram=1024 --vcpus=2 --disk=/var/lib/libvirt/images/test1.example.com.img,size=10 --location=/var/lib/libvirt/images/rhel-server-7.6-x86_64-dvd.iso --graphics=spice --os-type=Linux --os-variant=rhel7 
-```
-```bash
-# Don't wait for O/S installation:
-virt-install --name=tester1.example.com --ram=1024 --vcpus=2 --disk=/var/lib/libvirt/images/test1.example.com.img,size=10 --location=/var/lib/libvirt/images/rhel-server-7.6-x86_64-dvd.iso --graphics=spice --os-type=Linux --os-variant=rhel7 --noautoconsole --initrd-inject can be used with URL of .KS file.
-```
-```bash
-# Shutdown a domain gracefully:
-virsh shutdown <domain_name>
-```
-```bash
-# Terminate domain session:
-virsh destroy 'domain_name' --graceful
-# Non-gracefull:
-virsh destroy 'domain_name'
-```
-```bash
-# Remove domain but leave storage:
-virsh undefine tester1.example.com
-```
-```bash
-# Remove domain and associated storage
-virsh undefine tester1.example.com --remove-all-storage
-```
-```bash
-# Using extra arguments:
-# Specifying the kirkstart URI:
-virt-install --name=tester1.example.com --ram=1024 --vcpus=2 --disk=/var/lib/libvirt/images/test1.example.com.img,size=10 --location=/var/lib/libvirt/images/rhel-server-7.6-x86_64-dvd.iso --graphics=spice --os-type=Linux --os-variant=rhel7 --extra-args='ks=http://myserver/my.ks'
-```
-```bash
-# Enable / disable domain autostart at host boot:
-virsh autostart <domain_name>
-virsh autostart <domain_name> --disable
-```
-
 #### DFS-N/R:
 
 ```powershell
@@ -2841,10 +2751,12 @@ curl localhost :9200/_cat/count/<indice_name>
 
 ### Yubikey Manager:
 
+> **Note:** If multiple devices are present then the `--device` switch must be used before some subcommands.
+
 ```bash
 # List connected YubiKey devices:
 ykman list
-# Show full information of connected YubiKey devices:
+# Show full information of a connected YubiKey device:
 ykman info
 # Show full information of specific connected YubiKey device:
 ykman --device <sku> info
@@ -3564,6 +3476,10 @@ ssh-agent
 eval $(ssh-agent)
 # Add an private key to the ssh-agent cache (enter passphrase if prompted):
 ssh-add </path/.ssh/privatekey_file>
+```
+```bash
+# Kill the current ssh-agent:
+ssh-agent -k
 ```
 ```bash
 # Managing keys used by ssh-agent
@@ -4426,6 +4342,309 @@ git difftool -y
 git difftool --tool-help
 # View diff in a specific difftool:
 git difftool --tool=<toolname>
+```
+
+## Virtualisation:
+
+### Hyper-V:
+
+```powershell
+# VMnetwork Adapter VM Queing Weight (default was 100):
+Set-VMNetworkAdapter -ManagementOS -Name <switch_name> -VMQWeight 0 
+```
+```powershell
+# Create a new Hyper-V VM:
+New-VM -Name <hostname> -MemoryStartupBytes <bytes> -Generation <1|2> -NewVHDPath 'path\to\.vhdx' -NewVHDSizeBytes <bytes> -SwitchName <switchname> -Path <path\to\vmfiles>
+```
+```powershell
+# Create a DVD device and attach the .ISO to the VM:
+Add-VMDvdDrive -VMName <VMname> -ControllerLocation <#> -ControllerNumber <#> -Path <path\to\.iso>
+```
+```powershell
+# Disable dynamic memory:
+Set-VM -Name <VMname> -StaticMemory
+```
+```powershell
+# Mount an ISO and configure it for boot:
+$VMDVDDrive = Get-VMDvdDrive -VMName <vmname>
+Set-VMFirmware -VMName <vmname> -EnableSecureBoot Off -FirstBootDevice $VMDVDDrive
+```
+```powershell
+# Get VHD information:
+Get-VHD -Path <path\to\vhd>
+```
+```powershell
+# Resize VHD
+Resize-VHD -Path <path\to\vhd> -SizeBytes <bytes>
+```
+
+### QEMU:
+
+> **Note**: All commands as of version 10.1.2
+
+#### Images:
+
+```bash
+# Print information on an existing image:
+qemu-img info <filepath>
+```
+```bash
+# Create a new image:
+qemu-img create --format <format> <filepath> <bytes>
+# Create a new image where size is specified in prefixes (can be K, M, or G):
+qemu-img create --format <format> <filepath> <#[prefix]>
+```
+```bash
+# List all supported options for an image format:
+qemu-img create --format <format> -o help
+# Create a new image while specifying format options:
+qemu-img create -o <name=string> --format <format> <filepath> <bytes>
+# Create a new image while specifying a number of format options:
+qemu-img create -o <name=string,name=string> --format <format> <filepath> <bytes>
+```
+```bash
+# Create a new image based on a backing image.
+qemu-img create --format <format> --backing <filepath> <filepath>
+# Create a new image based on a backing image and specifiy the backing image format:
+qemu-img create --format <format> --backing-format <format> --backing <filepath> <filepath>
+# Change the backing file of an existing image:
+qemu-img rebase --backing-format <format> --backing <filepath> <filepath>
+# Change the backing file of an existing image even if the backing file cannot be read:
+qemu-img rebase --backing-unsafe --backing-format <format> --backing <filepath> <filepath>
+```
+```bash
+# Increase size of an existing image.
+# This can lead to data loss if the data contained is not considered:
+qemu-img resize --format <format> <filepath> <+bytes>
+# Decrease size of an existing image.
+# This can lead to data loss if the data contained is not considered:
+qemu-img resize --shrink --format <format> <filepath> <-bytes>
+```
+```bash
+# List snapshots on an image:
+qemu-img snapshot --list <filepath>
+# Create a new snapshot of an image:
+qemu-img snapshot --create <name> <filepath>
+# Apply an existing snapshot to an image:
+qemu-img snapshot --apply <name> <filepath>
+# Delete an existing snapshot from an image:
+qemu-img snapshot --delete <name> <filepath>
+```
+```bash
+# Convert an image format:
+qemu-img convert --target-format <format> <filepath> <filepath>
+# Convert an image format and specify the source format:
+qemu-img convert --source-format <format> --target-format <format> <filepath> <filepath>
+```
+
+#### x86_64 System Emulation:
+
+```bash
+# View available x86_64 CPUs that can be emulated:
+qemu-system-x86_64 -cpu help
+# View available emulated machine types:
+qemu-system-x86_64 -machine help
+# View available emulated device types:
+qemu-system-x86_64 -device help
+```
+```bash
+# Creating basic x86_64 system virtual machines with default (SLIRP) networking.
+# Create and boot an x86_64 system virtual machine with the default machine and memory size (128MiB):
+qemu-system-x86_64
+# Create and boot an x86_64 system virtual machine with the default machine, a specific image file and memory size:
+qemu-system-x86_64 --drive file=<filepath> -m size=<bytes>
+# Create and boot an x86_64 system virtual machine with the default machine, a specific image file and memory using prefixs:
+qemu-system-x86_64 --drive file=<filepath> -m size=<#M|#G>
+# Create and boot an x86_64 system virtual machine with the default machine, a specific image file, memory size and with a specific accelerator like KVM:
+qemu-system-x86_64 --drive file=<filepath> -m size=<bytes> -accel <name>
+# Create and boot an x86_64 system virtual machine with the default machine, a specific image file, memory size and a cdrom with an attached image:
+qemu-system-x86_64 --drive file=<filepath> -m size=<bytes> -cdrom <filepath>
+# Create and boot an x86_64 system virtual machine with the default machine, a specific image file and memory size with a specific CPU type:
+qemu-system-x86_64 --drive file=<filepath> -m size=<bytes> -cpu <name>
+# Create and boot an x86_64 system virtual machine with the default machine, a specific image file and memory size and emulate the host CPU:
+qemu-system-x86_64 --drive file=<filepath> -m size=<bytes> -cpu host
+# Create and boot an x86_64 system virtual machine with the default machine, a specific image file and memory size and disable networking:
+qemu-system-x86_64 --drive file=<filepath> -m size=<bytes> -nic none
+# Create and boot an x86_64 system virtual machine with the default machine, a specific image file, memory size with custom user networking IP range:
+qemu-system-x86_64 --drive file=<filepath> -m size=<bytes> -nic user,id=<network>,net=<cidr>
+# Create and boot an x86_64 system virtual machine with the default machine, a specific image file, memory size and amend the host (usually gateway) address:
+qemu-system-x86_64 --drive file=<filepath> -m size=<bytes> -nic user,id=<network>,host=<cidr>
+# Create and boot an x86_64 system virtual machine with the default machine, a specific image file, memory size and change the DHCP assignment starter range:
+qemu-system-x86_64 --drive file=<filepath> -m size=<bytes> -nic user,id=<network>,dhcpstart=<ip_range>
+# Create and boot an x86_64 system virtual machine with the default machine, a specific image file, memory size and forward a port to the host:
+qemu-system-x86_64 --drive file=<filepath> -m size=<bytes> -nic user,hostfwd=<proto>:<host_addr>:<host_port>-<address>:<port>
+# Create and boot an x86_64 system virtual machine with the default machine, a specific image file, memory size using a specific NIC type:
+qemu-system-x86_64 --drive file=<filepath> -m size=<bytes> -nic user,model=<device>
+# Create and boot an x86_64 system virtual machine with the default machine, a specific image file and memory size from an existing snapshot on the image:
+qemu-system-x86_64 --drive file=<filepath> -m size=<bytes> -loadvm <name>
+```
+```bash
+# Monitoring virtual machines.
+# EMU Monitor is default on virtual machine creation and accessible via "CTRL+ALT+2".
+# List all available commands:
+help
+# List available parameters of a specific subcommand:
+help <subcommand> 
+# Show QEMU version the guest is running on:
+info version
+# Show guest running state:
+info status
+# Show CPU info:
+info cpus
+# Show memory backend information:
+info memdev
+# Show memory size information:
+info memdev
+# Show more information on block devices:
+info block
+# Show more information on block devices:
+info block -v
+# Show only named nodes of block devices:
+info block -n
+# Show information on a specific block device:
+info block <name>
+# Show statistics on block devices:
+info blockstats
+# Show information on snapshots if image supports:
+info snapshots
+# Show network information:
+info network
+# Show PCI device information:
+info pci
+# Show USB device information:
+info usb
+# Show VNC server status:
+info vnc
+# Show spice server status:
+info spice
+# List all available virtio devices:
+info virtio
+# List TPM available TPM devices:
+info tpm
+```
+```bash
+# Modifying virtual machines with QEMU Monitor.
+# EMU Monitor is default on virtual machine creation and accessible via "CTRL+ALT+2".
+# Pause emulation of the guest:
+stop
+# Continue emulation of the paused guest:
+cont
+# Hard reset the guest:
+system_reset
+# Power off the guest:
+system_powerdown
+# Snapshot the guest with or without a name:
+savevm [name]
+# Commit a snapshot to to the guest:
+loadvm <name>
+# Eject removable media from a drive (use -f to force):
+eject <blockname>
+# Forward a port to the host.
+# Omit guest address for default IP address.
+hostfwd_add <netdev_id> <proto>:<host_addr>:<host_port>-<address>:<port>
+# Remove an existing host-guest redirect:
+hostfwd_remove <netdev_id> <proto>:<host_addr>:<host_port>
+```
+
+### libvirt
+
+#### virsh:
+
+> ℹ️ **Note:** These commands focus only on QEMU, check `virsh(1)` for others.
+
+> ℹ️ **Note:** Commands ran without elevation will execute on the user (session) connection, not the root (system) connection. All commands unless specified are to be system.
+
+```bash
+# Get all subcommands and their sections:
+virsh help
+# Get help for a specific section of commands:
+virsh help <keyword>
+# Get help for a specific subcommand:
+virsh help <subcommand>
+```
+```bash
+# Find the local URI for the hypervisor.
+# Without elevation this will be user and not root:
+virsh uri
+# Connect to a local QEMU hypervisor as root:
+virsh connect --name qemu:///system
+# Connect to a local user QEMU hypervisor:
+virsh connect --name qemu:///session
+```
+```bash
+# Working with the hypervisor host:
+# Show node hardware information:
+virsh sysinfo
+# Show node compute information:
+virsh nodeinfo
+# Show maximum number of vCPUs for guests on this node:
+virsh maxvcpus
+# Print running memory statistics of the node:
+virsh nodememstats
+# Print all usable CPUs known by the hypervisor:
+virsh hypervisor-cpu-models
+# Print all CPU models known by the hypervisor for the architecture (some may not work):
+virsh hypervisor-cpu-models --all
+```
+```bash
+# Working with storage pools:
+# List existing pools:
+virsh pool-list
+# Print information of a specific pool:
+virsh pool-info <name|id>
+# Refresh a specific pool:
+virsh pool-refresh <name|id>
+# Start an inactive pool:
+virsh pool-start <name|id>
+# Stop a running pool:
+virsh pool-destroy <name|id>
+# Show events that can be monitored on a specific pool:
+virsh pool-event --pool <name|id> --list
+# Monitor for a type of event in realtime on a specific pool:
+virsh pool-event --pool <name|id> --event <type>
+```
+
+
+
+```bash
+# Create new domain using virt-install:
+virt-install --name=tester1.example.com --ram=1024 --vcpus=2 --disk=/var/lib/libvirt/images/test1.example.com.img,size=16 --graphics=spice --location=ftp://192.168.1 22.1/pub/inst --os-type=Linux --os-variant=rhel7
+```
+```bash
+# Using an ISO for O/S deployment:
+virt-install --name=tester1.example.com --ram=1024 --vcpus=2 --disk=/var/lib/libvirt/images/test1.example.com.img,size=10 --location=/var/lib/libvirt/images/rhel-server-7.6-x86_64-dvd.iso --graphics=spice --os-type=Linux --os-variant=rhel7 
+```
+```bash
+# Don't wait for O/S installation:
+virt-install --name=tester1.example.com --ram=1024 --vcpus=2 --disk=/var/lib/libvirt/images/test1.example.com.img,size=10 --location=/var/lib/libvirt/images/rhel-server-7.6-x86_64-dvd.iso --graphics=spice --os-type=Linux --os-variant=rhel7 --noautoconsole --initrd-inject can be used with URL of .KS file.
+```
+```bash
+# Shutdown a domain gracefully:
+virsh shutdown <domain_name>
+```
+```bash
+# Terminate domain session:
+virsh destroy 'domain_name' --graceful
+# Non-gracefull:
+virsh destroy 'domain_name'
+```
+```bash
+# Remove domain but leave storage:
+virsh undefine tester1.example.com
+```
+```bash
+# Remove domain and associated storage
+virsh undefine tester1.example.com --remove-all-storage
+```
+```bash
+# Using extra arguments:
+# Specifying the kirkstart URI:
+virt-install --name=tester1.example.com --ram=1024 --vcpus=2 --disk=/var/lib/libvirt/images/test1.example.com.img,size=10 --location=/var/lib/libvirt/images/rhel-server-7.6-x86_64-dvd.iso --graphics=spice --os-type=Linux --os-variant=rhel7 --extra-args='ks=http://myserver/my.ks'
+```
+```bash
+# Enable / disable domain autostart at host boot:
+virsh autostart <domain_name>
+virsh autostart <domain_name> --disable
 ```
 
 ## Containerization:

@@ -2399,6 +2399,28 @@ REM Add a CNAME record as test to test.com:
 dnscmd /RecordAdd <zonename> test CNAME test.com
 ```
 
+### CUPS:
+
+> ℹ️ **Note:** CUPS 3.x will decprecate support for all printers and backends that do not support IPP.
+
+> ℹ️ **Note:** Some commands require elevation.
+
+```bash
+# Show CUPS scheduler configuration:
+cupsctl
+```
+```bash
+# Show running status of scheduler:
+lpstat -r
+```
+```bash
+# Managing printers and classes.
+# List all associated printer devices:
+lpinfo -v
+# Print all known drivers:
+lpinfo -m
+```
+
 #### resolvconf:
 
 > ℹ️ **Note:** Requires systemd-resolved.

@@ -4609,7 +4609,7 @@ virsh hypervisor-cpu-models
 virsh hypervisor-cpu-models --all
 ```
 ```bash
-# Working with storage pools:
+# Working with storage pools.
 # List existing pools:
 virsh pool-list
 # Print information of a specific pool:
@@ -4626,6 +4626,17 @@ virsh pool-event --pool <name|id> --list
 virsh pool-event --pool <name|id> --event <type>
 ```
 
+```bash
+# Working with virtual networks.
+# List existing virtual networks (remove --all to list active only):
+virsh net-list --all
+# Print information on an existing virtual network:
+virsh net-info <name|id>
+# Convert a network UUID to network name:
+virsh net-name <id>
+# Convert a network name to network UUID:
+virsh net-uuid <name>
+```
 
 
 ```bash

@@ -2414,11 +2414,89 @@ cupsctl
 lpstat -r
 ```
 ```bash
-# Managing printers and classes.
+# Show status summary of printers and classes:
+lpstat -t
+```
+```bash
+# Show the current default printer:
+lpstat -d
+# Show status of all printers:
+lpstat -p
+# Show status of a specific printer:
+lpstat -p <name>
+# Show all printers and their assoiciated devices:
+lpstat -v
+# Show a specific printers associated device:
+lpstat -v <name>
+# Show accepting state of all printer queues:
+lpstat -a
+# Show accepting state of a specific printer queue:
+lpstat -a <name>
+```
+```bash
+# Working with print jobs.
+# Show active jobs queued by the current user:
+lpstat
+# Show active jobs queued on a specific printer:
+lpstat <name>
+# Show full job history of a specific printer:
+lpstat -W all <name>
+# Show full job history of a specific printer with ranking order:
+lpstat -R -W all <name>
+# Show job history of a specific printer by status:
+lpstat -W <successful | completed | not-completed> <name>
+# Cancel a specific job on the default printer:
+cancel <id>
+# Cancel all jobs on a specific printer:
+cancel -a <name>
+# Cancel a specific job on a specific printer:
+cancel <id> <name>
+```
+```bash
+# Managing existing deprecated printers and classes.
 # List all associated printer devices:
 lpinfo -v
 # Print all known drivers:
 lpinfo -m
+# Add a printer:
+lpadmin -p <name> -v <device-uri> -m <driver>
+# Add a printer with location information:
+lpadmin -p <name> -v <device-uri> -m <driver> -L <string>
+# Add and enable a printer and accept jobs:
+lpadmin -p <name> -E -v <device-uri> -m <driver>
+# Enable an existing printer:
+cupsenable <name>
+# Disable an existing printer:
+cupsdisable <name>
+# Accept print jobs from an existing printer:
+cupsaccept <name>
+# Deny print jobs from an existing printer:
+cupsreject <name>
+# Set the default server-side printer:
+lpadmin -d <name>
+# Delete an existing printer:
+lpadmin -x <name>
+```
+```bash
+# Printing on the command line.
+# Send a print job to the default printer from a file:
+lp <filename>
+# Send a print job to a specific printer from a file:
+lp -d <name> <filename>
+# Send a print job to the default printer from stdin:
+<command> | lp
+# Send multiple copies of a print job from a file:
+lp -n 3 <filename>
+# Send a print job to the default printer from a file with a specific job name:
+lp -t <string> <filename>
+# Send a print job to the default printer from a file and hold:
+lp -H hold <filename>
+# Send a print job to the default printer from a file and hold until a specified time in UTC:
+lp -H <HH:MM> <filename>
+# Resume a currently held job on the default printer:
+lp -H resume -i <id>
+# Restart a previous job on the default printer:
+lp -i <id> -H restart
 ```
 
 #### resolvconf:

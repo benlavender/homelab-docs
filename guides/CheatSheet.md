@@ -2414,6 +2414,26 @@ cupsctl
 lpstat -r
 ```
 ```bash
+# Show status summary of printers and classes:
+lpstat -t
+```
+```bash
+# Show the current default printer:
+lpstat -d
+# Show status of all printers:
+lpstat -p
+# Show status of a specific printer:
+lpstat -p <name>
+# Show all printers and their assoiciated devices:
+lpstat -v
+# Show a specific printers associated device:
+lpstat -v <name>
+# Show accepting state of all printer queues:
+lpstat -a
+# Show accepting state of a specific printer queue:
+lpstat -a <name>
+```
+```bash
 # Managing existing deprecated printers and classes.
 # List all associated printer devices:
 lpinfo -v
@@ -2433,6 +2453,8 @@ cupsdisable <name>
 cupsaccept <name>
 # Deny print jobs from an existing printer:
 cupsreject <name>
+# Set the default server-side printer:
+lpadmin -d <name>
 # Delete an existing printer:
 lpadmin -x <name>
 ```

@@ -2414,11 +2414,27 @@ cupsctl
 lpstat -r
 ```
 ```bash
-# Managing printers and classes.
+# Managing existing deprecated printers and classes.
 # List all associated printer devices:
 lpinfo -v
 # Print all known drivers:
 lpinfo -m
+# Add a printer:
+lpadmin -p <name> -v <device-uri> -m <driver>
+# Add a printer with location information:
+lpadmin -p <name> -v <device-uri> -m <driver> -L <string>
+# Add and enable a printer and accept jobs:
+lpadmin -p <name> -E -v <device-uri> -m <driver>
+# Enable an existing printer:
+cupsenable <name>
+# Disable an existing printer:
+cupsdisable <name>
+# Accept print jobs from an existing printer:
+cupsaccept <name>
+# Deny print jobs from an existing printer:
+cupsreject <name>
+# Delete an existing printer:
+lpadmin -x <name>
 ```
 
 #### resolvconf:

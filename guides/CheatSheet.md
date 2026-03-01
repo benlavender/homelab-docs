@@ -4614,6 +4614,10 @@ virsh hypervisor-cpu-models --all
 virsh pool-list
 # Print information of a specific pool:
 virsh pool-info <name|id>
+# Create and start a pool based on a local directory::
+virsh pool-create-as --name <name> --type dir --target <dir>
+
+
 # Refresh a specific pool:
 virsh pool-refresh <name|id>
 # Start an inactive pool:

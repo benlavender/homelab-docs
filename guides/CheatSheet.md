@@ -298,9 +298,9 @@ G
 
 > ℹ️ **Note:** Commands usually require elevation.
 
-> ℹ️ **Note:** Defaults for new accounts are configured within `/etc/default/useradd`.
-
 ```bash
+# Show all configured defaults:
+useradd -D
 # Add a new user:
 useradd <name>
 # Add a new user with a description / full name:
@@ -317,10 +317,14 @@ useradd <name> --no-create-home
 useradd <name> --groups <name,name>
 # Add a new user and to an existing primary group:
 useradd <name> --gid <name>
+# Add a user and set a path to its shell other than the default:
+useradd <name> --shell <filename>
 # Add a new user with an expiry date:
 useradd <name> --expiredate <YYYY-MM-DD>
 # Add a new user that will become disabled a number of days after the maximum password age (use 0 for immediate):
 useradd <name> --inactive <#>
+# Add a new user and set its UID (must be system-unique):
+useradd <name> --uid <#>
 ```
 ```powershell
 # Get windows updates from remote machine:

@@ -294,6 +294,38 @@ G
 
 ## <ins>OS Management:</ins>
 
+### Useradd/usermod/userdel:
+
+> ℹ️ **Note:** Commands usually require elevation.
+
+```bash
+# Show all configured defaults:
+useradd -D
+# Add a new user:
+useradd <name>
+# Add a new user with a description / full name:
+useradd <name> -c <string>
+# Add a new user and create the home directory if it does not exist:
+useradd <name> --create-home
+# Add a new user and create the home directory in a specific directory:
+useradd <name> --home-dir <directory>
+# Add a new user and create the home directory in a specific base directory:
+useradd <name> --base-dir <directory>
+# Add a new user but do not create a home directory regardless of defaults.
+useradd <name> --no-create-home
+# Add a new user and define its group membership(s):
+useradd <name> --groups <name,name>
+# Add a new user and to an existing primary group:
+useradd <name> --gid <name>
+# Add a user and set a path to its shell other than the default:
+useradd <name> --shell <filename>
+# Add a new user with an expiry date:
+useradd <name> --expiredate <YYYY-MM-DD>
+# Add a new user that will become disabled a number of days after the maximum password age (use 0 for immediate):
+useradd <name> --inactive <#>
+# Add a new user and set its UID (must be system-unique):
+useradd <name> --uid <#>
+```
 ```powershell
 # Get windows updates from remote machine:
 Get-HotFix -ComputerName <target> 

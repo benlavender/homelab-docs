@@ -343,6 +343,8 @@ usermod <name> --append --groups <name,name>
 usermod <name> --remove --groups <name,name>
 # Change the home directory of a user:
 usermod <name> --home <directory>
+# Change the home directory of a user and move the original contents (target will be created):
+usermod <name> --home <directory> --move-home
 # Change a users shell:
 usermod <name> --shell <filename>
 ```

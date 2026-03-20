@@ -1073,6 +1073,9 @@ Get-ItemProperty -Path 'file/dir' | Format-List -Property *
 # List files created and modified today, in descending order by lastwritetime and include the name, lwt and size:
 Get-ChildItem -Path <dir> -Recurse | Where-Object {$_.LastWriteTime.date -eq (Get-Date).Date} | Sort-Object LastWriteTime -Descending | Select-Object -Property Name,LastWriteTime,Length | Format-Table -AutoSize
 ```
+
+#### dd:
+
 ```bash
 # Reading files with dd.
 # Use status=progress to print progress.

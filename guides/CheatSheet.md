@@ -346,6 +346,13 @@ usermod <name> --home <directory>
 # Change a users shell:
 usermod <name> --shell <filename>
 ```
+```bash
+# Use --force to overwrite any prompts.
+# Remove only the user account:
+userdel <name>
+# Remove a user and its existing home directory and mail spool:
+userdel <name> --remove
+```
 ```powershell
 # Get windows updates from remote machine:
 Get-HotFix -ComputerName <target> 

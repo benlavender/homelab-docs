@@ -326,6 +326,26 @@ useradd <name> --inactive <#>
 # Add a new user and set its UID (must be system-unique):
 useradd <name> --uid <#>
 ```
+```bash
+# Immediately disable a user:
+usermod <name> --expiredate 1
+# Disable a user at a specific date:
+usermod <name> --expiredate <YYYY-MM-DD>
+# Remove expiration flag on a user, re-enabling indefinitely if disabled:
+usermod <name> --expiredate -1
+# Lock a users password only:
+usermod <name> --lock
+# Unlock a users password only:
+usermod <name> --unlock
+# Add a user to an existing group or groups:
+usermod <name> --append --groups <name,name>
+# Remove a user from a group or groups:
+usermod <name> --remove --groups <name,name>
+# Change the home directory of a user:
+usermod <name> --home <directory>
+# Change a users shell:
+usermod <name> --shell <filename>
+```
 ```powershell
 # Get windows updates from remote machine:
 Get-HotFix -ComputerName <target> 
@@ -4735,8 +4755,6 @@ virsh pool-event --pool <name|id> --list
 # Monitor for a type of event in realtime on a specific pool:
 virsh pool-event --pool <name|id> --event <type>
 ```
-
-
 
 ```bash
 # Create new domain using virt-install:

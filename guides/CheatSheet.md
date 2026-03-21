@@ -294,6 +294,28 @@ G
 
 ## <ins>OS Management:</ins>
 
+### userdbctl
+
+> ℹ️ **Note:** Requires systemd.
+
+```bash
+# Use --output=<classic | friendly | table | json> to change formats (default is table where json is most verbose).
+# Print all users:
+userdbctl
+# Print all users in the classic UNIX fashion:
+userdbctl --output=classic
+# Print information for a specific user:
+userdbctl user <name>
+# Print group membership for a specific user:
+userdbctl groups-of-user <name>
+# Print all groups:
+userdbctl group
+# Print information for a specific:
+userdbctl group <name>
+# Print membership for a specific group:
+userdbctl users-in-group <name>
+```
+
 ### Useradd/usermod/userdel:
 
 > ℹ️ **Note:** Commands usually require elevation.

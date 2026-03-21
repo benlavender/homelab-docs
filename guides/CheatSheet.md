@@ -1128,6 +1128,17 @@ dd if=/dev/zero of=<dev>
 dd if=/dev/urandom of=<dev> iflag=fullblock
 ```
 
+#### Fallocate:
+
+> **Note:** Ensure filesystem supports sparse-type files.
+
+> **Note:** File sizes can of KiB, MiB, GiB, TiB or SI prefix KB, MB, GB, TB etc.
+
+```bash
+# Create a file and preallocate disk space:
+fallocate --length <size> <filename>
+```
+
 #### GNU Stow:
 
 > ℹ️ **Notes:**

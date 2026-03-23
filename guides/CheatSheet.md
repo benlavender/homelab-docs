@@ -294,6 +294,89 @@ G
 
 ## <ins>OS Management:</ins>
 
+### userdbctl
+
+> ℹ️ **Note:** Requires systemd.
+
+```bash
+# Use --output=<classic | friendly | table | json> to change formats (default is table where json is most verbose).
+# Print all users:
+userdbctl
+# Print all users in the classic UNIX fashion:
+userdbctl --output=classic
+# Print information for a specific user:
+userdbctl user <name>
+# Print group membership for a specific user:
+userdbctl groups-of-user <name>
+# Print all groups:
+userdbctl group
+# Print information for a specific:
+userdbctl group <name>
+# Print membership for a specific group:
+userdbctl users-in-group <name>
+```
+
+### Useradd/usermod/userdel:
+
+> ℹ️ **Note:** Commands usually require elevation.
+
+```bash
+# Show all configured defaults:
+useradd -D
+# Add a new user:
+useradd <name>
+# Add a new user with a description / full name:
+useradd <name> -c <string>
+# Add a new user and create the home directory if it does not exist:
+useradd <name> --create-home
+# Add a new user and create the home directory in a specific directory:
+useradd <name> --home-dir <directory>
+# Add a new user and create the home directory in a specific base directory:
+useradd <name> --base-dir <directory>
+# Add a new user but do not create a home directory regardless of defaults.
+useradd <name> --no-create-home
+# Add a new user and define its group membership(s):
+useradd <name> --groups <name,name>
+# Add a new user and to an existing primary group:
+useradd <name> --gid <name>
+# Add a user and set a path to its shell other than the default:
+useradd <name> --shell <filename>
+# Add a new user with an expiry date:
+useradd <name> --expiredate <YYYY-MM-DD>
+# Add a new user that will become disabled a number of days after the maximum password age (use 0 for immediate):
+useradd <name> --inactive <#>
+# Add a new user and set its UID (must be system-unique):
+useradd <name> --uid <#>
+```
+```bash
+# Immediately disable a user:
+usermod <name> --expiredate 1
+# Disable a user at a specific date:
+usermod <name> --expiredate <YYYY-MM-DD>
+# Remove expiration flag on a user, re-enabling indefinitely if disabled:
+usermod <name> --expiredate -1
+# Lock a users password only:
+usermod <name> --lock
+# Unlock a users password only:
+usermod <name> --unlock
+# Add a user to an existing group or groups:
+usermod <name> --append --groups <name,name>
+# Remove a user from a group or groups:
+usermod <name> --remove --groups <name,name>
+# Change the home directory of a user:
+usermod <name> --home <directory>
+# Change the home directory of a user and move the original contents (target will be created):
+usermod <name> --home <directory> --move-home
+# Change a users shell:
+usermod <name> --shell <filename>
+```
+```bash
+# Use --force to overwrite any prompts.
+# Remove only the user account:
+userdel <name>
+# Remove a user and its existing home directory and mail spool:
+userdel <name> --remove
+```
 ```powershell
 # Get windows updates from remote machine:
 Get-HotFix -ComputerName <target> 
@@ -1041,6 +1124,9 @@ Get-ItemProperty -Path 'file/dir' | Format-List -Property *
 # List files created and modified today, in descending order by lastwritetime and include the name, lwt and size:
 Get-ChildItem -Path <dir> -Recurse | Where-Object {$_.LastWriteTime.date -eq (Get-Date).Date} | Sort-Object LastWriteTime -Descending | Select-Object -Property Name,LastWriteTime,Length | Format-Table -AutoSize
 ```
+
+#### dd:
+
 ```bash
 # Reading files with dd.
 # Use status=progress to print progress.
@@ -1091,6 +1177,17 @@ dd if=<file | dev> of=<file | dev> bs=<#>
 dd if=/dev/zero of=<dev>
 # Randomize an entire device (useful for security if ran before dd if=/dev/zero):
 dd if=/dev/urandom of=<dev> iflag=fullblock
+```
+
+#### Fallocate:
+
+> **Note:** Ensure filesystem supports sparse-type files.
+
+> **Note:** File sizes can of KiB, MiB, GiB, TiB or SI prefix KB, MB, GB, TB etc.
+
+```bash
+# Create a file and preallocate disk space:
+fallocate --length <size> <filename>
 ```
 
 #### GNU Stow:
@@ -2414,11 +2511,89 @@ cupsctl
 lpstat -r
 ```
 ```bash
-# Managing printers and classes.
+# Show status summary of printers and classes:
+lpstat -t
+```
+```bash
+# Show the current default printer:
+lpstat -d
+# Show status of all printers:
+lpstat -p
+# Show status of a specific printer:
+lpstat -p <name>
+# Show all printers and their assoiciated devices:
+lpstat -v
+# Show a specific printers associated device:
+lpstat -v <name>
+# Show accepting state of all printer queues:
+lpstat -a
+# Show accepting state of a specific printer queue:
+lpstat -a <name>
+```
+```bash
+# Working with print jobs.
+# Show active jobs queued by the current user:
+lpstat
+# Show active jobs queued on a specific printer:
+lpstat <name>
+# Show full job history of a specific printer:
+lpstat -W all <name>
+# Show full job history of a specific printer with ranking order:
+lpstat -R -W all <name>
+# Show job history of a specific printer by status:
+lpstat -W <successful | completed | not-completed> <name>
+# Cancel a specific job on the default printer:
+cancel <id>
+# Cancel all jobs on a specific printer:
+cancel -a <name>
+# Cancel a specific job on a specific printer:
+cancel <id> <name>
+```
+```bash
+# Managing existing deprecated printers and classes.
 # List all associated printer devices:
 lpinfo -v
 # Print all known drivers:
 lpinfo -m
+# Add a printer:
+lpadmin -p <name> -v <device-uri> -m <driver>
+# Add a printer with location information:
+lpadmin -p <name> -v <device-uri> -m <driver> -L <string>
+# Add and enable a printer and accept jobs:
+lpadmin -p <name> -E -v <device-uri> -m <driver>
+# Enable an existing printer:
+cupsenable <name>
+# Disable an existing printer:
+cupsdisable <name>
+# Accept print jobs from an existing printer:
+cupsaccept <name>
+# Deny print jobs from an existing printer:
+cupsreject <name>
+# Set the default server-side printer:
+lpadmin -d <name>
+# Delete an existing printer:
+lpadmin -x <name>
+```
+```bash
+# Printing on the command line.
+# Send a print job to the default printer from a file:
+lp <filename>
+# Send a print job to a specific printer from a file:
+lp -d <name> <filename>
+# Send a print job to the default printer from stdin:
+<command> | lp
+# Send multiple copies of a print job from a file:
+lp -n 3 <filename>
+# Send a print job to the default printer from a file with a specific job name:
+lp -t <string> <filename>
+# Send a print job to the default printer from a file and hold:
+lp -H hold <filename>
+# Send a print job to the default printer from a file and hold until a specified time in UTC:
+lp -H <HH:MM> <filename>
+# Resume a currently held job on the default printer:
+lp -H resume -i <id>
+# Restart a previous job on the default printer:
+lp -i <id> -H restart
 ```
 
 #### resolvconf:
@@ -4630,17 +4805,6 @@ virsh pool-event --pool <name|id> --list
 virsh pool-event --pool <name|id> --event <type>
 ```
 
-```bash
-# Working with virtual networks.
-# List existing virtual networks (remove --all to list active only):
-virsh net-list --all
-# Print information on an existing virtual network:
-virsh net-info <name|id>
-# Convert a network UUID to network name:
-virsh net-name <id>
-# Convert a network name to network UUID:
-virsh net-uuid <name>
-```
 
 
 ```bash

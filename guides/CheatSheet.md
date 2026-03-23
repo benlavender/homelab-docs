@@ -1124,6 +1124,9 @@ Get-ItemProperty -Path 'file/dir' | Format-List -Property *
 # List files created and modified today, in descending order by lastwritetime and include the name, lwt and size:
 Get-ChildItem -Path <dir> -Recurse | Where-Object {$_.LastWriteTime.date -eq (Get-Date).Date} | Sort-Object LastWriteTime -Descending | Select-Object -Property Name,LastWriteTime,Length | Format-Table -AutoSize
 ```
+
+#### dd:
+
 ```bash
 # Reading files with dd.
 # Use status=progress to print progress.
@@ -1174,6 +1177,17 @@ dd if=<file | dev> of=<file | dev> bs=<#>
 dd if=/dev/zero of=<dev>
 # Randomize an entire device (useful for security if ran before dd if=/dev/zero):
 dd if=/dev/urandom of=<dev> iflag=fullblock
+```
+
+#### Fallocate:
+
+> **Note:** Ensure filesystem supports sparse-type files.
+
+> **Note:** File sizes can of KiB, MiB, GiB, TiB or SI prefix KB, MB, GB, TB etc.
+
+```bash
+# Create a file and preallocate disk space:
+fallocate --length <size> <filename>
 ```
 
 #### GNU Stow:

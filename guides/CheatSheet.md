@@ -550,6 +550,25 @@ loginctl terminate-user <id|name>
 loginctl kill-user <id|name>
 ```
 
+### fwupdmgr / firmware update manager for fwupd:
+
+```bash
+# Download latest metadata from remotes (use --force if required):
+fwupdmgr refresh
+```
+```bash
+# Show all enumerated devices:
+fwupdmgr get-devices
+# Show a specific device:
+fwupdmgr get-devices <Device ID | GUIDs>
+```
+```bash
+# Show available updates for all devices:
+fwupdmgr get-updates
+# Show available updates for a specific device:
+fwupdmgr get-updates <Device ID | GUIDs>
+```
+
 ### Timeshift: 
 
 > ℹ️ **Note:** Commands usually require elevation.

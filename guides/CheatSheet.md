@@ -4805,8 +4805,17 @@ virsh pool-event --pool <name|id> --list
 virsh pool-event --pool <name|id> --event <type>
 ```
 
-
-
+```bash
+# Working with virtual networks.
+# List existing virtual networks (remove --all to list active only):
+virsh net-list --all
+# Print information on an existing virtual network:
+virsh net-info <name|id>
+# Convert a network UUID to network name:
+virsh net-name <id>
+# Convert a network name to network UUID:
+virsh net-uuid <name>
+```
 ```bash
 # Create new domain using virt-install:
 virt-install --name=tester1.example.com --ram=1024 --vcpus=2 --disk=/var/lib/libvirt/images/test1.example.com.img,size=16 --graphics=spice --location=ftp://192.168.1 22.1/pub/inst --os-type=Linux --os-variant=rhel7

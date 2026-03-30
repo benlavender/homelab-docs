@@ -5060,6 +5060,10 @@ docker run --hostname <hostname> <image>
 docker run --dns <ip.addr> <image>
 # Run a container based on an image with a specific DNS search list:
 docker run --dns-search <domain> <image>
+# Run a container based on an image with a bind mount (src must exist on host):
+docker run --mount type=bind,src=<src>,dst=<dst> <image>
+# Run a container based on an image with a readonly bind mount (src must exist on host):
+docker run --mount type=bind,:ro,src=<src>,dst=<dst> <image>
 # Run a container based on an image with and set an environment variable:
 docker run --env <variable=value> <image>
 # Show all published ports of a running container:

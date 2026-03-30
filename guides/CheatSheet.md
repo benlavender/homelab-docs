@@ -552,6 +552,10 @@ loginctl kill-user <id|name>
 
 ### fwupdmgr / firmware update manager for fwupd:
 
+> ℹ️ **Notes:**
+> - Updates that can be applied online will be done immediately.
+> - Updates that need to be applied at boot will be staged for the next boot.
+
 ```bash
 # Download latest metadata from remotes (use --force if required):
 fwupdmgr refresh
@@ -563,10 +567,37 @@ fwupdmgr get-devices
 fwupdmgr get-devices <Device ID | GUIDs>
 ```
 ```bash
+# Show HWIDs of devices on the system:
+fwupdmgr hwids
+```
+```bash
 # Show available updates for all devices:
 fwupdmgr get-updates
 # Show available updates for a specific device:
 fwupdmgr get-updates <Device ID | GUIDs>
+# Show information on an update release for a specific device:
+fwupdmgr get-releases <Device ID | GUIDs>
+```
+```bash
+# Update a specific device with available updates:
+fwupdmgr update <Device ID | GUIDs>
+# Update all devices with available updates:
+fwupdmgr update
+```
+```bash
+# Search updates in the metadata regardless of device presence.
+# Strings can be CVE number, vendor name, device ID and name of device. See fwupdmgr(1) for more:
+fwupdmgr search <'string'>
+```
+```bash
+# Get list of configured remotes:
+fwupdmgr get-remotes
+# Enable a remote:
+fwupdmgr enable-remote <Remote ID>
+# Disable a remote:
+fwupdmgr disable-remote <Remote ID>
+# Clear metadata data of a remote:
+fwupdmgr clean-remote <Remote ID>
 ```
 
 ### Timeshift: 

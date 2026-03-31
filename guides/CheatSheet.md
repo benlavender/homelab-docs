@@ -5066,9 +5066,11 @@ docker run --mount type=bind,src=<src>,dst=<dst> <image>
 # Run a container based on an image with a readonly bind mount (src must exist on host):
 docker run --mount type=bind,:ro,src=<src>,dst=<dst> <image>
 # Run a container based on an image and mount a volume (volume will be created if not exist):
-docker run --volume <volume-name>:<dst> <image>
+docker run --volume <name>:<dst> <image>
 # Run a container based on an image aswell as create and mount an anonymous (random generated named) volume:
 docker run --volume <dst> <image>
+# Run a container based on an image and mount a readonly volume (volume must exist):
+docker run --volume <name>:<dst>:ro <image>
 # Run a container based on an image with and set an environment variable:
 docker run --env <variable=value> <image>
 # Show all published ports of a running container:
@@ -5084,6 +5086,7 @@ docker start -i <containerID | name>
 ```
 ```bash
 # Working with Volumes.
+# Default storage driver is local.
 # List existing volumes:
 docker volume ls
 # Create a volume with a random name:

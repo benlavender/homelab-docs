@@ -5028,7 +5028,8 @@ docker run --detach <image>
 docker run -d <image>
 # Run a container in the background if the ENTRYPOINT process exists:
 docker run --detach --interactive --tty <image>
-# Run a container based on an image but remove once exited:
+# Run a container based on an image but remove once exited.
+# Any anonymous (random generated named) volumes created with the container will also be removed:
 docker run --interactive --tty --rm <image>
 # Run a container based on an image with a TCP port mapping to the host:
 docker run --publish <host_port:container_port> <image>
@@ -5064,6 +5065,10 @@ docker run --dns-search <domain> <image>
 docker run --mount type=bind,src=<src>,dst=<dst> <image>
 # Run a container based on an image with a readonly bind mount (src must exist on host):
 docker run --mount type=bind,:ro,src=<src>,dst=<dst> <image>
+# Run a container based on an image and mount a volume (volume will be created if not exist):
+docker run --volume <volume-name>:<dst> <image>
+# Run a container based on an image aswell as create and mount an anonymous (random generated named) volume:
+docker run --volume <dst> <image>
 # Run a container based on an image with and set an environment variable:
 docker run --env <variable=value> <image>
 # Show all published ports of a running container:
@@ -5076,6 +5081,20 @@ docker start <ID | name>
 docker start --interactive <containerID | name>
 # or:
 docker start -i <containerID | name>
+```
+```bash
+# Working with Volumes.
+# List existing volumes:
+docker volume ls
+# Create a volume with a random name:
+docker volume create
+# Create a volume with a specific name:
+docker volume create <name>
+# Remove a volume:
+docker volume rm <name>
+# Remove unused and anonymous (random generated named) volumes.
+# Acknowledge the prompt or use --force to not prompt:
+docker volume prune
 ```
 
 #### Docker network driver types:

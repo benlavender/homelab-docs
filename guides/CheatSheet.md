@@ -1240,6 +1240,31 @@ dd if=/dev/urandom of=<dev> iflag=fullblock
 fallocate --length <size> <filename>
 ```
 
+#### losetup / Loop devices:
+
+> ℹ️ **Note:** Some commands require elevation.
+
+```bash
+# Print status of all loop devices:
+losetup --list --all
+```
+```bash
+# Show any associated loop devices with a specific file:
+losetup --associated <filename>
+```
+```bash 
+# Find the first unused loop device using the /dev/loop-control device:
+losetup --find
+```
+```bash
+# Associate a file with a specific loop device:
+losetup <filename> <dev>
+# Associate a file with the next available loop device using the /dev/loop-control device:
+losetup --find <filename>
+# Disassociate a file and its device:
+losetup --detach <dev>
+```
+
 #### GNU Stow:
 
 > ℹ️ **Notes:**

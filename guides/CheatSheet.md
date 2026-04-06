@@ -2086,8 +2086,6 @@ networkctl renew <link|idx>
 
 > ℹ️ **Note:** Commands require elevation.
 
-> ℹ️ **Note:** In order for a block device to be assoiciated with LVM it must be configured as a Physical Volume (PV).
-
 ```bash
 # Show general information about configured lvm storage:
 lvm fullreport
@@ -2098,6 +2096,8 @@ lvm devtypes
 ```
 ```bash
 # Working with physical volumes.
+# List existing PVs:
+lvm pvscan
 # Display basic information on existing PVs:
 lvm pvs
 # Show detailed information on existing PVs:
@@ -2118,6 +2118,35 @@ lvm pvresize --setphysicalvolumesize <size>
 lvm pvremove <name>
 ```
 
+```bash
+# Working with volume groups.
+# Block devices not initialised as a PV will automatically confgured when creating a VG.
+# Display basic information on all VGs:
+lvm vgs
+# Display detailed information on all VGs:
+lvm vgdisplay
+# Display basic information on a specific VG:
+lvm vgs <name>
+# Display detailed information on a specific VG:
+lvm vgdisplay <name>
+# Create a new volume group with a custom name using existing PV(s):
+lvm vgcreate <name> <dev> <dev> <dev>
+```
+
+```bash
+# Working with logical volumes.
+# Sizes for LVs can be of KiB, MiB, GiB, TiB or SI prefix K, M, G, T etc or a specifc extent.
+# If a size less than a single extent is given it will upsize dynamically.
+# Create a linear LV with a specific size:
+lvm lvcreate --size <#> <vg_name>
+
+# Create a linear LV with a specific size in logical extents:
+lvm lvcreate --extent <#> <vg_name>
+
+
+# Create a linear LV with a specific size and name:
+lvm lvcreate --name <name> --size <#> <vg_name>
+```
 
 
 ```bat

@@ -2082,6 +2082,44 @@ networkctl renew <link|idx>
 
 ### Storage:
 
+#### LVM / Logical Volume Manager:
+
+> ℹ️ **Note:** Commands require elevation.
+
+> ℹ️ **Note:** In order for a block device to be assoiciated with LVM it must be configured as a Physical Volume (PV).
+
+```bash
+# Show general information about configured lvm storage:
+lvm fullreport
+```
+```bash
+# Print supported block device types:
+lvm devtypes
+```
+```bash
+# Working with physical volumes.
+# Display basic information on existing PVs:
+lvm pvs
+# Show detailed information on existing PVs:
+lvm pvdisplay
+# Display basic information about a specific PV:
+lvm pvs <name>
+# Show detailed information about a specific PV:
+lvm pvdisplay <name>
+# Create a new PV from an existing block device:
+lvm pvcreate <dev>
+# Increase the size of a PV.
+# This needs to be done after modifying the block device:
+lvm pvresize <name>
+# Decrease the size of a PV.
+# This needs to be done before modifying the block device:
+lvm pvresize --setphysicalvolumesize <size>
+# Remove an existing PV:
+lvm pvremove <name>
+```
+
+
+
 ```bat
 REM Show active ISCSI sessions:
 iscsicli listtargetportals

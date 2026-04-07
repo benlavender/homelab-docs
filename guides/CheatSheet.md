@@ -2096,6 +2096,8 @@ lvm devtypes
 ```
 ```bash
 # Working with physical volumes.
+# List devices that may be used as PVs:
+lvm lvmdiskscan
 # List existing PVs:
 lvm pvscan
 # Display basic information on existing PVs:
@@ -2117,7 +2119,6 @@ lvm pvresize --setphysicalvolumesize <size>
 # Remove an existing PV:
 lvm pvremove <name>
 ```
-
 ```bash
 # Working with volume groups.
 # Block devices not initialised as a PV will automatically confgured when creating a VG.
@@ -2131,23 +2132,46 @@ lvm vgs <name>
 lvm vgdisplay <name>
 # Create a new volume group with a custom name using existing PV(s):
 lvm vgcreate <name> <dev> <dev> <dev>
+# Remove an existing volume group:
+lvm vgremove <name>
 ```
-
 ```bash
 # Working with logical volumes.
+# List existing LVs:
+lvm lvscan
+# Display basic information on all LVs:
+lvm lvs
+# Display detailed information on all LVs:
+lvm lvdisplay
+# Display basic information on a specific LV:
+lvm lvs <name>
+# Display detailed information on a specific LV::
+lvm lvdisplay <name>
+```
+```bash
+# Working with standard linear logical volumes.
+# Use --name <string> to name a LV otherwise a system name will be generated.
 # Sizes for LVs can be of KiB, MiB, GiB, TiB or SI prefix K, M, G, T etc or a specifc extent.
 # If a size less than a single extent is given it will upsize dynamically.
 # Create a linear LV with a specific size:
 lvm lvcreate --size <#> <vg_name>
-
 # Create a linear LV with a specific size in logical extents:
-lvm lvcreate --extent <#> <vg_name>
-
-
-# Create a linear LV with a specific size and name:
-lvm lvcreate --name <name> --size <#> <vg_name>
+lvm lvcreate --extents <#> <vg_name>
+# Create a linear LV with a specific percent of free remaining space of the logical extents:
+lvm lvcreate --extents <#%FREE> <vg_name>
+# Create a linear LV with a specific percent of all the logical extents:
+lvm lvcreate --extents <#%VG> <vg_name>
 ```
+```bash
+# Working with mirror type logical volumes.
+# Use --name <string> to name a LV otherwise a system name will be generated.
+# Sizes for LVs can be of KiB, MiB, GiB, TiB or SI prefix K, M, G, T etc or a specifc extent.
+# If a size less than a single extent is given it will upsize dynamically.
+# A minimum of three PVs are required where the mirror count is the amount of mirror images of the data plus one for logging.
+# Create a mirror LV with a specific number of mirrors and of a specific size: 
+lvm lvcreate --type mirror --mirrors <#> --size <#> <vg_name>
 
+```
 
 ```bat
 REM Show active ISCSI sessions:

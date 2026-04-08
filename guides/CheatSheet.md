@@ -2121,7 +2121,7 @@ lvm pvremove <name>
 ```
 ```bash
 # Working with volume groups.
-# Block devices not initialised as a PV will automatically confgured when creating a VG.
+# Block devices not initialised as a PV will automatically be confgured when creating a VG.
 # Display basic information on all VGs:
 lvm vgs
 # Display detailed information on all VGs:
@@ -2132,6 +2132,12 @@ lvm vgs <name>
 lvm vgdisplay <name>
 # Create a new volume group with a custom name using existing PV(s):
 lvm vgcreate <name> <dev> <dev> <dev>
+# Add a new PV(s) as a member to an existing VG:
+lvm vgextend <vg_name> <dev> <dev> <dev>
+# Remove a PV member from an existing VG:
+lvm vgreduce <vg_name> <dev>
+# Remove any PVs marked as missing in an existing VG:
+lvm vgreduce <vg_name> --removemissing
 # Remove an existing volume group:
 lvm vgremove <name>
 ```
@@ -2144,9 +2150,13 @@ lvm lvs
 # Display detailed information on all LVs:
 lvm lvdisplay
 # Display basic information on a specific LV:
-lvm lvs <name>
+lvm lvs <lv_path>
 # Display detailed information on a specific LV::
-lvm lvdisplay <name>
+lvm lvdisplay <lv_path>
+# Rename an existing LV:
+lvm lvrename <lv_path> <new_name>
+# Remove an existing LV:
+lvm lvremove <lv_path>
 ```
 ```bash
 # Working with standard linear logical volumes.
@@ -2162,15 +2172,27 @@ lvm lvcreate --extents <#%FREE> <vg_name>
 # Create a linear LV with a specific percent of all the logical extents:
 lvm lvcreate --extents <#%VG> <vg_name>
 ```
+
 ```bash
-# Working with mirror type logical volumes.
+# Working with LVM RADI1 type logical volumes.
 # Use --name <string> to name a LV otherwise a system name will be generated.
 # Sizes for LVs can be of KiB, MiB, GiB, TiB or SI prefix K, M, G, T etc or a specifc extent.
 # If a size less than a single extent is given it will upsize dynamically.
-# A minimum of three PVs are required where the mirror count is the amount of mirror images of the data plus one for logging.
-# Create a mirror LV with a specific number of mirrors and of a specific size: 
-lvm lvcreate --type mirror --mirrors <#> --size <#> <vg_name>
 
+```
+
+
+```bash
+# Working with the legacy mirror type logical volumes.
+# Use --name <string> to name a LV otherwise a system name will be generated.
+# Sizes for LVs can be of KiB, MiB, GiB, TiB or SI prefix K, M, G, T etc or a specifc extent.
+# If a size less than a single extent is given it will upsize dynamically.
+# Create a mirror LV with a specific number of mirrors and of a specific size.
+# Enough PVs need to be added to support the # of mirror images plus the disk log (usually one extra):
+lvm lvcreate --type mirror --mirrors <#> --size <#> <vg_name>
+# Create a mirror LV with a specific number of mirrors and of a specific size where the mirror log is memory backed.
+# Enough PVs need to be added to support the # of mirrors:
+lvm lvcreate --type mirror --mirrors <#> --mirrorlog core --size <#> <vg_name> 
 ```
 
 ```bat

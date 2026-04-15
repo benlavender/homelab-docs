@@ -2138,7 +2138,7 @@ lvm vgextend <vg_name> <dev> <dev> <dev>
 lvm vgreduce <vg_name> <dev>
 # Remove any PVs marked as missing in an existing VG:
 lvm vgreduce <vg_name> --removemissing
-# Remove an existing volume group:
+# Remove an existing volume group (use vgreduce first if possible):
 lvm vgremove <name>
 ```
 ```bash
@@ -2162,7 +2162,7 @@ lvm lvremove <lv_path>
 # Working with standard linear logical volumes.
 # Use --name <string> to name a LV otherwise a system name will be generated.
 # Sizes for LVs can be of KiB, MiB, GiB, TiB or SI prefix K, M, G, T etc or a specifc extent.
-# If a size less than a single extent is given it will upsize dynamically.
+# If a size is less than a single extent is given it will upsize dynamically.
 # Create a linear LV with a specific size:
 lvm lvcreate --size <#> <vg_name>
 # Create a linear LV with a specific size in logical extents:
@@ -2174,11 +2174,16 @@ lvm lvcreate --extents <#%VG> <vg_name>
 ```
 
 ```bash
-# Working with LVM RADI1 type logical volumes.
+# Working with LVM RAID type logical volumes.
 # Use --name <string> to name a LV otherwise a system name will be generated.
 # Sizes for LVs can be of KiB, MiB, GiB, TiB or SI prefix K, M, G, T etc or a specifc extent.
-# If a size less than a single extent is given it will upsize dynamically.
-
+# If a size is less than a single extent is given it will upsize dynamically.
+# Create a RAID0 (stripe) LV with the default 64KiB stripe size and a specific stripe count (use one stripe per PV).
+# A minimum of two PVs are required and beware if a single PV is lost then the whole array is defunct:
+lvm lvcreate --type raid0 --stripes <#> --size <#> <vg_name>
+# Create a RAID1 (mirror) LV with a specific number of mirrors and of a specific size.
+# Enough PVs need to be added to support the # of mirrors:
+lvm lvcreate --type raid1 --mirrors <#> --size <#> <vg_name>
 ```
 
 
@@ -2186,7 +2191,7 @@ lvm lvcreate --extents <#%VG> <vg_name>
 # Working with the legacy mirror type logical volumes.
 # Use --name <string> to name a LV otherwise a system name will be generated.
 # Sizes for LVs can be of KiB, MiB, GiB, TiB or SI prefix K, M, G, T etc or a specifc extent.
-# If a size less than a single extent is given it will upsize dynamically.
+# If a size is less than a single extent is given it will upsize dynamically.
 # Create a mirror LV with a specific number of mirrors and of a specific size.
 # Enough PVs need to be added to support the # of mirror images plus the disk log (usually one extra):
 lvm lvcreate --type mirror --mirrors <#> --size <#> <vg_name>

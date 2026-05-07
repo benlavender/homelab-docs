@@ -3258,22 +3258,29 @@ openssl req -in request.csr -noout -subject
 ```
 ```bash
 # Working with public and private keys in OpenSSL.
-# Read a private key file (enter passphrase if required):
+# Read an RSA private key file (enter passphrase if required):
 openssl rsa -in private.key -noout -text
-# or:
+# Read a private key file (enter passphrase if required):
 openssl pkey -in privkey.key -text
+# Read a PKCS1 private key file and print as this format (enter passphrase if required):
+openssl pkey -in privkey.key -text -traditional
 # Read a public key:
 openssl pkey -in pubkey.key -pubin -text
 ```
 ```bash
-# Generate a new private key (RSA 1024):
+# Generate a new RSA 2048 private key in PKCS8 format:
 openssl genpkey -algorithm rsa -out private.key
-# Generate a new private key (RSA 4096):
+# Generate a new private key (RSA 4096) in PKCS8 format:
 openssl genpkey -algorithm rsa -out private.key -pkeyopt rsa_keygen_bits:4096
-# Generate an encrypted private key with a Triple-DES passphrase:
+# Generate an RSA 2048 encrypted private key with a Triple-DES passphrase in PKCS8 format:
 openssl genpkey -algorithm rsa -out private.key -pkeyopt rsa_keygen_bits:2048 -des3
-# Generate an encrypted private key with a AES256 passphrase (generally preferred):
+# Generate an RSA 2048 encrypted private key with a AES256 passphrase (generally preferred) in PKCS8 format:
 openssl genpkey -algorithm rsa -out private.key -pkeyopt rsa_keygen_bits:2048 -aes256
+```
+```bash 
+# Generate a new RSA 2048 private key in PKCS1 format.
+# This is deprecated usually in favour of PKCS8 format methods:
+openssl genrsa -traditional -out private.key
 ```
 ```bash
 # Generate a private / public key pair using an existing key:
@@ -3288,6 +3295,14 @@ openssl pkey -in private.key -aes128 -out private2.key
 openssl pkey -in private.key -aes256 -out private2.key
 # Or with the AES256-CBC cipher:
 openssl pkey -in private.key -out private2.key -aes-256-cbc
+```
+```bash
+# Converting private keys.
+# Convert a key from PKCS1 to PKCS8 format.
+# Enter passphrase when prompted:
+openssl pkcs8 -topk8 -in private.key -out private2.key
+# Convert a key from PKCS1 to PKCS8 format and do not encrypt:
+openssl pkcs8 -topk8 -nocrypt -in private.key -out private2.key
 ```
 ```bash
 # Decrypt a private Key:

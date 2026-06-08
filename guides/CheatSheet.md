@@ -294,6 +294,29 @@ G
 
 ## <ins>OS Management:</ins>
 
+### sysctl
+
+> ℹ️ **Notes:** 
+> - Commands are only runtime and will not persist reboots.
+> - Some parameters require elevation, especially writes.
+
+```bash
+# Print all non-deprecated kernel parameters and their values:
+sysctl --all
+# Print all non-deprecated kernel parameter names only:
+sysctl --all --names
+# Print a specific kernel parameter:
+sysctl <variable>
+```
+```bash
+# Change a kernel parameter:
+sysctl --write <variable=value>
+```
+```bash
+# Load and write kernel parameters from configuration files:
+sysctl --system
+```
+
 ### userdbctl
 
 > ℹ️ **Note:** Requires systemd.

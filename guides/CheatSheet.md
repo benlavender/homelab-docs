@@ -5044,6 +5044,12 @@ docker ps --all --size
 docker rm <name>
 # Stop a container:
 docker stop <containerID | name>
+# View container logs:
+docker logs <containerID | name>
+# Follow container logs:
+docker logs --follow <containerID | name>
+# View container logs with timestamps:
+docker logs --timestamps <containerID | name>
 # Copy files and directories between containers.
 # Copy files and directories from local host to a container:
 docker cp <src_path> <containerID | name:dst_path>

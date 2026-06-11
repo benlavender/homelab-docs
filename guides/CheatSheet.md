@@ -5063,7 +5063,7 @@ docker image inspect <name>
 # View in JSON format:
 docker image inspect <name> --format json
 # List all dangling images:
-docker image ls --filter=unused=trueA
+docker image ls --filter=unused=true
 # Show detailed information on an existing container:
 docker inspect <name>
 ```

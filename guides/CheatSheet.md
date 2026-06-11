@@ -2928,6 +2928,45 @@ v4l2-ctl --device <device> --all
 v4l2-ctl --device <device> --list-ctrls
 ```
 
+### ddcutil (DDC/CI) / Monitor Control Command Set:
+
+> ℹ️ **Note:** Usually communication to a monitor is done via the I2C bus but can also use USB.
+
+```bash
+# Describe all VCP feature codes:
+ddcutil vcpinfo
+# Describe a specific VCP feature code:
+ddcutil vcpinfo <VCP code>
+# Describe specific ddcutil feature subsets if available, such as WINDOW:
+ddcutil vcpinfo <name>
+```
+```bash
+# Show connected monitors that provide a Virtual Control Panel:
+ddcutil detect
+```
+```bash
+# Show monitors capabilities:
+ddcutil capabilities
+```
+```bash
+# Collect verbose display information:
+ddcutil interrogate
+```
+```bash
+# If no monitor is given then the first detected is used.
+# Use --display <#> or --bus <#> or --sn <sn> to select displays.
+# Get all VCP feature values:
+ddcutil getvcp all
+# Get a specifc VCP feature value:
+ddcutil getvcp <VCP code>
+```
+```bash
+# If no monitor is given then the first detected is used.
+# Use --display <#> or --bus <#> or --sn <sn> to select displays.
+# Set a VCP feature value:
+ddcutil setvcp <VCP code> <value>
+```
+
 ### Exchange On-Premise:
 
 ```powershell

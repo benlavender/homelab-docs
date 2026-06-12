@@ -1000,6 +1000,10 @@ paccache -rk1
 pacman -Q <packagename>
 # Query installed package with info:
 pacman -Qi <packagename>
+# Query installed packages outside of pacman databases, such as the AUR:
+pacman -Qm
+# Query installed packages in the pacman databases only:
+pacman -Qn
 # Query list of files installed within a package:
 pacman -Ql <packagename>
 ```

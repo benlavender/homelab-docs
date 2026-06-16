@@ -48,6 +48,10 @@ By default `NetworkManager` uses its own DHCP, likely based on `n-dhcp4` but it 
 
 At default `NetworkManager` updates `/etc/resolv.conf` with the nameservers provided by the connections. There is no cache unless another library is used.
 
+## MDNS:
+
+Multicast DNS is supported by the way of the `systemd-resolve` plugin only. Both registering and or resolving `.local` names is supported when configured. 
+
 ## Example configuration files:
 
 > ℹ️ **Note:** Ensure to reload NetworkManager after making configuration changes.

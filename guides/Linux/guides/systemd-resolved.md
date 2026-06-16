@@ -155,4 +155,4 @@ ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf
 systemctl restart systemd-resolved
 ```
 
-4. The file `/etc/resolv.conf` is used directly by `systemd-resolved`. This file can be updated by other applications and packages. If this file is empty then `systemd-resolved` will use its own settings, depening on its configuration. This mode will be used if no symlinks are detected as above.
+4. The file `/etc/resolv.conf` is used directly by `systemd-resolved`. This file can be updated by other applications and packages. If this file is empty then `systemd-resolved` will use its own settings, depending on its configuration. This mode will be used if no symlinks are detected as above.

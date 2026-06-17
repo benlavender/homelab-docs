@@ -494,6 +494,44 @@ locale-gen
 localectl set-locale LANG=en_GB.UTF-8
 ```
 
+### getent / Name Service Switch (glibc):
+
+```bash
+# Use a different service for a database, such as files with the ahosts database, for overriding nsswitch.conf ordering:
+getent <database> --service <service>
+```
+```bash
+# Query results from the hosts database.
+# Query all results possible:
+getent ahosts
+# Query for a specific name to IP mapping:
+getent ahosts <name | fqdn | ip.addr>
+```
+```bash
+# Query results from the hosts database but only for IPv4 mappings.
+# Query for a specific name to IP mapping:
+getent ahostsv4 <name | fqdn | ip.addr>
+```
+```bash
+# Query results from the hosts database but only for IPv6 mappings.
+# Query for a specific name to IP mapping:
+getent ahostsv6 <name | fqdn | ip.addr>
+```
+```bash
+# Query results from the users database.
+# Query all results possible:
+getent passwd
+# Query for a specific user:
+getent passwd <user | id>
+```
+```bash
+# Query results from the group database.
+# Query all results possible:
+getent group
+# Query for a specific group:
+getent group <name>
+```
+
 ### Bootloaders and boot managers:
 
 #### efibootmgr:
@@ -1598,6 +1636,10 @@ sudo timedatectl set-ntp <true|false>
 #### netfilter:
 
 Front-ends to the netfilter framework.
+
+##### nftables:
+
+
 
 ##### firewalld:
 

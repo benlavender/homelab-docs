@@ -1286,6 +1286,21 @@ dd if=<file | dev> of=<file | dev> conv=fsync
 dd if=<file | dev> of=<file | dev> bs=<#>
 ```
 ```bash
+# Creating files with dd.
+# Use status=progress to print progress.
+# File sizes of shorthand K, M, G, T etc are IEC whereas kb, MB, GB, TB are SI.
+# Create a file using dd and zero the blocks:
+dd if=/dev/zero of=<file> bs=<#> count=<# of blocks>
+# Create a file of 1024B using dd and zero the blocks:
+dd if=/dev/zero of=<file> bs=1 count=1024
+# Create a file of 100M using dd and zero the blocks:
+dd if=/dev/zero of=<file> bs=1M count=100
+# Create a file of 1G using dd and zero the blocks:
+dd if=/dev/zero of=<file> bs=1G count=1
+# Create a file of 1GB using dd and zero the blocks:
+dd if=/dev/zero of=<file> bs=1GB count=1
+```
+```bash
 # Wiping block devices with dd.
 # Use status=progress to print progress.
 # Wipe an entire device with dd:

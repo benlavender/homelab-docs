@@ -2166,6 +2166,120 @@ networkctl renew <link|idx>
 
 ### Storage:
 
+#### LVM / Logical Volume Manager:
+
+> ℹ️ **Note:** Commands require elevation.
+
+```bash
+# Show general information about configured lvm storage:
+lvm fullreport
+```
+```bash
+# Print supported block device types:
+lvm devtypes
+```
+```bash
+# Working with physical volumes.
+# List devices that may be used as PVs:
+lvm lvmdiskscan
+# List existing PVs:
+lvm pvscan
+# Display basic information on existing PVs:
+lvm pvs
+# Show detailed information on existing PVs:
+lvm pvdisplay
+# Display basic information about a specific PV:
+lvm pvs <name>
+# Show detailed information about a specific PV:
+lvm pvdisplay <name>
+# Create a new PV from an existing block device:
+lvm pvcreate <dev>
+# Increase the size of a PV.
+# This needs to be done after modifying the block device:
+lvm pvresize <name>
+# Decrease the size of a PV.
+# This needs to be done before modifying the block device:
+lvm pvresize --setphysicalvolumesize <size>
+# Remove an existing PV:
+lvm pvremove <name>
+```
+```bash
+# Working with volume groups.
+# Block devices not initialised as a PV will automatically be confgured when creating a VG.
+# Display basic information on all VGs:
+lvm vgs
+# Display detailed information on all VGs:
+lvm vgdisplay
+# Display basic information on a specific VG:
+lvm vgs <name>
+# Display detailed information on a specific VG:
+lvm vgdisplay <name>
+# Create a new volume group with a custom name using existing PV(s):
+lvm vgcreate <name> <dev> <dev> <dev>
+# Add a new PV(s) as a member to an existing VG:
+lvm vgextend <vg_name> <dev> <dev> <dev>
+# Remove a PV member from an existing VG:
+lvm vgreduce <vg_name> <dev>
+# Remove any PVs marked as missing in an existing VG:
+lvm vgreduce <vg_name> --removemissing
+# Remove an existing volume group (use vgreduce first if possible):
+lvm vgremove <name>
+```
+```bash
+# Working with logical volumes.
+# List existing LVs:
+lvm lvscan
+# Display basic information on all LVs:
+lvm lvs
+# Display detailed information on all LVs:
+lvm lvdisplay
+# Display basic information on a specific LV:
+lvm lvs <lv_path>
+# Display detailed information on a specific LV::
+lvm lvdisplay <lv_path>
+# Rename an existing LV:
+lvm lvrename <lv_path> <new_name>
+# Remove an existing LV:
+lvm lvremove <lv_path>
+```
+```bash
+# Working with standard linear logical volumes.
+# Use --name <string> to name a LV otherwise a system name will be generated.
+# Sizes for LVs can be of KiB, MiB, GiB, TiB or SI prefix K, M, G, T etc or a specifc extent.
+# If a size is less than a single extent is given it will upsize dynamically.
+# Create a linear LV with a specific size:
+lvm lvcreate --size <#> <vg_name>
+# Create a linear LV with a specific size in logical extents:
+lvm lvcreate --extents <#> <vg_name>
+# Create a linear LV with a specific percent of free remaining space of the logical extents:
+lvm lvcreate --extents <#%FREE> <vg_name>
+# Create a linear LV with a specific percent of all the logical extents:
+lvm lvcreate --extents <#%VG> <vg_name>
+```
+```bash
+# Working with LVM RAID type logical volumes.
+# Use --name <string> to name a LV otherwise a system name will be generated.
+# Sizes for LVs can be of KiB, MiB, GiB, TiB or SI prefix K, M, G, T etc or a specifc extent.
+# If a size is less than a single extent is given it will upsize dynamically.
+# Create a RAID0 (stripe) LV with the default 64KiB stripe size and a specific stripe count (use one stripe per PV).
+# A minimum of two PVs are required and beware if a single PV is lost then the whole array is defunct:
+lvm lvcreate --type raid0 --stripes <#> --size <#> <vg_name>
+# Create a RAID1 (mirror) LV with a specific number of mirrors and of a specific size.
+# Enough PVs need to be added to support the # of mirrors:
+lvm lvcreate --type raid1 --mirrors <#> --size <#> <vg_name>
+```
+```bash
+# Working with the legacy mirror type logical volumes.
+# Use --name <string> to name a LV otherwise a system name will be generated.
+# Sizes for LVs can be of KiB, MiB, GiB, TiB or SI prefix K, M, G, T etc or a specifc extent.
+# If a size is less than a single extent is given it will upsize dynamically.
+# Create a mirror LV with a specific number of mirrors and of a specific size.
+# Enough PVs need to be added to support the # of mirror images plus the disk log (usually one extra):
+lvm lvcreate --type mirror --mirrors <#> --size <#> <vg_name>
+# Create a mirror LV with a specific number of mirrors and of a specific size where the mirror log is memory backed.
+# Enough PVs need to be added to support the # of mirrors:
+lvm lvcreate --type mirror --mirrors <#> --mirrorlog core --size <#> <vg_name> 
+```
 ```bat
 REM Show active ISCSI sessions:
 iscsicli listtargetportals

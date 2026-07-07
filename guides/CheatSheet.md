@@ -2256,7 +2256,6 @@ lvm lvcreate --extents <#%FREE> <vg_name>
 # Create a linear LV with a specific percent of all the logical extents:
 lvm lvcreate --extents <#%VG> <vg_name>
 ```
-
 ```bash
 # Working with LVM RAID type logical volumes.
 # Use --name <string> to name a LV otherwise a system name will be generated.
@@ -2269,8 +2268,6 @@ lvm lvcreate --type raid0 --stripes <#> --size <#> <vg_name>
 # Enough PVs need to be added to support the # of mirrors:
 lvm lvcreate --type raid1 --mirrors <#> --size <#> <vg_name>
 ```
-
-
 ```bash
 # Working with the legacy mirror type logical volumes.
 # Use --name <string> to name a LV otherwise a system name will be generated.
@@ -2283,7 +2280,6 @@ lvm lvcreate --type mirror --mirrors <#> --size <#> <vg_name>
 # Enough PVs need to be added to support the # of mirrors:
 lvm lvcreate --type mirror --mirrors <#> --mirrorlog core --size <#> <vg_name> 
 ```
-
 ```bat
 REM Show active ISCSI sessions:
 iscsicli listtargetportals

@@ -294,6 +294,29 @@ G
 
 ## <ins>OS Management:</ins>
 
+### sysctl
+
+> ℹ️ **Notes:** 
+> - Commands are only runtime and will not persist reboots.
+> - Some parameters require elevation, especially writes.
+
+```bash
+# Print all non-deprecated kernel parameters and their values:
+sysctl --all
+# Print all non-deprecated kernel parameter names only:
+sysctl --all --names
+# Print a specific kernel parameter:
+sysctl <variable>
+```
+```bash
+# Change a kernel parameter:
+sysctl --write <variable=value>
+```
+```bash
+# Load and write kernel parameters from configuration files:
+sysctl --system
+```
+
 ### userdbctl
 
 > ℹ️ **Note:** Requires systemd.
@@ -469,6 +492,44 @@ localectl status
 # Uncomment the line from /etc/locale.gen, i.e en_GB.UTF-8 UTF-8
 locale-gen
 localectl set-locale LANG=en_GB.UTF-8
+```
+
+### getent / Name Service Switch (glibc):
+
+```bash
+# Use a different service for a database, such as files with the ahosts database, for overriding nsswitch.conf ordering:
+getent <database> --service <service>
+```
+```bash
+# Query results from the hosts database.
+# Query all results possible:
+getent ahosts
+# Query for a specific name to IP mapping:
+getent ahosts <name | fqdn | ip.addr>
+```
+```bash
+# Query results from the hosts database but only for IPv4 mappings.
+# Query for a specific name to IP mapping:
+getent ahostsv4 <name | fqdn | ip.addr>
+```
+```bash
+# Query results from the hosts database but only for IPv6 mappings.
+# Query for a specific name to IP mapping:
+getent ahostsv6 <name | fqdn | ip.addr>
+```
+```bash
+# Query results from the users database.
+# Query all results possible:
+getent passwd
+# Query for a specific user:
+getent passwd <user | id>
+```
+```bash
+# Query results from the group database.
+# Query all results possible:
+getent group
+# Query for a specific group:
+getent group <name>
 ```
 
 ### Bootloaders and boot managers:
@@ -977,6 +1038,10 @@ paccache -rk1
 pacman -Q <packagename>
 # Query installed package with info:
 pacman -Qi <packagename>
+# Query installed packages outside of pacman databases, such as the AUR:
+pacman -Qm
+# Query installed packages in the pacman databases only:
+pacman -Qn
 # Query list of files installed within a package:
 pacman -Ql <packagename>
 ```
@@ -1219,6 +1284,21 @@ dd if=<file | dev> of=<file | dev> conv=fsync
 # Copy either a file or device and change the input/output block size in bytes or k or M (default is 512).
 # 512 bytes is typical of spindle disks, 4k is typical of SSDs so the default is somewhat out of date. This can be the physical block size of the device like 4096:
 dd if=<file | dev> of=<file | dev> bs=<#>
+```
+```bash
+# Creating files with dd.
+# Use status=progress to print progress.
+# File sizes of shorthand K, M, G, T etc are IEC whereas kb, MB, GB, TB are SI.
+# Create a file using dd and zero the blocks:
+dd if=/dev/zero of=<file> bs=<#> count=<# of blocks>
+# Create a file of 1024B using dd and zero the blocks:
+dd if=/dev/zero of=<file> bs=1 count=1024
+# Create a file of 100M using dd and zero the blocks:
+dd if=/dev/zero of=<file> bs=1M count=100
+# Create a file of 1G using dd and zero the blocks:
+dd if=/dev/zero of=<file> bs=1G count=1
+# Create a file of 1GB using dd and zero the blocks:
+dd if=/dev/zero of=<file> bs=1GB count=1
 ```
 ```bash
 # Wiping block devices with dd.
@@ -1571,6 +1651,10 @@ sudo timedatectl set-ntp <true|false>
 #### netfilter:
 
 Front-ends to the netfilter framework.
+
+##### nftables:
+
+
 
 ##### firewalld:
 
@@ -3023,6 +3107,45 @@ v4l2-ctl --device <device> --all
 v4l2-ctl --device <device> --list-ctrls
 ```
 
+### ddcutil (DDC/CI) / Monitor Control Command Set:
+
+> ℹ️ **Note:** Usually communication to a monitor is done via the I2C bus but can also use USB.
+
+```bash
+# Describe all VCP feature codes:
+ddcutil vcpinfo
+# Describe a specific VCP feature code:
+ddcutil vcpinfo <VCP code>
+# Describe specific ddcutil feature subsets if available, such as WINDOW:
+ddcutil vcpinfo <name>
+```
+```bash
+# Show connected monitors that provide a Virtual Control Panel:
+ddcutil detect
+```
+```bash
+# Show monitors capabilities:
+ddcutil capabilities
+```
+```bash
+# Collect verbose display information:
+ddcutil interrogate
+```
+```bash
+# If no monitor is given then the first detected is used.
+# Use --display <#> or --bus <#> or --sn <sn> to select displays.
+# Get all VCP feature values:
+ddcutil getvcp all
+# Get a specifc VCP feature value:
+ddcutil getvcp <VCP code>
+```
+```bash
+# If no monitor is given then the first detected is used.
+# Use --display <#> or --bus <#> or --sn <sn> to select displays.
+# Set a VCP feature value:
+ddcutil setvcp <VCP code> <value>
+```
+
 ### Exchange On-Premise:
 
 ```powershell
@@ -3376,22 +3499,29 @@ openssl req -in request.csr -noout -subject
 ```
 ```bash
 # Working with public and private keys in OpenSSL.
-# Read a private key file (enter passphrase if required):
+# Read an RSA private key file (enter passphrase if required):
 openssl rsa -in private.key -noout -text
-# or:
+# Read a private key file (enter passphrase if required):
 openssl pkey -in privkey.key -text
+# Read a PKCS1 private key file and print as this format (enter passphrase if required):
+openssl pkey -in privkey.key -text -traditional
 # Read a public key:
 openssl pkey -in pubkey.key -pubin -text
 ```
 ```bash
-# Generate a new private key (RSA 1024):
+# Generate a new RSA 2048 private key in PKCS8 format:
 openssl genpkey -algorithm rsa -out private.key
-# Generate a new private key (RSA 4096):
+# Generate a new private key (RSA 4096) in PKCS8 format:
 openssl genpkey -algorithm rsa -out private.key -pkeyopt rsa_keygen_bits:4096
-# Generate an encrypted private key with a Triple-DES passphrase:
+# Generate an RSA 2048 encrypted private key with a Triple-DES passphrase in PKCS8 format:
 openssl genpkey -algorithm rsa -out private.key -pkeyopt rsa_keygen_bits:2048 -des3
-# Generate an encrypted private key with a AES256 passphrase (generally preferred):
+# Generate an RSA 2048 encrypted private key with a AES256 passphrase (generally preferred) in PKCS8 format:
 openssl genpkey -algorithm rsa -out private.key -pkeyopt rsa_keygen_bits:2048 -aes256
+```
+```bash 
+# Generate a new RSA 2048 private key in PKCS1 format.
+# This is deprecated usually in favour of PKCS8 format methods:
+openssl genrsa -traditional -out private.key
 ```
 ```bash
 # Generate a private / public key pair using an existing key:
@@ -3406,6 +3536,14 @@ openssl pkey -in private.key -aes128 -out private2.key
 openssl pkey -in private.key -aes256 -out private2.key
 # Or with the AES256-CBC cipher:
 openssl pkey -in private.key -out private2.key -aes-256-cbc
+```
+```bash
+# Converting private keys.
+# Convert a key from PKCS1 to PKCS8 format.
+# Enter passphrase when prompted:
+openssl pkcs8 -topk8 -in private.key -out private2.key
+# Convert a key from PKCS1 to PKCS8 format and do not encrypt:
+openssl pkcs8 -topk8 -nocrypt -in private.key -out private2.key
 ```
 ```bash
 # Decrypt a private Key:
@@ -5104,7 +5242,7 @@ docker image inspect <name>
 # View in JSON format:
 docker image inspect <name> --format json
 # List all dangling images:
-docker image ls --filter=unused=trueA
+docker image ls --filter=unused=true
 # Show detailed information on an existing container:
 docker inspect <name>
 ```
@@ -5124,6 +5262,12 @@ docker ps --all --size
 docker rm <name>
 # Stop a container:
 docker stop <containerID | name>
+# View container logs:
+docker logs <containerID | name>
+# Follow container logs:
+docker logs --follow <containerID | name>
+# View container logs with timestamps:
+docker logs --timestamps <containerID | name>
 # Copy files and directories between containers.
 # Copy files and directories from local host to a container:
 docker cp <src_path> <containerID | name:dst_path>

@@ -1652,10 +1652,6 @@ sudo timedatectl set-ntp <true|false>
 
 Front-ends to the netfilter framework.
 
-##### nftables:
-
-
-
 ##### firewalld:
 
 > ℹ️ **Notes:**

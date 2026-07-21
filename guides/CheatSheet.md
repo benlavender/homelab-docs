@@ -3144,6 +3144,10 @@ ddcutil setvcp <VCP code> <value>
 # Configure remotes interactively.
 # Follow the interactive guide:
 rclone config
+# Show config file location:
+rclone config file
+# List configured remotes:
+rclone listremotes
 ```
 ```bash
 # List remote recursively from base directory:

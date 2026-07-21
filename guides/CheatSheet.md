@@ -3138,6 +3138,74 @@ ddcutil getvcp <VCP code>
 ddcutil setvcp <VCP code> <value>
 ```
 
+### rclone
+
+```bash
+# Configure remotes interactively.
+# Follow the interactive guide:
+rclone config
+```
+```bash
+# List remote recursively from base directory:
+rclone ls <remote:>
+# List remote path recursively:
+rclone ls <remote:path>
+# List only files from remote (use -R to recurse):
+rclone lsf <remote:path>
+# List only directories from remote (use -R to recurse):
+rclone lsf <remote:path>
+# List local directory recursively:spo
+rclone ls <dir>
+# List local directory recursively and recurse links:
+rclone ls --links <dir>
+```
+```bash
+# List size of remote:
+rclone size <remote:>
+# List size of path or file:
+rclone size <remote:path>
+```
+```bash
+# Use --dry-run if required.
+# Move a path from a remote to local:
+rclone move <remote:path> <dir>
+# Move a path from one remote to another:
+rclone move <remote:path> <remote:path>
+```
+```bash
+# Use --dry-run if required.
+# Remove a path from a remote:
+rclone delete <remote:path>
+# Remove all contents within a directory along with the parent:
+rclone purge <remote:path>
+```
+```bash
+# Confirm two remotes are exactly the same:
+rclone check <remote:> <remote:>
+# Confirm two remotes are exactly the same with a quicker size-only check:
+rclone check --size-only <remote:> <remote:>
+# Confirm the destination remote is at least the same as the source (ignoring any extra content in the destination):
+rclone check --one-way <src_remote:> <dst_remote:>
+```
+```bash
+# Use --dry-run if required.
+# Copy the source remote to the destination skipping any identical files:
+rclone copy <src_remote:> <dst_remote:>
+# Copy the source remote to the destination skipping newer files on the destination:
+rclone copy --update <src_remote:> <dst_remote:>
+# Copy the source remote to the destination skipping any identical files with a quicker size-only check:
+rclone copy --size-only <src_remote:> <dst_remote:>
+# Ensure the destination remote is identical to the source.
+# Warning: Non-identical content in the destination will be deleted:
+rclone sync <src_remote:> <dst_remote:>
+# Ensure the destination remote is identical to the source with a quicker size-only check.
+# Warning: Non-identical content in the destination will be deleted:
+rclone sync --size-only <src_remote:> <dst_remote:>
+# Ensure the destination remote is identical to the source where a suffix is added to any changed files without removing the previous.
+# Warning: Non-identical content in the destination will be deleted:
+rclone sync --suffix <string> --suffix-keep-extension <src_remote:> <dst_remote:>
+```
+
 ### Exchange On-Premise:
 
 ```powershell

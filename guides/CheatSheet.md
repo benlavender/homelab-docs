@@ -1157,6 +1157,38 @@ Get-WinEvent -ListLog * -EA SilentlyContinue | ForEach-Object -Process {Get-WinE
 Get-EventLog -ComputerName <host> <logname> | select timegenerated,message | Select-Sring <string>
 ```
 
+### Filesystems:
+
+#### e2fsprogs / Ext 2/3/4:
+
+> ℹ️ **Note:** Check commands require elevation.
+
+```bash
+# Print only superblock information:
+dumpe2fs -h <dev | LABEL | UUID>
+# Print superblock and blocks group information:
+dumpe2fs <dev | LABEL | UUID>
+# Print only reserved bad blocks:
+dumpe2fs -b <dev | LABEL | UUID>
+```
+
+```bash
+# Create a new ext filesystem:
+
+```
+
+```bash
+# Warning: Ensure the filesystem being checked is not mounted.
+# Check a filesystem and report only:
+e2fsck -n <dev>
+# Check a filesystem regardless if clean and report only:
+e2fsck -nf <dev>
+# Check an unclean filesystem and fix issues:
+e2fsck -p <dev>
+# Check a filesystem regardless if clean and fix issues:
+e2fsck -np <dev>
+```
+
 ### Files and Directories:
 
 ```bash
@@ -1399,10 +1431,6 @@ losetup --find <filename>
 # Disassociate a file and its device:
 losetup --detach <dev>
 ```
-
-#### Filesystems:
-
-##### Ext:
 
 ```bat
 REM Robocopy mirror sync:

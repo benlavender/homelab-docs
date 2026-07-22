@@ -957,6 +957,61 @@ dpkg -i package.deb
 apt-cache rdepends <package>
 ```
 
+#### Flatpak:
+
+> ℹ️ **Note:** All commands are system-wide unless `--user` is specified.
+
+> ℹ️ **Note:** If the user is in `wheel` and **not** on a PTS session then elevation is usually required.
+
+```bash
+# Working with repositories.
+# List installed repositories:
+flatpak remotes
+# Add a new repository:
+flatpak remote-add <custom_name> <URI>
+# Remove a repository:
+flatpak remote-delete <custom_name>
+# List all applications and runtimes in a repository:
+flatpak remote-ls <custom_name>
+```
+```bash
+# Search for applications:
+flatpak search <string>
+# Search for applications and display only a specific field:
+flatpak search spotify --columns=<FIELD>
+```
+```bash
+# Working with flatpak applications and runtimes.
+# Update all applications and runtimes:
+flatpak update
+# Update a specific application or runtime:
+flatpak update <id>
+# List installed applications:
+flatpak list
+# Show information about a runtime or application:
+flatpak remote-info <repo> <ref|id>
+# Run a flatpak application:
+flatpak run <id>
+# Show running flatpak applications:
+flatpak ps
+# Kill a running flatpak application:
+flatpak kill <instance|id>
+```
+```bash
+# Installing and removing flatpak applications and runtimes.
+# Use --noninteractive to skip prompts.
+# Install an application or runtime:
+flatpak install <repo> <ref|id>
+# Install an application or runtime with just the name (may give conflicts):
+flatpak install <name>
+# Remove an application or runtime:
+flatpak uninstall <ref|id>
+```
+```bash
+# Show activity log of flatpak:
+flatpak history
+```
+
 #### Winget:
 
 ```bat
@@ -1345,29 +1400,10 @@ losetup --find <filename>
 losetup --detach <dev>
 ```
 
-#### GNU Stow:
+#### Filesystems:
 
-> ℹ️ **Notes:**
-> - Stow will use the working directory as the stow directory unless changed.
-> - The term `package` refers to the `directory` containing the files to be managed. The stow `directory` must match the target tree for `defaults` to work.
-> - The term `target` refers to the directory where the files will be symlinked from, at default this is the parent directory of the package.
+##### Ext:
 
-```bash
-# Stow a package:
-stow <package>
-# Stow a package with verbose output:
-stow <package> --verbose
-# Stow a package as a dry run only:
-stow <package> --verbose --simulate
-# Stow a package even if the target files exist (files will be overwritten in the stow directory):
-stow <package> --adopt
-# Stow a package but do not merge/un-merge directories with a similar structure:
-stow <package> --no-folding
-# Stow a package with a specific target directory:
-stow <package> --target <target>
-# Stow a package with a specific target directory and a specific stow directory:
-stow <package> --target <target> --dir <directory>
-```
 ```bat
 REM Robocopy mirror sync:
 ROBOCOPY <src> <dst> /MIR /Z /W:5 /R:5
@@ -3027,59 +3063,28 @@ dt <structure*>
 
 ## Applications:
 
-### Flatpak:
+### GNU Stow:
 
-> ℹ️ **Note:** All commands are system-wide unless `--user` is specified.
+> ℹ️ **Notes:**
+> - Stow will use the working directory as the stow directory unless changed.
+> - The term `package` refers to the `directory` containing the files to be managed. The stow `directory` must match the target tree for `defaults` to work.
+> - The term `target` refers to the directory where the files will be symlinked from, at default this is the parent directory of the package.
 
-> ℹ️ **Note:** If the user is in `wheel` and **not** on a PTS session then elevation is usually required.
-
 ```bash
-# Working with repositories.
-# List installed repositories:
-flatpak remotes
-# Add a new repository:
-flatpak remote-add <custom_name> <URI>
-# Remove a repository:
-flatpak remote-delete <custom_name>
-# List all applications and runtimes in a repository:
-flatpak remote-ls <custom_name>
-```
-```bash
-# Search for applications:
-flatpak search <string>
-# Search for applications and display only a specific field:
-flatpak search spotify --columns=<FIELD>
-```
-```bash
-# Working with flatpak applications and runtimes.
-# Update all applications and runtimes:
-flatpak update
-# Update a specific application or runtime:
-flatpak update <id>
-# List installed applications:
-flatpak list
-# Show information about a runtime or application:
-flatpak remote-info <repo> <ref|id>
-# Run a flatpak application:
-flatpak run <id>
-# Show running flatpak applications:
-flatpak ps
-# Kill a running flatpak application:
-flatpak kill <instance|id>
-```
-```bash
-# Installing and removing flatpak applications and runtimes.
-# Use --noninteractive to skip prompts.
-# Install an application or runtime:
-flatpak install <repo> <ref|id>
-# Install an application or runtime with just the name (may give conflicts):
-flatpak install <name>
-# Remove an application or runtime:
-flatpak uninstall <ref|id>
-```
-```bash
-# Show activity log of flatpak:
-flatpak history
+# Stow a package:
+stow <package>
+# Stow a package with verbose output:
+stow <package> --verbose
+# Stow a package as a dry run only:
+stow <package> --verbose --simulate
+# Stow a package even if the target files exist (files will be overwritten in the stow directory):
+stow <package> --adopt
+# Stow a package but do not merge/un-merge directories with a similar structure:
+stow <package> --no-folding
+# Stow a package with a specific target directory:
+stow <package> --target <target>
+# Stow a package with a specific target directory and a specific stow directory:
+stow <package> --target <target> --dir <directory>
 ```
 
 ### video4linux:

@@ -1159,9 +1159,11 @@ Get-EventLog -ComputerName <host> <logname> | select timegenerated,message | Sel
 
 ### Filesystems:
 
-#### e2fsprogs / Ext 2/3/4:
+#### e2fsprogs - Ext 2/3/4:
 
-> ℹ️ **Note:** Check commands require elevation.
+> ℹ️ **Note:** Check and create commands usually require elevation.
+
+> ℹ️ **Note:** Device name is usually the standard way to reference an FS.
 
 ```bash
 # Print only superblock information:
@@ -1171,12 +1173,32 @@ dumpe2fs <dev | LABEL | UUID>
 # Print only reserved bad blocks:
 dumpe2fs -b <dev | LABEL | UUID>
 ```
-
 ```bash
-# Create a new ext filesystem:
-
+# fs-types are either ext2, ext3, or ext4 (default is ext2).
+# Create a new ext filesystem
+mke2fs -t <fs-type> <dev | file>
+# or:
+mkfs.ext<#> <dev | file>
+# Create a new ext filesystem with a label:
+mke2fs -t <fs-type> -L <string> <dev | file>
+# Create a new ext filesystem and overwrite the existing one.
+# Warning: Data loss will occur:
+mke2fs -t <fs-type> -F <dev | file>
 ```
-
+```bash
+# Print tuneable superblock information (same as dumpe2fs -h):
+tune2fs -l <dev | file>
+# Set a volume label to an existing ext filesystem:
+tune2fs -L <string> <dev | file>
+# Set extended options for an existing ext filesystem.
+# Available settings available via tune2fs(8):
+tune2fs -E <setting | setting=value> <dev | file>
+# Set features for an existing ext filesystem.
+# Available settings available via tune2fs(8):
+tune2fs -O <setting> <dev | file>
+# Clear a feature for an existing ext filesystem (if supported).
+tune2fs -O ^<setting> <dev | file>
+```
 ```bash
 # Warning: Ensure the filesystem being checked is not mounted.
 # Check a filesystem and report only:
@@ -1547,14 +1569,6 @@ umask
 ```bash
 # Displays both the standard rwx/ugo permissions as well as any ACLs if applied:
 getfacl file
-```
-```bash
-# Displays ext4 information on this partition. This should be displayed under Default mount options (Default mount options:    user_xattr acl).
-tune2fs -l /dev/sda1
-```
-```bash
-# Displays ext4 information on this partition (SDCARD):
-tune2fs -l /dev/mmcblk0p2 
 ```
 ```bash
 # Remounts the /home partition:
@@ -2369,10 +2383,6 @@ t
 n
 # Write changes to the disk
 w
-```
-```bash
-# Format a partition with the ext4 filesystem:
-mkfs.ext4 </dev/partition>
 ```
 ```bash
 # Format a partition with the FAT32 filesystem

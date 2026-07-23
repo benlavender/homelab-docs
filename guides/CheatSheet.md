@@ -957,6 +957,61 @@ dpkg -i package.deb
 apt-cache rdepends <package>
 ```
 
+#### Flatpak:
+
+> ℹ️ **Note:** All commands are system-wide unless `--user` is specified.
+
+> ℹ️ **Note:** If the user is in `wheel` and **not** on a PTS session then elevation is usually required.
+
+```bash
+# Working with repositories.
+# List installed repositories:
+flatpak remotes
+# Add a new repository:
+flatpak remote-add <custom_name> <URI>
+# Remove a repository:
+flatpak remote-delete <custom_name>
+# List all applications and runtimes in a repository:
+flatpak remote-ls <custom_name>
+```
+```bash
+# Search for applications:
+flatpak search <string>
+# Search for applications and display only a specific field:
+flatpak search spotify --columns=<FIELD>
+```
+```bash
+# Working with flatpak applications and runtimes.
+# Update all applications and runtimes:
+flatpak update
+# Update a specific application or runtime:
+flatpak update <id>
+# List installed applications:
+flatpak list
+# Show information about a runtime or application:
+flatpak remote-info <repo> <ref|id>
+# Run a flatpak application:
+flatpak run <id>
+# Show running flatpak applications:
+flatpak ps
+# Kill a running flatpak application:
+flatpak kill <instance|id>
+```
+```bash
+# Installing and removing flatpak applications and runtimes.
+# Use --noninteractive to skip prompts.
+# Install an application or runtime:
+flatpak install <repo> <ref|id>
+# Install an application or runtime with just the name (may give conflicts):
+flatpak install <name>
+# Remove an application or runtime:
+flatpak uninstall <ref|id>
+```
+```bash
+# Show activity log of flatpak:
+flatpak history
+```
+
 #### Winget:
 
 ```bat
@@ -1100,6 +1155,60 @@ Get-WinEvent -ListLog * -EA SilentlyContinue | ForEach-Object -Process {Get-WinE
 ```powershell
 # Using Get-EventLog, Get-EventLog uses a Win32 API that is deprecated. The results may not be accurate. Use the Get-WinEvent cmdlet instead.
 Get-EventLog -ComputerName <host> <logname> | select timegenerated,message | Select-Sring <string>
+```
+
+### Filesystems:
+
+#### e2fsprogs - Ext 2/3/4:
+
+> ℹ️ **Note:** Check and create commands usually require elevation.
+
+> ℹ️ **Note:** Device name is usually the standard way to reference an FS.
+
+```bash
+# Print only superblock information:
+dumpe2fs -h <dev | LABEL | UUID>
+# Print superblock and blocks group information:
+dumpe2fs <dev | LABEL | UUID>
+# Print only reserved bad blocks:
+dumpe2fs -b <dev | LABEL | UUID>
+```
+```bash
+# fs-types are either ext2, ext3, or ext4 (default is ext2).
+# Create a new ext filesystem
+mke2fs -t <fs-type> <dev | file>
+# or:
+mkfs.ext<#> <dev | file>
+# Create a new ext filesystem with a label:
+mke2fs -t <fs-type> -L <string> <dev | file>
+# Create a new ext filesystem and overwrite the existing one.
+# Warning: Data loss will occur:
+mke2fs -t <fs-type> -F <dev | file>
+```
+```bash
+# Print tuneable superblock information (same as dumpe2fs -h):
+tune2fs -l <dev | file>
+# Set a volume label to an existing ext filesystem:
+tune2fs -L <string> <dev | file>
+# Set extended options for an existing ext filesystem.
+# Available settings available via tune2fs(8):
+tune2fs -E <setting | setting=value> <dev | file>
+# Set features for an existing ext filesystem.
+# Available settings available via tune2fs(8):
+tune2fs -O <setting> <dev | file>
+# Clear a feature for an existing ext filesystem (if supported).
+tune2fs -O ^<setting> <dev | file>
+```
+```bash
+# Warning: Ensure the filesystem being checked is not mounted.
+# Check a filesystem and report only:
+e2fsck -n <dev>
+# Check a filesystem regardless if clean and report only:
+e2fsck -nf <dev>
+# Check an unclean filesystem and fix issues:
+e2fsck -p <dev>
+# Check a filesystem regardless if clean and fix issues:
+e2fsck -np <dev>
 ```
 
 ### Files and Directories:
@@ -1345,29 +1454,6 @@ losetup --find <filename>
 losetup --detach <dev>
 ```
 
-#### GNU Stow:
-
-> ℹ️ **Notes:**
-> - Stow will use the working directory as the stow directory unless changed.
-> - The term `package` refers to the `directory` containing the files to be managed. The stow `directory` must match the target tree for `defaults` to work.
-> - The term `target` refers to the directory where the files will be symlinked from, at default this is the parent directory of the package.
-
-```bash
-# Stow a package:
-stow <package>
-# Stow a package with verbose output:
-stow <package> --verbose
-# Stow a package as a dry run only:
-stow <package> --verbose --simulate
-# Stow a package even if the target files exist (files will be overwritten in the stow directory):
-stow <package> --adopt
-# Stow a package but do not merge/un-merge directories with a similar structure:
-stow <package> --no-folding
-# Stow a package with a specific target directory:
-stow <package> --target <target>
-# Stow a package with a specific target directory and a specific stow directory:
-stow <package> --target <target> --dir <directory>
-```
 ```bat
 REM Robocopy mirror sync:
 ROBOCOPY <src> <dst> /MIR /Z /W:5 /R:5
@@ -1483,14 +1569,6 @@ umask
 ```bash
 # Displays both the standard rwx/ugo permissions as well as any ACLs if applied:
 getfacl file
-```
-```bash
-# Displays ext4 information on this partition. This should be displayed under Default mount options (Default mount options:    user_xattr acl).
-tune2fs -l /dev/sda1
-```
-```bash
-# Displays ext4 information on this partition (SDCARD):
-tune2fs -l /dev/mmcblk0p2 
 ```
 ```bash
 # Remounts the /home partition:
@@ -2307,10 +2385,6 @@ n
 w
 ```
 ```bash
-# Format a partition with the ext4 filesystem:
-mkfs.ext4 </dev/partition>
-```
-```bash
 # Format a partition with the FAT32 filesystem
 mkfs.fat -F32 </dev/partition>
 ```
@@ -3027,59 +3101,28 @@ dt <structure*>
 
 ## Applications:
 
-### Flatpak:
+### GNU Stow:
 
-> ℹ️ **Note:** All commands are system-wide unless `--user` is specified.
+> ℹ️ **Notes:**
+> - Stow will use the working directory as the stow directory unless changed.
+> - The term `package` refers to the `directory` containing the files to be managed. The stow `directory` must match the target tree for `defaults` to work.
+> - The term `target` refers to the directory where the files will be symlinked from, at default this is the parent directory of the package.
 
-> ℹ️ **Note:** If the user is in `wheel` and **not** on a PTS session then elevation is usually required.
-
 ```bash
-# Working with repositories.
-# List installed repositories:
-flatpak remotes
-# Add a new repository:
-flatpak remote-add <custom_name> <URI>
-# Remove a repository:
-flatpak remote-delete <custom_name>
-# List all applications and runtimes in a repository:
-flatpak remote-ls <custom_name>
-```
-```bash
-# Search for applications:
-flatpak search <string>
-# Search for applications and display only a specific field:
-flatpak search spotify --columns=<FIELD>
-```
-```bash
-# Working with flatpak applications and runtimes.
-# Update all applications and runtimes:
-flatpak update
-# Update a specific application or runtime:
-flatpak update <id>
-# List installed applications:
-flatpak list
-# Show information about a runtime or application:
-flatpak remote-info <repo> <ref|id>
-# Run a flatpak application:
-flatpak run <id>
-# Show running flatpak applications:
-flatpak ps
-# Kill a running flatpak application:
-flatpak kill <instance|id>
-```
-```bash
-# Installing and removing flatpak applications and runtimes.
-# Use --noninteractive to skip prompts.
-# Install an application or runtime:
-flatpak install <repo> <ref|id>
-# Install an application or runtime with just the name (may give conflicts):
-flatpak install <name>
-# Remove an application or runtime:
-flatpak uninstall <ref|id>
-```
-```bash
-# Show activity log of flatpak:
-flatpak history
+# Stow a package:
+stow <package>
+# Stow a package with verbose output:
+stow <package> --verbose
+# Stow a package as a dry run only:
+stow <package> --verbose --simulate
+# Stow a package even if the target files exist (files will be overwritten in the stow directory):
+stow <package> --adopt
+# Stow a package but do not merge/un-merge directories with a similar structure:
+stow <package> --no-folding
+# Stow a package with a specific target directory:
+stow <package> --target <target>
+# Stow a package with a specific target directory and a specific stow directory:
+stow <package> --target <target> --dir <directory>
 ```
 
 ### video4linux:

@@ -1213,6 +1213,8 @@ e2fsck -np <dev>
 
 #### exfatprogs - extFAT:
 
+> ℹ️ **Note:** Commands usually require elevation.
+
 > ℹ️ **Note:** Device name is usually the standard way to reference an FS.
 
 ```bash
@@ -1233,6 +1235,10 @@ mkfs.exfat -f <dev | file>
 mkfs.exfat -P <auto | none | mbr | gpt> <dev | file>
 # Create a new exFAT filesystem and verify written metadata after creation:
 mkfs.exfat -C <dev | file>
+```
+```bash
+# Set a volume label to an existing extFAT filesystem:
+tune.exfat -L <string> <dev | file>
 ```
 
 ### Files and Directories:

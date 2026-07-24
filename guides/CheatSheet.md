@@ -1,4 +1,80 @@
-# <ins>CheatSheet</ins>
+```
+  /$$$$$$  /$$                             /$$            /$$$$$$  /$$                             /$$    
+ /$$__  $$| $$                            | $$           /$$__  $$| $$                            | $$    
+| $$  \__/| $$$$$$$   /$$$$$$   /$$$$$$  /$$$$$$        | $$  \__/| $$$$$$$   /$$$$$$   /$$$$$$  /$$$$$$  
+| $$      | $$__  $$ /$$__  $$ |____  $$|_  $$_/        |  $$$$$$ | $$__  $$ /$$__  $$ /$$__  $$|_  $$_/  
+| $$      | $$  \ $$| $$$$$$$$  /$$$$$$$  | $$           \____  $$| $$  \ $$| $$$$$$$$| $$$$$$$$  | $$    
+| $$    $$| $$  | $$| $$_____/ /$$__  $$  | $$ /$$       /$$  \ $$| $$  | $$| $$_____/| $$_____/  | $$ /$$
+|  $$$$$$/| $$  | $$|  $$$$$$$|  $$$$$$$  |  $$$$/      |  $$$$$$/| $$  | $$|  $$$$$$$|  $$$$$$$  |  $$$$/
+ \______/ |__/  |__/ \_______/ \_______/   \___/         \______/ |__/  |__/ \_______/ \_______/   \___/  
+```
+
+# Table of Contents:
+
+1. [Command-line reference](#command-line-reference)
+    - [PowerShell Management](#powershell-management)
+    - [Text streams and redirection](#text-streams-and-redirection)
+    - [Special characters](#special-characters)
+    - [awk](#awk)
+        - [awk variables](#awk-variables)
+        - [awk actions](#awk-actions)
+    - [vim](#vim)
+    - [Text editors](#text-editors)
+    - [System reference documentation](#system-reference-documentation)
+        - [Man pages](#man-pages)
+        - [Wikiman](#wikiman)
+2. [OS Management](#os-management)
+    - [sysctl](#sysctl)
+    - [userdbctl](#userdbctl)
+    - [Useradd/usermod/userdel](#Useradd/usermod/userdel)
+    - [getent / Name Service Switch](#getent--name-service-switch-glibc)
+    - [Bootloaders and boot managers](#bootloaders-and-boot-managers)
+        - [efibootmgr](#efibootmgr)
+    - [Loginctl](#Loginctl)
+    - [fwupdmgr](#fwupdmgr--firmware-update-manager-for-fwupd)
+    - [Timeshift](#timeshift)
+    - [BlueZ (bluetooth)](#bluez-bluetooth)
+    - [PulseAudio/PipeWire](#pulseaudiopipewire)
+    - [WirePlumber](#wireplumber)
+    - [RH subscription manager](#rh-subscription-manager)
+    - [Service control](#service-control)
+        - [SystemD](#systemd)
+    - [Package Management](#package-management)
+        - [Flatpak](#flatpak)
+        - [Winget](#winget)
+        - [Pacman / Arch Linux](#pacman--arch-linux)
+    - [WinEvents](#winevents)
+    - [Filesystems](#filesystems)
+        - [e2fsprogs - Ext2/3/4](#e2fsprogs---ext-234)
+        - [exfatprogs - extFAT](#exfatprogs---extfat)
+    - [Files and Directories](#files-and-directories)
+        - [dd](#dd)
+        - [Fallocate](#fallocate)
+        - [losetup / Loop devices](#losetup--loop-devices)
+    - [Archiving and Compression](#archiving-and-compression)
+    - [Process and Memory Management](#process-and-memory-management)
+    - [Time management](#time-management)
+        - [systemd-timesyncd](#systemd-timesyncd)
+    - [Networking](#networking)
+        - [netfilter](#netfilter)
+            - [firewalld](#firewalld)
+        - [NetworkManager](#networkmanager)
+        - [systemd-networkd](#systemd-networkd)
+    - [Storage](#storage)
+        - [LVM / Logical Volume Manager](#lvm--logical-volume-manager)
+        - [hdparm and sdparm](#hdparm-and-sdparm)
+        - [sedutil-cli](#sedutil-cli)
+        - [nvme-cli](#nvme-cli)
+        - [wipefs](#wipefs)
+    - [O/S Updates](#os-updates)
+    - [Fonts](#fonts)
+        - [Fontconfig](#fontconfig)
+3. [Roles](#roles)
+4. [Debugging](#debugging)
+5. [Applications](#applications)
+6. [Virtualisation](#virtualisation)
+7. [Desired State Configuration](#desired-state-configuration)
+8. [Public Cloud](#public-cloud)
 
 ## <ins>Command-line reference:</ins>
 
@@ -230,7 +306,7 @@ END = Process once at the termination of the command.
 
 ### Text editors:
 
-#### Vi:
+#### Vim:
 
 Default mode is command mode, then use i for insert mode.
 
@@ -923,6 +999,8 @@ subscription-manager repos --enable=<Repo-ID>
 
 ### Service control:
 
+#### SystemD:
+
 ```bash
 # Show all systemd unit files:
 systemctl list-unit-files
@@ -1159,7 +1237,7 @@ Get-EventLog -ComputerName <host> <logname> | select timegenerated,message | Sel
 
 ### Filesystems:
 
-#### e2fsprogs - Ext 2/3/4:
+#### e2fsprogs - Ext2/3/4:
 
 > ℹ️ **Note:** Check and create commands usually require elevation.
 
@@ -1958,9 +2036,6 @@ ss
 netstat -antup:
 ss -antup
 ```
-
-#### Further ip commands:
-
 ```bash
 # Shows link state plus statistics:
 ip link -s show 
@@ -5310,9 +5385,9 @@ virsh autostart <domain_name>
 virsh autostart <domain_name> --disable
 ```
 
-## Containerization:
+### Containerization:
 
-### 🐳 Docker: 
+#### 🐳 Docker: 
 
 ```bash
 # Show Docker version information:
@@ -5524,7 +5599,7 @@ docker volume rm <name>
 docker volume prune
 ```
 
-#### Docker network driver types:
+##### Docker network driver types:
 
 `bridge:` The default network driver. If you don't specify a driver, this is the type of network you are creating. Bridge networks are commonly used when your application runs in a container that needs to communicate with other containers on the same host.
 

@@ -1211,6 +1211,36 @@ e2fsck -p <dev>
 e2fsck -np <dev>
 ```
 
+#### exfatprogs - extFAT:
+
+> ℹ️ **Note:** Commands usually require elevation.
+
+> ℹ️ **Note:** Device name is usually the standard way to reference an FS.
+
+```bash
+# Print information on an existing exFAT filesystem:
+dump.exfat <dev | file>
+```
+```bash
+# Create a new exFAT filesystem:
+mkfs.exfat <dev | file>
+# Create a new exFAT filesystem with a label:
+mkfs.exfat -L <string> <dev | file>
+# Create a new exFAT filesystem and zero the blocks beforehand:
+mkfs.exfat -f <dev | file>
+# Create a new exFAT filesystem and overwrite the existing one.
+# Warning: Data loss will occur:
+mkfs.exfat -f <dev | file>
+# Create a new exFAT filesystem and specify the partition table type:
+mkfs.exfat -P <auto | none | mbr | gpt> <dev | file>
+# Create a new exFAT filesystem and verify written metadata after creation:
+mkfs.exfat -C <dev | file>
+```
+```bash
+# Set a volume label to an existing extFAT filesystem:
+tune.exfat -L <string> <dev | file>
+```
+
 ### Files and Directories:
 
 ```bash

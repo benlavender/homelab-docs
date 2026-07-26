@@ -3230,7 +3230,7 @@ rclone ls <remote:path>
 # List only files from remote (use -R to recurse):
 rclone lsf <remote:path>
 # List only directories from remote (use -R to recurse):
-rclone lsf <remote:path>
+rclone lsd <remote:path>
 # List local directory recursively:spo
 rclone ls <dir>
 # List local directory recursively and recurse links:
@@ -3266,12 +3266,15 @@ rclone check --one-way <src_remote:> <dst_remote:>
 ```
 ```bash
 # Use --dry-run if required.
+# Progress stats can be displayed with --progress which is updated every 500ms or can be an inline basic summary with both --progress --stats-one-line. 
 # Copy the source remote to the destination skipping any identical files:
 rclone copy <src_remote:> <dst_remote:>
 # Copy the source remote to the destination skipping newer files on the destination:
 rclone copy --update <src_remote:> <dst_remote:>
 # Copy the source remote to the destination skipping any identical files with a quicker size-only check:
 rclone copy --size-only <src_remote:> <dst_remote:>
+# Copy the source remote to the destination skipping any identical files and any specific file or directory:
+rclone copy --exclude <filename/directory> <src_remote:> <dst_remote:>
 # Ensure the destination remote is identical to the source.
 # Warning: Non-identical content in the destination will be deleted:
 rclone sync <src_remote:> <dst_remote:>

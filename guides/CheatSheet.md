@@ -3230,7 +3230,7 @@ rclone ls <remote:path>
 # List only files from remote (use -R to recurse):
 rclone lsf <remote:path>
 # List only directories from remote (use -R to recurse):
-rclone lsf <remote:path>
+rclone lsd <remote:path>
 # List local directory recursively:spo
 rclone ls <dir>
 # List local directory recursively and recurse links:

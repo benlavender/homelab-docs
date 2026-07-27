@@ -67,11 +67,33 @@
         - [nvme-cli](#nvme-cli)
         - [wipefs](#wipefs)
     - [O/S Updates](#os-updates)
+    - [Sysinternals](#sysinternals)
     - [Fonts](#fonts)
         - [Fontconfig](#fontconfig)
 3. [Roles](#roles)
+    - [ADDS](#adds)
+    - [DNS](#dns)
+    - [CUPS](#cups)
+    - [Storage Replica](#storage-replica)
+    - [DFS-N/R](#dfs-nr)
+    - [Windows Nano server](#windows-nano-server)
 4. [Debugging](#debugging)
 5. [Applications](#applications)
+    - [GNU Stow](#gnu-stow)
+    - [video4linux](#video4linux)
+    - [ddcutil](#ddcutil-ddcci--monitor-control-command-set)
+    - [rclone](#rclone)
+    - [Exchange On-Premise](#exchange-on-premise)
+    - [VMware and PowerCLI](#vmware-and-powercli)
+    - [Elasticsearch](#Elasticsearch)
+    - [Yubikey Manager](#yubikey-manager)
+    - [MySQL](#mysql)
+    - [PostgreSQL](#postgresql)
+    - [MS-SQL](#ms-sql)
+    - [SFTP](#sftp)
+    - [SCCM](#system-center-configuration-manager)
+    - [HTTP Commands](#http-commands)
+    - [Dig](#dig)
 6. [Virtualisation](#virtualisation)
 7. [Desired State Configuration](#desired-state-configuration)
 8. [Public Cloud](#public-cloud)
@@ -2799,6 +2821,14 @@ wuauclt /DetectNow /ReportNow
 REM Install the 
 ```
 
+### Sysinternals:
+
+```bat
+REM psexec
+REM Execute Powershell command via psexec:
+psexec \\<target> cmd /c "echo . | powershell <command>"
+```
+
 ### Fonts:
 
 #### Fontconfig:
@@ -3101,14 +3131,14 @@ Get-srpartnership | Remove-SRPartnership;Get-SRGroup | % { Remove-SRGroup -Name 
 New-SRPartnership -SourceComputerName {nb/ip.addr} -SourceRGName {NB name} -SourceVolumeName {mount point} -SourceLogVolumeName {mount point} -DestinationComputerName {nb/ip.addr} -DestinationRGName {NB name} -DestinationVolumeName {mount point (shold be same as source} -destinationlogvolumename {mount point} -LogSizeInBytes 1gb -ReplicationMode <mode>
 ```
 
-#### DFS-N/R:
+### DFS-N/R:
 
 ```powershell
 # DFS-R backlog:
 dfsrdiag backlog /rgname:"rep group name" /rfname:"volume/directory folder" /smem:hostname /rmem:hostname
 ```
 
-#### Windows Nano server:
+### Windows Nano server:
 
 ```powershell
 # Provisioning Nanos Servers. 
@@ -3591,14 +3621,6 @@ usermod -g sftpusers -d /incoming -s /sbin/nologin {jail}
 Get-CMDevice -Name <deviceID>
 ```
 
-### Sysinternals:
-
-```bat
-REM psexec
-REM Execute Powershell command via psexec:
-psexec \\<target> cmd /c "echo . | powershell <command>"
-```
-
 ### HTTP Commands:
 
 ```bash
@@ -3642,7 +3664,7 @@ curl -L --max-redirs <#> <URI>
 Invoke-RestMethod -Uri 'https://vsapp.vehiclesmart.com/rest/vehicleData?reg=<registration>&appid=vs5Dszb7SzN15JlKv71QxGv-aq1VcK6G20-S9v4hbdsb5' -Method GET | ConvertTo-Json
 ```
 
-### DNS Commands:
+### Dig:
 
 ```bash
 # Query the root hints:

@@ -1,4 +1,141 @@
-# <ins>CheatSheet</ins>
+```
+  /$$$$$$  /$$                             /$$            /$$$$$$  /$$                             /$$    
+ /$$__  $$| $$                            | $$           /$$__  $$| $$                            | $$    
+| $$  \__/| $$$$$$$   /$$$$$$   /$$$$$$  /$$$$$$        | $$  \__/| $$$$$$$   /$$$$$$   /$$$$$$  /$$$$$$  
+| $$      | $$__  $$ /$$__  $$ |____  $$|_  $$_/        |  $$$$$$ | $$__  $$ /$$__  $$ /$$__  $$|_  $$_/  
+| $$      | $$  \ $$| $$$$$$$$  /$$$$$$$  | $$           \____  $$| $$  \ $$| $$$$$$$$| $$$$$$$$  | $$    
+| $$    $$| $$  | $$| $$_____/ /$$__  $$  | $$ /$$       /$$  \ $$| $$  | $$| $$_____/| $$_____/  | $$ /$$
+|  $$$$$$/| $$  | $$|  $$$$$$$|  $$$$$$$  |  $$$$/      |  $$$$$$/| $$  | $$|  $$$$$$$|  $$$$$$$  |  $$$$/
+ \______/ |__/  |__/ \_______/ \_______/   \___/         \______/ |__/  |__/ \_______/ \_______/   \___/  
+```
+
+# Table of Contents:
+
+1. [Command-line reference](#command-line-reference)
+    - [PowerShell Management](#powershell-management)
+    - [Text streams and redirection](#text-streams-and-redirection)
+    - [Special characters](#special-characters)
+    - [awk](#awk)
+        - [awk variables](#awk-variables)
+        - [awk actions](#awk-actions)
+    - [vim](#vim)
+    - [Text editors](#text-editors)
+    - [System reference documentation](#system-reference-documentation)
+        - [Man pages](#man-pages)
+        - [Wikiman](#wikiman)
+2. [OS Management](#os-management)
+    - [sysctl](#sysctl)
+    - [userdbctl](#userdbctl)
+    - [Useradd/usermod/userdel](#Useradd/usermod/userdel)
+    - [getent / Name Service Switch](#getent--name-service-switch-glibc)
+    - [Bootloaders and boot managers](#bootloaders-and-boot-managers)
+        - [efibootmgr](#efibootmgr)
+    - [Loginctl](#Loginctl)
+    - [fwupdmgr](#fwupdmgr--firmware-update-manager-for-fwupd)
+    - [Timeshift](#timeshift)
+    - [BlueZ (bluetooth)](#bluez-bluetooth)
+    - [PulseAudio/PipeWire](#pulseaudiopipewire)
+    - [WirePlumber](#wireplumber)
+    - [RH subscription manager](#rh-subscription-manager)
+    - [Service control](#service-control)
+        - [SystemD](#systemd)
+    - [Package Management](#package-management)
+        - [Flatpak](#flatpak)
+        - [Winget](#winget)
+        - [Pacman / Arch Linux](#pacman--arch-linux)
+    - [WinEvents](#winevents)
+    - [Filesystems](#filesystems)
+        - [e2fsprogs - Ext2/3/4](#e2fsprogs---ext-234)
+        - [exfatprogs - extFAT](#exfatprogs---extfat)
+    - [Files and Directories](#files-and-directories)
+        - [dd](#dd)
+        - [Fallocate](#fallocate)
+        - [losetup / Loop devices](#losetup--loop-devices)
+    - [Archiving and Compression](#archiving-and-compression)
+    - [Process and Memory Management](#process-and-memory-management)
+    - [Time management](#time-management)
+        - [systemd-timesyncd](#systemd-timesyncd)
+    - [Networking](#networking)
+        - [netfilter](#netfilter)
+            - [firewalld](#firewalld)
+        - [NetworkManager](#networkmanager)
+        - [systemd-networkd](#systemd-networkd)
+    - [Storage](#storage)
+        - [LVM / Logical Volume Manager](#lvm--logical-volume-manager)
+        - [hdparm and sdparm](#hdparm-and-sdparm)
+        - [sedutil-cli](#sedutil-cli)
+        - [nvme-cli](#nvme-cli)
+        - [wipefs](#wipefs)
+    - [O/S Updates](#os-updates)
+    - [Sysinternals](#sysinternals)
+    - [Fonts](#fonts)
+        - [Fontconfig](#fontconfig)
+    - [lm_sensors](#lm_sensors)
+3. [Roles](#roles)
+    - [ADDS](#adds)
+    - [DNS](#dns)
+    - [CUPS](#cups)
+    - [Storage Replica](#storage-replica)
+    - [DFS-N/R](#dfs-nr)
+    - [Windows Nano server](#windows-nano-server)
+4. [Debugging](#debugging)
+5. [Applications](#applications)
+    - [GNU Stow](#gnu-stow)
+    - [video4linux](#video4linux)
+    - [ddcutil](#ddcutil-ddcci--monitor-control-command-set)
+    - [rclone](#rclone)
+    - [Exchange On-Premise](#exchange-on-premise)
+    - [VMware and PowerCLI](#vmware-and-powercli)
+    - [Elasticsearch](#Elasticsearch)
+    - [Yubikey Manager](#yubikey-manager)
+    - [MySQL](#mysql)
+    - [PostgreSQL](#postgresql)
+    - [MS-SQL](#ms-sql)
+    - [SFTP](#sftp)
+    - [SCCM](#system-center-configuration-manager)
+    - [HTTP Commands](#http-commands)
+    - [Dig](#dig)
+    - [Certificates, Key-based Authentication, and Encryption](#certificates-key-based-authentication-and-encryption)
+        - [OpenSSL](#openssl)
+        - [OpenPGP/GnuPG](#openpgpgnupg)
+        - [OpenSSH](#openssh)
+        - [ACME](#acme)
+            - [Certbot](#certbot)
+            - [Posh-ACME](#posh-acme)
+        - [dm-crypt](#dm-crypt)
+        - [systemd-cryptenroll / systemd-cryptsetup](#systemd-cryptenroll--systemd-cryptsetup)
+    - [SMTP](#smtp)
+    - [Packet capturing](#packet-capturing)
+    - [Network Analysis](#network-analysis)
+        - [Nmap](#nmap)
+        - [Shodan](#shodan)
+    - [Git SCM](#git-scm)
+6. [Virtualisation](#virtualisation)
+    - [Hyper-V](#hyper-v)
+    - [QEMU](#qemu)
+    - [libvirt](#libvirt)
+        - [virsh](#virsh)
+    - [Containerization](#containerization)
+        - [Docker](#-docker)
+7. [Desired State Configuration](#desired-state-configuration)
+    - [Desired State Configuration](#desired-state-configuration)
+        - [Terraform](#terraform)
+8. [Public Cloud](#public-cloud)
+    - [Microsoft 365](#microsoft-365)
+    - [Microsoft Azure](#microsoft-azure)
+        - [Azure Active Directory](#azure-active-directory)
+        - [Azure DevOps Services](#azure-devops-services)
+        - [Azure Resource Manager](#azure-resource-manager)
+        - [Azure Policy](#azure-policy)
+        - [Virtual Network](#virtual-network)
+        - [Azure Private Link](#azure-private-link)
+        - [Azure Load Balancer](#azure-load-balancer)
+        - [Azure DNS](#azure-dns)
+        - [Storage](#storage-1)
+        - [Virtual Machines](#virtual-machines)
+            - [VM Images](#vm-images-sizes-and-skus)
+            - [VM Extensions](#vm-extensions)
+        - [Azure Key Vault](#azure-key-vault)
 
 ## <ins>Command-line reference:</ins>
 
@@ -230,7 +367,7 @@ END = Process once at the termination of the command.
 
 ### Text editors:
 
-#### Vi:
+#### Vim:
 
 Default mode is command mode, then use i for insert mode.
 
@@ -293,6 +430,29 @@ p
 G
 
 ## <ins>OS Management:</ins>
+
+### sysctl
+
+> ℹ️ **Notes:** 
+> - Commands are only runtime and will not persist reboots.
+> - Some parameters require elevation, especially writes.
+
+```bash
+# Print all non-deprecated kernel parameters and their values:
+sysctl --all
+# Print all non-deprecated kernel parameter names only:
+sysctl --all --names
+# Print a specific kernel parameter:
+sysctl <variable>
+```
+```bash
+# Change a kernel parameter:
+sysctl --write <variable=value>
+```
+```bash
+# Load and write kernel parameters from configuration files:
+sysctl --system
+```
 
 ### userdbctl
 
@@ -471,6 +631,44 @@ locale-gen
 localectl set-locale LANG=en_GB.UTF-8
 ```
 
+### getent / Name Service Switch (glibc):
+
+```bash
+# Use a different service for a database, such as files with the ahosts database, for overriding nsswitch.conf ordering:
+getent <database> --service <service>
+```
+```bash
+# Query results from the hosts database.
+# Query all results possible:
+getent ahosts
+# Query for a specific name to IP mapping:
+getent ahosts <name | fqdn | ip.addr>
+```
+```bash
+# Query results from the hosts database but only for IPv4 mappings.
+# Query for a specific name to IP mapping:
+getent ahostsv4 <name | fqdn | ip.addr>
+```
+```bash
+# Query results from the hosts database but only for IPv6 mappings.
+# Query for a specific name to IP mapping:
+getent ahostsv6 <name | fqdn | ip.addr>
+```
+```bash
+# Query results from the users database.
+# Query all results possible:
+getent passwd
+# Query for a specific user:
+getent passwd <user | id>
+```
+```bash
+# Query results from the group database.
+# Query all results possible:
+getent group
+# Query for a specific group:
+getent group <name>
+```
+
 ### Bootloaders and boot managers:
 
 #### efibootmgr:
@@ -548,6 +746,56 @@ loginctl show-user <id|name>
 loginctl terminate-user <id|name>
 # Kill all processes of a user (sends SIGTERM):
 loginctl kill-user <id|name>
+```
+
+### fwupdmgr / firmware update manager for fwupd:
+
+> ℹ️ **Notes:**
+> - Updates that can be applied online will be done immediately.
+> - Updates that need to be applied at boot will be staged for the next boot.
+
+```bash
+# Download latest metadata from remotes (use --force if required):
+fwupdmgr refresh
+```
+```bash
+# Show all enumerated devices:
+fwupdmgr get-devices
+# Show a specific device:
+fwupdmgr get-devices <Device ID | GUIDs>
+```
+```bash
+# Show HWIDs of devices on the system:
+fwupdmgr hwids
+```
+```bash
+# Show available updates for all devices:
+fwupdmgr get-updates
+# Show available updates for a specific device:
+fwupdmgr get-updates <Device ID | GUIDs>
+# Show information on an update release for a specific device:
+fwupdmgr get-releases <Device ID | GUIDs>
+```
+```bash
+# Update a specific device with available updates:
+fwupdmgr update <Device ID | GUIDs>
+# Update all devices with available updates:
+fwupdmgr update
+```
+```bash
+# Search updates in the metadata regardless of device presence.
+# Strings can be CVE number, vendor name, device ID and name of device. See fwupdmgr(1) for more:
+fwupdmgr search <'string'>
+```
+```bash
+# Get list of configured remotes:
+fwupdmgr get-remotes
+# Enable a remote:
+fwupdmgr enable-remote <Remote ID>
+# Disable a remote:
+fwupdmgr disable-remote <Remote ID>
+# Clear metadata data of a remote:
+fwupdmgr clean-remote <Remote ID>
 ```
 
 ### Timeshift: 
@@ -812,6 +1060,8 @@ subscription-manager repos --enable=<Repo-ID>
 
 ### Service control:
 
+#### SystemD:
+
 ```bash
 # Show all systemd unit files:
 systemctl list-unit-files
@@ -844,6 +1094,61 @@ dpkg -i package.deb
 ```bash
 # Show reverse dependency information for a package:
 apt-cache rdepends <package>
+```
+
+#### Flatpak:
+
+> ℹ️ **Note:** All commands are system-wide unless `--user` is specified.
+
+> ℹ️ **Note:** If the user is in `wheel` and **not** on a PTS session then elevation is usually required.
+
+```bash
+# Working with repositories.
+# List installed repositories:
+flatpak remotes
+# Add a new repository:
+flatpak remote-add <custom_name> <URI>
+# Remove a repository:
+flatpak remote-delete <custom_name>
+# List all applications and runtimes in a repository:
+flatpak remote-ls <custom_name>
+```
+```bash
+# Search for applications:
+flatpak search <string>
+# Search for applications and display only a specific field:
+flatpak search spotify --columns=<FIELD>
+```
+```bash
+# Working with flatpak applications and runtimes.
+# Update all applications and runtimes:
+flatpak update
+# Update a specific application or runtime:
+flatpak update <id>
+# List installed applications:
+flatpak list
+# Show information about a runtime or application:
+flatpak remote-info <repo> <ref|id>
+# Run a flatpak application:
+flatpak run <id>
+# Show running flatpak applications:
+flatpak ps
+# Kill a running flatpak application:
+flatpak kill <instance|id>
+```
+```bash
+# Installing and removing flatpak applications and runtimes.
+# Use --noninteractive to skip prompts.
+# Install an application or runtime:
+flatpak install <repo> <ref|id>
+# Install an application or runtime with just the name (may give conflicts):
+flatpak install <name>
+# Remove an application or runtime:
+flatpak uninstall <ref|id>
+```
+```bash
+# Show activity log of flatpak:
+flatpak history
 ```
 
 #### Winget:
@@ -927,6 +1232,10 @@ paccache -rk1
 pacman -Q <packagename>
 # Query installed package with info:
 pacman -Qi <packagename>
+# Query installed packages outside of pacman databases, such as the AUR:
+pacman -Qm
+# Query installed packages in the pacman databases only:
+pacman -Qn
 # Query list of files installed within a package:
 pacman -Ql <packagename>
 ```
@@ -985,6 +1294,90 @@ Get-WinEvent -ListLog * -EA SilentlyContinue | ForEach-Object -Process {Get-WinE
 ```powershell
 # Using Get-EventLog, Get-EventLog uses a Win32 API that is deprecated. The results may not be accurate. Use the Get-WinEvent cmdlet instead.
 Get-EventLog -ComputerName <host> <logname> | select timegenerated,message | Select-Sring <string>
+```
+
+### Filesystems:
+
+#### e2fsprogs - Ext2/3/4:
+
+> ℹ️ **Note:** Check and create commands usually require elevation.
+
+> ℹ️ **Note:** Device name is usually the standard way to reference an FS.
+
+```bash
+# Print only superblock information:
+dumpe2fs -h <dev | LABEL | UUID>
+# Print superblock and blocks group information:
+dumpe2fs <dev | LABEL | UUID>
+# Print only reserved bad blocks:
+dumpe2fs -b <dev | LABEL | UUID>
+```
+```bash
+# fs-types are either ext2, ext3, or ext4 (default is ext2).
+# Create a new ext filesystem
+mke2fs -t <fs-type> <dev | file>
+# or:
+mkfs.ext<#> <dev | file>
+# Create a new ext filesystem with a label:
+mke2fs -t <fs-type> -L <string> <dev | file>
+# Create a new ext filesystem and overwrite the existing one.
+# Warning: Data loss will occur:
+mke2fs -t <fs-type> -F <dev | file>
+```
+```bash
+# Print tuneable superblock information (same as dumpe2fs -h):
+tune2fs -l <dev | file>
+# Set a volume label to an existing ext filesystem:
+tune2fs -L <string> <dev | file>
+# Set extended options for an existing ext filesystem.
+# Available settings available via tune2fs(8):
+tune2fs -E <setting | setting=value> <dev | file>
+# Set features for an existing ext filesystem.
+# Available settings available via tune2fs(8):
+tune2fs -O <setting> <dev | file>
+# Clear a feature for an existing ext filesystem (if supported).
+tune2fs -O ^<setting> <dev | file>
+```
+```bash
+# Warning: Ensure the filesystem being checked is not mounted.
+# Check a filesystem and report only:
+e2fsck -n <dev>
+# Check a filesystem regardless if clean and report only:
+e2fsck -nf <dev>
+# Check an unclean filesystem and fix issues:
+e2fsck -p <dev>
+# Check a filesystem regardless if clean and fix issues:
+e2fsck -np <dev>
+```
+
+#### exfatprogs - extFAT:
+
+> ℹ️ **Note:** Commands usually require elevation.
+
+> ℹ️ **Note:** Device name is usually the standard way to reference an FS.
+
+```bash
+# Print information on an existing exFAT filesystem:
+dump.exfat <dev | file>
+```
+```bash
+# Create a new exFAT filesystem:
+mkfs.exfat <dev | file>
+# Create a new exFAT filesystem with a label:
+mkfs.exfat -L <string> <dev | file>
+# Create a new exFAT filesystem and zero the blocks beforehand:
+mkfs.exfat -f <dev | file>
+# Create a new exFAT filesystem and overwrite the existing one.
+# Warning: Data loss will occur:
+mkfs.exfat -f <dev | file>
+# Create a new exFAT filesystem and specify the partition table type:
+mkfs.exfat -P <auto | none | mbr | gpt> <dev | file>
+# Create a new exFAT filesystem and verify written metadata after creation:
+mkfs.exfat -C <dev | file>
+```
+```bash
+# Set a volume label to an existing extFAT filesystem:
+tune.exfat -L <string> <dev | file>
 ```
 
 ### Files and Directories:
@@ -1171,6 +1564,21 @@ dd if=<file | dev> of=<file | dev> conv=fsync
 dd if=<file | dev> of=<file | dev> bs=<#>
 ```
 ```bash
+# Creating files with dd.
+# Use status=progress to print progress.
+# File sizes of shorthand K, M, G, T etc are IEC whereas kb, MB, GB, TB are SI.
+# Create a file using dd and zero the blocks:
+dd if=/dev/zero of=<file> bs=<#> count=<# of blocks>
+# Create a file of 1024B using dd and zero the blocks:
+dd if=/dev/zero of=<file> bs=1 count=1024
+# Create a file of 100M using dd and zero the blocks:
+dd if=/dev/zero of=<file> bs=1M count=100
+# Create a file of 1G using dd and zero the blocks:
+dd if=/dev/zero of=<file> bs=1G count=1
+# Create a file of 1GB using dd and zero the blocks:
+dd if=/dev/zero of=<file> bs=1GB count=1
+```
+```bash
 # Wiping block devices with dd.
 # Use status=progress to print progress.
 # Wipe an entire device with dd:
@@ -1190,29 +1598,31 @@ dd if=/dev/urandom of=<dev> iflag=fullblock
 fallocate --length <size> <filename>
 ```
 
-#### GNU Stow:
+#### losetup / Loop devices:
 
-> ℹ️ **Notes:**
-> - Stow will use the working directory as the stow directory unless changed.
-> - The term `package` refers to the `directory` containing the files to be managed. The stow `directory` must match the target tree for `defaults` to work.
-> - The term `target` refers to the directory where the files will be symlinked from, at default this is the parent directory of the package.
+> ℹ️ **Note:** Some commands require elevation.
 
 ```bash
-# Stow a package:
-stow <package>
-# Stow a package with verbose output:
-stow <package> --verbose
-# Stow a package as a dry run only:
-stow <package> --verbose --simulate
-# Stow a package even if the target files exist (files will be overwritten in the stow directory):
-stow <package> --adopt
-# Stow a package but do not merge/un-merge directories with a similar structure:
-stow <package> --no-folding
-# Stow a package with a specific target directory:
-stow <package> --target <target>
-# Stow a package with a specific target directory and a specific stow directory:
-stow <package> --target <target> --dir <directory>
+# Print status of all loop devices:
+losetup --list --all
 ```
+```bash
+# Show any associated loop devices with a specific file:
+losetup --associated <filename>
+```
+```bash 
+# Find the first unused loop device using the /dev/loop-control device:
+losetup --find
+```
+```bash
+# Associate a file with a specific loop device:
+losetup <filename> <dev>
+# Associate a file with the next available loop device using the /dev/loop-control device:
+losetup --find <filename>
+# Disassociate a file and its device:
+losetup --detach <dev>
+```
+
 ```bat
 REM Robocopy mirror sync:
 ROBOCOPY <src> <dst> /MIR /Z /W:5 /R:5
@@ -1328,14 +1738,6 @@ umask
 ```bash
 # Displays both the standard rwx/ugo permissions as well as any ACLs if applied:
 getfacl file
-```
-```bash
-# Displays ext4 information on this partition. This should be displayed under Default mount options (Default mount options:    user_xattr acl).
-tune2fs -l /dev/sda1
-```
-```bash
-# Displays ext4 information on this partition (SDCARD):
-tune2fs -l /dev/mmcblk0p2 
 ```
 ```bash
 # Remounts the /home partition:
@@ -1695,9 +2097,6 @@ ss
 netstat -antup:
 ss -antup
 ```
-
-#### Further ip commands:
-
 ```bash
 # Shows link state plus statistics:
 ip link -s show 
@@ -2007,6 +2406,120 @@ networkctl renew <link|idx>
 
 ### Storage:
 
+#### LVM / Logical Volume Manager:
+
+> ℹ️ **Note:** Commands require elevation.
+
+```bash
+# Show general information about configured lvm storage:
+lvm fullreport
+```
+```bash
+# Print supported block device types:
+lvm devtypes
+```
+```bash
+# Working with physical volumes.
+# List devices that may be used as PVs:
+lvm lvmdiskscan
+# List existing PVs:
+lvm pvscan
+# Display basic information on existing PVs:
+lvm pvs
+# Show detailed information on existing PVs:
+lvm pvdisplay
+# Display basic information about a specific PV:
+lvm pvs <name>
+# Show detailed information about a specific PV:
+lvm pvdisplay <name>
+# Create a new PV from an existing block device:
+lvm pvcreate <dev>
+# Increase the size of a PV.
+# This needs to be done after modifying the block device:
+lvm pvresize <name>
+# Decrease the size of a PV.
+# This needs to be done before modifying the block device:
+lvm pvresize --setphysicalvolumesize <size>
+# Remove an existing PV:
+lvm pvremove <name>
+```
+```bash
+# Working with volume groups.
+# Block devices not initialised as a PV will automatically be confgured when creating a VG.
+# Display basic information on all VGs:
+lvm vgs
+# Display detailed information on all VGs:
+lvm vgdisplay
+# Display basic information on a specific VG:
+lvm vgs <name>
+# Display detailed information on a specific VG:
+lvm vgdisplay <name>
+# Create a new volume group with a custom name using existing PV(s):
+lvm vgcreate <name> <dev> <dev> <dev>
+# Add a new PV(s) as a member to an existing VG:
+lvm vgextend <vg_name> <dev> <dev> <dev>
+# Remove a PV member from an existing VG:
+lvm vgreduce <vg_name> <dev>
+# Remove any PVs marked as missing in an existing VG:
+lvm vgreduce <vg_name> --removemissing
+# Remove an existing volume group (use vgreduce first if possible):
+lvm vgremove <name>
+```
+```bash
+# Working with logical volumes.
+# List existing LVs:
+lvm lvscan
+# Display basic information on all LVs:
+lvm lvs
+# Display detailed information on all LVs:
+lvm lvdisplay
+# Display basic information on a specific LV:
+lvm lvs <lv_path>
+# Display detailed information on a specific LV::
+lvm lvdisplay <lv_path>
+# Rename an existing LV:
+lvm lvrename <lv_path> <new_name>
+# Remove an existing LV:
+lvm lvremove <lv_path>
+```
+```bash
+# Working with standard linear logical volumes.
+# Use --name <string> to name a LV otherwise a system name will be generated.
+# Sizes for LVs can be of KiB, MiB, GiB, TiB or SI prefix K, M, G, T etc or a specifc extent.
+# If a size is less than a single extent is given it will upsize dynamically.
+# Create a linear LV with a specific size:
+lvm lvcreate --size <#> <vg_name>
+# Create a linear LV with a specific size in logical extents:
+lvm lvcreate --extents <#> <vg_name>
+# Create a linear LV with a specific percent of free remaining space of the logical extents:
+lvm lvcreate --extents <#%FREE> <vg_name>
+# Create a linear LV with a specific percent of all the logical extents:
+lvm lvcreate --extents <#%VG> <vg_name>
+```
+```bash
+# Working with LVM RAID type logical volumes.
+# Use --name <string> to name a LV otherwise a system name will be generated.
+# Sizes for LVs can be of KiB, MiB, GiB, TiB or SI prefix K, M, G, T etc or a specifc extent.
+# If a size is less than a single extent is given it will upsize dynamically.
+# Create a RAID0 (stripe) LV with the default 64KiB stripe size and a specific stripe count (use one stripe per PV).
+# A minimum of two PVs are required and beware if a single PV is lost then the whole array is defunct:
+lvm lvcreate --type raid0 --stripes <#> --size <#> <vg_name>
+# Create a RAID1 (mirror) LV with a specific number of mirrors and of a specific size.
+# Enough PVs need to be added to support the # of mirrors:
+lvm lvcreate --type raid1 --mirrors <#> --size <#> <vg_name>
+```
+```bash
+# Working with the legacy mirror type logical volumes.
+# Use --name <string> to name a LV otherwise a system name will be generated.
+# Sizes for LVs can be of KiB, MiB, GiB, TiB or SI prefix K, M, G, T etc or a specifc extent.
+# If a size is less than a single extent is given it will upsize dynamically.
+# Create a mirror LV with a specific number of mirrors and of a specific size.
+# Enough PVs need to be added to support the # of mirror images plus the disk log (usually one extra):
+lvm lvcreate --type mirror --mirrors <#> --size <#> <vg_name>
+# Create a mirror LV with a specific number of mirrors and of a specific size where the mirror log is memory backed.
+# Enough PVs need to be added to support the # of mirrors:
+lvm lvcreate --type mirror --mirrors <#> --mirrorlog core --size <#> <vg_name> 
+```
 ```bat
 REM Show active ISCSI sessions:
 iscsicli listtargetportals
@@ -2036,10 +2549,6 @@ t
 n
 # Write changes to the disk
 w
-```
-```bash
-# Format a partition with the ext4 filesystem:
-mkfs.ext4 </dev/partition>
 ```
 ```bash
 # Format a partition with the FAT32 filesystem
@@ -2351,6 +2860,14 @@ wuauclt /DetectNow /ReportNow
 REM Install the 
 ```
 
+### Sysinternals:
+
+```bat
+REM psexec
+REM Execute Powershell command via psexec:
+psexec \\<target> cmd /c "echo . | powershell <command>"
+```
+
 ### Fonts:
 
 #### Fontconfig:
@@ -2384,6 +2901,21 @@ fc-cache --really-force
 fc-scan <filename>
 # Scan a directory containing font files for information:
 fc-scan <directory>
+```
+
+### lm_sensors:
+
+> ℹ️ **Note:** Detect commands require elevation.
+
+```bash
+# Detect hardware sensors to monitor including generating config for service unit settings.
+# Answering YES to all could potentially cause hardware issues (see SENSORS-DETECT(8)). Use defaults for safety.
+# Follow the interactive guide:
+sensors-detect
+```
+```bash
+# Print all sensor values:
+sensors
 ```
 
 ## <ins>Roles:</ins>
@@ -2653,14 +3185,14 @@ Get-srpartnership | Remove-SRPartnership;Get-SRGroup | % { Remove-SRGroup -Name 
 New-SRPartnership -SourceComputerName {nb/ip.addr} -SourceRGName {NB name} -SourceVolumeName {mount point} -SourceLogVolumeName {mount point} -DestinationComputerName {nb/ip.addr} -DestinationRGName {NB name} -DestinationVolumeName {mount point (shold be same as source} -destinationlogvolumename {mount point} -LogSizeInBytes 1gb -ReplicationMode <mode>
 ```
 
-#### DFS-N/R:
+### DFS-N/R:
 
 ```powershell
 # DFS-R backlog:
 dfsrdiag backlog /rgname:"rep group name" /rfname:"volume/directory folder" /smem:hostname /rmem:hostname
 ```
 
-#### Windows Nano server:
+### Windows Nano server:
 
 ```powershell
 # Provisioning Nanos Servers. 
@@ -2758,59 +3290,28 @@ dt <structure*>
 
 ## Applications:
 
-### Flatpak:
+### GNU Stow:
 
-> ℹ️ **Note:** All commands are system-wide unless `--user` is specified.
+> ℹ️ **Notes:**
+> - Stow will use the working directory as the stow directory unless changed.
+> - The term `package` refers to the `directory` containing the files to be managed. The stow `directory` must match the target tree for `defaults` to work.
+> - The term `target` refers to the directory where the files will be symlinked from, at default this is the parent directory of the package.
 
-> ℹ️ **Note:** If the user is in `wheel` and **not** on a PTS session then elevation is usually required.
-
 ```bash
-# Working with repositories.
-# List installed repositories:
-flatpak remotes
-# Add a new repository:
-flatpak remote-add <custom_name> <URI>
-# Remove a repository:
-flatpak remote-delete <custom_name>
-# List all applications and runtimes in a repository:
-flatpak remote-ls <custom_name>
-```
-```bash
-# Search for applications:
-flatpak search <string>
-# Search for applications and display only a specific field:
-flatpak search spotify --columns=<FIELD>
-```
-```bash
-# Working with flatpak applications and runtimes.
-# Update all applications and runtimes:
-flatpak update
-# Update a specific application or runtime:
-flatpak update <id>
-# List installed applications:
-flatpak list
-# Show information about a runtime or application:
-flatpak remote-info <repo> <ref|id>
-# Run a flatpak application:
-flatpak run <id>
-# Show running flatpak applications:
-flatpak ps
-# Kill a running flatpak application:
-flatpak kill <instance|id>
-```
-```bash
-# Installing and removing flatpak applications and runtimes.
-# Use --noninteractive to skip prompts.
-# Install an application or runtime:
-flatpak install <repo> <ref|id>
-# Install an application or runtime with just the name (may give conflicts):
-flatpak install <name>
-# Remove an application or runtime:
-flatpak uninstall <ref|id>
-```
-```bash
-# Show activity log of flatpak:
-flatpak history
+# Stow a package:
+stow <package>
+# Stow a package with verbose output:
+stow <package> --verbose
+# Stow a package as a dry run only:
+stow <package> --verbose --simulate
+# Stow a package even if the target files exist (files will be overwritten in the stow directory):
+stow <package> --adopt
+# Stow a package but do not merge/un-merge directories with a similar structure:
+stow <package> --no-folding
+# Stow a package with a specific target directory:
+stow <package> --target <target>
+# Stow a package with a specific target directory and a specific stow directory:
+stow <package> --target <target> --dir <directory>
 ```
 
 ### video4linux:
@@ -2828,6 +3329,120 @@ v4l2-ctl --device <device> --all
 ```bash
 # List controls available for a specific device:
 v4l2-ctl --device <device> --list-ctrls
+```
+
+### ddcutil (DDC/CI) / Monitor Control Command Set:
+
+> ℹ️ **Note:** Usually communication to a monitor is done via the I2C bus but can also use USB.
+
+```bash
+# Describe all VCP feature codes:
+ddcutil vcpinfo
+# Describe a specific VCP feature code:
+ddcutil vcpinfo <VCP code>
+# Describe specific ddcutil feature subsets if available, such as WINDOW:
+ddcutil vcpinfo <name>
+```
+```bash
+# Show connected monitors that provide a Virtual Control Panel:
+ddcutil detect
+```
+```bash
+# Show monitors capabilities:
+ddcutil capabilities
+```
+```bash
+# Collect verbose display information:
+ddcutil interrogate
+```
+```bash
+# If no monitor is given then the first detected is used.
+# Use --display <#> or --bus <#> or --sn <sn> to select displays.
+# Get all VCP feature values:
+ddcutil getvcp all
+# Get a specifc VCP feature value:
+ddcutil getvcp <VCP code>
+```
+```bash
+# If no monitor is given then the first detected is used.
+# Use --display <#> or --bus <#> or --sn <sn> to select displays.
+# Set a VCP feature value:
+ddcutil setvcp <VCP code> <value>
+```
+
+### rclone
+
+```bash
+# Configure remotes interactively.
+# Follow the interactive guide:
+rclone config
+# Show config file location:
+rclone config file
+# List configured remotes:
+rclone listremotes
+```
+```bash
+# List remote recursively from base directory:
+rclone ls <remote:>
+# List remote path recursively:
+rclone ls <remote:path>
+# List only files from remote (use -R to recurse):
+rclone lsf <remote:path>
+# List only directories from remote (use -R to recurse):
+rclone lsd <remote:path>
+# List local directory recursively:spo
+rclone ls <dir>
+# List local directory recursively and recurse links:
+rclone ls --links <dir>
+```
+```bash
+# List size of remote:
+rclone size <remote:>
+# List size of path or file:
+rclone size <remote:path>
+```
+```bash
+# Use --dry-run if required.
+# Move a path from a remote to local:
+rclone move <remote:path> <dir>
+# Move a path from one remote to another:
+rclone move <remote:path> <remote:path>
+```
+```bash
+# Use --dry-run if required.
+# Remove a path from a remote:
+rclone delete <remote:path>
+# Remove all contents within a directory along with the parent:
+rclone purge <remote:path>
+```
+```bash
+# Confirm two remotes are exactly the same:
+rclone check <remote:> <remote:>
+# Confirm two remotes are exactly the same with a quicker size-only check:
+rclone check --size-only <remote:> <remote:>
+# Confirm the destination remote is at least the same as the source (ignoring any extra content in the destination):
+rclone check --one-way <src_remote:> <dst_remote:>
+```
+```bash
+# Use --dry-run if required.
+# Progress stats can be displayed with --progress which is updated every 500ms or can be an inline basic summary with both --progress --stats-one-line. 
+# Copy the source remote to the destination skipping any identical files:
+rclone copy <src_remote:> <dst_remote:>
+# Copy the source remote to the destination skipping newer files on the destination:
+rclone copy --update <src_remote:> <dst_remote:>
+# Copy the source remote to the destination skipping any identical files with a quicker size-only check:
+rclone copy --size-only <src_remote:> <dst_remote:>
+# Copy the source remote to the destination skipping any identical files and any specific file or directory:
+rclone copy --exclude <filename/directory> <src_remote:> <dst_remote:>
+# Ensure the destination remote is identical to the source.
+# Warning: Non-identical content in the destination will be deleted:
+rclone sync <src_remote:> <dst_remote:>
+# Ensure the destination remote is identical to the source with a quicker size-only check.
+# Warning: Non-identical content in the destination will be deleted:
+rclone sync --size-only <src_remote:> <dst_remote:>
+# Ensure the destination remote is identical to the source where a suffix is added to any changed files without removing the previous.
+# Warning: Non-identical content in the destination will be deleted:
+rclone sync --suffix <string> --suffix-keep-extension <src_remote:> <dst_remote:>
 ```
 
 ### Exchange On-Premise:
@@ -3060,14 +3675,6 @@ usermod -g sftpusers -d /incoming -s /sbin/nologin {jail}
 Get-CMDevice -Name <deviceID>
 ```
 
-### Sysinternals:
-
-```bat
-REM psexec
-REM Execute Powershell command via psexec:
-psexec \\<target> cmd /c "echo . | powershell <command>"
-```
-
 ### HTTP Commands:
 
 ```bash
@@ -3111,7 +3718,7 @@ curl -L --max-redirs <#> <URI>
 Invoke-RestMethod -Uri 'https://vsapp.vehiclesmart.com/rest/vehicleData?reg=<registration>&appid=vs5Dszb7SzN15JlKv71QxGv-aq1VcK6G20-S9v4hbdsb5' -Method GET | ConvertTo-Json
 ```
 
-### DNS Commands:
+### Dig:
 
 ```bash
 # Query the root hints:
@@ -3183,22 +3790,29 @@ openssl req -in request.csr -noout -subject
 ```
 ```bash
 # Working with public and private keys in OpenSSL.
-# Read a private key file (enter passphrase if required):
+# Read an RSA private key file (enter passphrase if required):
 openssl rsa -in private.key -noout -text
-# or:
+# Read a private key file (enter passphrase if required):
 openssl pkey -in privkey.key -text
+# Read a PKCS1 private key file and print as this format (enter passphrase if required):
+openssl pkey -in privkey.key -text -traditional
 # Read a public key:
 openssl pkey -in pubkey.key -pubin -text
 ```
 ```bash
-# Generate a new private key (RSA 1024):
+# Generate a new RSA 2048 private key in PKCS8 format:
 openssl genpkey -algorithm rsa -out private.key
-# Generate a new private key (RSA 4096):
+# Generate a new private key (RSA 4096) in PKCS8 format:
 openssl genpkey -algorithm rsa -out private.key -pkeyopt rsa_keygen_bits:4096
-# Generate an encrypted private key with a Triple-DES passphrase:
+# Generate an RSA 2048 encrypted private key with a Triple-DES passphrase in PKCS8 format:
 openssl genpkey -algorithm rsa -out private.key -pkeyopt rsa_keygen_bits:2048 -des3
-# Generate an encrypted private key with a AES256 passphrase (generally preferred):
+# Generate an RSA 2048 encrypted private key with a AES256 passphrase (generally preferred) in PKCS8 format:
 openssl genpkey -algorithm rsa -out private.key -pkeyopt rsa_keygen_bits:2048 -aes256
+```
+```bash 
+# Generate a new RSA 2048 private key in PKCS1 format.
+# This is deprecated usually in favour of PKCS8 format methods:
+openssl genrsa -traditional -out private.key
 ```
 ```bash
 # Generate a private / public key pair using an existing key:
@@ -3213,6 +3827,14 @@ openssl pkey -in private.key -aes128 -out private2.key
 openssl pkey -in private.key -aes256 -out private2.key
 # Or with the AES256-CBC cipher:
 openssl pkey -in private.key -out private2.key -aes-256-cbc
+```
+```bash
+# Converting private keys.
+# Convert a key from PKCS1 to PKCS8 format.
+# Enter passphrase when prompted:
+openssl pkcs8 -topk8 -in private.key -out private2.key
+# Convert a key from PKCS1 to PKCS8 format and do not encrypt:
+openssl pkcs8 -topk8 -nocrypt -in private.key -out private2.key
 ```
 ```bash
 # Decrypt a private Key:
@@ -4857,9 +5479,9 @@ virsh autostart <domain_name>
 virsh autostart <domain_name> --disable
 ```
 
-## Containerization:
+### Containerization:
 
-### 🐳 Docker: 
+#### 🐳 Docker: 
 
 ```bash
 # Show Docker version information:
@@ -4926,7 +5548,7 @@ docker image inspect <name>
 # View in JSON format:
 docker image inspect <name> --format json
 # List all dangling images:
-docker image ls --filter=unused=trueA
+docker image ls --filter=unused=true
 # Show detailed information on an existing container:
 docker inspect <name>
 ```
@@ -4946,6 +5568,12 @@ docker ps --all --size
 docker rm <name>
 # Stop a container:
 docker stop <containerID | name>
+# View container logs:
+docker logs <containerID | name>
+# Follow container logs:
+docker logs --follow <containerID | name>
+# View container logs with timestamps:
+docker logs --timestamps <containerID | name>
 # Copy files and directories between containers.
 # Copy files and directories from local host to a container:
 docker cp <src_path> <containerID | name:dst_path>
@@ -4993,7 +5621,8 @@ docker run --detach <image>
 docker run -d <image>
 # Run a container in the background if the ENTRYPOINT process exists:
 docker run --detach --interactive --tty <image>
-# Run a container based on an image but remove once exited:
+# Run a container based on an image but remove once exited.
+# Any anonymous (random generated named) volumes created with the container will also be removed:
 docker run --interactive --tty --rm <image>
 # Run a container based on an image with a TCP port mapping to the host:
 docker run --publish <host_port:container_port> <image>
@@ -5025,6 +5654,16 @@ docker run --hostname <hostname> <image>
 docker run --dns <ip.addr> <image>
 # Run a container based on an image with a specific DNS search list:
 docker run --dns-search <domain> <image>
+# Run a container based on an image with a bind mount (src must exist on host):
+docker run --mount type=bind,src=<src>,dst=<dst> <image>
+# Run a container based on an image with a readonly bind mount (src must exist on host):
+docker run --mount type=bind,:ro,src=<src>,dst=<dst> <image>
+# Run a container based on an image and mount a volume (volume will be created if not exist):
+docker run --volume <name>:<dst> <image>
+# Run a container based on an image aswell as create and mount an anonymous (random generated named) volume:
+docker run --volume <dst> <image>
+# Run a container based on an image and mount a readonly volume (volume must exist):
+docker run --volume <name>:<dst>:ro <image>
 # Run a container based on an image with and set an environment variable:
 docker run --env <variable=value> <image>
 # Show all published ports of a running container:
@@ -5038,8 +5677,23 @@ docker start --interactive <containerID | name>
 # or:
 docker start -i <containerID | name>
 ```
+```bash
+# Working with Volumes.
+# Default storage driver is local.
+# List existing volumes:
+docker volume ls
+# Create a volume with a random name:
+docker volume create
+# Create a volume with a specific name:
+docker volume create <name>
+# Remove a volume:
+docker volume rm <name>
+# Remove unused and anonymous (random generated named) volumes.
+# Acknowledge the prompt or use --force to not prompt:
+docker volume prune
+```
 
-#### Docker network driver types:
+##### Docker network driver types:
 
 `bridge:` The default network driver. If you don't specify a driver, this is the type of network you are creating. Bridge networks are commonly used when your application runs in a container that needs to communicate with other containers on the same host.
 
@@ -5659,7 +6313,7 @@ foreach ($sku in $skus) {
     $skus | Get-AzVMImage | Get-AzVMImage | Where-Object -Property PurchasePlan -NE $null | Select-Object -Property PublisherName,Offer,Skus,Name}
 ```
 
-#### VM Extensions:
+##### VM Extensions:
 
 ```bash
 # List all VM extensions available globally:

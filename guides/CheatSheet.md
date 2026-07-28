@@ -94,9 +94,47 @@
     - [SCCM](#system-center-configuration-manager)
     - [HTTP Commands](#http-commands)
     - [Dig](#dig)
+    - [Certificates, Key-based Authentication, and Encryption](#certificates-key-based-authentication-and-encryption)
+        - [OpenSSL](#openssl)
+        - [OpenPGP/GnuPG](#openpgpgnupg)
+        - [OpenSSH](#openssh)
+        - [ACME](#acme)
+            - [Certbot](#certbot)
+            - [Posh-ACME](#posh-acme)
+        - [dm-crypt](#dm-crypt)
+        - [systemd-cryptenroll / systemd-cryptsetup](#systemd-cryptenroll--systemd-cryptsetup)
+    - [SMTP](#smtp)
+    - [Packet capturing](#packet-capturing)
+    - [Network Analysis](#network-analysis)
+        - [Nmap](#nmap)
+        - [Shodan](#shodan)
+    - [Git SCM](#git-scm)
 6. [Virtualisation](#virtualisation)
+    - [Hyper-V](#hyper-v)
+    - [QEMU](#qemu)
+    - [libvirt](#libvirt)
+        - [virsh](#virsh)
+    - [Containerization](#containerization)
+        - [Docker](#-docker)
 7. [Desired State Configuration](#desired-state-configuration)
+    - [Desired State Configuration](#desired-state-configuration)
+        - [Terraform](#terraform)
 8. [Public Cloud](#public-cloud)
+    - [Microsoft 365](#microsoft-365)
+    - [Microsoft Azure](#microsoft-azure)
+        - [Azure Active Directory](#azure-active-directory)
+        - [Azure DevOps Services](#azure-devops-services)
+        - [Azure Resource Manager](#azure-resource-manager)
+        - [Azure Policy](#azure-policy)
+        - [Virtual Network](#virtual-network)
+        - [Azure Private Link](#azure-private-link)
+        - [Azure Load Balancer](#azure-load-balancer)
+        - [Azure DNS](#azure-dns)
+        - [Storage](#storage-1)
+        - [Virtual Machines](#virtual-machines)
+            - [VM Images](#vm-images-sizes-and-skus)
+            - [VM Extensions](#vm-extensions)
+        - [Azure Key Vault](#azure-key-vault)
 
 ## <ins>Command-line reference:</ins>
 
@@ -6244,7 +6282,7 @@ foreach ($sku in $skus) {
     $skus | Get-AzVMImage | Get-AzVMImage | Where-Object -Property PurchasePlan -NE $null | Select-Object -Property PublisherName,Offer,Skus,Name}
 ```
 
-#### VM Extensions:
+##### VM Extensions:
 
 ```bash
 # List all VM extensions available globally:

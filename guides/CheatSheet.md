@@ -70,6 +70,7 @@
     - [Sysinternals](#sysinternals)
     - [Fonts](#fonts)
         - [Fontconfig](#fontconfig)
+    - [lm_sensors](#lm_sensors)
 3. [Roles](#roles)
     - [ADDS](#adds)
     - [DNS](#dns)
@@ -2900,6 +2901,21 @@ fc-cache --really-force
 fc-scan <filename>
 # Scan a directory containing font files for information:
 fc-scan <directory>
+```
+
+### lm_sensors:
+
+> ℹ️ **Note:** Detect commands require elevation.
+
+```bash
+# Detect hardware sensors to monitor including generating config for service unit settings.
+# Answering YES to all could potentially cause hardware issues (see SENSORS-DETECT(8)). Use defaults for safety.
+# Follow the interactive guide:
+sensors-detect
+```
+```bash
+# Print all sensor values:
+sensors
 ```
 
 ## <ins>Roles:</ins>

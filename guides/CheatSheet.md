@@ -5413,8 +5413,6 @@ virsh pool-list
 virsh pool-info <name|id>
 # Create and start a pool based on a local directory::
 virsh pool-create-as --name <name> --type dir --target <dir>
-
-
 # Refresh a specific pool:
 virsh pool-refresh <name|id>
 # Start an inactive pool:
@@ -5426,7 +5424,6 @@ virsh pool-event --pool <name|id> --list
 # Monitor for a type of event in realtime on a specific pool:
 virsh pool-event --pool <name|id> --event <type>
 ```
-
 ```bash
 # Working with virtual networks.
 # List existing virtual networks (remove --all to list active only):
@@ -5439,6 +5436,15 @@ virsh net-name <id>
 virsh net-uuid <name>
 ```
 ```bash
+# Working with domains.
+# List all domains:
+virsh list --all
+# Shutdown a domain gracefully:
+virsh shutdown <id | name>
+# List all blocks on a domain:
+virsh domblklist <id | name>
+```
+```bash
 # Create new domain using virt-install:
 virt-install --name=tester1.example.com --ram=1024 --vcpus=2 --disk=/var/lib/libvirt/images/test1.example.com.img,size=16 --graphics=spice --location=ftp://192.168.1 22.1/pub/inst --os-type=Linux --os-variant=rhel7
 ```
@@ -5449,10 +5455,6 @@ virt-install --name=tester1.example.com --ram=1024 --vcpus=2 --disk=/var/lib/lib
 ```bash
 # Don't wait for O/S installation:
 virt-install --name=tester1.example.com --ram=1024 --vcpus=2 --disk=/var/lib/libvirt/images/test1.example.com.img,size=10 --location=/var/lib/libvirt/images/rhel-server-7.6-x86_64-dvd.iso --graphics=spice --os-type=Linux --os-variant=rhel7 --noautoconsole --initrd-inject can be used with URL of .KS file.
-```
-```bash
-# Shutdown a domain gracefully:
-virsh shutdown <domain_name>
 ```
 ```bash
 # Terminate domain session:

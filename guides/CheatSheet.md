@@ -55,6 +55,7 @@
     - [Process and Memory Management](#process-and-memory-management)
     - [Time management](#time-management)
         - [systemd-timesyncd](#systemd-timesyncd)
+    - [RFKill](#rfkill)
     - [Networking](#networking)
         - [netfilter](#netfilter)
             - [firewalld](#firewalld)
@@ -1893,6 +1894,14 @@ timedatectl set-timezone <ZONE>
 sudo timedatectl set-ntp <true|false>
 ```
 
+### RFKill:
+
+```bash
+# Print state of all wireless devices:
+rfkill list
+```
+
+
 ### Networking:
 
 #### netfilter:
@@ -2319,6 +2328,8 @@ nmcli connection down <name | uuid>
 nmcli connection delete <name | uuid>
 ```
 ```bash
+# Show all radio device status:
+nmcli radio
 # Disable WLAN radio:
 nmcli radio wifi off
 # Enable WLAN radio:

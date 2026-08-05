@@ -5406,11 +5406,13 @@ virsh hypervisor-cpu-models
 virsh hypervisor-cpu-models --all
 ```
 ```bash
-# Working with storage pools:
+# Working with storage pools.
 # List existing pools:
 virsh pool-list
 # Print information of a specific pool:
 virsh pool-info <name|id>
+# Create and start a pool based on a local directory::
+virsh pool-create-as --name <name> --type dir --target <dir>
 # Refresh a specific pool:
 virsh pool-refresh <name|id>
 # Start an inactive pool:
@@ -5422,7 +5424,41 @@ virsh pool-event --pool <name|id> --list
 # Monitor for a type of event in realtime on a specific pool:
 virsh pool-event --pool <name|id> --event <type>
 ```
-
+```bash
+# Working with virtual networks.
+# List existing virtual networks (remove --all to list active only):
+virsh net-list --all
+# Print information on an existing virtual network:
+virsh net-info <name|id>
+# Convert a network UUID to network name:
+virsh net-name <id>
+# Convert a network name to network UUID:
+virsh net-uuid <name>
+```
+```bash
+# Working with domains.
+# List all domains:
+virsh list --all
+# Shutdown a domain gracefully:
+virsh shutdown <id | name>
+# List all blocks on a domain:
+virsh domblklist <id | name>
+# Print domain information as XML to stdout:
+virsh dumpxml <id | name>
+```
+```bash
+# Perform a manual offline migration of an existing domain.
+# Export domain data to a .xml file:
+virsh dumpxml <id | name> > <filename.xml>
+# Print the existing block devices:
+virsh domblklist <id | name>
+# Check for any snapshots with backing files as these would also need to be moved:
+qemu-img info <filename>
+# Transfer the .xml file and any image files to the destination.
+# Paths need to be the same for the disk images as per the .xml or edit that file.
+# Define the domain on the target host:
+virsh define <filename.xml>
+```
 ```bash
 # Create new domain using virt-install:
 virt-install --name=tester1.example.com --ram=1024 --vcpus=2 --disk=/var/lib/libvirt/images/test1.example.com.img,size=16 --graphics=spice --location=ftp://192.168.1 22.1/pub/inst --os-type=Linux --os-variant=rhel7
@@ -5434,10 +5470,6 @@ virt-install --name=tester1.example.com --ram=1024 --vcpus=2 --disk=/var/lib/lib
 ```bash
 # Don't wait for O/S installation:
 virt-install --name=tester1.example.com --ram=1024 --vcpus=2 --disk=/var/lib/libvirt/images/test1.example.com.img,size=10 --location=/var/lib/libvirt/images/rhel-server-7.6-x86_64-dvd.iso --graphics=spice --os-type=Linux --os-variant=rhel7 --noautoconsole --initrd-inject can be used with URL of .KS file.
-```
-```bash
-# Shutdown a domain gracefully:
-virsh shutdown <domain_name>
 ```
 ```bash
 # Terminate domain session:

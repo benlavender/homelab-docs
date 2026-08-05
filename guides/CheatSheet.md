@@ -5443,6 +5443,21 @@ virsh list --all
 virsh shutdown <id | name>
 # List all blocks on a domain:
 virsh domblklist <id | name>
+# Print domain information as XML to stdout:
+virsh dumpxml <id | name>
+```
+```bash
+# Perform a manual offline migration of an existing domain.
+# Export domain data to a .xml file:
+virsh dumpxml <id | name> > <filename.xml>
+# Print the existing block devices:
+virsh domblklist <id | name>
+# Check for any snapshots with backing files as these would also need to be moved:
+qemu-img info <filename>
+# Transfer the .xml file and any image files to the destination.
+# Paths need to be the same for the disk images as per the .xml or edit that file.
+# Define the domain on the target host:
+virsh define <filename.xml>
 ```
 ```bash
 # Create new domain using virt-install:

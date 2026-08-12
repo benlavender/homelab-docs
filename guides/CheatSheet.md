@@ -5015,6 +5015,8 @@ git commit -a
 git commit -am <"commit_log">
 # Amend the last commit with changes in the staging area (use -m for inline commit message). This will replace the last commit:
 git commit --amend
+# Bypass identical commit with parent prevention allowing an "empty" commit:
+git commit --allow-empty -m <"commit_log">
 # View commit history:
 git log
 # View latest number of logs:

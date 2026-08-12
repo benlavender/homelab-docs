@@ -5126,6 +5126,13 @@ git mergetool --tool-help
 git mergetool --tool=<toolname>
 ```
 ```bash
+# Rebasing with Git.
+# Replay commits between branches:
+git rebase <src_branch> <branch>
+# Replay commits into the current branch (HEAD)
+git rebase <branch>
+```
+```bash
 # Working with tags in Git.
 # List all tags:
 git tag -l

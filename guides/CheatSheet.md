@@ -5015,6 +5015,8 @@ git commit -a
 git commit -am <"commit_log">
 # Amend the last commit with changes in the staging area (use -m for inline commit message). This will replace the last commit:
 git commit --amend
+# Bypass identical commit with parent prevention allowing an "empty" commit:
+git commit --allow-empty -m <"commit_log">
 # View commit history:
 git log
 # View latest number of logs:
@@ -5122,6 +5124,13 @@ git mergetool -y
 git mergetool --tool-help
 # View merge in a specific mergetool:
 git mergetool --tool=<toolname>
+```
+```bash
+# Rebasing with Git.
+# Replay commits between branches:
+git rebase <src_branch> <branch>
+# Replay commits into the current branch (HEAD)
+git rebase <branch>
 ```
 ```bash
 # Working with tags in Git.

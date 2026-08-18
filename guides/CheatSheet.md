@@ -29,6 +29,7 @@
     - [Useradd/usermod/userdel](#Useradd/usermod/userdel)
     - [getent / Name Service Switch](#getent--name-service-switch-glibc)
     - [Bootloaders and boot managers](#bootloaders-and-boot-managers)
+        - [systemd-boot](#systemd-boot)
         - [efibootmgr](#efibootmgr)
     - [Loginctl](#Loginctl)
     - [fwupdmgr](#fwupdmgr--firmware-update-manager-for-fwupd)
@@ -670,6 +671,21 @@ getent group <name>
 ```
 
 ### Bootloaders and boot managers:
+
+#### systemd-boot:
+
+> ℹ️ **Note:** Requires systemd.
+
+> ℹ️ **Note:** Some commands require elevation.
+
+```bash
+# Checks whether systemd-boot is installed in the ESP partition:
+bootctl is-installed
+```
+```bash
+# Print boot loader and firmware information:
+bootctl status
+```
 
 #### efibootmgr:
 

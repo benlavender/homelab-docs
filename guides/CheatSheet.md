@@ -32,6 +32,7 @@
         - [systemd-boot](#systemd-boot)
         - [efibootmgr](#efibootmgr)
     - [Loginctl](#Loginctl)
+    - [lspci](#lspci)
     - [fwupdmgr](#fwupdmgr--firmware-update-manager-for-fwupd)
     - [Timeshift](#timeshift)
     - [BlueZ (bluetooth)](#bluez-bluetooth)
@@ -762,6 +763,44 @@ loginctl show-user <id|name>
 loginctl terminate-user <id|name>
 # Kill all processes of a user (sends SIGTERM):
 loginctl kill-user <id|name>
+```
+
+### lspci:
+
+```bash
+# Print brief details of PCI devices:
+lspci
+# Print verbose details of all PCI devices:
+lspci -vv
+# Print brief information and show vendor and device codes as both numbers and names:
+lspci -nn
+# Print verbose details of all PCI devices along with vendor and device codes:
+lspci -nnvv
+# Print brief details and include kernel drivers and modules handling all PCI devices:
+lspci -k
+```
+```bash
+# Use -nn to print codes.
+# Print all devices by vendor:
+lspci -d <#:>
+# Print devices by vendor and device:
+lspci -d <#:#>
+```
+```bash
+# Print all devices on a specific PCI bus:
+lspci -s <#:>
+# Print brief information on a specific PCI device including all functions:
+lspci -s <#:#>
+# Print brief information on a specific PCI device providing a function:
+lspci -s <#:#.#>
+# Print verbose information on a specific PCI device and all its functions:
+lspci -vvs <#:#>
+# Print verbose information on a specific PCI device and function:
+lspci -vvs <#:#.#>
+```
+```bash
+# Print tree view information on buses, birdges, devices and their links:
+lspci -tv
 ```
 
 ### fwupdmgr / firmware update manager for fwupd:

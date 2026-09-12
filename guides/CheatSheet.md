@@ -4856,7 +4856,7 @@ nmap --open <host>
 ```
 ```bash
 # Additionally fingerprint the OS and provide verbose info:
-nmap -o <host> -v
+nmap -O <host> -v
 ```
 ```bash
 # Show supported IP protocols of a host: 

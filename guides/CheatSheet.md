@@ -5173,6 +5173,7 @@ git rebase <branch>
 ```
 ```bash
 # Working with tags in Git.
+# Avoid creating lightweight tags named "tag" as it may conflict with the command.
 # List all tags:
 git tag -l
 # List specific tag names:

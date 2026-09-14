@@ -5179,8 +5179,8 @@ git tag -l
 git tag -l <string>
 # Show a tag:
 git show <tag>
-# Create an annotated tag (use -m for inline message):
-git tag -a <tag>
+# Create an annotated tag: 
+git tag -a <tag> -m <message>
 # Create a lightweight tag:
 git tag <tag>
 # Tag a commit directly:

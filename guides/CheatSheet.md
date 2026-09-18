@@ -94,6 +94,7 @@
     - [MS-SQL](#ms-sql)
     - [SFTP](#sftp)
     - [SCCM](#system-center-configuration-manager)
+    - [speedtest](#speedtest-ookla)    
     - [HTTP Commands](#http-commands)
     - [Dig](#dig)
     - [Certificates, Key-based Authentication, and Encryption](#certificates-key-based-authentication-and-encryption)

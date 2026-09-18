@@ -3183,7 +3183,7 @@ resolvectl dns <interface>
 ```
 ```bash
 # Set DNS servers for a specific interface:
-resolvectl dns <interface> <dns1> | <dns2>
+resolvectl dns <interface> <dns1> | <dns2>+
 ```
 ```bash
 # Show DNS search listsfor a specific interface:
@@ -3712,6 +3712,23 @@ usermod -g sftpusers -d /incoming -s /sbin/nologin {jail}
 ```powershell
 # Get CCM device:
 Get-CMDevice -Name <deviceID>
+```
+
+### speedtest (Ookla):
+
+```bash
+# List nearest servers that support the speedtest service:
+speedtest --servers
+```
+```bash
+# Perform a speed test using nearest servers:
+speedtest
+# Perform a speed test using nearest servers and show selection process:
+speedtest --selection-details
+# Perform a speed test with a specific server:
+speedtest --server-id=<ID>
+# Perform a speed test from a specific local interface:
+speedtest --interface=interface=<int>
 ```
 
 ### HTTP Commands:

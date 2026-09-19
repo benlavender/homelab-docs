@@ -49,6 +49,7 @@
         - [e2fsprogs - Ext2/3/4](#e2fsprogs---ext-234)
         - [exfatprogs - extFAT](#exfatprogs---extfat)
     - [Files and Directories](#files-and-directories)
+        - [stat](#stat)
         - [dd](#dd)
         - [Fallocate](#fallocate)
         - [losetup / Loop devices](#losetup--loop-devices)
@@ -1556,6 +1557,43 @@ Get-ItemProperty -Path 'file/dir' | Format-List -Property *
 ```powershell
 # List files created and modified today, in descending order by lastwritetime and include the name, lwt and size:
 Get-ChildItem -Path <dir> -Recurse | Where-Object {$_.LastWriteTime.date -eq (Get-Date).Date} | Sort-Object LastWriteTime -Descending | Select-Object -Property Name,LastWriteTime,Length | Format-Table -AutoSize
+```
+
+#### stat:
+
+> **Note:** Can also be used with directories.
+
+```bash
+# Print file information:
+stat <filename>
+# Print file system information instead of file:
+stat --file-system <filename>
+```
+```bash
+# Printing with different output formats.
+# To print multiple formats use --format='<%type> <%type>'. 
+# Print only file name:
+stat --format=%n <filename>
+# Print only creation time in human readable:
+stat --format=%w <filename>
+# Print only atime in human readable:
+stat --format=%x <filename>
+# Print only mtime in human readable:
+stat --format=%y <filename>
+# Print only permissions in octal:
+stat --format=%a <filename>
+# Print only permissions in human readable:
+stat --format=%A <filename>
+# Print only file type:
+stat --format=%F <filename>
+# Print only inode number:
+stat --format=%i <filename>
+# Print only mount point:
+stat --format=%m <filename>
+# Print only ID of owner:
+stat --format=%u <filename>
+# Print only name of owner:
+stat --format=%U <filename>
 ```
 
 #### dd:

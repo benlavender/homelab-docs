@@ -3506,6 +3506,8 @@ rclone check --one-way <src_remote:> <dst_remote:>
 # Progress stats can be displayed with --progress which is updated every 500ms or can be an inline basic summary with both --progress --stats-one-line. 
 # Copy the source remote to the destination skipping any identical files:
 rclone copy <src_remote:> <dst_remote:>
+# Copy the source remote to the destination skipping any identical files and including empty directories:
+rclone copy --create-empty-src-dirs <src_remote:> <dst_remote:>
 # Copy the source remote to the destination skipping newer files on the destination:
 rclone copy --update <src_remote:> <dst_remote:>
 # Copy the source remote to the destination skipping any identical files with a quicker size-only check:
@@ -3524,6 +3526,9 @@ rclone sync --size-only <src_remote:> <dst_remote:>
 # Ensure the destination remote is identical to the source where a suffix is added to any changed files without removing the previous.
 # Warning: Non-identical content in the destination will be deleted:
 rclone sync --suffix <string> --suffix-keep-extension <src_remote:> <dst_remote:>
+# Ensure the destination remote is identical to the source including empty directories.
+# Warning: Non-identical content in the destination will be deleted:
+rclone sync --create-empty-src-dirs <src_remote:> <dst_remote:>
 ```
 
 ### Exchange On-Premise:

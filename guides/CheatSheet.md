@@ -3514,6 +3514,7 @@ rclone copy --size-only <src_remote:> <dst_remote:>
 rclone copy --exclude <filename/directory> <src_remote:> <dst_remote:>
 ```
 ```bash
+# Use --dry-run if required.
 # Ensure the destination remote is identical to the source.
 # Warning: Non-identical content in the destination will be deleted:
 rclone sync <src_remote:> <dst_remote:>

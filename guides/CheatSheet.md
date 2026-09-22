@@ -3509,11 +3509,15 @@ rclone copy <src_remote:> <dst_remote:>
 # Copy the source remote to the destination skipping any identical files and including empty directories:
 rclone copy --create-empty-src-dirs <src_remote:> <dst_remote:>
 # Copy the source remote to the destination skipping newer files on the destination:
-rclone copy --update <src_remote:> <dst_remote:>
+rclone copy --update <src_remote:> <dst_sremote:>
 # Copy the source remote to the destination skipping any identical files with a quicker size-only check:
 rclone copy --size-only <src_remote:> <dst_remote:>
-# Copy the source remote to the destination skipping any identical files and any specific file or directory:
-rclone copy --exclude <filename/directory> <src_remote:> <dst_remote:>
+# Copy the source remote to the destination skipping any identical files and a specific file:
+rclone copy --exclude=<filename> <src_remote:> <dst_remote:>
+# Copy the source remote to the destination skipping any identical files and all specific file extensions:
+rclone copy --exclude=*.<ext> <src_remote:> <dst_remote:>
+# Copy the source remote to the destination skipping any identical files and a specific directory:
+rclone copy --exclude=</dir/> <src_remote:> <dst_remote:>
 ```
 ```bash
 # Use --dry-run if required.

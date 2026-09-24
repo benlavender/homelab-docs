@@ -124,6 +124,7 @@
     - [Desired State Configuration](#desired-state-configuration)
         - [Terraform](#terraform)
 8. [Public Cloud](#public-cloud)
+    - [Amazon Web Services](#amazon-web-services)
     - [Microsoft 365](#microsoft-365)
     - [Microsoft Azure](#microsoft-azure)
         - [Azure Active Directory](#azure-active-directory)
@@ -5915,6 +5916,41 @@ terraform output
 ```
 
 ## Public Cloud:
+
+### Amazon Web Services:
+
+```bash
+# Configure awscli.
+# Follow the interactive guide:
+aws configure
+# Configure the default region:
+aws configure set default.region <region>
+# Override region set as default:
+aws configure set region <region>
+```
+```bash
+# List configured awscli settings:
+aws configure list
+```
+```bash
+# Login with management console credentials:
+aws login
+```
+
+#### Account management:
+
+```bash
+# Print current account information:
+aws account get-account-information
+```
+```bash
+# Print primary account contact information:
+aws account get-account-information
+```
+```bash
+# Print all regions for the current account:
+aws account list-regions
+```
 
 ### Microsoft 365:
 

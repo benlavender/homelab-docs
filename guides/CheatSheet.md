@@ -5952,6 +5952,31 @@ aws account get-account-information
 aws account list-regions
 ```
 
+#### S3:
+
+```bash
+# List all s3 buckets:
+aws s3 ls
+# List all s3 buckets with more info:
+aws s3api list-buckets
+```
+```bash
+# Create an s3 bucket outside of us-east-1:
+aws s3api create-bucket --bucket <name> --create-bucket-configuration LocationConstraint=<region>
+```
+```bash
+# Remove an empty s3 bucket:
+aws s3 rb <s3uri>
+# Remove a non-empty s3 bucket:
+aws s3 rb --force <s3uri>
+```
+```bash
+# List all objects in an s3 bucket:
+aws s3 ls <s3uri | name>
+# List all objects in an s3 bucket in human readable output:
+aws s3 ls <s3uri | name> --human-readable
+```
+
 ### Microsoft 365:
 
 All commands use the [Microsoft Graph PowerShell SDK (Microsoft.Graph)](https://learn.microsoft.com/en-us/powershell/microsoftgraph/get-started?view=graph-powershell-1.0)

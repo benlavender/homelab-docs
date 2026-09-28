@@ -125,6 +125,8 @@
         - [Terraform](#terraform)
 8. [Public Cloud](#public-cloud)
     - [Amazon Web Services](#amazon-web-services)
+        - [Account management](#account-management)
+        - [S3](#s3)
     - [Microsoft 365](#microsoft-365)
     - [Microsoft Azure](#microsoft-azure)
         - [Azure Active Directory](#azure-active-directory)
@@ -5975,6 +5977,25 @@ aws s3 rb --force <s3uri>
 aws s3 ls <s3uri | name>
 # List all objects in an s3 bucket in human readable output:
 aws s3 ls <s3uri | name> --human-readable
+# List all objects in an s3 bucket with more info:
+aws s3api list-objects --bucket <name>
+```
+```bash
+# Use --dryrun if required.
+# Copy object to or from an s3 bucket:
+aws s3 cp <local_path | s3uri> <local_path | s3uri>
+# Copy all objects to or from an s3 bucket:
+aws s3 cp --recursive <local_path | s3uri> <local_path | s3uri> 
+```
+```bash
+# Add an object to an s3 bucket:
+aws s3api put-object --bucket <name> --key <object_name> --body <object>
+# Add an object to an s3 bucket at a specific location:
+aws s3api put-object --bucket <name> --key </dir/object_name> --body <object>
+```
+```bash
+# Copy an object stored in an s3 bucket:
+aws s3api copy-object --copy-source <name/oject> --key <object_name> --bucket <name> 
 ```
 
 ### Microsoft 365:

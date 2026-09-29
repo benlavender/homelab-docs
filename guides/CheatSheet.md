@@ -5988,6 +5988,17 @@ aws s3 cp <local_path | s3uri> <local_path | s3uri>
 aws s3 cp --recursive <local_path | s3uri> <local_path | s3uri> 
 ```
 ```bash
+# Syncronise data on the destination based on the source:
+aws s3 sync <local_path | s3uri> <local_path | s3uri>
+# Syncronise data on the destination based on the source and force destination to be identical.
+# Warning: Non-identical content in the destination will be deleted:
+aws s3 sync --delete <local_path | s3uri> <local_path | s3uri>
+```
+```bash
+# Download an object stored in an S3 bucket:
+aws s3api get-object --bucket <name> --key <object_name> <filename>
+```
+```bash
 # Add an object to an s3 bucket:
 aws s3api put-object --bucket <name> --key <object_name> --body <object>
 # Add an object to an s3 bucket at a specific location:

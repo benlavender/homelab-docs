@@ -127,6 +127,7 @@
     - [Amazon Web Services](#amazon-web-services)
         - [Account management](#account-management)
         - [S3](#s3)
+        - [IAM](#iam)
     - [Microsoft 365](#microsoft-365)
     - [Microsoft Azure](#microsoft-azure)
         - [Azure Active Directory](#azure-active-directory)
@@ -5952,6 +5953,13 @@ aws account get-account-information
 ```bash
 # Print all regions for the current account:
 aws account list-regions
+```
+
+#### IAM:
+
+```bash
+# List all users in account:
+aws iam list-users
 ```
 
 #### S3:

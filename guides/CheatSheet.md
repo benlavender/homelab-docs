@@ -5961,6 +5961,18 @@ aws account list-regions
 # List all users in account:
 aws iam list-users
 ```
+```bash
+# List all managed policies in account:
+aws iam list-policies
+# List all managed policies in account that are currently attached:
+aws iam list-policies --only-attached
+# Get a managed policy in account:
+aws iam get-policy --policy-arn <arn>
+```
+```bash
+# Delete a non-attached policy:
+aws iam delete-policy --policy-arn <arn>
+```
 
 #### S3:
 

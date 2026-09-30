@@ -5939,6 +5939,10 @@ aws configure list
 # Login with management console credentials:
 aws login
 ```
+```bash
+# Removed cached login credentials:
+aws logout
+```
 
 #### Account management:
 

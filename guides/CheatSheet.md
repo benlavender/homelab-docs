@@ -127,6 +127,7 @@
     - [Amazon Web Services](#amazon-web-services)
         - [Account management](#account-management)
         - [S3](#s3)
+        - [IAM](#iam)
     - [Microsoft 365](#microsoft-365)
     - [Microsoft Azure](#microsoft-azure)
         - [Azure Active Directory](#azure-active-directory)
@@ -5938,6 +5939,10 @@ aws configure list
 # Login with management console credentials:
 aws login
 ```
+```bash
+# Removed cached login credentials:
+aws logout
+```
 
 #### Account management:
 
@@ -5952,6 +5957,37 @@ aws account get-account-information
 ```bash
 # Print all regions for the current account:
 aws account list-regions
+```
+
+#### IAM:
+
+```bash
+# List all users in account:
+aws iam list-users
+```
+```bash
+# Create an IAM group:
+aws iam create-group --group-name <name>
+```
+```bash
+# Add IAM user to existing group:
+aws iam add-user-to-group --user-name <name> --group-name <name>
+```
+```bash
+# Delete an existing IAM group:
+aws iam delete-group --group-name <name>
+```
+```bash
+# List all managed policies in account:
+aws iam list-policies
+# List all managed policies in account that are currently attached:
+aws iam list-policies --only-attached
+# Get a managed policy in account:
+aws iam get-policy --policy-arn <arn>
+```
+```bash
+# Delete a non-attached policy:
+aws iam delete-policy --policy-arn <arn>
 ```
 
 #### S3:

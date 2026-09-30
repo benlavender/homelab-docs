@@ -5962,6 +5962,18 @@ aws account list-regions
 aws iam list-users
 ```
 ```bash
+# Create an IAM group:
+aws iam create-group --group-name <name>
+```
+```bash
+# Add IAM user to existing group:
+aws iam add-user-to-group --user-name <name> --group-name <name>
+```
+```bash
+# Delete an existing IAM group:
+aws iam delete-group --group-name <name>
+```
+```bash
 # List all managed policies in account:
 aws iam list-policies
 # List all managed policies in account that are currently attached:

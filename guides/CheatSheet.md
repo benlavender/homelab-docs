@@ -5989,6 +5989,14 @@ aws iam get-policy --policy-arn <arn>
 # Delete a non-attached policy:
 aws iam delete-policy --policy-arn <arn>
 ```
+```bash
+# List IAM roles in account:
+aws iam list-roles
+```
+```bash
+# Print information about an IAM role:
+aws iam get-role --role-name <name>
+```
 
 #### S3:
 

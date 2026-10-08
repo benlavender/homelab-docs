@@ -124,6 +124,10 @@
     - [Desired State Configuration](#desired-state-configuration)
         - [Terraform](#terraform)
 8. [Public Cloud](#public-cloud)
+    - [Amazon Web Services](#amazon-web-services)
+        - [Account management](#account-management)
+        - [S3](#s3)
+        - [IAM](#iam)
     - [Microsoft 365](#microsoft-365)
     - [Microsoft Azure](#microsoft-azure)
         - [Azure Active Directory](#azure-active-directory)
@@ -5917,6 +5921,139 @@ terraform output
 ```
 
 ## Public Cloud:
+
+### Amazon Web Services:
+
+```bash
+# Configure awscli.
+# Follow the interactive guide:
+aws configure
+# Configure the default region:
+aws configure set default.region <region>
+# Override region set as default:
+aws configure set region <region>
+```
+```bash
+# List configured awscli settings:
+aws configure list
+```
+```bash
+# Login with management console credentials:
+aws login
+```
+```bash
+# Removed cached login credentials:
+aws logout
+```
+
+#### Account management:
+
+```bash
+# Print current account information:
+aws account get-account-information
+```
+```bash
+# Print primary account contact information:
+aws account get-account-information
+```
+```bash
+# Print all regions for the current account:
+aws account list-regions
+```
+
+#### IAM:
+
+```bash
+# List all users in account:
+aws iam list-users
+```
+```bash
+# Create an IAM group:
+aws iam create-group --group-name <name>
+```
+```bash
+# Add IAM user to existing group:
+aws iam add-user-to-group --user-name <name> --group-name <name>
+```
+```bash
+# Delete an existing IAM group:
+aws iam delete-group --group-name <name>
+```
+```bash
+# List all managed policies in account:
+aws iam list-policies
+# List all managed policies in account that are currently attached:
+aws iam list-policies --only-attached
+# Get a managed policy in account:
+aws iam get-policy --policy-arn <arn>
+```
+```bash
+# Delete a non-attached policy:
+aws iam delete-policy --policy-arn <arn>
+```
+```bash
+# List IAM roles in account:
+aws iam list-roles
+```
+```bash
+# Print information about an IAM role:
+aws iam get-role --role-name <name>
+```
+
+#### S3:
+
+```bash
+# List all s3 buckets:
+aws s3 ls
+# List all s3 buckets with more info:
+aws s3api list-buckets
+```
+```bash
+# Create an s3 bucket outside of us-east-1:
+aws s3api create-bucket --bucket <name> --create-bucket-configuration LocationConstraint=<region>
+```
+```bash
+# Remove an empty s3 bucket:
+aws s3 rb <s3uri>
+# Remove a non-empty s3 bucket:
+aws s3 rb --force <s3uri>
+```
+```bash
+# List all objects in an s3 bucket:
+aws s3 ls <s3uri | name>
+# List all objects in an s3 bucket in human readable output:
+aws s3 ls <s3uri | name> --human-readable
+# List all objects in an s3 bucket with more info:
+aws s3api list-objects --bucket <name>
+```
+```bash
+# Use --dryrun if required.
+# Copy object to or from an s3 bucket:
+aws s3 cp <local_path | s3uri> <local_path | s3uri>
+# Copy all objects to or from an s3 bucket:
+aws s3 cp --recursive <local_path | s3uri> <local_path | s3uri> 
+```
+```bash
+# Syncronise data on the destination based on the source:
+aws s3 sync <local_path | s3uri> <local_path | s3uri>
+# Syncronise data on the destination based on the source and force destination to be identical.
+# Warning: Non-identical content in the destination will be deleted:
+aws s3 sync --delete <local_path | s3uri> <local_path | s3uri>
+```
+```bash
+# Download an object stored in an S3 bucket:
+aws s3api get-object --bucket <name> --key <object_name> <filename>
+```
+```bash
+# Add an object to an s3 bucket:
+aws s3api put-object --bucket <name> --key <object_name> --body <object>
+# Add an object to an s3 bucket at a specific location:
+aws s3api put-object --bucket <name> --key </dir/object_name> --body <object>
+```
+```bash
+# Copy an object stored in an s3 bucket:
+aws s3api copy-object --copy-source <name/oject> --key <object_name> --bucket <name> 
+```
 
 ### Microsoft 365:
 

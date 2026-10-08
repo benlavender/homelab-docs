@@ -5560,6 +5560,8 @@ virsh net-uuid <name>
 # Working with domains.
 # List all domains:
 virsh list --all
+# Start a domain:
+virsh start <name>
 # Shutdown a domain gracefully:
 virsh shutdown <id | name>
 # List all blocks on a domain:

@@ -5957,8 +5957,37 @@ aws account get-account-information
 aws account get-account-information
 ```
 ```bash
+# Print account contact information:
+aws account get-contact-information
+```
+```bash
 # Print all regions for the current account:
 aws account list-regions
+```
+
+#### Organizations:
+
+```bash
+# List the organization root:
+aws organizations list-roots
+```
+```bash
+# List all child organizational units of a parent:
+aws organizations list-organizational-units-for-parent --parent-id <id>
+# or:
+aws organizations list-children --parent-id <id> --child-type ORGANIZATIONAL_UNIT
+# List all child accounts of a parent:
+aws organizations list-accounts-for-parent --parent-id <id>
+# or:
+aws organizations list-children --parent-id <id> --child-type ACCOUNT
+```
+```bash
+# Print all accounts in the organization:
+aws organizations list-accounts
+```
+```bash
+# Print account information:
+aws organizations describe-account --account-id <id>
 ```
 
 #### IAM:

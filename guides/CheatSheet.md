@@ -126,6 +126,7 @@
 8. [Public Cloud](#public-cloud)
     - [Amazon Web Services](#amazon-web-services)
         - [Account management](#account-management)
+        - [Organizations](#organizations)
         - [S3](#s3)
         - [IAM](#iam)
     - [Microsoft 365](#microsoft-365)

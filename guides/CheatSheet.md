@@ -99,6 +99,7 @@
     - [HTTP Commands](#http-commands)
     - [Dig](#dig)
     - [Certificates, Key-based Authentication, and Encryption](#certificates-key-based-authentication-and-encryption)
+        - [p11-kit / Cryptoki(pkcs11)](#p11-kit--cryptokipkcs11)
         - [OpenSSL](#openssl)
         - [OpenPGP/GnuPG](#openpgpgnupg)
         - [OpenSSH](#openssh)
@@ -3845,6 +3846,39 @@ dig +trace <QNAME>
 ```
 
 ### Certificates, Key-based Authentication, and Encryption:
+
+#### p11-kit / Cryptoki(pkcs11):
+
+```bash
+# List all in the trust policy store:
+trust list
+# List an existing pkcs11 object by URI:
+trust list --filter='pkcs11:<id>'
+# List only CA certificates:
+trust list --filter=ca-anchors
+# List only distrusted certificates:
+trust list --filter=blocklist
+# List only certificates used for server authentication:
+trust list --purpose=server-auth
+# List only certificates used for client authentication:
+trust list --purpose=client-auth
+```
+```bash
+# Add a trust anchor to the trust policy store:
+trust anchor --store <filename>
+```
+```bash
+# Remove an existing trust anchor in the trust policy store:
+trust anchor --remove 'pkcs11:<id>'
+# Remove an existing trust anchor by filename identical to one in the trust policy store:
+trust anchor --remove <filename>
+```
+```bash
+# Extract an existing object from the trust policy store to an PEM formatted file:
+trust extract --filter='pkcs11:<id>' --format=pem-bundle <filename>
+# Extract an existing object from the trust policy store to an DER formatted file:
+trust extract --filter='pkcs11:<id>' --format=x509-file <filename>
+```
 
 #### OpenSSL:
 

@@ -24,6 +24,7 @@
         - [Man pages](#man-pages)
         - [Wikiman](#wikiman)
 2. [OS Management](#os-management)
+    - [dmidecode](#dmidecode--smbios)
     - [sysctl](#sysctl)
     - [userdbctl](#userdbctl)
     - [Useradd/usermod/userdel](#Useradd/usermod/userdel)
@@ -439,6 +440,20 @@ G
 
 ## <ins>OS Management:</ins>
 
+### dmidecode / SMBIOS
+
+> ℹ️ **Note:** Commands usually require elevation.
+
+```bash
+# List available DMI types:
+dmidecode --list-types
+```
+```bash
+# Refer to DMIDECODE(8) for type names and numbers.
+# Print specific table records:
+dmidecode --type <name|#>
+```
+
 ### sysctl
 
 > ℹ️ **Notes:** 
@@ -618,14 +633,6 @@ loadectl status
 ```bash
 # Load keys for the current console only:
 loadkeys <keymap>
-```
-```bash
-# Retreive BIOS information from SMBIOS
-dmidecode --type bios
-```
-```bash
-# Retreive system information, such as serial number 
-dmidecode --type system
 ```
 ```bash
 # Get locale information:

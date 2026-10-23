@@ -635,14 +635,6 @@ loadectl status
 loadkeys <keymap>
 ```
 ```bash
-# Retreive BIOS information from SMBIOS
-dmidecode --type bios
-```
-```bash
-# Retreive system information, such as serial number 
-dmidecode --type system
-```
-```bash
 # Get locale information:
 localectl status
 ```

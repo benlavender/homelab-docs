@@ -31,6 +31,7 @@
     - [getent / Name Service Switch](#getent--name-service-switch-glibc)
     - [Bootloaders and boot managers](#bootloaders-and-boot-managers)
         - [systemd-boot](#systemd-boot)
+        - [efivar](#efivar)
         - [efibootmgr](#efibootmgr)
     - [Loginctl](#Loginctl)
     - [lspci](#lspci)
@@ -700,6 +701,17 @@ bootctl is-installed
 ```bash
 # Print boot loader and firmware information:
 bootctl status
+```
+
+#### efivar:
+
+```bash
+# List current UEFI variables:
+efivar --list
+```
+```bash
+# Print a specific UEFI variable:
+efivar --print --name <guid-name>
 ```
 
 #### efibootmgr:

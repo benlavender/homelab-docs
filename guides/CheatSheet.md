@@ -24,6 +24,7 @@
         - [Man pages](#man-pages)
         - [Wikiman](#wikiman)
 2. [OS Management](#os-management)
+    - [dmidecode](#dmidecode--smbios)
     - [sysctl](#sysctl)
     - [userdbctl](#userdbctl)
     - [Useradd/usermod/userdel](#Useradd/usermod/userdel)
@@ -50,6 +51,7 @@
         - [e2fsprogs - Ext2/3/4](#e2fsprogs---ext-234)
         - [exfatprogs - extFAT](#exfatprogs---extfat)
     - [Files and Directories](#files-and-directories)
+        - [stat](#stat)
         - [dd](#dd)
         - [Fallocate](#fallocate)
         - [losetup / Loop devices](#losetup--loop-devices)
@@ -95,9 +97,11 @@
     - [MS-SQL](#ms-sql)
     - [SFTP](#sftp)
     - [SCCM](#system-center-configuration-manager)
+    - [speedtest](#speedtest-ookla)    
     - [HTTP Commands](#http-commands)
     - [Dig](#dig)
     - [Certificates, Key-based Authentication, and Encryption](#certificates-key-based-authentication-and-encryption)
+        - [p11-kit / Cryptoki(pkcs11)](#p11-kit--cryptokipkcs11)
         - [OpenSSL](#openssl)
         - [OpenPGP/GnuPG](#openpgpgnupg)
         - [OpenSSH](#openssh)
@@ -123,6 +127,10 @@
     - [Desired State Configuration](#desired-state-configuration)
         - [Terraform](#terraform)
 8. [Public Cloud](#public-cloud)
+    - [Amazon Web Services](#amazon-web-services)
+        - [Account management](#account-management)
+        - [S3](#s3)
+        - [IAM](#iam)
     - [Microsoft 365](#microsoft-365)
     - [Microsoft Azure](#microsoft-azure)
         - [Azure Active Directory](#azure-active-directory)
@@ -433,6 +441,20 @@ G
 
 ## <ins>OS Management:</ins>
 
+### dmidecode / SMBIOS
+
+> ℹ️ **Note:** Commands usually require elevation.
+
+```bash
+# List available DMI types:
+dmidecode --list-types
+```
+```bash
+# Refer to DMIDECODE(8) for type names and numbers.
+# Print specific table records:
+dmidecode --type <name|#>
+```
+
 ### sysctl
 
 > ℹ️ **Notes:** 
@@ -612,14 +634,6 @@ loadectl status
 ```bash
 # Load keys for the current console only:
 loadkeys <keymap>
-```
-```bash
-# Retreive BIOS information from SMBIOS
-dmidecode --type bios
-```
-```bash
-# Retreive system information, such as serial number 
-dmidecode --type system
 ```
 ```bash
 # Get locale information:
@@ -1571,6 +1585,43 @@ Get-ItemProperty -Path 'file/dir' | Format-List -Property *
 ```powershell
 # List files created and modified today, in descending order by lastwritetime and include the name, lwt and size:
 Get-ChildItem -Path <dir> -Recurse | Where-Object {$_.LastWriteTime.date -eq (Get-Date).Date} | Sort-Object LastWriteTime -Descending | Select-Object -Property Name,LastWriteTime,Length | Format-Table -AutoSize
+```
+
+#### stat:
+
+> **Note:** Can also be used with directories.
+
+```bash
+# Print file information:
+stat <filename>
+# Print file system information instead of file:
+stat --file-system <filename>
+```
+```bash
+# Printing with different output formats.
+# To print multiple formats use --format='<%type> <%type>'. 
+# Print only file name:
+stat --format=%n <filename>
+# Print only creation time in human readable:
+stat --format=%w <filename>
+# Print only atime in human readable:
+stat --format=%x <filename>
+# Print only mtime in human readable:
+stat --format=%y <filename>
+# Print only permissions in octal:
+stat --format=%a <filename>
+# Print only permissions in human readable:
+stat --format=%A <filename>
+# Print only file type:
+stat --format=%F <filename>
+# Print only inode number:
+stat --format=%i <filename>
+# Print only mount point:
+stat --format=%m <filename>
+# Print only ID of owner:
+stat --format=%u <filename>
+# Print only name of owner:
+stat --format=%U <filename>
 ```
 
 #### dd:
@@ -3199,7 +3250,7 @@ resolvectl dns <interface>
 ```
 ```bash
 # Set DNS servers for a specific interface:
-resolvectl dns <interface> <dns1> | <dns2>
+resolvectl dns <interface> <dns1> | <dns2>+
 ```
 ```bash
 # Show DNS search listsfor a specific interface:
@@ -3445,7 +3496,7 @@ rclone ls <remote:path>
 rclone lsf <remote:path>
 # List only directories from remote (use -R to recurse):
 rclone lsd <remote:path>
-# List local directory recursively:spo
+# List local directory recursively:
 rclone ls <dir>
 # List local directory recursively and recurse links:
 rclone ls --links <dir>
@@ -3483,12 +3534,21 @@ rclone check --one-way <src_remote:> <dst_remote:>
 # Progress stats can be displayed with --progress which is updated every 500ms or can be an inline basic summary with both --progress --stats-one-line. 
 # Copy the source remote to the destination skipping any identical files:
 rclone copy <src_remote:> <dst_remote:>
+# Copy the source remote to the destination skipping any identical files and including empty directories:
+rclone copy --create-empty-src-dirs <src_remote:> <dst_remote:>
 # Copy the source remote to the destination skipping newer files on the destination:
-rclone copy --update <src_remote:> <dst_remote:>
+rclone copy --update <src_remote:> <dst_sremote:>
 # Copy the source remote to the destination skipping any identical files with a quicker size-only check:
 rclone copy --size-only <src_remote:> <dst_remote:>
-# Copy the source remote to the destination skipping any identical files and any specific file or directory:
-rclone copy --exclude <filename/directory> <src_remote:> <dst_remote:>
+# Copy the source remote to the destination skipping any identical files and a specific file:
+rclone copy --exclude=<filename> <src_remote:> <dst_remote:>
+# Copy the source remote to the destination skipping any identical files and all specific file extensions:
+rclone copy --exclude=*.<ext> <src_remote:> <dst_remote:>
+# Copy the source remote to the destination skipping any identical files and a specific directory:
+rclone copy --exclude=</dir/> <src_remote:> <dst_remote:>
+```
+```bash
+# Use --dry-run if required.
 # Ensure the destination remote is identical to the source.
 # Warning: Non-identical content in the destination will be deleted:
 rclone sync <src_remote:> <dst_remote:>
@@ -3498,6 +3558,9 @@ rclone sync --size-only <src_remote:> <dst_remote:>
 # Ensure the destination remote is identical to the source where a suffix is added to any changed files without removing the previous.
 # Warning: Non-identical content in the destination will be deleted:
 rclone sync --suffix <string> --suffix-keep-extension <src_remote:> <dst_remote:>
+# Ensure the destination remote is identical to the source including empty directories.
+# Warning: Non-identical content in the destination will be deleted:
+rclone sync --create-empty-src-dirs <src_remote:> <dst_remote:>
 ```
 
 ### Exchange On-Premise:
@@ -3730,6 +3793,23 @@ usermod -g sftpusers -d /incoming -s /sbin/nologin {jail}
 Get-CMDevice -Name <deviceID>
 ```
 
+### speedtest (Ookla):
+
+```bash
+# List nearest servers that support the speedtest service:
+speedtest --servers
+```
+```bash
+# Perform a speed test using nearest servers:
+speedtest
+# Perform a speed test using nearest servers and show selection process:
+speedtest --selection-details
+# Perform a speed test with a specific server:
+speedtest --server-id=<ID>
+# Perform a speed test from a specific local interface:
+speedtest --interface=interface=<int>
+```
+
 ### HTTP Commands:
 
 ```bash
@@ -3789,6 +3869,39 @@ dig +trace <QNAME>
 ```
 
 ### Certificates, Key-based Authentication, and Encryption:
+
+#### p11-kit / Cryptoki(pkcs11):
+
+```bash
+# List all in the trust policy store:
+trust list
+# List an existing pkcs11 object by URI:
+trust list --filter='pkcs11:<id>'
+# List only CA certificates:
+trust list --filter=ca-anchors
+# List only distrusted certificates:
+trust list --filter=blocklist
+# List only certificates used for server authentication:
+trust list --purpose=server-auth
+# List only certificates used for client authentication:
+trust list --purpose=client-auth
+```
+```bash
+# Add a trust anchor to the trust policy store:
+trust anchor --store <filename>
+```
+```bash
+# Remove an existing trust anchor in the trust policy store:
+trust anchor --remove 'pkcs11:<id>'
+# Remove an existing trust anchor by filename identical to one in the trust policy store:
+trust anchor --remove <filename>
+```
+```bash
+# Extract an existing object from the trust policy store to an PEM formatted file:
+trust extract --filter='pkcs11:<id>' --format=pem-bundle <filename>
+# Extract an existing object from the trust policy store to an DER formatted file:
+trust extract --filter='pkcs11:<id>' --format=x509-file <filename>
+```
 
 #### OpenSSL:
 
@@ -4872,7 +4985,7 @@ nmap --open <host>
 ```
 ```bash
 # Additionally fingerprint the OS and provide verbose info:
-nmap -o <host> -v
+nmap -O <host> -v
 ```
 ```bash
 # Show supported IP protocols of a host: 
@@ -5189,14 +5302,15 @@ git rebase <branch>
 ```
 ```bash
 # Working with tags in Git.
+# Avoid creating lightweight tags named "tag" as it may conflict with the command.
 # List all tags:
 git tag -l
 # List specific tag names:
 git tag -l <string>
 # Show a tag:
 git show <tag>
-# Create an annotated tag (use -m for inline message):
-git tag -a <tag>
+# Create an annotated tag: 
+git tag -a <tag> -m <message>
 # Create a lightweight tag:
 git tag <tag>
 # Tag a commit directly:
@@ -5503,6 +5617,8 @@ virsh net-uuid <name>
 # Working with domains.
 # List all domains:
 virsh list --all
+# Start a domain:
+virsh start <name>
 # Shutdown a domain gracefully:
 virsh shutdown <id | name>
 # List all blocks on a domain:
@@ -5862,6 +5978,168 @@ terraform output
 ```
 
 ## Public Cloud:
+
+### Amazon Web Services:
+
+```bash
+# Configure awscli.
+# Follow the interactive guide:
+aws configure
+# Configure the default region:
+aws configure set default.region <region>
+# Override region set as default:
+aws configure set region <region>
+```
+```bash
+# List configured awscli settings:
+aws configure list
+```
+```bash
+# Login with management console credentials:
+aws login
+```
+```bash
+# Removed cached login credentials:
+aws logout
+```
+
+#### Account management:
+
+```bash
+# Print current account information:
+aws account get-account-information
+```
+```bash
+# Print primary account contact information:
+aws account get-account-information
+```
+```bash
+# Print account contact information:
+aws account get-contact-information
+```
+```bash
+# Print all regions for the current account:
+aws account list-regions
+```
+
+#### Organizations:
+
+```bash
+# List the organization root:
+aws organizations list-roots
+```
+```bash
+# List all child organizational units of a parent:
+aws organizations list-organizational-units-for-parent --parent-id <id>
+# or:
+aws organizations list-children --parent-id <id> --child-type ORGANIZATIONAL_UNIT
+# List all child accounts of a parent:
+aws organizations list-accounts-for-parent --parent-id <id>
+# or:
+aws organizations list-children --parent-id <id> --child-type ACCOUNT
+```
+```bash
+# Print all accounts in the organization:
+aws organizations list-accounts
+```
+```bash
+# Print account information:
+aws organizations describe-account --account-id <id>
+```
+
+#### IAM:
+
+```bash
+# List all users in account:
+aws iam list-users
+```
+```bash
+# Create an IAM group:
+aws iam create-group --group-name <name>
+```
+```bash
+# Add IAM user to existing group:
+aws iam add-user-to-group --user-name <name> --group-name <name>
+```
+```bash
+# Delete an existing IAM group:
+aws iam delete-group --group-name <name>
+```
+```bash
+# List all managed policies in account:
+aws iam list-policies
+# List all managed policies in account that are currently attached:
+aws iam list-policies --only-attached
+# Get a managed policy in account:
+aws iam get-policy --policy-arn <arn>
+```
+```bash
+# Delete a non-attached policy:
+aws iam delete-policy --policy-arn <arn>
+```
+```bash
+# List IAM roles in account:
+aws iam list-roles
+```
+```bash
+# Print information about an IAM role:
+aws iam get-role --role-name <name>
+```
+
+#### S3:
+
+```bash
+# List all s3 buckets:
+aws s3 ls
+# List all s3 buckets with more info:
+aws s3api list-buckets
+```
+```bash
+# Create an s3 bucket outside of us-east-1:
+aws s3api create-bucket --bucket <name> --create-bucket-configuration LocationConstraint=<region>
+```
+```bash
+# Remove an empty s3 bucket:
+aws s3 rb <s3uri>
+# Remove a non-empty s3 bucket:
+aws s3 rb --force <s3uri>
+```
+```bash
+# List all objects in an s3 bucket:
+aws s3 ls <s3uri | name>
+# List all objects in an s3 bucket in human readable output:
+aws s3 ls <s3uri | name> --human-readable
+# List all objects in an s3 bucket with more info:
+aws s3api list-objects --bucket <name>
+```
+```bash
+# Use --dryrun if required.
+# Copy object to or from an s3 bucket:
+aws s3 cp <local_path | s3uri> <local_path | s3uri>
+# Copy all objects to or from an s3 bucket:
+aws s3 cp --recursive <local_path | s3uri> <local_path | s3uri> 
+```
+```bash
+# Syncronise data on the destination based on the source:
+aws s3 sync <local_path | s3uri> <local_path | s3uri>
+# Syncronise data on the destination based on the source and force destination to be identical.
+# Warning: Non-identical content in the destination will be deleted:
+aws s3 sync --delete <local_path | s3uri> <local_path | s3uri>
+```
+```bash
+# Download an object stored in an S3 bucket:
+aws s3api get-object --bucket <name> --key <object_name> <filename>
+```
+```bash
+# Add an object to an s3 bucket:
+aws s3api put-object --bucket <name> --key <object_name> --body <object>
+# Add an object to an s3 bucket at a specific location:
+aws s3api put-object --bucket <name> --key </dir/object_name> --body <object>
+```
+```bash
+# Copy an object stored in an s3 bucket:
+aws s3api copy-object --copy-source <name/oject> --key <object_name> --bucket <name> 
+```
 
 ### Microsoft 365:
 

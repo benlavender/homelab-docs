@@ -5605,11 +5605,49 @@ virsh list --all
 virsh start <name>
 # Shutdown a domain gracefully:
 virsh shutdown <id | name>
-# List all blocks on a domain:
-virsh domblklist <id | name>
 # Print domain information as XML to stdout:
 virsh dumpxml <id | name>
+# Print connection URI information of a running domain:
+virsh domdisplay <id | name>
+# List all mounted filesystems on domain:
+virsh domfsinfo <id | name>
+# List all blocks on a domain:
+virsh domblklist <id | name>
 ```
+```bash
+# Working with osinfo database.
+# Refer to osinfo-query(1) for all properties.
+# List all possible OS variants for domains:
+osinfo-query os
+# Or for a list of above:
+osinfo-query os --fields=short-id
+# List all possible OS variants for domains only with their short-id, name and vendor:
+osinfo-query os --fields=short-id,name,vendor
+# List all possible OS variants for a specific vendor:
+osinfo-query os vendor=<'vendor'>
+```
+```bash
+# Creating domains.
+# Defaults for --vcpus, --cpu and --memory if not specified will be based on osinfo (prefered).
+# Use --dry-run if required (useful if unsure on default domain spec).
+# Removing --noautoconsole will automatically spawn and attempt connect with virt-viewer.
+# Removing --noreboot will boot the domain once created.
+# All domains are created with EFI support, unless --boot uefi=off is specified.
+# Create a diskless domain booting off a CD ISO where name is the same as the os variant:
+virt-install --os-variant <variant> --disk none --cdrom <filename> --boot uefi=on --noautoconsole --noreboot
+# Create a domain booting off an existing image with a custom name and memory count:
+virt-install --name <name> --os-variant <variant> --disk <filename> --memory <MiB> --boot hd --boot uefi=on --noautoconsole --noreboot
+# Create a domain booting off a CD ISO with a custom name, specific vcpu and memory count:
+virt-install --name <name> --os-variant <variant> --disk <filename> --vcpus <#> --memory <MiB> --boot hd --boot uefi=on --noautoconsole --noreboot
+# Create a domain booting off an existing image with a custom name and a specific CPU ISA.
+# Use "qemu-system-x86_64 -cpu help":
+virt-install --name <name> --os-variant <variant> --disk <filename> --cpu <name> --memory <MiB> --boot hd --boot uefi=on --noautoconsole --noreboot
+# Create a domain booting off an existing image with a custom name and with the hosts CPU config exposed to the guest for higher performance:
+virt-install --name <name> --os-variant <variant> --disk <filename> --cpu host-model --memory <MiB> --boot hd --boot uefi=on --noautoconsole --noreboot
+# Create a domain booting off an existing image with a custom name and with the hosts CPU passed through to the guest for higher performance:
+virt-install --name <name> --os-variant <variant> --disk <filename> --cpu host-passthrough --memory <MiB> --boot hd --boot uefi=on --noautoconsole --noreboot
+```
+
 ```bash
 # Perform a manual offline migration of an existing domain.
 # Export domain data to a .xml file:

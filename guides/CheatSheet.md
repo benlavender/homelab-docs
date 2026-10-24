@@ -5605,10 +5605,81 @@ virsh list --all
 virsh start <name>
 # Shutdown a domain gracefully:
 virsh shutdown <id | name>
-# List all blocks on a domain:
-virsh domblklist <id | name>
+# Terminate domain session by force (shut off):
+virsh destroy <id | name>
 # Print domain information as XML to stdout:
 virsh dumpxml <id | name>
+# Print connection URI information of a running domain:
+virsh domdisplay <id | name>
+# List all mounted filesystems on domain:
+virsh domfsinfo <id | name>
+# List all blocks on a domain:
+virsh domblklist <id | name>
+```
+```bash
+# Working with osinfo database.
+# Refer to osinfo-query(1) for all properties.
+# List all possible OS variants for domains:
+osinfo-query os
+# Or for a list of above:
+osinfo-query os --fields=short-id
+# List all possible OS variants for domains only with their short-id, name and vendor:
+osinfo-query os --fields=short-id,name,vendor
+# List all possible OS variants for a specific vendor:
+osinfo-query os vendor=<'vendor'>
+```
+```bash
+# Creating manual domains.
+# Defaults for --vcpus, --cpu and --memory if not specified will be based on osinfo (prefered).
+# Use --dry-run if required (useful if unsure on default domain specs).
+# Default img format is qcow2.
+# Removing --noautoconsole will automatically spawn and attempt connect with virt-viewer.
+# Removing --noreboot will boot the domain once created.
+# All domains are created with EFI support, unless --boot uefi=off is specified.
+# Create a diskless domain booting off a CD ISO where name is the same as the os variant:
+virt-install --os-variant <variant> --disk none --cdrom <filename> --boot uefi=on --noautoconsole --noreboot
+# Create a domain booting off an existing image with a custom name:
+virt-install --name <name> --os-variant <variant> --disk <filename> --boot hd --boot uefi=on --noautoconsole --noreboot
+# Create a domain booting off a CD ISO with a custom name where a RAW disk is created with a specific size in GiB:
+virt-install --name <name> --os-variant <variant> --disk size=<#> --boot uefi=on --noautoconsole --noreboot
+# Create a domain with a custom name where a RAW disk is created with a specific size in GiB:
+virt-install --name <name> --os-variant <variant> --cdrom <filename> --disk size=<#> ---boot uefi=on --noautoconsole
+# Create a domain booting off an existing image with a custom name and connect the NIC to a specific existing virtual network:
+virt-install --name <name> --os-variant <variant> --disk <filename> --boot hd --boot uefi=on --network <name> --noautoconsole --noreboot
+# Create a domain booting off an existing image with a custom name but no attached NIC:
+virt-install --name <name> --os-variant <variant> --disk <filename> --boot hd --boot uefi=on --network none --noautoconsole --noreboot
+# Create a domain booting off an existing image with a custom name and memory count:
+virt-install --name <name> --os-variant <variant> --disk <filename> --memory <MiB> --boot hd --boot uefi=on --noautoconsole --noreboot
+# Create a domain booting off a CD ISO with a custom name, specific vcpu and memory count:
+virt-install --name <name> --os-variant <variant> --disk <filename> --vcpus <#> --memory <MiB> --boot hd --boot uefi=on --noautoconsole --noreboot
+# Create a domain booting off an existing image with a custom name and a specific CPU ISA.
+# Use "qemu-system-x86_64 -cpu help":
+virt-install --name <name> --os-variant <variant> --disk <filename> --cpu <name> --memory <MiB> --boot hd --boot uefi=on --noautoconsole --noreboot
+# Create a domain booting off an existing image with a custom name and with the hosts CPU config exposed to the guest for higher performance (more guest isolation and better for migrations):
+virt-install --name <name> --os-variant <variant> --disk <filename> --cpu host-model --memory <MiB> --boot hd --boot uefi=on --noautoconsole --noreboot
+# Create a domain booting off an existing image with a custom name and with the hosts CPU passed through to the guest for higher performance (prefered over host-model but can hamper migrations):
+virt-install --name <name> --os-variant <variant> --disk <filename> --cpu host-passthrough --memory <MiB> --boot hd --boot uefi=on --noautoconsole --noreboot
+```
+```bash
+# Installing domains interactively.
+# Defaults for --vcpus, --cpu and --memory if not specified will be based on osinfo (prefered).
+# Use --dry-run if required (useful if unsure on default domain specs/location).
+# Default img format is qcow2.
+# Removing --noautoconsole will automatically spawn and attempt connect with virt-viewer.
+# All domains are created with EFI support, unless --boot uefi=off is specified.
+# Download media and create a domain where name is the same as the os variant:
+virt-install --install os=<variant> --boot uefi=on --noautoconsole
+# Download media and create a domain with a custom name:
+virt-install --name <name> --install os=<variant> --boot uefi=on --noautoconsole
+# Download media and create a domain with a custom name and provide a name and password for the user account.
+# Password file must only contain one single line as the password:
+virt-install --name <name> --install os=<variant> --unattended user-login=<name>,user-password-file=<filename> --boot uefi=on --noautoconsole
+```
+```bash
+# Remove a non-running domain but leave storage:
+virsh undefine <id | name>
+# Remove a non-running domain and associated storage:
+virsh undefine <id | name> --remove-all-storage
 ```
 ```bash
 # Perform a manual offline migration of an existing domain.
@@ -5624,40 +5695,10 @@ qemu-img info <filename>
 virsh define <filename.xml>
 ```
 ```bash
-# Create new domain using virt-install:
-virt-install --name=tester1.example.com --ram=1024 --vcpus=2 --disk=/var/lib/libvirt/images/test1.example.com.img,size=16 --graphics=spice --location=ftp://192.168.1 22.1/pub/inst --os-type=Linux --os-variant=rhel7
-```
-```bash
-# Using an ISO for O/S deployment:
-virt-install --name=tester1.example.com --ram=1024 --vcpus=2 --disk=/var/lib/libvirt/images/test1.example.com.img,size=10 --location=/var/lib/libvirt/images/rhel-server-7.6-x86_64-dvd.iso --graphics=spice --os-type=Linux --os-variant=rhel7 
-```
-```bash
-# Don't wait for O/S installation:
-virt-install --name=tester1.example.com --ram=1024 --vcpus=2 --disk=/var/lib/libvirt/images/test1.example.com.img,size=10 --location=/var/lib/libvirt/images/rhel-server-7.6-x86_64-dvd.iso --graphics=spice --os-type=Linux --os-variant=rhel7 --noautoconsole --initrd-inject can be used with URL of .KS file.
-```
-```bash
-# Terminate domain session:
-virsh destroy 'domain_name' --graceful
-# Non-gracefull:
-virsh destroy 'domain_name'
-```
-```bash
-# Remove domain but leave storage:
-virsh undefine tester1.example.com
-```
-```bash
-# Remove domain and associated storage
-virsh undefine tester1.example.com --remove-all-storage
-```
-```bash
-# Using extra arguments:
-# Specifying the kirkstart URI:
-virt-install --name=tester1.example.com --ram=1024 --vcpus=2 --disk=/var/lib/libvirt/images/test1.example.com.img,size=10 --location=/var/lib/libvirt/images/rhel-server-7.6-x86_64-dvd.iso --graphics=spice --os-type=Linux --os-variant=rhel7 --extra-args='ks=http://myserver/my.ks'
-```
-```bash
-# Enable / disable domain autostart at host boot:
-virsh autostart <domain_name>
-virsh autostart <domain_name> --disable
+# Automatically boot the domain at host boot:
+virsh autostart <id | name>
+# Disable booting of the domain at host boot:
+virsh autostart <id | name> --disable
 ```
 
 ### Containerization:

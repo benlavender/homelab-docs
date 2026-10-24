@@ -5605,6 +5605,8 @@ virsh list --all
 virsh start <name>
 # Shutdown a domain gracefully:
 virsh shutdown <id | name>
+# Terminate domain session by force (shut off):
+virsh destroy <id | name>
 # Print domain information as XML to stdout:
 virsh dumpxml <id | name>
 # Print connection URI information of a running domain:
@@ -5613,15 +5615,6 @@ virsh domdisplay <id | name>
 virsh domfsinfo <id | name>
 # List all blocks on a domain:
 virsh domblklist <id | name>
-```
-```bash
-# Working with snapshots.
-# List snapshots on a domain:
-virsh snapshot-list <id | name>
-# Print existing snapshot info on a domain:
-virsh snapshot-info <id | name> <snapshot_name>
-# Delete an existing snapshot on a domain:
-virsh snapshot-delete <id | name> <snapshot_name>
 ```
 ```bash
 # Working with osinfo database.
@@ -5667,7 +5660,6 @@ virt-install --name <name> --os-variant <variant> --disk <filename> --cpu host-m
 # Create a domain booting off an existing image with a custom name and with the hosts CPU passed through to the guest for higher performance (prefered over host-model but can hamper migrations):
 virt-install --name <name> --os-variant <variant> --disk <filename> --cpu host-passthrough --memory <MiB> --boot hd --boot uefi=on --noautoconsole --noreboot
 ```
-
 ```bash
 # Installing domains interactively.
 # Defaults for --vcpus, --cpu and --memory if not specified will be based on osinfo (prefered).
@@ -5681,15 +5673,7 @@ virt-install --install os=<variant> --boot uefi=on --noautoconsole
 virt-install --name <name> --install os=<variant> --boot uefi=on --noautoconsole
 # Download media and create a domain with a custom name and provide a name and password for the user account.
 # Password file must only contain one single line as the password:
-virt-install --name <name> --install os=<variant> --unattended user-login=<name> admin-password-file=<filename> --boot uefi=on --noautoconsole
-
-```
-
-```bash
-# Shutdown a domain gracefully:
-virsh shutdown domain <id | name>
-# Terminate domain session by force (shut off):
-virsh destroy <id | name>
+virt-install --name <name> --install os=<variant> --unattended user-login=<name>,user-password-file=<filename> --boot uefi=on --noautoconsole
 ```
 ```bash
 # Remove a non-running domain but leave storage:
@@ -5697,8 +5681,6 @@ virsh undefine <id | name>
 # Remove a non-running domain and associated storage:
 virsh undefine <id | name> --remove-all-storage
 ```
-
-
 ```bash
 # Perform a manual offline migration of an existing domain.
 # Export domain data to a .xml file:
@@ -5713,19 +5695,11 @@ qemu-img info <filename>
 virsh define <filename.xml>
 ```
 ```bash
-# Enable / disable domain autostart at host boot:
-virsh autostart <domain_name>
-virsh autostart <domain_name> --disable
+# Automatically boot the domain at host boot:
+virsh autostart <id | name>
+# Disable booting of the domain at host boot:
+virsh autostart <id | name> --disable
 ```
-
-
-
-```bash
-# Using extra arguments:
-# Specifying the kirkstart URI:
-virt-install --name=tester1.example.com --ram=1024 --vcpus=2 --disk=/var/lib/libvirt/images/test1.example.com.img,size=10 --location=/var/lib/libvirt/images/rhel-server-7.6-x86_64-dvd.iso --graphics=spice --os-type=Linux --os-variant=rhel7 --extra-args='ks=http://myserver/my.ks'
-```
-
 
 ### Containerization:
 

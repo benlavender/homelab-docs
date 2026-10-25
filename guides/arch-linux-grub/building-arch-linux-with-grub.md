@@ -10,8 +10,8 @@
 
 * Hostname: LAB-UXC0001
 * RAM: 1GiB
-* Storage: x1 qcow2 image 5GiB
-* Network: Hyper-V Network Adapter using DHCP
+* Storage: x1 qcow2 image 6GiB
+* Network: Default nat virtual network
 * CDROM drive for ISO using ARCH ISO
 * Bootloader: GRUB
 * Extra packages in build:
@@ -24,7 +24,7 @@
 Using the above VM hardware settings, which came off the `archlinux` variant, build this VM:
 
 ```bash
-sudo virt-install --name LAB-UXC0001 --os-variant archlinux --disk size=5 --boot hd --boot uefi=on --cpu host-passthrough --noautoconsole
+sudo virt-install --name LAB-UXC0001 --os-variant archlinux --disk size=6 --cdrom archlinux-x86_64.iso --boot cdrom --boot uefi=on --cpu host-passthrough
 ```
 
 ## OS Build:
@@ -39,27 +39,23 @@ Verify the PGP signatures as per [the official instructions](https://wiki.archli
 
 ![default shell](./images/first-shell.png "First shell")
 
-3. Change console keyboard layout:
+3. (Optional): SSHD should be available on this VM if that is preferred and listening on the private inet address. This is accessible after setting the `root` password in the tty:
+
+```bash
+passwd
+```
+
+4. Change console keyboard layout:
 
 ```bash
 loadkeys uk
 ```
 
-4. I am using a UFI capable device so verify efivarfs variables are available and we are booted into an EFI system: 
+5. I am using a UFI capable device so verify efivarfs variables are available and we are booted into an EFI system: 
 
 ```bash
 efivar --list
-```
-
-```bash
-ls -l /sys/firmware/efi/efivars
 cat /sys/firmware/efi/fw_platform_size
-```
-
-5. I obtained IP addressing via DHCP so verify this device has connectivity to build the distribution:
-
-```bash
-ip addr show
 ```
 
 6. Configure the NTP client to sync from an NTP source and configure the time zone:
@@ -69,25 +65,25 @@ timedatectl set-timezone Europe/London
 timedatectl set-ntp true
 ```
 
-7. The partitioning and sizing is based on a 6GiB .VHDX disk. The partitioning Partition the disk as follows:
+7. The partitioning and sizing is based on a 6GiB qcow2 image. The partitioning of the disk is as follows:
 
 | Disk | Size |
 | --- | --- |
-/dev/sda | 6GiB
+/dev/vda | 6GiB
 
 | Device | Partition Table |
 | --- | --- |
-/dev/sda | GPT
+/dev/vda | GPT
 
 | Partition # | Sectors | Partition Type | Size |
 | --- | --- | --- | --- |
-1 | 2048 - 411647| EFI Filesystem | 200M
-2 | 411648 - 12582878 | Linux Filesystem | 5.8GiB
+1 | 2048 - 12582878 | EFI Filesystem | 300MiB
+2 | 616448 - 12582878 | Linux Filesystem | 4.7GiB
 
-* Set the disk partiton table as GPT:
+* Set the disk partition table as GPT:
 
 ```bash
-fdisk /dev/sda
+fdisk /dev/vda
 : g
 ```
 
@@ -97,7 +93,7 @@ fdisk /dev/sda
 : n
 : 1
 # Confirm default start sectors and then for end sectors:
-: +200M
+: +300M
 # Set the filesystem type to EFI Filesystem:
 : t
 : 1
@@ -126,13 +122,13 @@ fdisk /dev/sda
 * Create the EFI file system:
 
 ```bash
-mkfs.fat -F32 /dev/sda1
+mkfs.fat -F32 /dev/vda1
 ```
 
 * Create the Linux ext4 file system:
 
 ```bash
-mkfs.ext4 /dev/sda2
+mkfs.ext4 /dev/vda2
 ```
 
 9. Mount the file systems we've just created:
@@ -140,7 +136,7 @@ mkfs.ext4 /dev/sda2
 * Mount the root partition:
 
 ```bash
-mount /dev/sda2 /mnt
+mount /dev/vda2 /mnt
 ```
 
 * Create and mount the EFI partition 
@@ -149,7 +145,7 @@ mount /dev/sda2 /mnt
 # Create the directory:
 mkdir /mnt/boot
 # Mount the partition:
-mount /dev/sda1 /mnt/boot
+mount /dev/vda1 /mnt/boot
 ```
 
 10. Now install the distribution to the /mnt directory:
@@ -158,7 +154,7 @@ mount /dev/sda1 /mnt/boot
 # synchronise databases
 pacman -Syy
 # Install Arch Linux:
-pacstrap /mnt linux linux-firmware base 
+pacstrap /mnt linux linux-firmware base vi
 ```
 
 11. Create the fstab file and update the file with the file systems configured:
@@ -182,30 +178,26 @@ ln -sf /usr/share/zoneinfo/Europe/London /etc/localtime
 hwclock --systohc
 ```
 
+> **Note::** Steps 14-16 are optional if swap is required.
+
 14. Allocate the swap file space, set the permissions and create the swap file:
 
 ```bash
 # Allocate the space:
-fallocate -l 2GB /swapfile
+fallocate --length 2GB /swapfile
 # Set the permissions to the directory:
 chmod 600 /swapfile
 # Create the swapfile
 mkswap /swapfile
 ```
 
-15. Enable swapping with the swapfile:
+15. : Enable swapping with the swapfile:
 
 ```bash
 swapon /swapfile
 ```
 
-16. Install a text editor like vi:
-
-```bash
-pacman --noconfirm -S vi
-```
-
-17. Update fstab with the new swapfile:
+16. Update fstab with the new swapfile:
 
 ```bash
 vi /etc/fstab
@@ -213,7 +205,7 @@ vi /etc/fstab
 /swapfile   none    swap    defaults 0 0
 ```
 
-18. Generate the correct locale, mine is en_GB.UTF-8 UTF-8:
+17. Generate the correct locale, mine is en_GB.UTF-8 UTF-8:
 
 ```bash
 # Uncomment the locate from /etc/locale.gen:
@@ -222,7 +214,7 @@ en_GB.UTF-8 UTF-8
 locale-gen
 ```
 
-19. Create the /etc/locale.conf locale config file and set the variable:
+18. Create the /etc/locale.conf locale config file and set the variable:
 
 ```bash
 vi /etc/locale.conf
@@ -230,7 +222,7 @@ vi /etc/locale.conf
 LANG=en_GB.UTF-8
 ```
 
-20. Update the virtual console config file with the keymaps:
+19. Update the virtual console config file with the keymaps:
 
 ```bash
 vi /etc/vconsole.conf
@@ -238,7 +230,7 @@ vi /etc/vconsole.conf
 KEYMAP=uk
 ```
 
-21. Update the hosts file:
+20. Update the hosts file:
 
 ```bash
 vi /etc/hosts
@@ -248,7 +240,7 @@ vi /etc/hosts
 127.0.1.1	LAB-UXC0001.localdomain	LAB-UXC0001
 ```
 
-22. Set the hostname of the machine:
+21. Set the hostname of the machine:
 
 ```bash
 vi /etc/hostname
@@ -256,13 +248,13 @@ vi /etc/hostname
 LAB-UXC0001
 ```
 
-23. Reset the root password:
+22. Set the root password:
 
 ```bash
 passwd
 ```
 
-24. Install and configure the GRUB bootloader:
+23. Install and configure the GRUB bootloader:
 
 ```bash
 # Install the grub package:
@@ -273,26 +265,14 @@ grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
 grub-mkconfig -o /boot/grub/grub.cfg
 ```
 
-25. Install Network Manager so that the interface configurations will be brought up once booted into the new system:
-
-```bash
-# First database sync:
-pacman -Sy
-
-# Install networkmanager
-pacman -S --noconfirm networkmanager
-# Enable daemon at start:
-systemctl enable NetworkManager
-```
-
-25. Unmount the current partitions:
+24. Unmount the current partitions:
 
 ```bash
 exit
 umount -R /mnt
 ```
 
-26. Reboot into the new system and discard the liveCD:
+25. Reboot into the new system and discard the liveCD:
 
 ```bash
 reboot

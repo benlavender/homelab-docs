@@ -22,6 +22,8 @@ Repository store for all my homelab build docs and configs. 😎
 
 ## Configs:
 
+* [Arch Linux build with GRUB](guides/arch-linux-grub/building-arch-linux-with-grub.md)
+* [Arch Linux build with systemd-boot](guides/arch-linux-sd-boot/building-arch-linux-with-sd-boot.md)
 * [Personal Arch Linux ARM](configs/pi/Arch-Pi.md)
 
 ## Guides:

@@ -256,7 +256,7 @@ passwd
 
 ```bash
 # Install the bootloader to the /boot directory:
-bootctl install
+bootctl install --esp-path=/boot
 ```
 
 24. Configure the systemd bootloader entry:

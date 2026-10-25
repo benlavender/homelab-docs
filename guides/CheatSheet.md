@@ -5592,6 +5592,8 @@ virsh pool-event --pool <name|id> --event <type>
 virsh net-list --all
 # Print information on an existing virtual network:
 virsh net-info <name|id>
+# Dump XML date of an existing virtual network:
+virsh net-dumpxml <name>
 # Convert a network UUID to network name:
 virsh net-name <id>
 # Convert a network name to network UUID:

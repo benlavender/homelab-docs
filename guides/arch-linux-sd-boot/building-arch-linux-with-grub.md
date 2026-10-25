@@ -6,7 +6,26 @@
    <br>
 </h1>
 
-## 
+## Software and hardware specification for this build:
+
+* Hostname: LAB-UXC0001
+* RAM: 1GiB
+* Storage: x1 qcow2 image 5GiB
+* Network: Hyper-V Network Adapter using DHCP
+* CDROM drive for ISO using ARCH ISO
+* Bootloader: GRUB
+* Extra packages in build:
+    * grub
+    * efimgr
+    * vi
+ 
+## VM Build:
+
+Using the above VM hardware settings, which came off the `archlinux` variant, build this VM:
+
+```bash
+sudo virt-install --name LAB-UXC0001 --os-variant archlinux --disk size=5 --boot hd --boot uefi=on --cpu host-passthrough --noautoconsole
+```
 
 ## OS Build:
 

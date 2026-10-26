@@ -702,6 +702,32 @@ bootctl is-installed
 # Print boot loader and firmware information:
 bootctl status
 ```
+```bash
+# Print available boot loader entries:
+bootctl list
+```
+```bash
+# Prints kernel type information:
+bootctl kernel-identify <filename>
+```
+```bash
+# Remove a boot loader entry and its associated files.
+# Warning: If no other entry is configured the system may not be bootable.
+bootctl unlink <id>
+```
+```bash
+# Check if firmware setup mode on next boot is set:
+bootctl reboot-to-firmware
+# Change the boot loader to firmware setup mode on next boot:
+bootctl reboot-to-firmware true
+# Deactivate firmware setup mode on next boot:
+bootctl reboot-to-firmware false
+```
+```bash
+# Remove all systemd-boot files and directories.
+# Warning: If no other boot loader is configured the system may not be bootable.
+bootctl remove
+```
 
 #### efivar:
 

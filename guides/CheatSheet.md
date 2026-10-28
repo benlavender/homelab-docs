@@ -6057,6 +6057,10 @@ aws account list-regions
 aws organizations list-roots
 ```
 ```bash
+# Print details of a specific account:
+aws organizations describe-account --account-id <id>
+```
+```bash
 # List all child organizational units of a parent:
 aws organizations list-organizational-units-for-parent --parent-id <id>
 # or:

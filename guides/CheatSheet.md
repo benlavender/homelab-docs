@@ -128,6 +128,7 @@
 8. [Public Cloud](#public-cloud)
     - [Amazon Web Services](#amazon-web-services)
         - [Account management](#account-management)
+        - [Organizations](#organizations)
         - [S3](#s3)
         - [IAM](#iam)
     - [Microsoft 365](#microsoft-365)
@@ -6079,6 +6080,12 @@ aws organizations describe-account --account-id <id>
 ```bash
 # List all users in account:
 aws iam list-users
+```
+```bash
+# Get current iam user account:
+aws iam get-user
+# Get existing iam user account by name:
+aws iam get-user --user-name <name>
 ```
 ```bash
 # Create an IAM group:

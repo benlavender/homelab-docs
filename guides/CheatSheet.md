@@ -6082,6 +6082,12 @@ aws organizations describe-account --account-id <id>
 aws iam list-users
 ```
 ```bash
+# Get current iam user account:
+aws iam get-user
+# Get existing iam user account by name:
+aws iam get-user --user-name <name>
+```
+```bash
 # Create an IAM group:
 aws iam create-group --group-name <name>
 ```

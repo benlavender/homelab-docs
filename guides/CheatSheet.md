@@ -30,6 +30,8 @@
     - [Useradd/usermod/userdel](#Useradd/usermod/userdel)
     - [getent / Name Service Switch](#getent--name-service-switch-glibc)
     - [Bootloaders and boot managers](#bootloaders-and-boot-managers)
+        - [systemd-boot](#systemd-boot)
+        - [efivar](#efivar)
         - [efibootmgr](#efibootmgr)
     - [Loginctl](#Loginctl)
     - [lspci](#lspci)
@@ -686,6 +688,58 @@ getent group <name>
 ```
 
 ### Bootloaders and boot managers:
+
+#### systemd-boot:
+
+> ℹ️ **Note:** Requires systemd.
+
+> ℹ️ **Note:** Some commands require elevation.
+
+```bash
+# Checks whether systemd-boot is installed in the ESP partition:
+bootctl is-installed
+```
+```bash
+# Print boot loader and firmware information:
+bootctl status
+```
+```bash
+# Print available boot loader entries:
+bootctl list
+```
+```bash
+# Prints kernel type information:
+bootctl kernel-identify <filename>
+```
+```bash
+# Remove a boot loader entry and its associated files.
+# Warning: If no other entry is configured the system may not be bootable.
+bootctl unlink <id>
+```
+```bash
+# Check if firmware setup mode on next boot is set:
+bootctl reboot-to-firmware
+# Change the boot loader to firmware setup mode on next boot:
+bootctl reboot-to-firmware true
+# Deactivate firmware setup mode on next boot:
+bootctl reboot-to-firmware false
+```
+```bash
+# Remove all systemd-boot files and directories.
+# Warning: If no other boot loader is configured the system may not be bootable.
+bootctl remove
+```
+
+#### efivar:
+
+```bash
+# List current UEFI variables:
+efivar --list
+```
+```bash
+# Print a specific UEFI variable:
+efivar --print --name <guid-name>
+```
 
 #### efibootmgr:
 

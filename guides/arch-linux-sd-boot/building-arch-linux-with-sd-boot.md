@@ -276,7 +276,7 @@ options root=UUID=<uuid> rw loglevel=3 quiet
 vi /boot/loader/loader.conf
 # Add in:
 default arch.conf
-timeout 2
+timeout 1
 console-mode max
 ```
 

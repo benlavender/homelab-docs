@@ -130,6 +130,7 @@
 8. [Public Cloud](#public-cloud)
     - [Amazon Web Services](#amazon-web-services)
         - [Account management](#account-management)
+        - [Organizations](#organizations)
         - [S3](#s3)
         - [IAM](#iam)
     - [Microsoft 365](#microsoft-365)
@@ -6110,6 +6111,10 @@ aws account list-regions
 aws organizations list-roots
 ```
 ```bash
+# Print details of a specific account:
+aws organizations describe-account --account-id <id>
+```
+```bash
 # List all child organizational units of a parent:
 aws organizations list-organizational-units-for-parent --parent-id <id>
 # or:
@@ -6133,6 +6138,12 @@ aws organizations describe-account --account-id <id>
 ```bash
 # List all users in account:
 aws iam list-users
+```
+```bash
+# Get current iam user account:
+aws iam get-user
+# Get existing iam user account by name:
+aws iam get-user --user-name <name>
 ```
 ```bash
 # Create an IAM group:

@@ -40,6 +40,8 @@ Repository store for all my homelab build docs and configs. 😎
 * [Firewalld](guides/Linux/guides/Firewalld.md)
 * [NetworkManager](guides/Linux/guides/NetworkManager.md)
 * [dm-crypt / LUKS](guides/Linux/guides/dm-crypt-luks.md)
+* [SSDs](guides/Linux/guides/ssds.md)
+* [Trim](guides/Linux/guides/trim.md)
 
 ### General:
 

@@ -2892,6 +2892,8 @@ sedutil-cli --scan
 
 > ℹ️ **Note:** Requires `nvme-cli` package.
 
+> ℹ️ **Note:** Commands usually require elevation.
+
 > ℹ️ **Note:** `ctrl` refers to the NVMe controller (`/dev/nvme0`) where `dev` refers to the device with namespace ID (`/dev/nvme0n1`) for example.
 
 > ℹ️ **Note:** Use `nvme id-ctrl` to find controller capabilities such as `NS Management` or `Sanitize` for example as some of the commands may not be supported.
@@ -2902,9 +2904,9 @@ nvme list-subsys
 ```
 ```bash
 # Show controller information assoicated with an NVMe device:
-nvme id-ctrl <ctrl>
+nvme id ctrl <ctrl>
 # Show controller information assoicated with an NVMe device with human readable output:
-nvme id-ctrl <ctrl> --human-readable
+nvme id ctrl <ctrl> --human-readable
 ```
 ```bash
 # Show a topology of an NVMe device:
@@ -2914,13 +2916,13 @@ nvme show-topology <dev>
 # List all NVMe devices and namespaces:
 nvme list
 # List all namespaces on a device:
-nvme list-ns <ctrl>
+nvme id ns-list <ctrl>
 # Get namespace IDs on a specific block device:
-nvme get-ns-id <dev>
+nvme ns get-id <dev>
 # Show detailed information on a specific namespace of a device (remove --human-readable to show in hex):
-nvme id-ns <ctrl> --namespace-id=<#> --human-readable
+nvme id ns <ctrl> --namespace-id=<#> --human-readable
 # Show detailed information on all namespaces of a device (remove --human-readable to show in hex):
-nvme id-ns <dev> --human-readable
+nvme id ns <dev> --human-readable
 ```
 ```bash
 # Format a namespace.
@@ -2946,18 +2948,18 @@ nvme sanitize <ctrl> --sanact=4
 ```
 ```bash
 # View sanitize log statistics:
-nvme sanitize-log <dev> --human-readable
+nvme log sanitize <dev> --human-readable
 ```
 ```bash
 # Get the firmware versions of all the slots including the active slot.
 # Use --output-format=json for human readable:
-nvme fw-log <ctrl>
+nvme log fw <ctrl>
 # Get the device error log.
 # Use --log-entries=<#> to limit the number of entries returned.
 # Use --output-format=json for human readable:
-nvme error-log <ctrl>
+nvme log error <ctrl>
 # Show SMART log for an NVMe device:
-nvme smart-log <ctrl> --human-readable
+nvme log smart <ctrl> --human-readable
 ```
 
 #### wipefs:

@@ -24,13 +24,18 @@
         - [Man pages](#man-pages)
         - [Wikiman](#wikiman)
 2. [OS Management](#os-management)
+    - [dmidecode](#dmidecode--smbios)
     - [sysctl](#sysctl)
+    - [ps](#ps)
     - [userdbctl](#userdbctl)
     - [Useradd/usermod/userdel](#Useradd/usermod/userdel)
     - [getent / Name Service Switch](#getent--name-service-switch-glibc)
     - [Bootloaders and boot managers](#bootloaders-and-boot-managers)
+        - [systemd-boot](#systemd-boot)
+        - [efivar](#efivar)
         - [efibootmgr](#efibootmgr)
     - [Loginctl](#Loginctl)
+    - [lspci](#lspci)
     - [fwupdmgr](#fwupdmgr--firmware-update-manager-for-fwupd)
     - [Timeshift](#timeshift)
     - [BlueZ (bluetooth)](#bluez-bluetooth)
@@ -48,6 +53,7 @@
         - [e2fsprogs - Ext2/3/4](#e2fsprogs---ext-234)
         - [exfatprogs - extFAT](#exfatprogs---extfat)
     - [Files and Directories](#files-and-directories)
+        - [stat](#stat)
         - [dd](#dd)
         - [Fallocate](#fallocate)
         - [losetup / Loop devices](#losetup--loop-devices)
@@ -94,9 +100,11 @@
     - [MS-SQL](#ms-sql)
     - [SFTP](#sftp)
     - [SCCM](#system-center-configuration-manager)
+    - [speedtest](#speedtest-ookla)    
     - [HTTP Commands](#http-commands)
     - [Dig](#dig)
     - [Certificates, Key-based Authentication, and Encryption](#certificates-key-based-authentication-and-encryption)
+        - [p11-kit / Cryptoki(pkcs11)](#p11-kit--cryptokipkcs11)
         - [OpenSSL](#openssl)
         - [OpenPGP/GnuPG](#openpgpgnupg)
         - [OpenSSH](#openssh)
@@ -122,6 +130,11 @@
     - [Desired State Configuration](#desired-state-configuration)
         - [Terraform](#terraform)
 8. [Public Cloud](#public-cloud)
+    - [Amazon Web Services](#amazon-web-services)
+        - [Account management](#account-management)
+        - [Organizations](#organizations)
+        - [S3](#s3)
+        - [IAM](#iam)
     - [Microsoft 365](#microsoft-365)
     - [Microsoft Azure](#microsoft-azure)
         - [Azure Active Directory](#azure-active-directory)
@@ -432,6 +445,20 @@ G
 
 ## <ins>OS Management:</ins>
 
+### dmidecode / SMBIOS
+
+> ℹ️ **Note:** Commands usually require elevation.
+
+```bash
+# List available DMI types:
+dmidecode --list-types
+```
+```bash
+# Refer to DMIDECODE(8) for type names and numbers.
+# Print specific table records:
+dmidecode --type <name|#>
+```
+
 ### sysctl
 
 > ℹ️ **Notes:** 
@@ -453,6 +480,69 @@ sysctl --write <variable=value>
 ```bash
 # Load and write kernel parameters from configuration files:
 sysctl --system
+```
+
+### ps
+
+```bash
+# Remove -f to only print basic information.
+# Show all running processes of the current user shell:
+ps -f
+# Show all running processes of specific user:
+ps -fU <id|name>
+# Show all running processes:
+ps -fe
+# Show all running processes in an ASCII-style tree:
+ps -fe --forest
+# Show all running processes in an ASCII-style tree for a specific user:
+ps -fU <id|name> --forest
+# Show a running process by PID:
+ps -fp <#>
+# Show a running process by PID and all command line arguments in full if width buffer is maxed:
+ps -wwfp <#>
+# Show all child processes of a process by parent PID (PPID):
+ps -f --ppid <#>
+# Show all running processes by specific binary name:
+ps -fC <name>
+# Show all running processes by specific binary name in an ASCII-style tree:
+ps -fC <name> --forest
+# Show a running process by PID and include SELinux contexts:
+ps -fMp <#>
+```
+```bash
+# Sorting processes.
+# Refer to ps(1) for more STANDARD FORMAT SPECIFIERS.
+# Use -<key> for decreasing and <key> for ascending order.
+# Show all running processes sorted by PID ascending:
+ps -fe --sort pid
+# Show all running processes sorted by start time ascending:
+ps -fe --sort stime
+# Show all running processes sorted by CPU utilization:
+ps -e --sort -%cpu
+# Show all running processes sorted by memory utilization:
+ps -e --sort -%mem
+```
+```bash
+# Selective output formats.
+# Refer to ps(1) for more STANDARD FORMAT SPECIFIERS.
+# All commands use an existing PID to reduce buffer, remove the "-p #" if required.
+# uuid,pid,ppid can be removed if needed.
+# Show a running process by PID with only UID, PID, PPID and binary name:
+ps -p <#> -o uid,pid,ppid,comm
+# Show a running process by PID with only UID, PID, PPID and binary path:
+ps -p <#> -o uid,pid,ppid,exe
+# Show a running process by PID with only UID, PID, PPID and all command line arguments:
+ps -p <#> -o uid,pid,ppid,args
+# Show a running process by PID with only UID, PID, PPID and all command line arguments in full if width buffer is maxed:
+ps -wwp <#> -o uid,pid,ppid,args
+# Show a running process by PID with only UID, PID, PPID and start time:
+ps -p <#> -o uid,pid,ppid,stime
+# Show a running process by PID with only UID, PID, PPID and controlling tty:
+ps -p <#> -o uid,pid,ppid,tt
+# Show a running process by PID with only UID, PID, PPID and associated systemd unit:
+ps -p <#> -o uid,pid,ppid,unit
+# Show a running process by PID with only UID, PID, PPID and associated systemd user unit:
+ps -p <#> -o uid,pid,ppid,uunit
 ```
 
 ### userdbctl
@@ -613,14 +703,6 @@ loadectl status
 loadkeys <keymap>
 ```
 ```bash
-# Retreive BIOS information from SMBIOS
-dmidecode --type bios
-```
-```bash
-# Retreive system information, such as serial number 
-dmidecode --type system
-```
-```bash
 # Get locale information:
 localectl status
 ```
@@ -671,6 +753,58 @@ getent group <name>
 ```
 
 ### Bootloaders and boot managers:
+
+#### systemd-boot:
+
+> ℹ️ **Note:** Requires systemd.
+
+> ℹ️ **Note:** Some commands require elevation.
+
+```bash
+# Checks whether systemd-boot is installed in the ESP partition:
+bootctl is-installed
+```
+```bash
+# Print boot loader and firmware information:
+bootctl status
+```
+```bash
+# Print available boot loader entries:
+bootctl list
+```
+```bash
+# Prints kernel type information:
+bootctl kernel-identify <filename>
+```
+```bash
+# Remove a boot loader entry and its associated files.
+# Warning: If no other entry is configured the system may not be bootable.
+bootctl unlink <id>
+```
+```bash
+# Check if firmware setup mode on next boot is set:
+bootctl reboot-to-firmware
+# Change the boot loader to firmware setup mode on next boot:
+bootctl reboot-to-firmware true
+# Deactivate firmware setup mode on next boot:
+bootctl reboot-to-firmware false
+```
+```bash
+# Remove all systemd-boot files and directories.
+# Warning: If no other boot loader is configured the system may not be bootable.
+bootctl remove
+```
+
+#### efivar:
+
+```bash
+# List current UEFI variables:
+efivar --list
+```
+```bash
+# Print a specific UEFI variable:
+efivar --print --name <guid-name>
+```
 
 #### efibootmgr:
 
@@ -747,6 +881,44 @@ loginctl show-user <id|name>
 loginctl terminate-user <id|name>
 # Kill all processes of a user (sends SIGTERM):
 loginctl kill-user <id|name>
+```
+
+### lspci:
+
+```bash
+# Print brief details of PCI devices:
+lspci
+# Print verbose details of all PCI devices:
+lspci -vv
+# Print brief information and show vendor and device codes as both numbers and names:
+lspci -nn
+# Print verbose details of all PCI devices along with vendor and device codes:
+lspci -nnvv
+# Print brief details and include kernel drivers and modules handling all PCI devices:
+lspci -k
+```
+```bash
+# Use -nn to print codes.
+# Print all devices by vendor:
+lspci -d <#:>
+# Print devices by vendor and device:
+lspci -d <#:#>
+```
+```bash
+# Print all devices on a specific PCI bus:
+lspci -s <#:>
+# Print brief information on a specific PCI device including all functions:
+lspci -s <#:#>
+# Print brief information on a specific PCI device providing a function:
+lspci -s <#:#.#>
+# Print verbose information on a specific PCI device and all its functions:
+lspci -vvs <#:#>
+# Print verbose information on a specific PCI device and function:
+lspci -vvs <#:#.#>
+```
+```bash
+# Print tree view information on buses, birdges, devices and their links:
+lspci -tv
 ```
 
 ### fwupdmgr / firmware update manager for fwupd:
@@ -1517,6 +1689,43 @@ Get-ItemProperty -Path 'file/dir' | Format-List -Property *
 ```powershell
 # List files created and modified today, in descending order by lastwritetime and include the name, lwt and size:
 Get-ChildItem -Path <dir> -Recurse | Where-Object {$_.LastWriteTime.date -eq (Get-Date).Date} | Sort-Object LastWriteTime -Descending | Select-Object -Property Name,LastWriteTime,Length | Format-Table -AutoSize
+```
+
+#### stat:
+
+> **Note:** Can also be used with directories.
+
+```bash
+# Print file information:
+stat <filename>
+# Print file system information instead of file:
+stat --file-system <filename>
+```
+```bash
+# Printing with different output formats.
+# To print multiple formats use --format='<%type> <%type>'. 
+# Print only file name:
+stat --format=%n <filename>
+# Print only creation time in human readable:
+stat --format=%w <filename>
+# Print only atime in human readable:
+stat --format=%x <filename>
+# Print only mtime in human readable:
+stat --format=%y <filename>
+# Print only permissions in octal:
+stat --format=%a <filename>
+# Print only permissions in human readable:
+stat --format=%A <filename>
+# Print only file type:
+stat --format=%F <filename>
+# Print only inode number:
+stat --format=%i <filename>
+# Print only mount point:
+stat --format=%m <filename>
+# Print only ID of owner:
+stat --format=%u <filename>
+# Print only name of owner:
+stat --format=%U <filename>
 ```
 
 #### dd:
@@ -2758,6 +2967,8 @@ sedutil-cli --scan
 
 > ℹ️ **Note:** Requires `nvme-cli` package.
 
+> ℹ️ **Note:** Commands usually require elevation.
+
 > ℹ️ **Note:** `ctrl` refers to the NVMe controller (`/dev/nvme0`) where `dev` refers to the device with namespace ID (`/dev/nvme0n1`) for example.
 
 > ℹ️ **Note:** Use `nvme id-ctrl` to find controller capabilities such as `NS Management` or `Sanitize` for example as some of the commands may not be supported.
@@ -2768,9 +2979,9 @@ nvme list-subsys
 ```
 ```bash
 # Show controller information assoicated with an NVMe device:
-nvme id-ctrl <ctrl>
+nvme id ctrl <ctrl>
 # Show controller information assoicated with an NVMe device with human readable output:
-nvme id-ctrl <ctrl> --human-readable
+nvme id ctrl <ctrl> --human-readable
 ```
 ```bash
 # Show a topology of an NVMe device:
@@ -2780,13 +2991,13 @@ nvme show-topology <dev>
 # List all NVMe devices and namespaces:
 nvme list
 # List all namespaces on a device:
-nvme list-ns <ctrl>
+nvme id ns-list <ctrl>
 # Get namespace IDs on a specific block device:
-nvme get-ns-id <dev>
+nvme ns get-id <dev>
 # Show detailed information on a specific namespace of a device (remove --human-readable to show in hex):
-nvme id-ns <ctrl> --namespace-id=<#> --human-readable
+nvme id ns <ctrl> --namespace-id=<#> --human-readable
 # Show detailed information on all namespaces of a device (remove --human-readable to show in hex):
-nvme id-ns <dev> --human-readable
+nvme id ns <dev> --human-readable
 ```
 ```bash
 # Format a namespace.
@@ -2812,18 +3023,18 @@ nvme sanitize <ctrl> --sanact=4
 ```
 ```bash
 # View sanitize log statistics:
-nvme sanitize-log <dev> --human-readable
+nvme log sanitize <dev> --human-readable
 ```
 ```bash
 # Get the firmware versions of all the slots including the active slot.
 # Use --output-format=json for human readable:
-nvme fw-log <ctrl>
+nvme log fw <ctrl>
 # Get the device error log.
 # Use --log-entries=<#> to limit the number of entries returned.
 # Use --output-format=json for human readable:
-nvme error-log <ctrl>
+nvme log error <ctrl>
 # Show SMART log for an NVMe device:
-nvme smart-log <ctrl> --human-readable
+nvme log smart <ctrl> --human-readable
 ```
 
 #### wipefs:
@@ -3155,7 +3366,7 @@ resolvectl dns <interface>
 ```
 ```bash
 # Set DNS servers for a specific interface:
-resolvectl dns <interface> <dns1> | <dns2>
+resolvectl dns <interface> <dns1> | <dns2>+
 ```
 ```bash
 # Show DNS search listsfor a specific interface:
@@ -3401,7 +3612,7 @@ rclone ls <remote:path>
 rclone lsf <remote:path>
 # List only directories from remote (use -R to recurse):
 rclone lsd <remote:path>
-# List local directory recursively:spo
+# List local directory recursively:
 rclone ls <dir>
 # List local directory recursively and recurse links:
 rclone ls --links <dir>
@@ -3439,12 +3650,21 @@ rclone check --one-way <src_remote:> <dst_remote:>
 # Progress stats can be displayed with --progress which is updated every 500ms or can be an inline basic summary with both --progress --stats-one-line. 
 # Copy the source remote to the destination skipping any identical files:
 rclone copy <src_remote:> <dst_remote:>
+# Copy the source remote to the destination skipping any identical files and including empty directories:
+rclone copy --create-empty-src-dirs <src_remote:> <dst_remote:>
 # Copy the source remote to the destination skipping newer files on the destination:
-rclone copy --update <src_remote:> <dst_remote:>
+rclone copy --update <src_remote:> <dst_sremote:>
 # Copy the source remote to the destination skipping any identical files with a quicker size-only check:
 rclone copy --size-only <src_remote:> <dst_remote:>
-# Copy the source remote to the destination skipping any identical files and any specific file or directory:
-rclone copy --exclude <filename/directory> <src_remote:> <dst_remote:>
+# Copy the source remote to the destination skipping any identical files and a specific file:
+rclone copy --exclude=<filename> <src_remote:> <dst_remote:>
+# Copy the source remote to the destination skipping any identical files and all specific file extensions:
+rclone copy --exclude=*.<ext> <src_remote:> <dst_remote:>
+# Copy the source remote to the destination skipping any identical files and a specific directory:
+rclone copy --exclude=</dir/> <src_remote:> <dst_remote:>
+```
+```bash
+# Use --dry-run if required.
 # Ensure the destination remote is identical to the source.
 # Warning: Non-identical content in the destination will be deleted:
 rclone sync <src_remote:> <dst_remote:>
@@ -3454,6 +3674,9 @@ rclone sync --size-only <src_remote:> <dst_remote:>
 # Ensure the destination remote is identical to the source where a suffix is added to any changed files without removing the previous.
 # Warning: Non-identical content in the destination will be deleted:
 rclone sync --suffix <string> --suffix-keep-extension <src_remote:> <dst_remote:>
+# Ensure the destination remote is identical to the source including empty directories.
+# Warning: Non-identical content in the destination will be deleted:
+rclone sync --create-empty-src-dirs <src_remote:> <dst_remote:>
 ```
 
 ### Exchange On-Premise:
@@ -3686,6 +3909,23 @@ usermod -g sftpusers -d /incoming -s /sbin/nologin {jail}
 Get-CMDevice -Name <deviceID>
 ```
 
+### speedtest (Ookla):
+
+```bash
+# List nearest servers that support the speedtest service:
+speedtest --servers
+```
+```bash
+# Perform a speed test using nearest servers:
+speedtest
+# Perform a speed test using nearest servers and show selection process:
+speedtest --selection-details
+# Perform a speed test with a specific server:
+speedtest --server-id=<ID>
+# Perform a speed test from a specific local interface:
+speedtest --interface=interface=<int>
+```
+
 ### HTTP Commands:
 
 ```bash
@@ -3745,6 +3985,39 @@ dig +trace <QNAME>
 ```
 
 ### Certificates, Key-based Authentication, and Encryption:
+
+#### p11-kit / Cryptoki(pkcs11):
+
+```bash
+# List all in the trust policy store:
+trust list
+# List an existing pkcs11 object by URI:
+trust list --filter='pkcs11:<id>'
+# List only CA certificates:
+trust list --filter=ca-anchors
+# List only distrusted certificates:
+trust list --filter=blocklist
+# List only certificates used for server authentication:
+trust list --purpose=server-auth
+# List only certificates used for client authentication:
+trust list --purpose=client-auth
+```
+```bash
+# Add a trust anchor to the trust policy store:
+trust anchor --store <filename>
+```
+```bash
+# Remove an existing trust anchor in the trust policy store:
+trust anchor --remove 'pkcs11:<id>'
+# Remove an existing trust anchor by filename identical to one in the trust policy store:
+trust anchor --remove <filename>
+```
+```bash
+# Extract an existing object from the trust policy store to an PEM formatted file:
+trust extract --filter='pkcs11:<id>' --format=pem-bundle <filename>
+# Extract an existing object from the trust policy store to an DER formatted file:
+trust extract --filter='pkcs11:<id>' --format=x509-file <filename>
+```
 
 #### OpenSSL:
 
@@ -4828,7 +5101,7 @@ nmap --open <host>
 ```
 ```bash
 # Additionally fingerprint the OS and provide verbose info:
-nmap -o <host> -v
+nmap -O <host> -v
 ```
 ```bash
 # Show supported IP protocols of a host: 
@@ -5026,6 +5299,8 @@ git commit -a
 git commit -am <"commit_log">
 # Amend the last commit with changes in the staging area (use -m for inline commit message). This will replace the last commit:
 git commit --amend
+# Bypass identical commit with parent prevention allowing an "empty" commit:
+git commit --allow-empty -m <"commit_log">
 # View commit history:
 git log
 # View latest number of logs:
@@ -5135,15 +5410,23 @@ git mergetool --tool-help
 git mergetool --tool=<toolname>
 ```
 ```bash
+# Rebasing with Git.
+# Replay commits between branches:
+git rebase <src_branch> <branch>
+# Replay commits into the current branch (HEAD)
+git rebase <branch>
+```
+```bash
 # Working with tags in Git.
+# Avoid creating lightweight tags named "tag" as it may conflict with the command.
 # List all tags:
 git tag -l
 # List specific tag names:
 git tag -l <string>
 # Show a tag:
 git show <tag>
-# Create an annotated tag (use -m for inline message):
-git tag -a <tag>
+# Create an annotated tag: 
+git tag -a <tag> -m <message>
 # Create a lightweight tag:
 git tag <tag>
 # Tag a commit directly:
@@ -5417,11 +5700,13 @@ virsh hypervisor-cpu-models
 virsh hypervisor-cpu-models --all
 ```
 ```bash
-# Working with storage pools:
+# Working with storage pools.
 # List existing pools:
 virsh pool-list
 # Print information of a specific pool:
 virsh pool-info <name|id>
+# Create and start a pool based on a local directory::
+virsh pool-create-as --name <name> --type dir --target <dir>
 # Refresh a specific pool:
 virsh pool-refresh <name|id>
 # Start an inactive pool:
@@ -5433,46 +5718,121 @@ virsh pool-event --pool <name|id> --list
 # Monitor for a type of event in realtime on a specific pool:
 virsh pool-event --pool <name|id> --event <type>
 ```
-
 ```bash
-# Create new domain using virt-install:
-virt-install --name=tester1.example.com --ram=1024 --vcpus=2 --disk=/var/lib/libvirt/images/test1.example.com.img,size=16 --graphics=spice --location=ftp://192.168.1 22.1/pub/inst --os-type=Linux --os-variant=rhel7
+# Working with virtual networks.
+# List existing virtual networks (remove --all to list active only):
+virsh net-list --all
+# Print information on an existing virtual network:
+virsh net-info <name|id>
+# Dump XML date of an existing virtual network:
+virsh net-dumpxml <name>
+# Convert a network UUID to network name:
+virsh net-name <id>
+# Convert a network name to network UUID:
+virsh net-uuid <name>
 ```
 ```bash
-# Using an ISO for O/S deployment:
-virt-install --name=tester1.example.com --ram=1024 --vcpus=2 --disk=/var/lib/libvirt/images/test1.example.com.img,size=10 --location=/var/lib/libvirt/images/rhel-server-7.6-x86_64-dvd.iso --graphics=spice --os-type=Linux --os-variant=rhel7 
-```
-```bash
-# Don't wait for O/S installation:
-virt-install --name=tester1.example.com --ram=1024 --vcpus=2 --disk=/var/lib/libvirt/images/test1.example.com.img,size=10 --location=/var/lib/libvirt/images/rhel-server-7.6-x86_64-dvd.iso --graphics=spice --os-type=Linux --os-variant=rhel7 --noautoconsole --initrd-inject can be used with URL of .KS file.
-```
-```bash
+# Working with domains.
+# List all domains in any state:
+virsh list --all
+# Start a domain:
+virsh start <name>
 # Shutdown a domain gracefully:
-virsh shutdown <domain_name>
+virsh shutdown <id | name>
+# Terminate domain session by force (shut off):
+virsh destroy <id | name>
+# Print domain information as XML to stdout:
+virsh dumpxml <id | name>
+# Print connection URI information of a running domain:
+virsh domdisplay <id | name>
+# List all mounted filesystems on domain:
+virsh domfsinfo <id | name>
+# List all blocks on a domain:
+virsh domblklist <id | name>
 ```
 ```bash
-# Terminate domain session:
-virsh destroy 'domain_name' --graceful
-# Non-gracefull:
-virsh destroy 'domain_name'
+# Working with osinfo database.
+# Refer to osinfo-query(1) for all properties.
+# List all possible OS variants for domains:
+osinfo-query os
+# Or for a list of above:
+osinfo-query os --fields=short-id
+# List all possible OS variants for domains only with their short-id, name and vendor:
+osinfo-query os --fields=short-id,name,vendor
+# List all possible OS variants for a specific vendor:
+osinfo-query os vendor=<'vendor'>
 ```
 ```bash
-# Remove domain but leave storage:
-virsh undefine tester1.example.com
+# Creating manual domains.
+# Defaults for --vcpus, --cpu and --memory if not specified will be based on osinfo (prefered).
+# Use --dry-run if required (useful if unsure on default domain specs).
+# Default img format is qcow2.
+# Removing --noautoconsole will automatically spawn and attempt connect with virt-viewer.
+# Removing --noreboot will boot the domain once created.
+# All domains are created with EFI support, unless --boot uefi=off is specified.
+# Create a diskless domain booting off a CD ISO where name is the same as the os variant:
+virt-install --os-variant <variant> --disk none --cdrom <filename> --boot uefi=on --noautoconsole --noreboot
+# Create a domain booting off an existing image with a custom name:
+virt-install --name <name> --os-variant <variant> --disk <filename> --boot hd --boot uefi=on --noautoconsole --noreboot
+# Create a domain booting off a CD ISO with a custom name where a RAW disk is created with a specific size in GiB:
+virt-install --name <name> --os-variant <variant> --disk size=<#> --boot uefi=on --noautoconsole --noreboot
+# Create a domain with a custom name where a RAW disk is created with a specific size in GiB:
+virt-install --name <name> --os-variant <variant> --cdrom <filename> --disk size=<#> ---boot uefi=on --noautoconsole
+# Create a domain booting off an existing image with a custom name and connect the NIC to a specific existing virtual network:
+virt-install --name <name> --os-variant <variant> --disk <filename> --boot hd --boot uefi=on --network <name> --noautoconsole --noreboot
+# Create a domain booting off an existing image with a custom name but no attached NIC:
+virt-install --name <name> --os-variant <variant> --disk <filename> --boot hd --boot uefi=on --network none --noautoconsole --noreboot
+# Create a domain booting off an existing image with a custom name and memory count:
+virt-install --name <name> --os-variant <variant> --disk <filename> --memory <MiB> --boot hd --boot uefi=on --noautoconsole --noreboot
+# Create a domain booting off a CD ISO with a custom name, specific vcpu and memory count:
+virt-install --name <name> --os-variant <variant> --disk <filename> --vcpus <#> --memory <MiB> --boot hd --boot uefi=on --noautoconsole --noreboot
+# Create a domain booting off an existing image with a custom name and a specific CPU ISA.
+# Use "qemu-system-x86_64 -cpu help":
+virt-install --name <name> --os-variant <variant> --disk <filename> --cpu <name> --memory <MiB> --boot hd --boot uefi=on --noautoconsole --noreboot
+# Create a domain booting off an existing image with a custom name and with the hosts CPU config exposed to the guest for higher performance (more guest isolation and better for migrations):
+virt-install --name <name> --os-variant <variant> --disk <filename> --cpu host-model --memory <MiB> --boot hd --boot uefi=on --noautoconsole --noreboot
+# Create a domain booting off an existing image with a custom name and with the hosts CPU passed through to the guest for higher performance (prefered over host-model but can hamper migrations):
+virt-install --name <name> --os-variant <variant> --disk <filename> --cpu host-passthrough --memory <MiB> --boot hd --boot uefi=on --noautoconsole --noreboot
 ```
 ```bash
-# Remove domain and associated storage
-virsh undefine tester1.example.com --remove-all-storage
+# Installing domains interactively.
+# Defaults for --vcpus, --cpu and --memory if not specified will be based on osinfo (prefered).
+# Use --dry-run if required (useful if unsure on default domain specs/location).
+# Default img format is qcow2.
+# Removing --noautoconsole will automatically spawn and attempt connect with virt-viewer.
+# All domains are created with EFI support, unless --boot uefi=off is specified.
+# Download media and create a domain where name is the same as the os variant:
+virt-install --install os=<variant> --boot uefi=on --noautoconsole
+# Download media and create a domain with a custom name:
+virt-install --name <name> --install os=<variant> --boot uefi=on --noautoconsole
+# Download media and create a domain with a custom name and provide a name and password for the user account.
+# Password file must only contain one single line as the password:
+virt-install --name <name> --install os=<variant> --unattended user-login=<name>,user-password-file=<filename> --boot uefi=on --noautoconsole
 ```
 ```bash
-# Using extra arguments:
-# Specifying the kirkstart URI:
-virt-install --name=tester1.example.com --ram=1024 --vcpus=2 --disk=/var/lib/libvirt/images/test1.example.com.img,size=10 --location=/var/lib/libvirt/images/rhel-server-7.6-x86_64-dvd.iso --graphics=spice --os-type=Linux --os-variant=rhel7 --extra-args='ks=http://myserver/my.ks'
+# Remove a non-running domain but leave storage:
+virsh undefine <id | name>
+# Remove a non-running domain and associated storage:
+virsh undefine <id | name> --remove-all-storage
 ```
 ```bash
-# Enable / disable domain autostart at host boot:
-virsh autostart <domain_name>
-virsh autostart <domain_name> --disable
+# Perform a manual offline migration of an existing domain.
+# Export domain data to a .xml file:
+virsh dumpxml <id | name> > <filename.xml>
+# Print the existing block devices:
+virsh domblklist <id | name>
+# Check for any snapshots with backing files as these would also need to be moved:
+qemu-img info <filename>
+# Transfer the .xml file and any image files to the destination.
+# Paths need to be the same for the disk images as per the .xml or edit that file.
+# Define the domain on the target host:
+virsh define <filename.xml>
+```
+```bash
+# Automatically boot the domain at host boot:
+virsh autostart <id | name>
+# Disable booting of the domain at host boot:
+virsh autostart <id | name> --disable
 ```
 
 ### Containerization:
@@ -5777,6 +6137,178 @@ terraform output
 ```
 
 ## Public Cloud:
+
+### Amazon Web Services:
+
+```bash
+# Configure awscli.
+# Follow the interactive guide:
+aws configure
+# Configure the default region:
+aws configure set default.region <region>
+# Override region set as default:
+aws configure set region <region>
+```
+```bash
+# List configured awscli settings:
+aws configure list
+```
+```bash
+# Login with management console credentials:
+aws login
+```
+```bash
+# Removed cached login credentials:
+aws logout
+```
+
+#### Account management:
+
+```bash
+# Print current account information:
+aws account get-account-information
+```
+```bash
+# Print primary account contact information:
+aws account get-account-information
+```
+```bash
+# Print account contact information:
+aws account get-contact-information
+```
+```bash
+# Print all regions for the current account:
+aws account list-regions
+```
+
+#### Organizations:
+
+```bash
+# List the organization root:
+aws organizations list-roots
+```
+```bash
+# Print details of a specific account:
+aws organizations describe-account --account-id <id>
+```
+```bash
+# List all child organizational units of a parent:
+aws organizations list-organizational-units-for-parent --parent-id <id>
+# or:
+aws organizations list-children --parent-id <id> --child-type ORGANIZATIONAL_UNIT
+# List all child accounts of a parent:
+aws organizations list-accounts-for-parent --parent-id <id>
+# or:
+aws organizations list-children --parent-id <id> --child-type ACCOUNT
+```
+```bash
+# Print all accounts in the organization:
+aws organizations list-accounts
+```
+```bash
+# Print account information:
+aws organizations describe-account --account-id <id>
+```
+
+#### IAM:
+
+```bash
+# List all users in account:
+aws iam list-users
+```
+```bash
+# Get current iam user account:
+aws iam get-user
+# Get existing iam user account by name:
+aws iam get-user --user-name <name>
+```
+```bash
+# Create an IAM group:
+aws iam create-group --group-name <name>
+```
+```bash
+# Add IAM user to existing group:
+aws iam add-user-to-group --user-name <name> --group-name <name>
+```
+```bash
+# Delete an existing IAM group:
+aws iam delete-group --group-name <name>
+```
+```bash
+# List all managed policies in account:
+aws iam list-policies
+# List all managed policies in account that are currently attached:
+aws iam list-policies --only-attached
+# Get a managed policy in account:
+aws iam get-policy --policy-arn <arn>
+```
+```bash
+# Delete a non-attached policy:
+aws iam delete-policy --policy-arn <arn>
+```
+```bash
+# List IAM roles in account:
+aws iam list-roles
+```
+```bash
+# Print information about an IAM role:
+aws iam get-role --role-name <name>
+```
+
+#### S3:
+
+```bash
+# List all s3 buckets:
+aws s3 ls
+# List all s3 buckets with more info:
+aws s3api list-buckets
+```
+```bash
+# Create an s3 bucket outside of us-east-1:
+aws s3api create-bucket --bucket <name> --create-bucket-configuration LocationConstraint=<region>
+```
+```bash
+# Remove an empty s3 bucket:
+aws s3 rb <s3uri>
+# Remove a non-empty s3 bucket:
+aws s3 rb --force <s3uri>
+```
+```bash
+# List all objects in an s3 bucket:
+aws s3 ls <s3uri | name>
+# List all objects in an s3 bucket in human readable output:
+aws s3 ls <s3uri | name> --human-readable
+# List all objects in an s3 bucket with more info:
+aws s3api list-objects --bucket <name>
+```
+```bash
+# Use --dryrun if required.
+# Copy object to or from an s3 bucket:
+aws s3 cp <local_path | s3uri> <local_path | s3uri>
+# Copy all objects to or from an s3 bucket:
+aws s3 cp --recursive <local_path | s3uri> <local_path | s3uri> 
+```
+```bash
+# Syncronise data on the destination based on the source:
+aws s3 sync <local_path | s3uri> <local_path | s3uri>
+# Syncronise data on the destination based on the source and force destination to be identical.
+# Warning: Non-identical content in the destination will be deleted:
+aws s3 sync --delete <local_path | s3uri> <local_path | s3uri>
+```
+```bash
+# Download an object stored in an S3 bucket:
+aws s3api get-object --bucket <name> --key <object_name> <filename>
+```
+```bash
+# Add an object to an s3 bucket:
+aws s3api put-object --bucket <name> --key <object_name> --body <object>
+# Add an object to an s3 bucket at a specific location:
+aws s3api put-object --bucket <name> --key </dir/object_name> --body <object>
+```
+```bash
+# Copy an object stored in an s3 bucket:
+aws s3api copy-object --copy-source <name/oject> --key <object_name> --bucket <name> 
+```
 
 ### Microsoft 365:
 

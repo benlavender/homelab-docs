@@ -28,6 +28,8 @@ Repository store for all my homelab build docs and configs. 😎
 
 ### 🐧 Linux/BSD:
 
+* [Arch Linux build with GRUB](guides/arch-linux-grub/building-arch-linux-with-grub.md)
+* [Arch Linux build with systemd-boot](guides/arch-linux-sd-boot/building-arch-linux-with-sd-boot.md)
 * [Arch Linux Hyper-V build](guides/Arch-Linux-VM/Building-Arch-Linux-on-Hyper-V.md)
 * [Arch Linux Reflector service](guides/Arch-Linux-Reflector-Service.md)
 * [Simple HAProxy build on Debian Linux](guides/haproxy-deb.md)
@@ -38,6 +40,8 @@ Repository store for all my homelab build docs and configs. 😎
 * [Firewalld](guides/Linux/guides/Firewalld.md)
 * [NetworkManager](guides/Linux/guides/NetworkManager.md)
 * [dm-crypt / LUKS](guides/Linux/guides/dm-crypt-luks.md)
+* [SSDs](guides/Linux/guides/ssds.md)
+* [Trim](guides/Linux/guides/trim.md)
 
 ### General:
 

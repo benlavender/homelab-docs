@@ -491,19 +491,32 @@ ps -f
 ps -fU <id|name>
 # Show all running processes:
 ps -fe
+# Show all running processes in an ASCII-style tree:
+ps -fe --forest
+# Show all running processes in an ASCII-style tree for a specific user:
+ps -fU <id|name> --forest
 # Show a running process by PID:
 ps -fp <#>
+# Show a running process by PID and all command line arguments in full if width buffer is maxed:
+ps -wwfp <#>
 # Show all child processes of a process by parent PID (PPID):
 ps -f --ppid <#>
 # Show a running process by PID and include SELinux contexts:
 ps -fMp <#>
 ```
-
 ```bash
-# Sorting processes.1
+# Sorting processes.
+# Refer to ps(1) for more STANDARD FORMAT SPECIFIERS.
+# Use -<key> for decreasing and <key> for ascending order.
+# Show all running processes sorted by PID ascending:
+ps -fe --sort pid
+# Show all running processes sorted by start time ascending:
+ps -fe --sort stime
+# Show all running processes sorted by CPU utilization:
+ps -e --sort -%cpu
+# Show all running processes sorted by memory utilization:
+ps -e --sort -%mem
 ```
-
-
 ```bash
 # Selective output formats.
 # Refer to ps(1) for more STANDARD FORMAT SPECIFIERS.

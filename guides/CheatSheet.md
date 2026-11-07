@@ -501,6 +501,10 @@ ps -fp <#>
 ps -wwfp <#>
 # Show all child processes of a process by parent PID (PPID):
 ps -f --ppid <#>
+# Show all running processes by specific binary name:
+ps -fC <name>
+# Show all running processes by specific binary name in an ASCII-style tree:
+ps -fC <name> --forest
 # Show a running process by PID and include SELinux contexts:
 ps -fMp <#>
 ```

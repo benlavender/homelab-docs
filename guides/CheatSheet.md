@@ -5722,7 +5722,7 @@ virsh net-uuid <name>
 ```
 ```bash
 # Working with domains.
-# List all domains:
+# List all domains in any state:
 virsh list --all
 # Start a domain:
 virsh start <name>

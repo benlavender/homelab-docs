@@ -2105,11 +2105,34 @@ sudo timedatectl set-ntp <true|false>
 
 ### RFKill:
 
+> ℹ️ **Note:** Hardware blocks are handled outside of rfkill but can be shown with its commands.
+
+> ℹ️ **Note:** Blocking/unblocking commands usually require elevation.
+
 ```bash
 # Print state of all wireless devices:
 rfkill list
 ```
-
+```bash
+# Show blocking log:
+rfkill event
+```
+```bash
+# Enable / disable a specific wireless device:
+rfkill toggle <id>
+```
+```bash
+# Both software unblock all wireless devices:
+rfkill unblock all
+# Both software block all wireless devices:
+rfkill block all
+```
+```bash
+# Software unblock a specific wireless device:
+rfkill unblock <id>
+# Software block all wireless devices:
+rfkill block all
+```
 
 ### Networking:
 

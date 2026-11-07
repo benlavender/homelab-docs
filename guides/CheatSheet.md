@@ -26,6 +26,7 @@
 2. [OS Management](#os-management)
     - [dmidecode](#dmidecode--smbios)
     - [sysctl](#sysctl)
+    - [ps](#ps)
     - [userdbctl](#userdbctl)
     - [Useradd/usermod/userdel](#Useradd/usermod/userdel)
     - [getent / Name Service Switch](#getent--name-service-switch-glibc)
@@ -478,6 +479,65 @@ sysctl --write <variable=value>
 ```bash
 # Load and write kernel parameters from configuration files:
 sysctl --system
+```
+
+### ps
+
+```bash
+# Remove -f to only print basic information.
+# Show all running processes of the current user shell:
+ps -f
+# Show all running processes of specific user:
+ps -fU <id|name>
+# Show all running processes:
+ps -fe
+# Show all running processes in an ASCII-style tree:
+ps -fe --forest
+# Show all running processes in an ASCII-style tree for a specific user:
+ps -fU <id|name> --forest
+# Show a running process by PID:
+ps -fp <#>
+# Show a running process by PID and all command line arguments in full if width buffer is maxed:
+ps -wwfp <#>
+# Show all child processes of a process by parent PID (PPID):
+ps -f --ppid <#>
+# Show a running process by PID and include SELinux contexts:
+ps -fMp <#>
+```
+```bash
+# Sorting processes.
+# Refer to ps(1) for more STANDARD FORMAT SPECIFIERS.
+# Use -<key> for decreasing and <key> for ascending order.
+# Show all running processes sorted by PID ascending:
+ps -fe --sort pid
+# Show all running processes sorted by start time ascending:
+ps -fe --sort stime
+# Show all running processes sorted by CPU utilization:
+ps -e --sort -%cpu
+# Show all running processes sorted by memory utilization:
+ps -e --sort -%mem
+```
+```bash
+# Selective output formats.
+# Refer to ps(1) for more STANDARD FORMAT SPECIFIERS.
+# All commands use an existing PID to reduce buffer, remove the "-p #" if required.
+# uuid,pid,ppid can be removed if needed.
+# Show a running process by PID with only UID, PID, PPID and binary name:
+ps -p <#> -o uid,pid,ppid,comm
+# Show a running process by PID with only UID, PID, PPID and binary path:
+ps -p <#> -o uid,pid,ppid,exe
+# Show a running process by PID with only UID, PID, PPID and all command line arguments:
+ps -p <#> -o uid,pid,ppid,args
+# Show a running process by PID with only UID, PID, PPID and all command line arguments in full if width buffer is maxed:
+ps -wwp <#> -o uid,pid,ppid,args
+# Show a running process by PID with only UID, PID, PPID and start time:
+ps -p <#> -o uid,pid,ppid,stime
+# Show a running process by PID with only UID, PID, PPID and controlling tty:
+ps -p <#> -o uid,pid,ppid,tt
+# Show a running process by PID with only UID, PID, PPID and associated systemd unit:
+ps -p <#> -o uid,pid,ppid,unit
+# Show a running process by PID with only UID, PID, PPID and associated systemd user unit:
+ps -p <#> -o uid,pid,ppid,uunit
 ```
 
 ### userdbctl

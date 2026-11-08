@@ -5190,6 +5190,8 @@ ncat --listen --udp <#>
 ncat --listen --allow <cidr>
 # Start an ncat server but deny specific nets:
 ncat --listen --deny <cidr>
+# Start an ncat server in broker mode and id client transmissions (useful for multi-client chats):
+ncat --listen --chat
 ```
 ```bash
 # Connect mode.
@@ -5201,6 +5203,22 @@ ncat <hostname|ip.addr>
 ncat <hostname|ip.addr> <#>
 # Connect to an ncat server on a specific UDP port:
 ncat <hostname|ip.addr> --udp <#>
+# Connect to an ncat server but ignore any received data:
+ncat --send-only <hostname|ip.addr> 
+# Connect to an ncat server without name resolution:
+ncat --send-only <hostname|ip.addr> --nodns
+```
+```bash
+# Simple file transfers.
+# Start an ncat server with output as desired filename:
+ncat --listen > <filename>
+# Connect to the ncat server and input the desired file:
+ncat --send-only <hostname|ip.addr> < <filename>
+# Connect to the ncat server and pipe in the desired file.
+# Piping command should not be using redirects but pipes will work:
+<command> | ncat --send-only <hostname|ip.addr>
+# or 
+<command | command> | ncat --send-only <hostname|ip.addr>
 ```
 
 #### Shodan:

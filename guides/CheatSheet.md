@@ -5172,6 +5172,8 @@ nmap <Host> -dd
 
 ##### ncat:
 
+> ℹ️ **Note:** Connections are not encrypted at default.
+
 > ℹ️ **Note:** Usually requires `nmap` package.
 
 ```bash
@@ -5182,6 +5184,10 @@ nmap <Host> -dd
 ncat --listen
 # Start an ncat server on all networks and allow multiple connections without terminating:
 ncat --listen --keep-open
+# Start an ncat server with TLS:
+ncat --listen --ssl
+# Start an ncat server with TLS and a custom certificate for server authentication:
+ncat --listen --ssl --ssl-cert <filename> --ssl-key <filename>
 # Start an ncat server on a specific TCP port:
 ncat --listen <#>
 # Start an ncat server on a specific UDP port:
@@ -5199,6 +5205,11 @@ ncat --listen --chat
 # Use --verbose if required.
 # Connect to an ncat server:
 ncat <hostname|ip.addr>
+# Connect to an ncat server using TLS.
+# Server must also be running with TLS:
+ncat --ssl <hostname|ip.addr>
+# Verify TLS certificate from server:
+ncat --ssl-verify --ssl-trustfile <filename> <hostname|ip.addr>
 # Connect to an ncat server on a specific TCP port:
 ncat <hostname|ip.addr> <#>
 # Connect to an ncat server on a specific UDP port:

@@ -115,8 +115,9 @@
         - [systemd-cryptenroll / systemd-cryptsetup](#systemd-cryptenroll--systemd-cryptsetup)
     - [SMTP](#smtp)
     - [Packet capturing](#packet-capturing)
-    - [Network Analysis](#network-analysis)
+    - [Network Analysis / Tools](#network-analysis--tools)
         - [Nmap](#nmap)
+            - [ncat](#ncat)
         - [Shodan](#shodan)
     - [Git SCM](#git-scm)
 6. [Virtualisation](#virtualisation)
@@ -5083,7 +5084,7 @@ tcpdump -i ANY port 514
 tcpdump -n src host <ip.addr>
 ```
 
-### Network Analysis:
+### Network Analysis / Tools:
 
 #### Nmap:
 
@@ -5167,6 +5168,39 @@ nmap <Host> -vv
 nmap <Host> -d
 # Scan with extra debugging verbosity:
 nmap <Host> -dd
+```
+
+##### ncat:
+
+> ℹ️ **Note:** Usually requires `nmap` package.
+
+```bash
+# Listen mode.
+# Default port is TCP 31337.
+# Use --verbose if required.
+# Start an ncat server on all networks:
+ncat --listen
+# Start an ncat server on all networks and allow multiple connections without terminating:
+ncat --listen --keep-open
+# Start an ncat server on a specific TCP port:
+ncat --listen <#>
+# Start an ncat server on a specific UDP port:
+ncat --listen --udp <#>
+# Start an ncat server but permit specific nets:
+ncat --listen --allow <cidr>
+# Start an ncat server but deny specific nets:
+ncat --listen --deny <cidr>
+```
+```bash
+# Connect mode.
+# Default port is TCP 31337.
+# Use --verbose if required.
+# Connect to an ncat server:
+ncat <hostname|ip.addr>
+# Connect to an ncat server on a specific TCP port:
+ncat <hostname|ip.addr> <#>
+# Connect to an ncat server on a specific UDP port:
+ncat <hostname|ip.addr> --udp <#>
 ```
 
 #### Shodan:

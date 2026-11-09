@@ -5172,14 +5172,14 @@ nmap <Host> -dd
 
 ##### ncat:
 
-> ℹ️ **Note:** Connections are not encrypted at default.
-
-> ℹ️ **Note:** Usually requires `nmap` or `nmap-ncat` packages.
+> ℹ️ **Notes:**
+> - Connections are not encrypted at default.
+> - Usually requires `nmap` or `nmap-ncat` packages.
+> - Default port is TCP 31337.
+> - Use -v -vv -vvv for increasing verbosity.
 
 ```bash
 # Listen mode.
-# Default port is TCP 31337.
-# Use -v -vv -vvv for increasing verbosity.
 # Start an ncat server on all networks:
 ncat --listen
 # Start an ncat server on all networks and allow multiple connections without terminating:
@@ -5203,8 +5203,6 @@ ncat --listen --chat
 ```
 ```bash
 # Connect mode.
-# Default port is TCP 31337.
-# Use -v -vv -vvv for increasing verbosity.
 # Connect to an ncat server:
 ncat <hostname|ip.addr>
 # Connect to an ncat server using TLS.
@@ -5223,7 +5221,6 @@ ncat --send-only <hostname|ip.addr> --nodns
 ```
 ```bash
 # Simple file transfers.
-# Use -v -vv -vvv for increasing verbosity.
 # Start an ncat server with output as desired filename:
 ncat --listen > <filename>
 # Connect to the ncat server and input the desired file:
@@ -5236,7 +5233,6 @@ ncat --send-only <hostname|ip.addr> < <filename>
 ```
 ```bash
 # Broker file transfers to multiple clients.
-# Use -v -vv -vvv for increasing verbosity.
 # Start an ncat server in broker mode:
 ncat --listen --broker
 # Connect a client to the server that will receive the file:

@@ -115,8 +115,9 @@
         - [systemd-cryptenroll / systemd-cryptsetup](#systemd-cryptenroll--systemd-cryptsetup)
     - [SMTP](#smtp)
     - [Packet capturing](#packet-capturing)
-    - [Network Analysis](#network-analysis)
+    - [Network Analysis / Tools](#network-analysis--tools)
         - [Nmap](#nmap)
+            - [ncat](#ncat)
         - [Shodan](#shodan)
     - [Git SCM](#git-scm)
 6. [Virtualisation](#virtualisation)
@@ -5083,7 +5084,7 @@ tcpdump -i ANY port 514
 tcpdump -n src host <ip.addr>
 ```
 
-### Network Analysis:
+### Network Analysis / Tools:
 
 #### Nmap:
 
@@ -5167,6 +5168,84 @@ nmap <Host> -vv
 nmap <Host> -d
 # Scan with extra debugging verbosity:
 nmap <Host> -dd
+```
+
+##### ncat:
+
+> ℹ️ **Notes:**
+> - Connections are not encrypted at default.
+> - Usually requires `nmap` or `nmap-ncat` packages.
+> - Default port is TCP 31337.
+> - Use -v -vv -vvv for increasing verbosity.
+
+```bash
+# Listen mode.
+# Start an ncat server on all networks:
+ncat --listen
+# Start an ncat server on all networks and allow multiple connections without terminating:
+ncat --listen --keep-open
+# Start an ncat server with TLS:
+ncat --listen --ssl
+# Start an ncat server with TLS and a custom certificate for server authentication:
+ncat --listen --ssl --ssl-cert <filename> --ssl-key <filename>
+# Start an ncat server on a specific TCP port:
+ncat --listen <#>
+# Start an ncat server on a specific UDP port:
+ncat --listen --udp <#>
+# Start an ncat server but permit specific nets:
+ncat --listen --allow <cidr>
+# Start an ncat server but deny specific nets:
+ncat --listen --deny <cidr>
+# Start an ncat server as a web proxy.
+# Default port is 3128:
+ncat --listen --proxy-type http
+# Start an ncat server as a web proxy with basic authentication.
+# Default port is 3128.
+# Warning: Basic authentication is usually unencrypted:
+ncat --listen --proxy-type http --proxy-auth <user>:<password>
+# Start an ncat server in broker mode, where the listening server repeats the inbound traffic to all connected clients:
+ncat --listen --broker
+# Start an ncat server in broker mode and id client transmissions (useful for multi-client chats):
+ncat --listen --chat
+```
+```bash
+# Connect mode.
+# Connect to an ncat server:
+ncat <hostname|ip.addr>
+# Connect to an ncat server using TLS.
+# Server must also be running with TLS:
+ncat --ssl <hostname|ip.addr>
+# Verify TLS certificate from server:
+ncat --ssl-verify --ssl-trustfile <filename> <hostname|ip.addr>
+# Connect to an ncat server on a specific TCP port:
+ncat <hostname|ip.addr> <#>
+# Connect to an ncat server on a specific UDP port:
+ncat <hostname|ip.addr> --udp <#>
+# Connect to an ncat server but ignore any received data:
+ncat --send-only <hostname|ip.addr> 
+# Connect to an ncat server without name resolution:
+ncat --send-only <hostname|ip.addr> --nodns
+```
+```bash
+# Simple file transfers.
+# Start an ncat server with output as desired filename:
+ncat --listen > <filename>
+# Connect to the ncat server and input the desired file:
+ncat --send-only <hostname|ip.addr> < <filename>
+# Connect to the ncat server and pipe in the desired file.
+# Piping command should not be using redirects but pipes will work:
+<command> | ncat --send-only <hostname|ip.addr>
+# or 
+<command | command> | ncat --send-only <hostname|ip.addr>
+```
+```bash
+# Broker file transfers to multiple clients.
+# Start an ncat server in broker mode:
+ncat --listen --broker
+# Connect a client to the server that will receive the file:
+ncat --recv-only <hostname|ip.addr> > <filename>
+# Connect a client to the server that will send the file:
+ncat --send-only <hostname|ip.addr> < <filename>
 ```
 
 #### Shodan:

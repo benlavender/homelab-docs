@@ -5196,6 +5196,13 @@ ncat --listen --udp <#>
 ncat --listen --allow <cidr>
 # Start an ncat server but deny specific nets:
 ncat --listen --deny <cidr>
+# Start an ncat server as a web proxy.
+# Default port is 3128:
+ncat --listen --proxy-type http
+# Start an ncat server as a web proxy with basic authentication.
+# Default port is 3128.
+# Warning: Basic authentication is usually unencrypted:
+ncat --listen --proxy-type http --proxy-auth <user>:<password>
 # Start an ncat server in broker mode, where the listening server repeats the inbound traffic to all connected clients:
 ncat --listen --broker
 # Start an ncat server in broker mode and id client transmissions (useful for multi-client chats):

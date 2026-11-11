@@ -5199,7 +5199,7 @@ ncat --listen --deny <cidr>
 # Start an ncat server as a web proxy.
 # Default port is 3128:
 ncat --listen --proxy-type http
-# Start an ncat server as a web proxy with basic authentication.
+# Start an ncat server as a web proxy with basic or digest authentication.
 # Default port is 3128.
 # Warning: Basic authentication is usually unencrypted:
 ncat --listen --proxy-type http --proxy-auth <user>:<password>

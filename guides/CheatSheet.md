@@ -27,14 +27,15 @@
     - [dmidecode](#dmidecode--smbios)
     - [sysctl](#sysctl)
     - [ps](#ps)
-    - [userdbctl](#userdbctl)
+    - [userdbctl](#userdbctl--systemd)
     - [Useradd/usermod/userdel](#Useradd/usermod/userdel)
     - [getent / Name Service Switch](#getent--name-service-switch-glibc)
     - [Bootloaders and boot managers](#bootloaders-and-boot-managers)
         - [systemd-boot](#systemd-boot)
         - [efivar](#efivar)
         - [efibootmgr](#efibootmgr)
-    - [Loginctl](#Loginctl)
+    - [Loginctl](#loginctl--systemd)
+    - [systemd-resolved](#resolvconf--systemd)
     - [lspci](#lspci)
     - [fwupdmgr](#fwupdmgr--firmware-update-manager-for-fwupd)
     - [Timeshift](#timeshift)
@@ -546,7 +547,7 @@ ps -p <#> -o uid,pid,ppid,unit
 ps -p <#> -o uid,pid,ppid,uunit
 ```
 
-### userdbctl
+### userdbctl / systemd:
 
 > ℹ️ **Note:** Requires systemd.
 
@@ -840,7 +841,9 @@ efibootmgr -c -d <dev> -p <part#> -L <LABEL> -l <path/to/.efi>
 efibootmgr -b <#> -B
 ```
 
-### Loginctl:
+### Loginctl / systemd:
+
+> ℹ️ **Note:** Requires systemd.
 
 ```bash
 # List current sessions:
@@ -882,6 +885,51 @@ loginctl show-user <id|name>
 loginctl terminate-user <id|name>
 # Kill all processes of a user (sends SIGTERM):
 loginctl kill-user <id|name>
+```
+
+### resolvconf / systemd:
+
+> ℹ️ **Note:** Requires systemd-resolved.
+
+```bash
+# Show detailed server information:
+resolvectl show-server-state <domain>
+```
+```bash
+# Show current DNS settings for all interfaces:
+resolvectl status
+# Show DNS settings for a specific interface:
+resolvectl dns <interface>
+```
+```bash
+# Set DNS servers for a specific interface:
+resolvectl dns <interface> <dns1> | <dns2>+
+```
+```bash
+# Show DNS search listsfor a specific interface:
+resolvectl domain <interface>
+```
+```bash
+# Set DNS search domains for a specific interface:
+resolvectl domain <interface> <domain1> | <domain2>
+```
+```bash
+# Reset DNS settings for a specific interface:
+resolvectl revert <interface>
+```
+```bash
+# Show active local DNS queries and their responses:
+resolvectl monitor
+```
+```bash
+# Resolve an A and or AAAA record:
+resolvectl query <domain>
+# Resolve a specific RRType:
+resolvectl query --type=<RRType> <domain>
+```
+```bash
+# Show the stub resolver cache:
+resolvectl show-cache
 ```
 
 ### lspci:
@@ -3372,51 +3420,6 @@ lp -H <HH:MM> <filename>
 lp -H resume -i <id>
 # Restart a previous job on the default printer:
 lp -i <id> -H restart
-```
-
-#### resolvconf:
-
-> ℹ️ **Note:** Requires systemd-resolved.
-
-```bash
-# Show detailed server information:
-resolvectl show-server-state <domain>
-```
-```bash
-# Show current DNS settings for all interfaces:
-resolvectl status
-# Show DNS settings for a specific interface:
-resolvectl dns <interface>
-```
-```bash
-# Set DNS servers for a specific interface:
-resolvectl dns <interface> <dns1> | <dns2>+
-```
-```bash
-# Show DNS search listsfor a specific interface:
-resolvectl domain <interface>
-```
-```bash
-# Set DNS search domains for a specific interface:
-resolvectl domain <interface> <domain1> | <domain2>
-```
-```bash
-# Reset DNS settings for a specific interface:
-resolvectl revert <interface>
-```
-```bash
-# Show active local DNS queries and their responses:
-resolvectl monitor
-```
-```bash
-# Resolve an A and or AAAA record:
-resolvectl query <domain>
-# Resolve a specific RRType:
-resolvectl query --type=<RRType> <domain>
-```
-```bash
-# Show the stub resolver cache:
-resolvectl show-cache
 ```
 
 ### Storage Replica:

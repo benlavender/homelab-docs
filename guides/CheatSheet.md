@@ -6243,7 +6243,11 @@ machinectl list --all
 # Print running information of a systemd machine:
 machinectl status <name>
 # Print properties of a systemd machine:
-machinectl shoe <name>
+machinectl show <name>
+# Open an interactive shell on a running systemd machine:
+machinectl shell <name>
+# Open an interactive terminal login session to a running systemd machine:
+machinectl login <name>
 # Reboot a running systemd machine:
 machinectl reboot <name>
 # Power off a running systemd machine:

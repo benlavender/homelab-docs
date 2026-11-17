@@ -121,17 +121,20 @@
             - [ncat](#ncat)
         - [Shodan](#shodan)
     - [Git SCM](#git-scm)
-6. [Virtualisation](#virtualisation)
+6. [Scripts](#scripts)
+    - [pacstrap](#pacstrap--arch-linux)
+7. [Virtualisation](#virtualisation)
     - [Hyper-V](#hyper-v)
     - [QEMU](#qemu)
     - [libvirt](#libvirt)
         - [virsh](#virsh)
     - [Containerization](#containerization)
         - [Docker](#-docker)
-7. [Desired State Configuration](#desired-state-configuration)
+        - [systemd-nspawn](#systemd-nspawn)
+8. [Desired State Configuration](#desired-state-configuration)
     - [Desired State Configuration](#desired-state-configuration)
         - [Terraform](#terraform)
-8. [Public Cloud](#public-cloud)
+9. [Public Cloud](#public-cloud)
     - [Amazon Web Services](#amazon-web-services)
         - [Account management](#account-management)
         - [Organizations](#organizations)
@@ -5562,6 +5565,23 @@ git difftool --tool-help
 git difftool --tool=<toolname>
 ```
 
+## Scripts:
+
+### pacstrap / Arch Linux:
+
+> ℹ️ **Note:** Requires `arch-install-scripts` package.
+
+> ℹ️ **Note:** Commands require elevation.
+
+```bash
+# Install base package and initialize an empty pacman keyring (preferred):
+pacstrap -K <dir>
+# Install base package using the hosts pacman keyring:
+pacstrap <dir>
+# Install base package and initialize an empty pacman keyring with additional package(s):
+pacstrap -K <dir> <package> <package>
+```
+
 ## Virtualisation:
 
 ### Hyper-V:
@@ -6193,6 +6213,12 @@ docker network create --driver ipvlan --subnet <cidr> --gateway <ip.addr> --opt 
 # Remove a docker network:
 docker network rm <networkID>
 ```
+
+#### systemd-nspawn:
+
+> ℹ️ **Note:** Commands require elevation.
+
+
 
 ## Desired State Configuration:
 

@@ -121,17 +121,20 @@
             - [ncat](#ncat)
         - [Shodan](#shodan)
     - [Git SCM](#git-scm)
-6. [Virtualisation](#virtualisation)
+6. [Scripts](#scripts)
+    - [pacstrap](#pacstrap--arch-linux)
+7. [Virtualisation](#virtualisation)
     - [Hyper-V](#hyper-v)
     - [QEMU](#qemu)
     - [libvirt](#libvirt)
         - [virsh](#virsh)
     - [Containerization](#containerization)
         - [Docker](#-docker)
-7. [Desired State Configuration](#desired-state-configuration)
+        - [systemd-nspawn](#systemd-nspawn)
+8. [Desired State Configuration](#desired-state-configuration)
     - [Desired State Configuration](#desired-state-configuration)
         - [Terraform](#terraform)
-8. [Public Cloud](#public-cloud)
+9. [Public Cloud](#public-cloud)
     - [Amazon Web Services](#amazon-web-services)
         - [Account management](#account-management)
         - [Organizations](#organizations)
@@ -5562,6 +5565,23 @@ git difftool --tool-help
 git difftool --tool=<toolname>
 ```
 
+## Scripts:
+
+### pacstrap / Arch Linux:
+
+> ℹ️ **Note:** Requires `arch-install-scripts` package.
+
+> ℹ️ **Note:** Commands require elevation.
+
+```bash
+# Install base package and initialize an empty pacman keyring (preferred):
+pacstrap -K <dir>
+# Install base package using the hosts pacman keyring:
+pacstrap <dir>
+# Install base package and initialize an empty pacman keyring with additional package(s):
+pacstrap -K <dir> <package> <package>
+```
+
 ## Virtualisation:
 
 ### Hyper-V:
@@ -6192,6 +6212,50 @@ docker network create --subnet <cidr> <name>
 docker network create --driver ipvlan --subnet <cidr> --gateway <ip.addr> --opt parent=<int> <name>
 # Remove a docker network:
 docker network rm <networkID>
+```
+
+#### systemd-nspawn:
+
+> ℹ️ **Note:** systemd-nspawn commands require elevation.
+
+> ℹ️ **Notes:** 
+> - An existing root file system is required for --directory / -D.
+> - The directory is not immutable, edits persist across machines unless --ephemeral is used.
+> - Hostname at default is the name of the directory.
+
+```bash
+# Create a linux container and connect to a shell:
+systemd-nspawn --directory=<dir>
+# Create a linux container and call the init system:
+systemd-nspawn --boot --directory=<dir>
+# Create a linux container and call the init system based on a snapshot of the file system (changes lost once exited):
+systemd-nspawn --boot --directory=<dir> --ephemeral
+# Create a linux container and call the init system with a custom name and hostname:
+systemd-nspawn --boot --directory=<dir> --machine=<name>
+# Create a linux container and call the init system with a differencial hostname to the machine name:
+systemd-nspawn --boot --directory=<dir> --hostname=<name>
+```
+```bash
+# List all running systemd machines:
+machinectl list
+# List all existing systemd machines and host:
+machinectl list --all
+# Print running information of a systemd machine:
+machinectl status <name>
+# Print properties of a systemd machine:
+machinectl show <name>
+# Open an interactive shell on a running systemd machine:
+machinectl shell <name>
+# Open an interactive terminal login session to a running systemd machine:
+machinectl login <name>
+# Reboot a running systemd machine:
+machinectl reboot <name>
+# Power off a running systemd machine:
+machinectl poweroff <name>
+# Terminate a systemd machine by force:
+machinectl terminate <name>
+# Remove a systemd machine:
+machinectl remove <name>
 ```
 
 ## Desired State Configuration:

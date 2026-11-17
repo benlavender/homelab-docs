@@ -6216,9 +6216,43 @@ docker network rm <networkID>
 
 #### systemd-nspawn:
 
-> ℹ️ **Note:** Commands require elevation.
+> ℹ️ **Note:** systemd-nspawn commands require elevation.
 
+> ℹ️ **Notes:** 
+> - An existing root file system is required for --directory / -D.
+> - The directory is not immutable, edits persist across machines unless --ephemeral is used.
+> - Hostname at default is the name of the directory.
 
+```bash
+# Create a linux container and connect to a shell:
+systemd-nspawn --directory=<dir>
+# Create a linux container and call the init system:
+systemd-nspawn --boot --directory=<dir>
+# Create a linux container and call the init system based on a snapshot of the file system (changes lost once exited):
+systemd-nspawn --boot --directory=<dir> --ephemeral
+# Create a linux container and call the init system with a custom name and hostname:
+systemd-nspawn --boot --directory=<dir> --machine=<name>
+# Create a linux container and call the init system with a differencial hostname to the machine name:
+systemd-nspawn --boot --directory=<dir> --hostname=<name>
+```
+```bash
+# List all running systemd machines:
+machinectl list
+# List all existing systemd machines and host:
+machinectl list --all
+# Print running information of a systemd machine:
+machinectl status <name>
+# Print properties of a systemd machine:
+machinectl shoe <name>
+# Reboot a running systemd machine:
+machinectl reboot <name>
+# Power off a running systemd machine:
+machinectl poweroff <name>
+# Terminate a systemd machine by force:
+machinectl terminate <name>
+# Remove a systemd machine:
+machinectl remove <name>
+```
 
 ## Desired State Configuration:
 

@@ -6222,6 +6222,7 @@ docker network rm <networkID>
 > - An existing root file system is required for --directory / -D.
 > - The directory is not immutable, edits persist across machines unless --ephemeral is used.
 > - Hostname at default is the name of the directory.
+> - Use --background= to disable background colour (yes empty string).
 
 ```bash
 # Create a linux container and only connect to a shell:
@@ -6238,6 +6239,8 @@ systemd-nspawn --boot --directory=<dir> --machine=<name>
 systemd-nspawn --boot --directory=<dir> --hostname=<name>
 # Create a linux container and call the init system based on an image:
 systemd-nspawn --boot --image=<filename>
+# Create a linux container and call the init system with network isolation:
+systemd-nspawn --boot --directory=<dir> --private-network
 ```
 ```bash
 # List all running systemd machines:

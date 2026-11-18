@@ -51,7 +51,7 @@
         - [Pacman / Arch Linux](#pacman--arch-linux)
     - [WinEvents](#winevents)
     - [Filesystems](#filesystems)
-        - [e2fsprogs - Ext2/3/4](#e2fsprogs---ext-234)
+        - [e2fsprogs - Ext2/3/4](#e2fsprogs---ext234)
         - [exfatprogs - extFAT](#exfatprogs---extfat)
     - [Files and Directories](#files-and-directories)
         - [stat](#stat)

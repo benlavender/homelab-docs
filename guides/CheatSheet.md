@@ -79,6 +79,7 @@
     - [Fonts](#fonts)
         - [Fontconfig](#fontconfig)
     - [lm_sensors](#lm_sensors)
+    - [chroot](#chroot)
 3. [Roles](#roles)
     - [ADDS](#adds)
     - [DNS](#dns)
@@ -3213,6 +3214,30 @@ sensors-detect
 ```bash
 # Print all sensor values:
 sensors
+```
+
+### chroot:
+
+> ℹ️ **Notes:** 
+> - The chroot target should be a directory which contains a file system.
+> - Directories `/proc`, `/sys`, `/dev` and `/run` must be mounted into the target directory.
+
+> ℹ️ **Note:** Commands require elevation.
+
+```bash
+# Prepare mounts before entering a chroot:
+mount -t proc /proc <chroot_target>
+mount -t sysfs /sys <chroot_target>
+mount --rbind /dev <chroot_target>
+mount --rbind /run <chroot_target>
+```
+```bash
+# Change the root directory of a new process:
+chroot <chroot_target> <command>
+```
+```bash
+# Exit a chroot:
+exit
 ```
 
 ## <ins>Roles:</ins>

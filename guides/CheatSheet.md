@@ -3249,7 +3249,7 @@ sensors
 
 > ℹ️ **Notes:** 
 > - The chroot target should be a directory which contains a file system.
-> - Directories `/proc`, `/sys`, `/dev` and `/run` must be mounted into the target directory.
+> - Directories `/proc`, `/sys`, `/dev` must be mounted into the target directory.
 
 > ℹ️ **Note:** Commands require elevation.
 
@@ -3258,7 +3258,6 @@ sensors
 mount -t proc /proc <chroot_target>
 mount -t sysfs /sys <chroot_target>
 mount --rbind /dev <chroot_target>
-mount --rbind /run <chroot_target>
 ```
 ```bash
 # Change the root directory of a new process:

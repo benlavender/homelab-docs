@@ -26,6 +26,9 @@
 2. [OS Management](#os-management)
     - [dmidecode](#dmidecode--smbios)
     - [sysctl](#sysctl)
+    - [swap](#swap)
+        - [mkswap](#mkswap)
+        - [swapon / swapoff](#swapon--swapoff)
     - [ps](#ps)
     - [userdbctl](#userdbctl--systemd)
     - [Useradd/usermod/userdel](#Useradd/usermod/userdel)
@@ -486,6 +489,43 @@ sysctl --write <variable=value>
 ```bash
 # Load and write kernel parameters from configuration files:
 sysctl --system
+```
+
+### swap:
+
+#### mkswap:
+
+> ℹ️ **Note:** Commands require elevation.
+
+```bash
+# Setup swap area on a device or file:
+mkswap <dev | filename>
+# Create a swap file with appropriate file permissions and populated blocks on disk.
+# File sizes can of KiB/K, MiB/M, GiB/G, TiB/T with a minimum of 40 KiB:
+mkswap --size <#> --file <filename>
+```
+
+#### swapon / swapoff:
+
+> ℹ️ **Note:** Enable/disable commands require elevation.
+
+```bash
+# Show all configured swap areas:
+swapon --show
+# Show all configured swap areas with UUID and LABEL:
+swapon --show --output-all
+# Show all configured swap areas in bytes:
+swapon --show --bytes
+```
+```bash
+# Enable a device / file for swap:
+swapon <dev | file>
+# Enable all devices marked as swap in /etc/fstab:
+swapon --all
+```
+```bash
+# Disable a device / file configured for swap:
+swapoff <dev | file>
 ```
 
 ### ps
@@ -2120,17 +2160,6 @@ Get-WmiObject -ClassName Win32_Process | Where-Object -Property Name -EQ <imagen
 ```bash
 #List descriptors of a process:
 lsof -p PID
-```
-```bash
-# Create a swapfile and partition (x2 RAM):
-fallocate -l 2GB /swapfile
-# Set permissions to swapfile
-chmod 600 /swapfile
-# Format the file
-mkswap /swapfile
-# Enable swap
-swapon /swapfile
-# Update /etc/fstab:
 ```
 
 ### Time management:

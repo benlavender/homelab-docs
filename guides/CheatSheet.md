@@ -6285,8 +6285,6 @@ systemd-nspawn --directory=<dir>
 systemd-nspawn --boot --directory=<dir>
 # Create a linux container and call the init system based on a snapshot of the file system (changes lost once exited):
 systemd-nspawn --boot --directory=<dir> --ephemeral
-# Create a linux container and call the init system based on a snapshot of the host file system (changes lost once exited):
-systemd-nspawn --boot --directory=/ --ephemeral
 # Create a linux container and call the init system with a read only filesystem:
 systemd-nspawn --boot --directory=<dir> --read-only
 # Create a linux container and call the init system with a custom name and hostname:

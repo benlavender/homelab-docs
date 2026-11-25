@@ -134,6 +134,8 @@
         - [virsh](#virsh)
     - [Containerization](#containerization)
         - [Docker](#-docker)
+        - [importctl](#importctl)
+        - [machinectl](#machinectl)
         - [systemd-nspawn](#systemd-nspawn)
 8. [Desired State Configuration](#desired-state-configuration)
     - [Desired State Configuration](#desired-state-configuration)
@@ -6268,35 +6270,51 @@ docker network create --driver ipvlan --subnet <cidr> --gateway <ip.addr> --opt 
 docker network rm <networkID>
 ```
 
-#### systemd-nspawn:
-
-> ℹ️ **Note:** systemd-nspawn commands require elevation.
+#### importctl:
 
 > ℹ️ **Notes:** 
-> - An existing root file system is required for --directory / -D.
-> - The directory is not immutable, edits persist across machines unless --ephemeral is used.
-> - Hostname at default is the name of the directory.
-> - Use --background= to disable background colour (yes empty string).
+> - Requires systemd.
+> - Images for tarball type must be of .tar, .tar.gz, .tar.xz, or .tar.bz2.
+> - Images for raw type must be of qcow2 or raw disk image and if compressed, must match the same as tarball-types.
+> - Names of images are set to the directory/file name unless specified.
+
+> ℹ️ **Note:** Commands require elevation.
 
 ```bash
-# Create a linux container and only connect to a shell:
-systemd-nspawn --directory=<dir>
-# Create a linux container and call the init system:
-systemd-nspawn --boot --directory=<dir>
-# Create a linux container and call the init system based on a snapshot of the file system (changes lost once exited):
-systemd-nspawn --boot --directory=<dir> --ephemeral
-# Create a linux container and call the init system with a read only filesystem:
-systemd-nspawn --boot --directory=<dir> --read-only
-# Create a linux container and call the init system with a custom name and hostname:
-systemd-nspawn --boot --directory=<dir> --machine=<name>
-# Create a linux container and call the init system with a differencial hostname to the machine name:
-systemd-nspawn --boot --directory=<dir> --hostname=<name>
-# Create a linux container and call the init system based on an image:
-systemd-nspawn --boot --image=<filename>
-# Create a linux container and call the init system with network isolation:
-systemd-nspawn --boot --directory=<dir> --private-network
+# Importing images.
+# Append <name> for custom name.
+# Import a systemd machine image from a file system:
+importctl import-fs --class=machine <dir>
+# Import a systemd machine image from an image:
+importctl import-raw --class=machine <filename> 
 ```
 ```bash
+# Pulling images.
+# Use --verify=no if checksums fail.
+# Append <name> for custom name.
+# Download and import a raw systemd machine image:
+importctl pull-raw --class=machine <URI>
+# Download and import a systemd machine image from a tarball:
+importctl pull-tar --class=machine <URI>
+```
+
+#### machinectl:
+
+> ℹ️ **Notes:** Requires systemd.
+
+> ℹ️ **Note:** Some commands require elevation.
+
+```bash
+# Working with images.
+# List all installed systemd machine images:
+machinectl list-images
+# Show information about an installed systemd machine image:
+machinectl image-status <name>
+# Remove an installed systemd machine image:
+machinectl remove <name>
+```
+```bash
+# Working with systemd machines.
 # List all running systemd machines:
 machinectl list
 # List all existing systemd machines and host:
@@ -6317,6 +6335,43 @@ machinectl poweroff <name>
 machinectl terminate <name>
 # Remove a systemd machine:
 machinectl remove <name>
+```
+
+#### systemd-nspawn:
+
+> ℹ️ **Note:** systemd-nspawn commands require elevation.
+
+> ℹ️ **Notes:** 
+> - An existing root file system is required for --directory / -D.
+> - The directory is not immutable, edits persist across machines unless --ephemeral is used.
+> - Hostname at default is the name of the directory.
+> - Use --background= to disable background colour (yes empty string).
+
+```bash
+# Create a linux container and only connect to a shell:
+systemd-nspawn --directory=<dir>
+# Create a linux container and call the init system:
+systemd-nspawn --boot --directory=<dir>
+# Create a linux container based on an installed image and call the init system:
+systemd-nspawn --boot --image=<image_name>
+# Create a linux container based on an installed image and only connect to a shell:
+systemd-nspawn --image=<image_name>
+# Create a linux container based on an installed image (tar-pulled) and only connect to a shell:
+systemd-nspawn --machine=<image_name>
+# Create a linux container based on an installed image (tar-pulled) and call the init system:
+systemd-nspawn --boot --machine=<image_name>
+# Create a linux container and call the init system based on a snapshot of the file system (changes lost once exited):
+systemd-nspawn --boot --directory=<dir> --ephemeral
+# Create a linux container and call the init system with a read only filesystem:
+systemd-nspawn --boot --directory=<dir> --read-only
+# Create a linux container and call the init system with a custom name and hostname:
+systemd-nspawn --boot --directory=<dir> --machine=<name>
+# Create a linux container and call the init system with a differencial hostname to the machine name:
+systemd-nspawn --boot --directory=<dir> --hostname=<name>
+# Create a linux container and call the init system based on an image:
+systemd-nspawn --boot --image=<filename>
+# Create a linux container and call the init system with network isolation:
+systemd-nspawn --boot --directory=<dir> --private-network
 ```
 
 ## Desired State Configuration:

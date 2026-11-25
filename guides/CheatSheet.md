@@ -6352,10 +6352,8 @@ machinectl remove <name>
 systemd-nspawn --directory=<dir>
 # Create a linux container and call the init system:
 systemd-nspawn --boot --directory=<dir>
-# Create a linux container based on an installed image and call the init system:
-systemd-nspawn --boot --image=<image_name>
-# Create a linux container based on an installed image and only connect to a shell:
-systemd-nspawn --image=<image_name>
+# Create a linux container and call the init system based on an image:
+systemd-nspawn --boot --image=<filename>
 # Create a linux container based on an installed image (tar-pulled) and only connect to a shell:
 systemd-nspawn --machine=<image_name>
 # Create a linux container based on an installed image (tar-pulled) and call the init system:
@@ -6368,8 +6366,6 @@ systemd-nspawn --boot --directory=<dir> --read-only
 systemd-nspawn --boot --directory=<dir> --machine=<name>
 # Create a linux container and call the init system with a differencial hostname to the machine name:
 systemd-nspawn --boot --directory=<dir> --hostname=<name>
-# Create a linux container and call the init system based on an image:
-systemd-nspawn --boot --image=<filename>
 # Create a linux container and call the init system with network isolation:
 systemd-nspawn --boot --directory=<dir> --private-network
 ```

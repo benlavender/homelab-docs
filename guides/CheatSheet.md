@@ -6294,7 +6294,7 @@ importctl import-raw --class=machine <filename>
 # Append <name> for custom name.
 # Download and import a raw systemd machine image:
 importctl pull-raw --class=machine <URI>
-# Download and import a systemd machine image from a tarball:
+# Download and import a systemd machine image from a tarball (usually a cloud image):
 importctl pull-tar --class=machine <URI>
 ```
 

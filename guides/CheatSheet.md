@@ -6352,7 +6352,7 @@ machinectl remove <name>
 systemd-nspawn --directory=<dir>
 # Create a linux container and call the init system:
 systemd-nspawn --boot --directory=<dir>
-# Create a linux container and call the init system based on an image:
+# Create a linux container and call the init system based on an a raw image:
 systemd-nspawn --boot --image=<filename>
 # Create a linux container and call the init system based on a snapshot of the file system (changes lost once exited):
 systemd-nspawn --boot --directory=<dir> --ephemeral

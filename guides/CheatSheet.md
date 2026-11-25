@@ -6342,7 +6342,7 @@ machinectl remove <name>
 > ℹ️ **Note:** systemd-nspawn commands require elevation.
 
 > ℹ️ **Notes:** 
-> - An existing root file system is required for --directory / -D.
+> - An existing root file system is required for --directory / -D. This can also be a directory-type image.
 > - The directory is not immutable, edits persist across machines unless --ephemeral is used.
 > - Hostname at default is the name of the directory.
 > - Use --background= to disable background colour (yes empty string).
@@ -6354,10 +6354,6 @@ systemd-nspawn --directory=<dir>
 systemd-nspawn --boot --directory=<dir>
 # Create a linux container and call the init system based on an image:
 systemd-nspawn --boot --image=<filename>
-# Create a linux container based on an installed image (tar-pulled) and only connect to a shell:
-systemd-nspawn --machine=<image_name>
-# Create a linux container based on an installed image (tar-pulled) and call the init system:
-systemd-nspawn --boot --machine=<image_name>
 # Create a linux container and call the init system based on a snapshot of the file system (changes lost once exited):
 systemd-nspawn --boot --directory=<dir> --ephemeral
 # Create a linux container and call the init system with a read only filesystem:
